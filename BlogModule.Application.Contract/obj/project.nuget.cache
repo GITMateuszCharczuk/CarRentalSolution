@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "qktJ6AgqP88DwxOvtIqJfdhEJmjkeFmoMv8SpJJIcnqEyfbToogBuyXK8sWNscxtD5H62to1q3ev6Rl1W5zqxA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Application.Contract\\BlogModule.Application.Contract.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.5\\microsoft.aspnetcore.openapi.8.0.5.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.4.0\\swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
+  ],
+  "logs": []
+}

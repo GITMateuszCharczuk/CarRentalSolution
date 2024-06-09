@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "dgSpecHash": "V9Hq+9Ca8f8l+nyGgg9YDXdTZ1Ap+nykiQym6QysPKjaACBuN3l2DTBHcRiZHbfPOpS1Uyu1HTSWjapQc4ZhRQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Behaviors\\Shared.Behaviors.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\testo\\.nuget\\packages\\mediatr\\12.3.0\\mediatr.12.3.0.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.0-preview.4.24267.1\\microsoft.entityframeworkcore.9.0.0-preview.4.24267.1.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.0-preview.4.24267.1\\microsoft.entityframeworkcore.abstractions.9.0.0-preview.4.24267.1.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\9.0.0-preview.4.24267.1\\microsoft.entityframeworkcore.analyzers.9.0.0-preview.4.24267.1.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\9.0.0-preview.4.24266.19\\microsoft.extensions.caching.abstractions.9.0.0-preview.4.24266.19.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.extensions.caching.memory\\9.0.0-preview.4.24266.19\\microsoft.extensions.caching.memory.9.0.0-preview.4.24266.19.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\9.0.0-preview.4.24266.19\\microsoft.extensions.dependencyinjection.9.0.0-preview.4.24266.19.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.0-preview.4.24266.19\\microsoft.extensions.dependencyinjection.abstractions.9.0.0-preview.4.24266.19.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.extensions.logging\\9.0.0-preview.4.24266.19\\microsoft.extensions.logging.9.0.0-preview.4.24266.19.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\9.0.0-preview.4.24266.19\\microsoft.extensions.logging.abstractions.9.0.0-preview.4.24266.19.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.extensions.options\\9.0.0-preview.4.24266.19\\microsoft.extensions.options.9.0.0-preview.4.24266.19.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\microsoft.extensions.primitives\\9.0.0-preview.4.24266.19\\microsoft.extensions.primitives.9.0.0-preview.4.24266.19.nupkg.sha512"
+  ],
+  "logs": []
+}
