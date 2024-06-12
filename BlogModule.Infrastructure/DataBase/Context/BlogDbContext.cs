@@ -8,8 +8,8 @@ public class BlogDbContext : DbContext
 {
     public DbSet<BlogPostEntity> BlogPosts { get; set; } = null!;
     public DbSet<TagEntity> Tags { get; set; } = null!;
-    public DbSet<BlogPostLikeEntity> BlogPostLike { get; set; } = null!;
-    public DbSet<BlogPostCommentEntity> BlogPostComment { get; set; } = null!;
+    public DbSet<BlogPostLikeEntity> BlogPostLikes { get; set; } = null!;
+    public DbSet<BlogPostCommentEntity> BlogPostComments { get; set; } = null!;
     
     public BlogDbContext()
     {

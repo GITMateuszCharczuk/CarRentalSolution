@@ -10,7 +10,7 @@ var connectionString = configuration.GetConnectionString("CarRentalBlogDbConnect
 var dbContextOptions = new DbContextOptionsBuilder<BlogDbContext>().UseSqlServer(connectionString).Options;
 var blogDbContext = new BlogDbContext(dbContextOptions);
 
-var fakeBlogs = BlogFaker.Generate(100);
+var fakeBlogs = BlogPostFaker.Generate(100);
 blogDbContext.BlogPosts.AddRange(fakeBlogs);
 
 var count = await blogDbContext.SaveChangesAsync();

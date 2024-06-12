@@ -17,4 +17,14 @@
       <None Remove="Properties\launchSettings.json" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\BlogModule.Application.Contract\BlogModule.Application.Contract.csproj" />
+      <ProjectReference Include="..\Shared.CQRS\Shared.CQRS.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="CommandHandlers\BlogPost\" />
+      <Folder Include="QueryHandlers\BlogPost\" />
+    </ItemGroup>
+
 </Project>

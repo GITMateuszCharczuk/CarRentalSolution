@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "KZBlS9deXgRxOlLBXIEQ035EeER9rZE1PzUq2He4HyzGhGF1AbKpyXV2V2C8YsXxObamI/0oI43x0FkucpH7qg==",
+  "dgSpecHash": "IXE6hkEILaCAylDnLnu/fQl+7ku/RHGCkJUcIFTwcJFfA4VgdJDUAzWUdOa5XgoUmIfOD8REkWZOuwK0INoZpQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Infrastructure.FakeSeed\\BlogModule.Infrastructure.FakeSeed.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\testo\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\testo\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
+    "C:\\Users\\testo\\.nuget\\packages\\bogus\\35.5.1\\bogus.35.5.1.nupkg.sha512",
     "C:\\Users\\testo\\.nuget\\packages\\mediatr\\12.3.0\\mediatr.12.3.0.nupkg.sha512",
     "C:\\Users\\testo\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
     "C:\\Users\\testo\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.5\\microsoft.aspnetcore.openapi.8.0.5.nupkg.sha512",

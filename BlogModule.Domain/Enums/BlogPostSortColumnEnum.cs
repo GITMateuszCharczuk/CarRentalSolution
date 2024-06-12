@@ -1,8 +1,8 @@
-﻿namespace TrucksModule.Domain.Enums;
+﻿namespace BlogModule.Domain.Enums;
 
 public enum BlogPostSortColumnEnum
 {
-    Code = 0,
-    Name = 1,
-    Status = 2,
+    PublishedDate,
+    Author,
+    Heading
 }

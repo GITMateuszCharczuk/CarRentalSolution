@@ -29,6 +29,9 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
+              "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj": {
+                "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj"
+              },
               "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj": {
                 "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj"
               }

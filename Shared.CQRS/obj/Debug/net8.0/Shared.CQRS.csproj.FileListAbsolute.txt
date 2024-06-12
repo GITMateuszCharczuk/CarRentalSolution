@@ -15,3 +15,4 @@ C:\Users\testo\Documents\GitHub\CarRentalSolution\Shared.CQRS\obj\Debug\net8.0\S
 C:\Users\testo\Documents\GitHub\CarRentalSolution\Shared.CQRS\obj\Debug\net8.0\ref\Shared.CQRS.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\Shared.CQRS\bin\Debug\net8.0\Shared.Results.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\Shared.CQRS\bin\Debug\net8.0\Shared.Results.pdb
+C:\Users\testo\Documents\GitHub\CarRentalSolution\Shared.CQRS\obj\Debug\net8.0\Shared.CQRS.sourcelink.json

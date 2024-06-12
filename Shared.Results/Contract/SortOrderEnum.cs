@@ -1,4 +1,4 @@
-﻿namespace TrucksModule.Domain.Enums;
+﻿namespace Results.Contract;
 
 public enum SortOrderEnum
 {

@@ -1,0 +1,23 @@
+{
+  "Version": 1,
+  "Hash": "AXb/s3vQ1E6S4y6TcVAjZdjUk9GJELuNLxTWlmr9O+I=",
+  "Source": "BlogModule.Infrastructure",
+  "BasePath": "_content/BlogModule.Infrastructure",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Domain\\BlogModule.Domain.csproj",
+      "Version": 2,
+      "Source": "BlogModule.Domain",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    }
+  ],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

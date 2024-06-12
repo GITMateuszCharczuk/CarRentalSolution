@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BlogModule.Domain\BlogModule.Domain.csproj" />
       <ProjectReference Include="..\Shared.Results\Shared.Results.csproj" />
     </ItemGroup>
 

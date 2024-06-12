@@ -1,4 +1,5 @@
-﻿using BlogModule.Domain.Models.Ids;
+﻿using System.Collections.Immutable;
+using BlogModule.Domain.Models.Ids;
 using CarRental.Web.Models.Domain.Blog;
 
 namespace BlogModule.Domain.Models;

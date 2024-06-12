@@ -10,10 +10,9 @@ namespace BlogModule.Infrastructure.DataBase.Repository.BlogPostLike;
 
 public class BlogPostLikeCommandRepository : CommandRepository<BlogPostLikeEntity, BlogPostLikeId, BlogPostLikeModel, BlogDbContext>, IBlogPostLikeCommandRepository
 {
-    private readonly BlogDbContext _blogDbContext;
     public BlogPostLikeCommandRepository(BlogDbContext dbContext, IPersistenceMapper<BlogPostLikeEntity, BlogPostLikeModel> mapper) : base(dbContext, mapper)
     {
-        _blogDbContext = dbContext;
+
     }
 
     public override async Task<BlogPostLikeModel> AddAsync(BlogPostLikeModel model, CancellationToken cancellationToken = default) =>
@@ -33,7 +32,7 @@ public class BlogPostLikeCommandRepository : CommandRepository<BlogPostLikeEntit
             UserId = userId
         };
         var likeEntity = Mapper.MapToEntity(likeModel);
-        await _blogDbContext.BlogPostLike.AddAsync(likeEntity);
-        await _blogDbContext.SaveChangesAsync();
+        await DbContext.BlogPostLikes.AddAsync(likeEntity);
+        await DbContext.SaveChangesAsync();
     }
 }

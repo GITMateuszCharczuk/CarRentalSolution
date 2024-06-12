@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Shared.Results\Shared.Results.csproj" />
       <ProjectReference Include="..\Shared.Utilities\Shared.Utilities.csproj" />
     </ItemGroup>
 

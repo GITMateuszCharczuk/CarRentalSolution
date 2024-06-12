@@ -27,11 +27,11 @@ public class BlogPostLikeQueryRepository : QueryRepository<BlogPostLikeEntity, B
         await base.GetTotalCountAsync(cancellationToken);
     
     public async Task<int> GetTotalLikesForBlogPostAsync(BlogPostId blogPostId, CancellationToken cancellationToken) =>
-        await DbContext.BlogPostLike
+        await DbContext.BlogPostLikes
             .CountAsync(x => x.BlogPostId == blogPostId, cancellationToken);
 
     public async Task<ImmutableArray<BlogPostLikeModel>> GetLikesForBlogPostAsync(BlogPostId blogPostId, CancellationToken cancellationToken) =>
-        await DbContext.BlogPostLike
+        await DbContext.BlogPostLikes
             .AsNoTracking()
             .Where(x => x.BlogPostId == blogPostId)
             .Select(bp => Mapper.MapToModel(bp))

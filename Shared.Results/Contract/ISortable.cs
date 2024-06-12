@@ -1,6 +1,4 @@
-﻿using TrucksModule.Domain.Enums;
-
-namespace Results.Contract;
+﻿namespace Results.Contract;
 
 public interface ISortable<TColumnEnum>
 {

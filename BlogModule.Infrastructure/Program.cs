@@ -1,5 +1,6 @@
 using BlogModule.Infrastructure.DataBase.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var services = new ServiceCollection();
 
