@@ -1,0 +1,3 @@
+namespace BlogModule.Application.CommandHandlers.BlogPostComment.CreateBlogPostComment;
+
+public class CreateBlogPostCommentCommand();

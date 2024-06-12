@@ -3,6 +3,7 @@ using BlogModule.Application.Contract.BlogPosts.UpdateBlogPost;
 using BlogModule.Domain.Models;
 using BlogModule.Domain.Models.Ids;
 using BlogModule.Domain.RepositoryInterfaces.BlogPost;
+using CarRental.Web.Models.Domain.Blog;
 using Results.Application;
 using Results.Domain;
 using Shared.CQRS;
@@ -44,7 +45,7 @@ public class UpdateBlogPostCommandHandler : ICommandHandler<UpdateBlogPostComman
             PublishedDate = request.PublishedDate,
             Author = request.Author,
             Visible = request.Visible,
-            Tags = request.Tags,
+            Tags = ConvertToTagModels(request.Tags, blogPost.Id),
             Likes = blogPost.Likes,
             Comments = blogPost.Comments
         };
@@ -55,5 +56,17 @@ public class UpdateBlogPostCommandHandler : ICommandHandler<UpdateBlogPostComman
             Title = "Blog post updated",
             Message = $"Truck with url {updatedTruck.UrlHandle} was updated in the database."
         };
+    }
+    
+    private static ICollection<TagModel> ConvertToTagModels(string[]? tags, Guid blogPostId)
+    {
+        if (tags == null) return new List<TagModel>();
+
+        return tags.Select(tag => new TagModel
+        {
+            Id = new TagId(Guid.NewGuid()),
+            Name = tag,
+            BlogPostId = blogPostId
+        }).ToList();
     }
 }

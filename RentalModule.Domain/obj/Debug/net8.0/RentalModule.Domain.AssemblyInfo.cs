@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RentalModule.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c58e0b7c9d6c2f02165981b66f939c17178662f7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5735615fdd7d522974973a7c9affb33859c21000")]
 [assembly: System.Reflection.AssemblyProductAttribute("RentalModule.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RentalModule.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

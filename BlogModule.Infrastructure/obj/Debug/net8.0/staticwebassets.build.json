@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "AXb/s3vQ1E6S4y6TcVAjZdjUk9GJELuNLxTWlmr9O+I=",
+  "Hash": "aW1MKF0SewPU929/KLdBCcJMGt5jRfpHF7OvusMkKl8=",
   "Source": "BlogModule.Infrastructure",
   "BasePath": "_content/BlogModule.Infrastructure",
   "Mode": "Default",
@@ -11,10 +11,10 @@
       "Version": 2,
       "Source": "BlogModule.Domain",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
     }
   ],

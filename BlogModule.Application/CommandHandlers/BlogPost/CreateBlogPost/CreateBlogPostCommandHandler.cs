@@ -1,6 +1,8 @@
 ﻿using BlogModule.Application.Contract.BlogPosts.CreateBlogPost;
 using BlogModule.Domain.Models;
+using BlogModule.Domain.Models.Ids;
 using BlogModule.Domain.RepositoryInterfaces.BlogPost;
+using CarRental.Web.Models.Domain.Blog;
 using Results.Application;
 using Results.Domain;
 using Shared.CQRS;
@@ -28,9 +30,10 @@ public class CreateBlogPostCommandHandler : ICommandHandler<CreateBlogPostComman
             Title = "Cannot create blog post",
             Message = $"Blog post with url handle {request.UrlHandle} already exists in the database."
         };
-        
+        var newBlogPostId = new BlogPostId(new Guid());
         var blogPostToAdd = new BlogPostModel
         {
+            Id = newBlogPostId,
             Heading = request.Heading,
             PageTitle = request.PageTitle,
             Content = request.Content,
@@ -40,9 +43,9 @@ public class CreateBlogPostCommandHandler : ICommandHandler<CreateBlogPostComman
             PublishedDate = request.PublishedDate,
             Author = request.Author,
             Visible = request.Visible,
-            Tags = request.Tags,
-            Likes = blogPost.Likes,
-            Comments = blogPost.Comments
+            Tags = ConvertToTagModels(request.Tags, newBlogPostId),
+            Likes = new List<BlogPostLikeModel>(),
+            Comments = new List<BlogPostCommentModel>()
         };
 
         var addedBlogPost = await _commandRepository.AddAsync(blogPostToAdd, cancellationToken);
@@ -52,5 +55,17 @@ public class CreateBlogPostCommandHandler : ICommandHandler<CreateBlogPostComman
             Title = "Blog post created",
             Message = $"Blog post '{addedBlogPost.Heading}' was created in the database."
         };
+    }
+    
+    private static ICollection<TagModel> ConvertToTagModels(string[]? tags, Guid blogPostId)
+    {
+        if (tags == null) return new List<TagModel>();
+
+        return tags.Select(tag => new TagModel
+        {
+            Id = new TagId(Guid.NewGuid()),
+            Name = tag,
+            BlogPostId = blogPostId
+        }).ToList();
     }
 }

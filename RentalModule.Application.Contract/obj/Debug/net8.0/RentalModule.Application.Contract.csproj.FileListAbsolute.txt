@@ -1,0 +1,12 @@
+C:\Users\testo\Documents\GitHub\CarRentalSolution\RentalModule.Application.Contract\bin\Debug\net8.0\RentalModule.Application.Contract.deps.json
+C:\Users\testo\Documents\GitHub\CarRentalSolution\RentalModule.Application.Contract\bin\Debug\net8.0\RentalModule.Application.Contract.dll
+C:\Users\testo\Documents\GitHub\CarRentalSolution\RentalModule.Application.Contract\bin\Debug\net8.0\RentalModule.Application.Contract.pdb
+C:\Users\testo\Documents\GitHub\CarRentalSolution\RentalModule.Application.Contract\obj\Debug\net8.0\RentalModule.Application.Contract.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\testo\Documents\GitHub\CarRentalSolution\RentalModule.Application.Contract\obj\Debug\net8.0\RentalModule.Application.Contract.AssemblyInfoInputs.cache
+C:\Users\testo\Documents\GitHub\CarRentalSolution\RentalModule.Application.Contract\obj\Debug\net8.0\RentalModule.Application.Contract.AssemblyInfo.cs
+C:\Users\testo\Documents\GitHub\CarRentalSolution\RentalModule.Application.Contract\obj\Debug\net8.0\RentalModule.Application.Contract.csproj.CoreCompileInputs.cache
+C:\Users\testo\Documents\GitHub\CarRentalSolution\RentalModule.Application.Contract\obj\Debug\net8.0\RentalModule.Application.Contract.sourcelink.json
+C:\Users\testo\Documents\GitHub\CarRentalSolution\RentalModule.Application.Contract\obj\Debug\net8.0\RentalModule.Application.Contract.dll
+C:\Users\testo\Documents\GitHub\CarRentalSolution\RentalModule.Application.Contract\obj\Debug\net8.0\refint\RentalModule.Application.Contract.dll
+C:\Users\testo\Documents\GitHub\CarRentalSolution\RentalModule.Application.Contract\obj\Debug\net8.0\RentalModule.Application.Contract.pdb
+C:\Users\testo\Documents\GitHub\CarRentalSolution\RentalModule.Application.Contract\obj\Debug\net8.0\ref\RentalModule.Application.Contract.dll

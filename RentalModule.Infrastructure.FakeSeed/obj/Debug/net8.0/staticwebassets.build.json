@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "L4zspRahnM2BCS9LAEeHKx7fBu4maxyQwwDqoW6HkjE=",
+  "Source": "RentalModule.Infrastructure.FakeSeed",
+  "BasePath": "_content/RentalModule.Infrastructure.FakeSeed",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
