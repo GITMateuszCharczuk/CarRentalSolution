@@ -19,7 +19,7 @@ public class CreateBlogPostCommentCommandHandler : ICommandHandler<CreateBlogPos
     }
 
     public async Task<HandlerResult<CreateBlogPostCommentResponse,IErrorResult>> Handle(CreateBlogPostCommentCommand request, CancellationToken cancellationToken)
-    {
+    {//dodać walidacje todo
         var context = new ValidationContext(request);
         Validator.ValidateObject(request, context, validateAllProperties: true);
         

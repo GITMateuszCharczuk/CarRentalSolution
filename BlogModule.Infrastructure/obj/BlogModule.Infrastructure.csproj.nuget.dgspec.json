@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Infrastructure\\BlogModule.Infrastructure.csproj": {}
+    "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Infrastructure\\BlogModule.Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Domain\\BlogModule.Domain.csproj": {
+    "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Domain\\BlogModule.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Domain\\BlogModule.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Domain\\BlogModule.Domain.csproj",
         "projectName": "BlogModule.Domain",
-        "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Domain\\BlogModule.Domain.csproj",
-        "packagesPath": "C:\\Users\\testo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Domain\\obj\\",
+        "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Domain\\BlogModule.Domain.csproj",
+        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\testo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,18 +22,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj": {
-                "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj"
+              "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj": {
+                "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj"
               },
-              "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj": {
-                "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj"
+              "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj": {
+                "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj"
               }
             }
           }
@@ -76,21 +75,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.206/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Infrastructure\\BlogModule.Infrastructure.csproj": {
+    "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Infrastructure\\BlogModule.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Infrastructure\\BlogModule.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Infrastructure\\BlogModule.Infrastructure.csproj",
         "projectName": "BlogModule.Infrastructure",
-        "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Infrastructure\\BlogModule.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\testo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Infrastructure\\obj\\",
+        "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Infrastructure\\BlogModule.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\testo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -98,21 +97,20 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Domain\\BlogModule.Domain.csproj": {
-                "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Domain\\BlogModule.Domain.csproj"
+              "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Domain\\BlogModule.Domain.csproj": {
+                "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Domain\\BlogModule.Domain.csproj"
               },
-              "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.CQRS\\Shared.CQRS.csproj": {
-                "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.CQRS\\Shared.CQRS.csproj"
+              "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.CQRS\\Shared.CQRS.csproj": {
+                "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.CQRS\\Shared.CQRS.csproj"
               },
-              "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.UnitOfWork\\Shared.UnitOfWork.csproj": {
-                "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.UnitOfWork\\Shared.UnitOfWork.csproj"
+              "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.UnitOfWork\\Shared.UnitOfWork.csproj": {
+                "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.UnitOfWork\\Shared.UnitOfWork.csproj"
               }
             }
           }
@@ -173,21 +171,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.206/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.CQRS\\Shared.CQRS.csproj": {
+    "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.CQRS\\Shared.CQRS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.CQRS\\Shared.CQRS.csproj",
+        "projectUniqueName": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.CQRS\\Shared.CQRS.csproj",
         "projectName": "Shared.CQRS",
-        "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.CQRS\\Shared.CQRS.csproj",
-        "packagesPath": "C:\\Users\\testo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.CQRS\\obj\\",
+        "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.CQRS\\Shared.CQRS.csproj",
+        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.CQRS\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\testo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -195,18 +193,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj": {
-                "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj"
+              "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj": {
+                "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj"
               },
-              "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj": {
-                "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj"
+              "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj": {
+                "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj"
               }
             }
           }
@@ -242,21 +239,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.206/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj": {
+    "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj",
+        "projectUniqueName": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj",
         "projectName": "Shared.Results",
-        "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj",
-        "packagesPath": "C:\\Users\\testo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\obj\\",
+        "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\Shared.Results.csproj",
+        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Results\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\testo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -264,7 +261,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -298,21 +294,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.206/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.UnitOfWork\\Shared.UnitOfWork.csproj": {
+    "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.UnitOfWork\\Shared.UnitOfWork.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.UnitOfWork\\Shared.UnitOfWork.csproj",
+        "projectUniqueName": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.UnitOfWork\\Shared.UnitOfWork.csproj",
         "projectName": "Shared.UnitOfWork",
-        "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.UnitOfWork\\Shared.UnitOfWork.csproj",
-        "packagesPath": "C:\\Users\\testo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.UnitOfWork\\obj\\",
+        "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.UnitOfWork\\Shared.UnitOfWork.csproj",
+        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.UnitOfWork\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\testo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -320,7 +316,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -360,21 +355,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.206/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj": {
+    "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj",
+        "projectUniqueName": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj",
         "projectName": "Shared.Utilities",
-        "projectPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj",
-        "packagesPath": "C:\\Users\\testo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\obj\\",
+        "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\Shared.Utilities.csproj",
+        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\Shared.Utilities\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\testo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -382,7 +377,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -422,7 +416,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.206/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
