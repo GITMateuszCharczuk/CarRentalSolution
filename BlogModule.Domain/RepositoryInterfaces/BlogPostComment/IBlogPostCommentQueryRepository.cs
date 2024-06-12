@@ -13,7 +13,12 @@ public interface IBlogPostCommentQueryRepository
     public Task<ImmutableArray<BlogPostCommentModel>> GetByIdsAsync(ImmutableArray<BlogPostCommentId> ids,
         CancellationToken cancellationToken);
 
-    public Task<int> GetTotalCountAsync(CancellationToken cancellationToken);
+    public Task<int> GetTotalCommentsCountAsync(
+        BlogPostId? blogPostId,
+        ImmutableArray<BlogPostCommentId>? ids,
+        ImmutableArray<DateTime>? dateTimes,
+        ImmutableArray<Guid>? userIds,
+        CancellationToken cancellationToken);
 
     public Task<ImmutableArray<BlogPostCommentModel>> GetByBlogPostIdAsync(BlogPostId blogPostId,
         CancellationToken cancellationToken);

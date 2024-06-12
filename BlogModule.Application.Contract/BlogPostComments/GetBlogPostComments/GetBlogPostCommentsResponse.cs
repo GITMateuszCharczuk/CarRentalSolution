@@ -6,12 +6,12 @@ using Results.Domain;
 
 namespace BlogModule.Application.Contract.BlogPostComments.GetBlogPostComments;
 
-public class GetBlogPostCommentsResponse: IApiCollectionResult<BlogPostCommentModel>, IPageableResponse, ISortable<BlogPostSortColumnEnum?>, ISuccessResult
+public class GetBlogPostCommentsResponse: IApiCollectionResult<BlogPostCommentModel>, IPageableResponse, ISortable<BlogPostCommentSortColumnEnum?>, ISuccessResult
 {
     public int? Page { get; init; }
     public int? PageSize { get; init; }
     public int TotalCount { get; init; }
-    public BlogPostSortColumnEnum? OrderBy { get; init; }
+    public BlogPostCommentSortColumnEnum? OrderBy { get; init; }
     public SortOrderEnum? OrderDirection { get; init; }
     public ImmutableArray<BlogPostCommentModel> Items { get; init; }
 }

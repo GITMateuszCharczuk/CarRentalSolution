@@ -1,6 +1,6 @@
 using Results.Domain;
 
-namespace BlogModule.Application.Contract.BlogPostLikes.GetLikesCountForBlogPost;
+namespace BlogModule.Application.Contract.BlogPostLikes.GetLikesCount;
 
 public class GetLikesCountResponse : ISuccessResult
 {

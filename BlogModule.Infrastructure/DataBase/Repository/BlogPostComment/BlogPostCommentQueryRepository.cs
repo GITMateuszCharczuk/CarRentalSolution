@@ -12,30 +12,66 @@ using Shared.Utilities;
 
 namespace BlogModule.Infrastructure.DataBase.Repository.BlogPostComment;
 
-public class BlogPostCommentQueryRepository : QueryRepository<BlogPostCommentEntity, BlogPostCommentId, BlogPostCommentModel, BlogDbContext>, IBlogPostCommentQueryRepository
+public class BlogPostCommentQueryRepository :
+    QueryRepository<BlogPostCommentEntity, BlogPostCommentId, BlogPostCommentModel, BlogDbContext>,
+    IBlogPostCommentQueryRepository
 {
-    public BlogPostCommentQueryRepository(BlogDbContext dbContext, IPersistenceMapper<BlogPostCommentEntity, BlogPostCommentModel> mapper) : base(dbContext, mapper)
+    public BlogPostCommentQueryRepository(BlogDbContext dbContext,
+        IPersistenceMapper<BlogPostCommentEntity, BlogPostCommentModel> mapper) : base(dbContext, mapper)
     {
     }
-    
-    public override async Task<BlogPostCommentModel?> GetByIdAsync(BlogPostCommentId id, CancellationToken cancellationToken = default) => 
+
+    public override async Task<BlogPostCommentModel?> GetByIdAsync(BlogPostCommentId id,
+        CancellationToken cancellationToken = default) =>
         await base.GetByIdAsync(id, cancellationToken);
-    
-    public override async Task<ImmutableArray<BlogPostCommentModel>> GetByIdsAsync(ImmutableArray<BlogPostCommentId> ids, CancellationToken cancellationToken = default) => 
+
+    public override async Task<ImmutableArray<BlogPostCommentModel>> GetByIdsAsync(
+        ImmutableArray<BlogPostCommentId> ids, CancellationToken cancellationToken = default) =>
         await base.GetByIdsAsync(ids, cancellationToken);
 
-    public override async Task<int> GetTotalCountAsync(CancellationToken cancellationToken = default) => 
-        await base.GetTotalCountAsync(cancellationToken);
+    public async Task<int> GetTotalCommentsCountAsync(BlogPostId? blogPostId, ImmutableArray<BlogPostCommentId>? ids,
+        ImmutableArray<DateTime>? dateTimes,
+        ImmutableArray<Guid>? userIds, CancellationToken cancellationToken)
+    {
+        var query = DbContext.BlogPostComments
+            .AsNoTracking()
+            .AsQueryable();
 
-    public async Task<ImmutableArray<BlogPostCommentModel>> GetByBlogPostIdAsync(BlogPostId blogPostId, CancellationToken cancellationToken) =>
+        if (blogPostId is not null)
+        {
+            query = query.Where(c => c.BlogPostId == blogPostId.Value);
+        }
+
+        if (ids.HasValue)
+        {
+            query = query.Where(c => ids.Value.Contains(c.Id));
+        }
+
+        if (dateTimes.HasValue)
+        {
+            query = query.Where(c => dateTimes.Value.Contains(c.DateAdded));
+        }
+
+        if (userIds.HasValue)
+        {
+            query = query.Where(c => userIds.Value.Contains(c.UserId));
+        }
+
+        return await query.CountAsync(cancellationToken);
+    }
+
+    public async Task<ImmutableArray<BlogPostCommentModel>> GetByBlogPostIdAsync(BlogPostId blogPostId,
+        CancellationToken cancellationToken) =>
         await DbContext.BlogPostComments
             .AsNoTracking()
             .Where(x => x.BlogPostId == blogPostId)
             .Select(bp => Mapper.MapToModel(bp))
             .ToImmutableArrayAsync(cancellationToken);
 
-    public async Task<ImmutableArray<BlogPostCommentModel>> GetCollectionAsync(int? page, int? pageSize, BlogPostId? blogPostId, BlogPostCommentSortColumnEnum? orderBy,
-        SortOrderEnum? orderDirection, ImmutableArray<BlogPostCommentId>? ids, ImmutableArray<DateTime>? dateTimes, ImmutableArray<Guid>? userIds,
+    public async Task<ImmutableArray<BlogPostCommentModel>> GetCollectionAsync(int? page, int? pageSize,
+        BlogPostId? blogPostId, BlogPostCommentSortColumnEnum? orderBy,
+        SortOrderEnum? orderDirection, ImmutableArray<BlogPostCommentId>? ids, ImmutableArray<DateTime>? dateTimes,
+        ImmutableArray<Guid>? userIds,
         CancellationToken cancellationToken)
     {
         var queryableComments = DbContext.BlogPostComments
