@@ -1,10 +1,10 @@
 using System.Collections.Immutable;
 using BlogModule.Domain.Enums;
+using BlogModule.Domain.Models;
 using BlogModule.Domain.Models.Ids;
 using BlogModule.Domain.RepositoryInterfaces.Tag;
 using BlogModule.Infrastructure.DataBase.Context;
 using BlogModule.Infrastructure.DataBase.Entities;
-using CarRental.Web.Models.Domain.Blog;
 using Microsoft.EntityFrameworkCore;
 using Results.Contract;
 using Shared.CQRS.Repository;
@@ -34,22 +34,23 @@ public class TagQueryRepository : QueryRepository<TagEntity, TagId, TagModel, Bl
             .AsNoTracking()
             .AsQueryable();
         
-        if (blogPostId is not null)
+        if (blogPostId is null)
         {
-            queryableTags = queryableTags.Where(x => x.BlogPostId == blogPostId.Value);
+            throw new InvalidOperationException($"Cannot delete entity that does not exist");//{blogPostId.Value}
+            //queryableTags = queryableTags.Where(x => x.BlogPostId == blogPostId);
         }
         
-        if (orderBy.HasValue && orderDirection.HasValue)
-        {
-            var isOrderDirectionAscending = orderDirection == SortOrderEnum.Ascending;
-            queryableTags = orderBy switch
-            {
-                TagSortColumnEnum.Name => isOrderDirectionAscending
-                    ? queryableTags.OrderBy(x => x.Name)
-                    : queryableTags.OrderByDescending(x => x.Name),
-                _ => queryableTags
-            };
-        }
+        // if (orderBy.HasValue && orderDirection.HasValue)
+        // {
+        //     var isOrderDirectionAscending = orderDirection == SortOrderEnum.Ascending;
+        //     queryableTags = orderBy switch
+        //     {
+        //         TagSortColumnEnum.Name => isOrderDirectionAscending
+        //             ? queryableTags.OrderBy(x => x.Name)
+        //             : queryableTags.OrderByDescending(x => x.Name),
+        //         _ => queryableTags
+        //     };
+        // }
 
         var tags = await queryableTags.ToListAsync(cancellationToken);
 

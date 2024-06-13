@@ -21,8 +21,8 @@ public class CreateLikeForBlogPostCommandHandler : ICommandHandler<CreateLikeFor
         var newLike = new BlogPostLikeModel//todo
         {
             Id = new BlogPostLikeId(new Guid()),
-            BlogPostId = default,
-            UserId = default
+            BlogPostId = request.BlogPostId,
+            UserId = request.UserId
         };
 
         var addedLike = await _repository.AddAsync(newLike, cancellationToken);

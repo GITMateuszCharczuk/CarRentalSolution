@@ -1,5 +1,5 @@
-﻿using BlogModule.Domain.Models.Ids;
-using CarRental.Web.Models.Domain.Blog;
+﻿using BlogModule.Domain.Models;
+using BlogModule.Domain.Models.Ids;
 
 namespace BlogModule.Domain.RepositoryInterfaces.Tag;
 

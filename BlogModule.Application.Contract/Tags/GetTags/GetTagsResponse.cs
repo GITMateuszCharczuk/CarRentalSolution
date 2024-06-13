@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using BlogModule.Domain.Enums;
-using CarRental.Web.Models.Domain.Blog;
+using BlogModule.Domain.Models;
 using Results.Contract;
 using Results.Domain;
 

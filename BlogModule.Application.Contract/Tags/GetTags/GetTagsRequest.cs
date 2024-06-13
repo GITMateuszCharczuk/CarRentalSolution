@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
 using BlogModule.Domain.Enums;
 using BlogModule.Domain.Models.Ids;
-using CarRental.Web.Models.Domain.Blog;
 using Results.Contract;
 
 namespace BlogModule.Application.Contract.Tags.GetTags;

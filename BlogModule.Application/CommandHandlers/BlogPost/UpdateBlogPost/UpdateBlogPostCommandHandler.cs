@@ -1,9 +1,8 @@
-﻿using BlogModule.Application.CommandHandlers.UpdateBlogPost;
+﻿using System.Collections.Immutable;
 using BlogModule.Application.Contract.BlogPosts.UpdateBlogPost;
 using BlogModule.Domain.Models;
 using BlogModule.Domain.Models.Ids;
 using BlogModule.Domain.RepositoryInterfaces.BlogPost;
-using CarRental.Web.Models.Domain.Blog;
 using Results.Application;
 using Results.Domain;
 using Shared.CQRS;
@@ -58,15 +57,15 @@ public class UpdateBlogPostCommandHandler : ICommandHandler<UpdateBlogPostComman
         };
     }
     
-    private static ICollection<TagModel> ConvertToTagModels(string[]? tags, Guid blogPostId)
+    private static ImmutableArray<TagModel> ConvertToTagModels(ImmutableArray<string>? tags, BlogPostId blogPostId)
     {
-        if (tags == null) return new List<TagModel>();
+        if (tags == null || tags.Value.IsEmpty) return ImmutableArray<TagModel>.Empty;
 
-        return tags.Select(tag => new TagModel
+        return tags.Value.Select(tag => new TagModel
         {
             Id = new TagId(Guid.NewGuid()),
             Name = tag,
             BlogPostId = blogPostId
-        }).ToList();
+        }).ToImmutableArray();
     }
 }

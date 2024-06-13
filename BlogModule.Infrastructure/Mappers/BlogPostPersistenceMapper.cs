@@ -1,33 +1,25 @@
 using BlogModule.Domain.Models;
 using BlogModule.Infrastructure.DataBase.Entities;
-using CarRental.Web.Models.Domain.Blog;
 using Shared.Utilities;
- 
+
 namespace BlogModule.Infrastructure.Mappers
 {
     public class BlogPostPersistenceMapper : IPersistenceMapper<BlogPostEntity, BlogPostModel>
     {
-        private readonly IPersistenceMapper<BlogPostCommentModel, BlogPostCommentEntity> _commentMapperToEntity;
-        private readonly IPersistenceMapper<BlogPostLikeModel, BlogPostLikeEntity> _likeMapperToEntity;
-        private readonly IPersistenceMapper<TagModel, TagEntity> _tagMapperToEntity;
-        private readonly IPersistenceMapper<BlogPostCommentEntity, BlogPostCommentModel> _commentMapperToModel;
-        private readonly IPersistenceMapper<BlogPostLikeEntity, BlogPostLikeModel> _likeMapperToModel;
-        private readonly IPersistenceMapper<TagEntity, TagModel> _tagMapperToModel;
+        private readonly IPersistenceMapper<BlogPostCommentEntity, BlogPostCommentModel> _commentMapper;
+        private readonly IPersistenceMapper<BlogPostLikeEntity, BlogPostLikeModel> _likeMapper;
+        private readonly IPersistenceMapper<TagEntity, TagModel> _tagMapper;
 
-        public BlogPostPersistenceMapper(IPersistenceMapper<BlogPostCommentModel, BlogPostCommentEntity> commentMapperToEntity,
-            IPersistenceMapper<BlogPostLikeModel, BlogPostLikeEntity> likeMapperToEntity,
-            IPersistenceMapper<TagModel, TagEntity> tagMapperToEntity,
-            IPersistenceMapper<BlogPostCommentEntity, BlogPostCommentModel> commentMapperToModel,
-            IPersistenceMapper<BlogPostLikeEntity, BlogPostLikeModel> likeMapperToModel,
-            IPersistenceMapper<TagEntity, TagModel> tagMapperToModel)
+        public BlogPostPersistenceMapper(
+            IPersistenceMapper<BlogPostCommentEntity, BlogPostCommentModel> commentMapper,
+            IPersistenceMapper<BlogPostLikeEntity, BlogPostLikeModel> likeMapper,
+            IPersistenceMapper<TagEntity, TagModel> tagMapper)
         {
-            _tagMapperToModel = tagMapperToModel;
-            _likeMapperToModel = likeMapperToModel;
-            _commentMapperToModel = commentMapperToModel;
-            _tagMapperToEntity = tagMapperToEntity;
-            _likeMapperToEntity = likeMapperToEntity;
-            _commentMapperToEntity = commentMapperToEntity;
+            _tagMapper = tagMapper;
+            _likeMapper = likeMapper;
+            _commentMapper = commentMapper;
         }
+
         public BlogPostModel MapToModel(BlogPostEntity entity) => new()
         {
             Id = entity.Id,
@@ -40,9 +32,9 @@ namespace BlogModule.Infrastructure.Mappers
             PublishedDate = entity.PublishedDate,
             Author = entity.Author,
             Visible = entity.Visible,
-            Tags = entity.Tags.Select(_tagMapperToEntity.MapToModel).ToArray(),
-            Likes = entity.Likes.Select(_likeMapperToEntity.MapToModel).ToArray(),
-            Comments = entity.Comments.Select(_commentMapperToEntity.MapToModel).ToArray()
+            Tags = entity.Tags?.Select(tag => _tagMapper.MapToModel(tag)).ToArray() ?? Array.Empty<TagModel>(),
+            Likes = entity.Likes?.Select(like => _likeMapper.MapToModel(like)).ToArray() ?? Array.Empty<BlogPostLikeModel>(),
+            Comments = entity.Comments?.Select(comment => _commentMapper.MapToModel(comment)).ToArray() ?? Array.Empty<BlogPostCommentModel>()
         };
 
         public BlogPostEntity MapToEntity(BlogPostModel model) => new()
@@ -57,9 +49,9 @@ namespace BlogModule.Infrastructure.Mappers
             PublishedDate = model.PublishedDate,
             Author = model.Author,
             Visible = model.Visible,
-            Tags = model.Tags.Select(_tagMapperToModel.MapToEntity).ToArray(), 
-            Likes = model.Likes.Select(_likeMapperToModel.MapToEntity).ToArray(),
-            Comments = model.Comments.Select(_commentMapperToModel.MapToEntity).ToArray()
+            Tags = model.Tags?.Select(tag => _tagMapper.MapToEntity(tag)).ToArray() ?? Array.Empty<TagEntity>(),
+            Likes = model.Likes?.Select(like => _likeMapper.MapToEntity(like)).ToArray() ?? Array.Empty<BlogPostLikeEntity>(),
+            Comments = model.Comments?.Select(comment => _commentMapper.MapToEntity(comment)).ToArray() ?? Array.Empty<BlogPostCommentEntity>()
         };
     }
 }

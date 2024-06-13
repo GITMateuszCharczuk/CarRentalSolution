@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
@@ -8,7 +9,7 @@ public class NonAlphanumeric : ValidationAttribute
 {
     protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
     {
-        var tags = value as string[];
+        var tags = value is ImmutableArray<string> ? (ImmutableArray<string>)value : default;
         if (tags == null || tags.Length == 0)
         {
             return ValidationResult.Success!;

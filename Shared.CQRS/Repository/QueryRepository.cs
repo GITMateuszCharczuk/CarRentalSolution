@@ -6,7 +6,7 @@ namespace Shared.CQRS.Repository;
 
 public class QueryRepository<TEntity, TId, TModel, TDbContext>
     where TEntity : class, IEntity<TId>
-    where TId : BaseId<TId>
+    where TId : struct//BaseId<TId>
     where TModel : class
     where TDbContext : DbContext
 {

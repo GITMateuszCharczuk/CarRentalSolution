@@ -4,7 +4,6 @@ using BlogModule.Application.Contract.BlogPosts.GetBlogPost;
 using BlogModule.Domain.Models;
 using BlogModule.Domain.Models.Ids;
 using BlogModule.Domain.RepositoryInterfaces.BlogPost;
-using CarRental.Web.Models.Domain.Blog;
 using Results.Application;
 using Results.Domain;
 using Shared.CQRS;
@@ -49,9 +48,9 @@ public class GetBlogPostQueryHandler : IQueryHandler<GetBlogPostQuery, HandlerRe
                 FeaturedImageUrl = blogPost.FeaturedImageUrl,
                 UrlHandle = blogPost.UrlHandle,
                 PublishedDate = blogPost.PublishedDate,
-                Tags = (ImmutableArray<TagModel>)blogPost.Tags,
-                Likes = (ImmutableArray<BlogPostLikeModel>)blogPost.Likes,
-                Comments = (ImmutableArray<BlogPostCommentModel>)blogPost.Comments,
+                Tags = blogPost.Tags.ToImmutableArray(),
+                Likes = blogPost.Likes.ToImmutableArray(),
+                Comments = blogPost.Comments.ToImmutableArray(),
             };
     }
 }

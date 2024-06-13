@@ -25,9 +25,9 @@ namespace BlogModule.Infrastructure.FakeSeed.Fakers
                 .RuleFor(entity => entity.PublishedDate, faker => faker.Date.Past())
                 .RuleFor(entity => entity.Author, faker => faker.Person.FullName)
                 .RuleFor(entity => entity.Visible, faker => faker.Random.Bool())
-                .RuleFor(entity => entity.Tags, (faker, entity) => TagFaker.Generate(faker.Random.Int(2, 8), entity.Id.Value).ToList())
-                .RuleFor(entity => entity.Likes, (faker, entity) => BlogPostLikeFaker.Generate(faker.Random.Int(5, 60), entity.Id.Value).ToList())
-                .RuleFor(entity => entity.Comments, (faker, entity) => BlogPostCommentFaker.Generate(faker.Random.Int(1, 8), entity.Id.Value).ToList());
+                .RuleFor(entity => entity.Tags, (faker, entity) => TagFaker.Generate(faker.Random.Int(2, 8), entity.Id).ToList())
+                .RuleFor(entity => entity.Likes, (faker, entity) => BlogPostLikeFaker.Generate(faker.Random.Int(5, 60), entity.Id).ToList())
+                .RuleFor(entity => entity.Comments, (faker, entity) => BlogPostCommentFaker.Generate(faker.Random.Int(1, 8), entity.Id).ToList());
 
         public static IEnumerable<BlogPostEntity> Generate(int count) => Faker.Generate(count);
     }

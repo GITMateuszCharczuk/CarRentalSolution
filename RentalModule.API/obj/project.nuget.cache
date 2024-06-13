@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OthL9uLIwEI/Ii+fYHu3bk2pT497Q2tptpr3arlfnKHY96IV86B8dsgeaj84WvotBxUv9LZyhDOjuuhwEaHccw==",
+  "dgSpecHash": "Cb1C7okbaW8fZ7ptPKhKXNzsAGTSMKCM7eR5338uD6zQw2thSGdEloAxAjkIPsqTqUii0uUdNwPZCqhQ3IAwFw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\mateu\\Documents\\GitHub\\CarRentalSolution\\RentalModule.API\\RentalModule.API.csproj",
+  "projectFilePath": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\RentalModule.API\\RentalModule.API.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

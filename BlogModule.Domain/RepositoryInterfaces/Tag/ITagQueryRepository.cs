@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using BlogModule.Domain.Enums;
+using BlogModule.Domain.Models;
 using BlogModule.Domain.Models.Ids;
-using CarRental.Web.Models.Domain.Blog;
 using Results.Contract;
 
 namespace BlogModule.Domain.RepositoryInterfaces.Tag;

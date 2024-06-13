@@ -1,5 +1,4 @@
 using Bogus;
-using CarRental.Web.Models.Domain.Blog;
 using BlogModule.Domain.Models.Ids;
 using BlogModule.Infrastructure.DataBase.Entities;
 

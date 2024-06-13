@@ -23,7 +23,7 @@ public class BlogPostLikeCommandRepository : CommandRepository<BlogPostLikeEntit
 
     public override async Task DeleteAsync(BlogPostLikeId id, CancellationToken cancellationToken = default) =>
         await base.DeleteAsync(id, cancellationToken);
-    public async Task AddLikeForBlogAsync(BlogPostLikeId blogPostId, Guid userId)
+    public async Task AddLikeForBlogAsync(BlogPostId blogPostId, Guid userId)
     {
         var likeModel = new BlogPostLikeModel()
         {

@@ -1,10 +1,10 @@
 ﻿using BlogModule.Domain.Models.Ids;
 
-namespace CarRental.Web.Models.Domain.Blog;
+namespace BlogModule.Domain.Models;
 
 public record TagModel
 {
     public TagId Id { get; init; }
     public string Name { get; set; }
-    public Guid BlogPostId { get; set; }
+    public BlogPostId BlogPostId { get; set; }
 }

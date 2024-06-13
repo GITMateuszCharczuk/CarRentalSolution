@@ -1,7 +1,6 @@
 ﻿using System.Collections.Immutable;
 using BlogModule.Domain.Models;
 using BlogModule.Domain.Models.Ids;
-using CarRental.Web.Models.Domain.Blog;
 using Results.Contract;
 using Results.Domain;
 

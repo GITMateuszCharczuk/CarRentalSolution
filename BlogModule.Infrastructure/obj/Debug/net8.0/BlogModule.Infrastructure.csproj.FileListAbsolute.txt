@@ -9,7 +9,6 @@ C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Humanizer.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\MediatR.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\MediatR.Contracts.dll
-C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
@@ -45,12 +44,8 @@ C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
-C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Microsoft.OpenApi.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Mono.TextTemplating.dll
-C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
-C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\System.CodeDom.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\System.Composition.AttributedModel.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\bin\Debug\net8.0\System.Composition.Convention.dll
@@ -149,7 +144,6 @@ C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\obj\
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\obj\Debug\net8.0\BlogModule.Infrastructure.AssemblyInfoInputs.cache
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\obj\Debug\net8.0\BlogModule.Infrastructure.AssemblyInfo.cs
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\obj\Debug\net8.0\BlogModule.Infrastructure.csproj.CoreCompileInputs.cache
-C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\obj\Debug\net8.0\BlogModule.Infrastructure.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\obj\Debug\net8.0\BlogModule.Infrastructure.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\obj\Debug\net8.0\BlogModule.Infrastructure.sourcelink.json
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Infrastructure\obj\Debug\net8.0\staticwebassets.build.json

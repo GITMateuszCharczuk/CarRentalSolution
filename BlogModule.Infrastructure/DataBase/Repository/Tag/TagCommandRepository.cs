@@ -1,8 +1,8 @@
+using BlogModule.Domain.Models;
 using BlogModule.Domain.Models.Ids;
 using BlogModule.Domain.RepositoryInterfaces.Tag;
 using BlogModule.Infrastructure.DataBase.Context;
 using BlogModule.Infrastructure.DataBase.Entities;
-using CarRental.Web.Models.Domain.Blog;
 using Shared.CQRS.Repository;
 using Shared.Utilities;
 

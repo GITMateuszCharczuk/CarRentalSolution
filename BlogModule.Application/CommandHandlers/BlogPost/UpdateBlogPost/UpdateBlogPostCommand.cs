@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Immutable;
+using System.ComponentModel.DataAnnotations;
 using BlogModule.Application.Contract.BlogPosts.UpdateBlogPost;
 using BlogModule.Application.ValidationAttributes;
 using BlogModule.Domain.Models.Ids;
@@ -6,7 +7,7 @@ using Results.Domain;
 using Shared.CQRS;
 using Shared.CQRS.CommandHandlers;
 
-namespace BlogModule.Application.CommandHandlers.UpdateBlogPost;
+namespace BlogModule.Application.CommandHandlers.BlogPost.UpdateBlogPost;
 
 public class UpdateBlogPostCommand : ICommand<HandlerResult<UpdateBlogPostResponse, IErrorResult>>
 {
@@ -46,5 +47,5 @@ public class UpdateBlogPostCommand : ICommand<HandlerResult<UpdateBlogPostRespon
     public bool Visible { get; set; }
 
     [NonAlphanumeric]
-    public string[]? Tags { get; set; }
+    public ImmutableArray<string>? Tags { get; set; }
 }

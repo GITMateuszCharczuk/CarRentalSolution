@@ -1,7 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Text.Json.Serialization;
 using BlogModule.Domain.Models;
-using CarRental.Web.Models.Domain.Blog;
 
 namespace BlogModule.Application.Contract.BlogPosts.CreateBlogPost;
 

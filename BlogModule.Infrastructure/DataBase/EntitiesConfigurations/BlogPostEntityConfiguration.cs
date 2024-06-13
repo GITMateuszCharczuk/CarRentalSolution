@@ -1,20 +1,27 @@
 ﻿using BlogModule.Domain.Models;
 using BlogModule.Domain.Models.Ids;
+using BlogModule.Infrastructure.DataBase.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BlogModule.Infrastructure.DataBase.EntitiesConfigurations
 {
-    public class BlogPostEntityConfiguration : IEntityTypeConfiguration<BlogPostModel>
+    public class BlogPostEntityConfiguration : IEntityTypeConfiguration<BlogPostEntity>
     {
-        public void Configure(EntityTypeBuilder<BlogPostModel> builder)
+        public void Configure(EntityTypeBuilder<BlogPostEntity> builder)
         {
             builder.HasKey(entity => entity.Id);
 
+            // builder.Property(entity => entity.Id)
+            //     .HasConversion(
+            //         id => id.Value,
+            //         value => new BlogPostId(value))
+            //     .ValueGeneratedOnAdd();
+            
             builder.Property(entity => entity.Id)
                 .HasConversion(
                     id => (Guid)id,
-                    value => new BlogPostId(value))
+                    value => value)
                 .ValueGeneratedOnAdd();
 
             builder.Property(entity => entity.Heading)
@@ -62,4 +69,6 @@ namespace BlogModule.Infrastructure.DataBase.EntitiesConfigurations
                 .HasForeignKey(comment => comment.BlogPostId);
         }
     }
+
+
 }

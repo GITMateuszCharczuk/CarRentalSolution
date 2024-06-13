@@ -7,9 +7,7 @@ using Shared.CQRS.QueryHandlers;
 
 namespace BlogModule.Application.QueryHandlers.BlogPostLike.GetLikesCount;
 
-public class
-    GetLikesCountQueryHandler : IQueryHandler<GetLikesCountQuery, HandlerResult<GetLikesCountResponse, IErrorResult>>
-{
+public class GetLikesCountQueryHandler : IQueryHandler<GetLikesCountQuery, HandlerResult<GetLikesCountResponse, IErrorResult>> {
     private readonly IBlogPostLikeQueryRepository _repository;
 
     public GetLikesCountQueryHandler(IBlogPostLikeQueryRepository repository)

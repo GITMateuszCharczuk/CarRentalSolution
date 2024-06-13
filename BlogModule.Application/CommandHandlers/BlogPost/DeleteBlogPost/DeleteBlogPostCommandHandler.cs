@@ -1,5 +1,4 @@
-﻿using BlogModule.Application.CommandHandlers.DeleteBlogPost;
-using BlogModule.Application.Contract.BlogPosts.DeleteBlogPost;
+﻿using BlogModule.Application.Contract.BlogPosts.DeleteBlogPost;
 using BlogModule.Domain.Models.Ids;
 using BlogModule.Domain.RepositoryInterfaces.BlogPost;
 using Results.Application;

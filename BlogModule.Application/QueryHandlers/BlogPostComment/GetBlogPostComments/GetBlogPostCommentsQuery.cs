@@ -9,7 +9,7 @@ using Shared.CQRS.QueryHandlers;
 
 namespace BlogModule.Application.QueryHandlers.BlogPostComment.GetBlogPostComments;
 
-public class GetBlogPostCommentsQuery : IQuery<HandlerResult<GetBlogPostCommentsResponse, IErrorResult>>
+public record GetBlogPostCommentsQuery : IQuery<HandlerResult<GetBlogPostCommentsResponse, IErrorResult>>
 {
     public int? Page { get; init; }
     public int? PageSize { get; init; }

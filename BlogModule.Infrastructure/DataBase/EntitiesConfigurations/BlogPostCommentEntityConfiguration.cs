@@ -1,20 +1,27 @@
 using BlogModule.Domain.Models;
 using BlogModule.Domain.Models.Ids;
+using BlogModule.Infrastructure.DataBase.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BlogModule.Infrastructure.DataBase.EntitiesConfigurations
 {
-    public class BlogPostCommentEntityConfiguration : IEntityTypeConfiguration<BlogPostCommentModel>
+    public class BlogPostCommentEntityConfiguration : IEntityTypeConfiguration<BlogPostCommentEntity>
     {
-        public void Configure(EntityTypeBuilder<BlogPostCommentModel> builder)
+        public void Configure(EntityTypeBuilder<BlogPostCommentEntity> builder)
         {
             builder.HasKey(entity => entity.Id);
 
+            // builder.Property(entity => entity.Id)
+            //     .HasConversion(
+            //         id => id.Value,
+            //         value => new BlogPostCommentId(value))
+            //     .ValueGeneratedOnAdd();
+            
             builder.Property(entity => entity.Id)
                 .HasConversion(
                     id => (Guid)id,
-                    value => new BlogPostCommentId(value))
+                    value => value)
                 .ValueGeneratedOnAdd();
 
             builder.Property(entity => entity.Description)

@@ -1,5 +1,5 @@
+using BlogModule.Domain.Models;
 using BlogModule.Infrastructure.DataBase.Entities;
-using CarRental.Web.Models.Domain.Blog;
 using Shared.Utilities;
 
 namespace BlogModule.Infrastructure.Mappers

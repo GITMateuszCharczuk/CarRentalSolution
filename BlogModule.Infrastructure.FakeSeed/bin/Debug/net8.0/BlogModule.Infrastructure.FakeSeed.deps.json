@@ -689,10 +689,8 @@
       "System.Threading.Tasks.Extensions/4.5.4": {},
       "BlogModule.Domain/1.0.0": {
         "dependencies": {
-          "Microsoft.AspNetCore.OpenApi": "8.0.5",
           "Shared.Results": "1.0.0",
-          "Shared.Utilities": "1.0.0",
-          "Swashbuckle.AspNetCore": "6.4.0"
+          "Shared.Utilities": "1.0.0"
         },
         "runtime": {
           "BlogModule.Domain.dll": {}

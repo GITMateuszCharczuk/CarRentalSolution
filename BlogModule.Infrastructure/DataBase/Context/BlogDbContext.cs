@@ -1,5 +1,5 @@
 ﻿using BlogModule.Infrastructure.DataBase.Entities;
-using CarRental.Web.Models.Domain.Blog;
+using BlogModule.Infrastructure.DataBase.EntitiesConfigurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogModule.Infrastructure.DataBase.Context;
@@ -22,6 +22,11 @@ public class BlogDbContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // modelBuilder.ApplyConfiguration(new TagEntityConfiguration());
+        // modelBuilder.ApplyConfiguration(new BlogPostEntityConfiguration());
+        // modelBuilder.ApplyConfiguration(new BlogPostCommentEntityConfiguration());
+        // modelBuilder.ApplyConfiguration(new BlogPostLikeEntityConfiguration());
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(BlogDbContext).Assembly);
+        //base.OnModelCreating(modelBuilder);
     }
 }

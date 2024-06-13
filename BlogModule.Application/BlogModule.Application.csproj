@@ -10,8 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="DotnetBadWordDetector" Version="1.0.1" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="MediatR" Version="12.3.0" />
     </ItemGroup>
 
     <ItemGroup>

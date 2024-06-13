@@ -8,7 +8,7 @@ public record BlogPostCommentModel
 
     public string Description { get; set; }
 
-    public Guid BlogPostId { get; set; }
+    public BlogPostId BlogPostId { get; set; }
 
     public Guid UserId { get; set; }
 

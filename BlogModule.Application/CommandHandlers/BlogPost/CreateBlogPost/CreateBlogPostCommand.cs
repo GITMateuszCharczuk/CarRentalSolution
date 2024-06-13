@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Immutable;
+using System.ComponentModel.DataAnnotations;
 using BlogModule.Application.Contract.BlogPosts.CreateBlogPost;
 using BlogModule.Application.ValidationAttributes;
 using Results.Domain;
@@ -44,5 +45,5 @@ public class CreateBlogPostCommand : ICommand<HandlerResult<CreateBlogPostRespon
     public bool Visible { get; set; }
     
     [NonAlphanumeric]
-    public string[]? Tags { get; set; }
+    public ImmutableArray<string>? Tags { get; set; }
 }

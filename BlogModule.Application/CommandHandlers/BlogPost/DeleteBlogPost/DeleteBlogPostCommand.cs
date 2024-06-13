@@ -3,7 +3,7 @@ using Results.Domain;
 using Shared.CQRS;
 using Shared.CQRS.CommandHandlers;
 
-namespace BlogModule.Application.CommandHandlers.DeleteBlogPost;
+namespace BlogModule.Application.CommandHandlers.BlogPost.DeleteBlogPost;
 
 public class DeleteBlogPostCommand : ICommand<HandlerResult<DeleteBlogPostResponse, IErrorResult>>
 {
