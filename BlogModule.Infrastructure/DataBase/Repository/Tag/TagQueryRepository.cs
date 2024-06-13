@@ -34,23 +34,22 @@ public class TagQueryRepository : QueryRepository<TagEntity, TagId, TagModel, Bl
             .AsNoTracking()
             .AsQueryable();
         
-        if (blogPostId is null)
+        if (blogPostId is not null)
         {
-            throw new InvalidOperationException($"Cannot delete entity that does not exist");//{blogPostId.Value}
-            //queryableTags = queryableTags.Where(x => x.BlogPostId == blogPostId);
+            queryableTags = queryableTags.Where(x => x.BlogPostId == blogPostId);
         }
         
-        // if (orderBy.HasValue && orderDirection.HasValue)
-        // {
-        //     var isOrderDirectionAscending = orderDirection == SortOrderEnum.Ascending;
-        //     queryableTags = orderBy switch
-        //     {
-        //         TagSortColumnEnum.Name => isOrderDirectionAscending
-        //             ? queryableTags.OrderBy(x => x.Name)
-        //             : queryableTags.OrderByDescending(x => x.Name),
-        //         _ => queryableTags
-        //     };
-        // }
+        if (orderBy.HasValue && orderDirection.HasValue)
+        {
+            var isOrderDirectionAscending = orderDirection == SortOrderEnum.Ascending;
+            queryableTags = orderBy switch
+            {
+                TagSortColumnEnum.Name => isOrderDirectionAscending
+                    ? queryableTags.OrderBy(x => x.Name)
+                    : queryableTags.OrderByDescending(x => x.Name),
+                _ => queryableTags
+            };
+        }
 
         var tags = await queryableTags.ToListAsync(cancellationToken);
 

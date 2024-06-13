@@ -27,7 +27,7 @@ public class UpdateBlogPostCommandHandler : ICommandHandler<UpdateBlogPostComman
     {
         var blogPost = request.Id is null
             ? await _queryRepository.GetByUrlAsync(request.UrlHandle, cancellationToken) 
-            : await _queryRepository.GetByIdAsync(new BlogPostId(request.Id.Value), cancellationToken);
+            : await _queryRepository.GetByIdAsync(request.Id.Value, cancellationToken);
         if (blogPost is null) return new EntityNotFoundErrorResult() {
             Title = "Cannot update blog post",
             Message = $"Blog post with url {request.UrlHandle} does not exist in the database."

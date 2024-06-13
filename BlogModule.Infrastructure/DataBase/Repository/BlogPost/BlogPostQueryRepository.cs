@@ -60,17 +60,18 @@ public class BlogPostQueryRepository : QueryRepository<BlogPostEntity, BlogPostI
             .AsNoTracking()
             .AsQueryable();
 
-        if (ids is not null && ids.Any<BlogPostId>())
+        if (ids is not null && ids.Value.Any())
         {
             queryablePosts = queryablePosts.Where(x => ids.Contains(x.Id));
         }
 
-        if (publishedDates is not null && publishedDates.Any<DateTime>())
+        if (publishedDates is not null && publishedDates.Value.Any())
         {
-            queryablePosts = queryablePosts.Where(x => publishedDates.Contains(x.PublishedDate));
+            var dates = publishedDates.Value.Select(dt => dt.Date).ToHashSet();
+            queryablePosts = queryablePosts.Where(x => dates.Contains(x.PublishedDate.Date));
         }
 
-        if (authors is not null && authors.Any<string>())
+        if (authors is not null && authors.Value.Any())
         {
             queryablePosts = queryablePosts.Where(x => authors.Contains(x.Author));
         }

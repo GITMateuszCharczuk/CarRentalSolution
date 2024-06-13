@@ -24,7 +24,7 @@ public class BlogPostLikeController : Controller
 
     [HttpPost]
     public async Task<IActionResult> CreateBlogPostLikeAsync([FromBody] CreateLikeForBlogPostRequest request, CancellationToken cancellationToken) =>
-        (await _mediator.Send(new CreateLikeForBlogPostCommand() { BlogPostId = request.BlogPostId, UserId = request.UserId }, cancellationToken)).Match(Ok, this.ErrorResult);
+        (await _mediator.Send(_mapper.MapToMessage(request), cancellationToken)).Match(Ok, this.ErrorResult);
       
     [HttpGet("{idOrUrl}")]
     public async Task<IActionResult> GetLikesCountForBlogPost([FromRoute] string idOrUrl, CancellationToken cancellationToken) =>

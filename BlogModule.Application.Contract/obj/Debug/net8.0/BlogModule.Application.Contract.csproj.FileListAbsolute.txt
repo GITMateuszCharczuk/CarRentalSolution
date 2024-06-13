@@ -26,3 +26,13 @@ C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contrac
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contract\obj\Debug\net8.0\refint\BlogModule.Application.Contract.dll
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contract\obj\Debug\net8.0\BlogModule.Application.Contract.pdb
 C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contract\obj\Debug\net8.0\ref\BlogModule.Application.Contract.dll
+C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contract\bin\Debug\net8.0\BlogModule.Infrastructure.deps.json
+C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contract\bin\Debug\net8.0\BlogModule.Infrastructure.runtimeconfig.json
+C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contract\bin\Debug\net8.0\appsettings.json
+C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contract\bin\Debug\net8.0\BlogModule.Infrastructure.exe
+C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contract\bin\Debug\net8.0\BlogModule.Infrastructure.dll
+C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contract\bin\Debug\net8.0\Shared.CQRS.dll
+C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contract\bin\Debug\net8.0\Shared.UnitOfWork.dll
+C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contract\bin\Debug\net8.0\BlogModule.Infrastructure.pdb
+C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contract\bin\Debug\net8.0\Shared.CQRS.pdb
+C:\Users\testo\Documents\GitHub\CarRentalSolution\BlogModule.Application.Contract\bin\Debug\net8.0\Shared.UnitOfWork.pdb

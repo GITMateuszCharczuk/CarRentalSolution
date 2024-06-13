@@ -1,9 +1,11 @@
 ﻿using System.Text.Json.Serialization;
+using BlogModule.Domain.Models.Ids;
 
 namespace BlogModule.Application.Contract.BlogPosts.UpdateBlogPost;
 
 public record UpdateBlogPostRequest
 {
+    public BlogPostId? Id { get; init; }
     public string Heading { get; set; } = string.Empty;
     public string PageTitle { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;

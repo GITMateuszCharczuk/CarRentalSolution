@@ -23,10 +23,16 @@ public class BlogPostCommentsController : Controller
     [HttpGet]
     public async Task<IActionResult> GetBlogPostCommentsAsync([FromQuery] GetBlogPostCommentsRequest request, CancellationToken cancellationToken) =>
         (await _mediator.Send(_mapper.MapToMessage(request), cancellationToken)).Match(Ok, this.ErrorResult);
-
+    // [HttpGet]
+    // public async Task<IActionResult> GetBlogPostCommentsAsync([FromQuery] GetBlogPostCommentsRequest request, CancellationToken cancellationToken)
+    // {
+    //     return Ok(request);
+    // }
+    
     [HttpPost]
     public async Task<IActionResult> CreateBlogPostCommentAsync([FromBody] CreateBlogPostCommentRequest request, CancellationToken cancellationToken) =>
         (await _mediator.Send(_mapper.MapToMessage(request), cancellationToken)).Match(Ok, this.ErrorResult);
+    
     
     // [HttpDelete("{id}")]
     // public async Task<IActionResult> DeleteBlogPostCommentAsync([FromRoute] BlogPostCommentId id, CancellationToken cancellationToken) =>

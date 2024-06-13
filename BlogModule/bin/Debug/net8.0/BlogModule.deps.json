@@ -1538,6 +1538,7 @@
       "BlogModule.Application.Contract/1.0.0": {
         "dependencies": {
           "BlogModule.Domain": "1.0.0",
+          "BlogModule.Infrastructure": "1.0.0",
           "Shared.Results": "1.0.0"
         },
         "runtime": {

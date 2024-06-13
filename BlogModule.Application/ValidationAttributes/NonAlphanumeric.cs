@@ -15,13 +15,13 @@ public class NonAlphanumeric : ValidationAttribute
             return ValidationResult.Success!;
         }
 
-        var invalidTags = tags.Where(tag => !System.Text.RegularExpressions.Regex.IsMatch(tag, @"^[^a-zA-Z0-9]*$"))
+        var invalidTags = tags.Where(tag => !System.Text.RegularExpressions.Regex.IsMatch(tag, @"^[a-zA-Z0-9\s]*$"))
             .ToList();
 
         if (invalidTags.Any())
         {
             return new ValidationResult(
-                $"The following tags contain alphanumeric characters: {string.Join(", ", invalidTags)}");
+                $"The following tags contain invalid characters: {string.Join(", ", invalidTags)}");
         }
 
         return ValidationResult.Success!;

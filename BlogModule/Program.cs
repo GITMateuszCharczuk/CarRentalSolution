@@ -8,6 +8,10 @@ using BlogModule.Domain.RepositoryInterfaces.BlogPost;
 using BlogModule.Domain.RepositoryInterfaces.BlogPostComment;
 using BlogModule.Domain.RepositoryInterfaces.BlogPostLike;
 using BlogModule.Domain.RepositoryInterfaces.Tag;
+using BlogModule.Infrastructure.Binders.BlogPostCommentId;
+using BlogModule.Infrastructure.Binders.BlogPostId;
+using BlogModule.Infrastructure.Binders.BlogPostLikeId;
+using BlogModule.Infrastructure.Binders.TagId;
 using BlogModule.Infrastructure.DataBase.Context;
 using BlogModule.Infrastructure.DataBase.Entities;
 using BlogModule.Infrastructure.DataBase.Repository.BlogPost;
@@ -52,9 +56,15 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationHandlerBehaviour<,>));
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(BlogCommandHandlerBehavior<,>));
 
-builder.Services.AddControllers()
+builder.Services.AddControllers(options =>
+    {
+        options.ModelBinderProviders.Insert(0, new BlogPostIdModelBinderProvider());
+        options.ModelBinderProviders.Insert(0, new TagIdModelBinderProvider());
+        options.ModelBinderProviders.Insert(0, new BlogPostCommentIdModelBinderProvider());
+        options.ModelBinderProviders.Insert(0, new BlogPostLikeIdModelBinderProvider());
+    })
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-;
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

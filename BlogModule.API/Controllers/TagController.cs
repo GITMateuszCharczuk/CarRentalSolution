@@ -19,7 +19,8 @@ public class TagsController : Controller
         _mapper = mapper;
     }
 
-    [HttpGet("asdasdasdasdasdas")]
+    [HttpGet("GetTags")]
     public async Task<IActionResult> GetTagsAsync([FromQuery] GetTagsRequest request, CancellationToken cancellationToken) =>
         (await _mediator.Send(_mapper.MapToMessage(request), cancellationToken)).Match(Ok, this.ErrorResult);
+
 }

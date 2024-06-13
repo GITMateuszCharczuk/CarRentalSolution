@@ -68,10 +68,11 @@ public class BlogPostCommentQueryRepository :
             .Select(bp => Mapper.MapToModel(bp))
             .ToImmutableArrayAsync(cancellationToken);
 
-    public async Task<ImmutableArray<BlogPostCommentModel>> GetCollectionAsync(int? page, int? pageSize,
+    public async Task<ImmutableArray<BlogPostCommentModel>> GetCollectionAsync(
+        int? page, int? pageSize,
         BlogPostId? blogPostId, BlogPostCommentSortColumnEnum? orderBy,
-        SortOrderEnum? orderDirection, ImmutableArray<BlogPostCommentId>? ids, ImmutableArray<DateTime>? dateTimes,
-        ImmutableArray<Guid>? userIds,
+        SortOrderEnum? orderDirection, ImmutableArray<BlogPostCommentId>? ids,
+        ImmutableArray<DateTime>? dateTimes, ImmutableArray<Guid>? userIds,
         CancellationToken cancellationToken)
     {
         var queryableComments = DbContext.BlogPostComments
@@ -83,17 +84,18 @@ public class BlogPostCommentQueryRepository :
             queryableComments = queryableComments.Where(x => x.BlogPostId == blogPostId.Value);
         }
 
-        if (ids is not null && ids.Any<BlogPostCommentId>())
+        if (ids is not null && ids.Value.Any())
         {
             queryableComments = queryableComments.Where(x => ids.Contains(x.Id));
         }
 
-        if (dateTimes is not null && dateTimes.Any<DateTime>())
+        if (dateTimes is not null && dateTimes.Value.Any())
         {
-            queryableComments = queryableComments.Where(x => dateTimes.Contains(x.DateAdded));
+            var dates = dateTimes.Value.Select(dt => dt.Date).ToHashSet();
+            queryableComments = queryableComments.Where(x => dates.Contains(x.DateAdded.Date));
         }
 
-        if (userIds is not null && userIds.Any<Guid>())
+        if (userIds is not null && userIds.Value.Any())
         {
             queryableComments = queryableComments.Where(x => userIds.Contains(x.UserId));
         }

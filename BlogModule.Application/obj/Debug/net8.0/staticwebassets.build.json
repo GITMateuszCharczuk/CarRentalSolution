@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "4gDhaU1pMr/ZUTaWjM9OLsrXd5gwoiJHMZEN/SvJG9s=",
+  "Hash": "VpLCuvHdqS/rkJEFbyzzNdlK+x9C+VuUBKci+vjLsV4=",
   "Source": "BlogModule.Application",
   "BasePath": "_content/BlogModule.Application",
   "Mode": "Default",
@@ -27,6 +27,17 @@
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
       "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    },
+    {
+      "Identity": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\BlogModule.Infrastructure\\BlogModule.Infrastructure.csproj",
+      "Version": 2,
+      "Source": "BlogModule.Infrastructure",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     }
   ],
   "DiscoveryPatterns": [],

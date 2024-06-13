@@ -20,7 +20,7 @@ public class GetTagsQueryHandler : IQueryHandler<GetTagsQuery, HandlerResult<Get
         var tags = await _repository.GetAllDistinctAsync(
             request.OrderBy, 
             request.OrderDirection,
-            request.BlogPostId , //  is null ? null : request.BlogPostId.Value
+            request.BlogPostId ,
             cancellationToken);
 
         var response = new GetTagsResponse() {

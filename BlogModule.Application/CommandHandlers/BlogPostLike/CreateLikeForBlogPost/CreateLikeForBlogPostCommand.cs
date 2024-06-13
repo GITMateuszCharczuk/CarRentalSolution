@@ -9,5 +9,5 @@ namespace BlogModule.Application.CommandHandlers.BlogPostLike.CreateLikeForBlogP
 public class CreateLikeForBlogPostCommand : ICommand<HandlerResult<CreateLikeForBlogPostResponse, IErrorResult>>
 {
     public BlogPostId BlogPostId { get; init; } 
-    public Guid UserId { get; set; } 
+    public Guid UserId { get; init; } 
 }

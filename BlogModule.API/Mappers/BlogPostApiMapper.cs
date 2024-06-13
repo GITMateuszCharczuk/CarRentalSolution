@@ -14,6 +14,7 @@ using BlogModule.Application.Contract.Tags.GetTags;
 using BlogModule.Application.QueryHandlers.BlogPost.GetBlogPosts;
 using BlogModule.Application.QueryHandlers.BlogPostComment.GetBlogPostComments;
 using BlogModule.Application.QueryHandlers.Tag.GetTags;
+using BlogModule.Domain.Models.Ids;
 
 namespace BlogModule.API.Mappers;
 
