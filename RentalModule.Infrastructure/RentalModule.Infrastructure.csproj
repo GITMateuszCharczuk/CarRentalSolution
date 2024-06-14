@@ -8,8 +8,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0-preview.5.24306.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.0-preview.5.24306.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-preview.5.24306.3">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-preview.5.24306.3" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0-preview.5.24306.7" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0-preview.5.24306.7" />
     </ItemGroup>
 
     <ItemGroup>
@@ -20,6 +27,18 @@
 
     <ItemGroup>
       <None Remove="Properties\launchSettings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="DataBase\Migrations\" />
+      <Folder Include="DataBase\Utilities\" />
+      <Folder Include="ErrorResults\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RentalModule.Domain\RentalModule.Domain.csproj" />
+      <ProjectReference Include="..\Shared.CQRS\Shared.CQRS.csproj" />
+      <ProjectReference Include="..\Shared.UnitOfWork\Shared.UnitOfWork.csproj" />
     </ItemGroup>
 
 </Project>

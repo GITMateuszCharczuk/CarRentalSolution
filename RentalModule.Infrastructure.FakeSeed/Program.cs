@@ -1,44 +1,20 @@
-var builder = WebApplication.CreateBuilder(args);
+using Bogus;
+using Microsoft.EntityFrameworkCore;
+using RentalModule.Infrastructure.DataBase.Context;
+using RentalModule.Infrastructure.DataBase.Entities;
+using RentalModule.Infrastructure.FakeSeed.Fakers;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+IConfiguration configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
 
-var app = builder.Build();
+var connectionString = configuration.GetConnectionString("CarRentalBlogDbConnectionString");
+var dbContextOptions = new DbContextOptionsBuilder<RentalDbContext>().UseSqlServer(connectionString).Options;
+var blogDbContext = new RentalDbContext(dbContextOptions);
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+var fakeOffers = CarOfferFaker.Generate(100);
+blogDbContext.CarOffers.AddRange(fakeOffers);
 
-app.UseHttpsRedirection();
+var count = await blogDbContext.SaveChangesAsync();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast")
-    .WithOpenApi();
-
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+Console.WriteLine($"Number of fake Car offers added {count}");

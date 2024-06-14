@@ -11,12 +11,6 @@ namespace BlogModule.Infrastructure.DataBase.EntitiesConfigurations
         public void Configure(EntityTypeBuilder<BlogPostEntity> builder)
         {
             builder.HasKey(entity => entity.Id);
-
-            // builder.Property(entity => entity.Id)
-            //     .HasConversion(
-            //         id => id.Value,
-            //         value => new BlogPostId(value))
-            //     .ValueGeneratedOnAdd();
             
             builder.Property(entity => entity.Id)
                 .HasConversion(

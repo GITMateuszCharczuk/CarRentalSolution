@@ -15,7 +15,7 @@ namespace BlogModule.Infrastructure.DataBase.EntitiesConfigurations
             // builder.Property(entity => entity.Id)
             //     .HasConversion(
             //         id => id.Value,
-            //         value => new BlogPostCommentId(value))
+            //         value => new CarOfferId(value))
             //     .ValueGeneratedOnAdd();
             
             builder.Property(entity => entity.Id)

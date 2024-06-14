@@ -8,12 +8,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Bogus" Version="35.5.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="Properties\launchSettings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RentalModule.Infrastructure\RentalModule.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

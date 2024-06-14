@@ -4,9 +4,9 @@ using Shared.Utilities;
 namespace BlogModule.Domain.Models.Ids;
 
 // [JsonConverter(typeof(BaseIdJsonConverter))]
-// public sealed class BlogPostCommentId : BaseId<BlogPostCommentId>
+// public sealed class CarOfferId : BaseId<CarOfferId>
 // {
-//     public BlogPostCommentId(Guid value) : base(value){ }
+//     public CarOfferId(Guid value) : base(value){ }
 // }
 
 

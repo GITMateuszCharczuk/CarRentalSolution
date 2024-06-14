@@ -35,6 +35,6 @@ public class BlogPostCommentsController : Controller
     
     
     // [HttpDelete("{id}")]
-    // public async Task<IActionResult> DeleteBlogPostCommentAsync([FromRoute] BlogPostCommentId id, CancellationToken cancellationToken) =>
+    // public async Task<IActionResult> DeleteBlogPostCommentAsync([FromRoute] CarOfferId id, CancellationToken cancellationToken) =>
     //     (await _mediator.Send(new DeleteBlogPostCommentCommand() { Id = id }, cancellationToken)).Match(Ok, this.ErrorResult); todo
 }

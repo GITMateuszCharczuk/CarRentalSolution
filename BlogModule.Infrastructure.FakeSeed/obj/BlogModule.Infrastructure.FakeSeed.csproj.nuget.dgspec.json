@@ -114,18 +114,6 @@
             "Bogus": {
               "target": "Package",
               "version": "[35.5.1, )"
-            },
-            "Microsoft.AspNetCore.OpenApi": {
-              "target": "Package",
-              "version": "[8.0.5, )"
-            },
-            "Microsoft.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[9.0.0-preview.4.24267.1, )"
-            },
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.4.0, )"
             }
           },
           "imports": [

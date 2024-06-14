@@ -1,5 +1,4 @@
 using Bogus;
-using BlogModule.Domain.Models;
 using BlogModule.Domain.Models.Ids;
 using BlogModule.Infrastructure.DataBase.Entities;
 

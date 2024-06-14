@@ -6,4 +6,14 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\RentalModule.Domain\RentalModule.Domain.csproj" />
+      <ProjectReference Include="..\RentalModule.Infrastructure\RentalModule.Infrastructure.csproj" />
+      <ProjectReference Include="..\Shared.Results\Shared.Results.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="CarOffers\CheckCarOfferAvailibility\" />
+    </ItemGroup>
+
 </Project>
