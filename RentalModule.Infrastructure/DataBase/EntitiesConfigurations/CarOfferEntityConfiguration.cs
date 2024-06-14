@@ -69,7 +69,7 @@ public class CarOfferEntityConfiguration : IEntityTypeConfiguration<CarOfferEnti
 
         builder.HasOne(entity => entity.Tarrif)
             .WithOne()
-            .HasForeignKey<CarTariffModel>(t => t.CarOfferId);
+            .HasForeignKey<CarTariffEntity>(t => t.CarOfferId);
 
         builder.HasMany(entity => entity.Tags)
             .WithOne()

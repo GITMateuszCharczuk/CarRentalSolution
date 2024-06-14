@@ -2,11 +2,15 @@ using RentalModule.Domain.Models;
 using RentalModule.Infrastructure.DataBase.Entities;
 using Shared.Utilities;
 
-namespace RentalModule.Infrastructure.Mappers
+namespace RentalModule.Infrastructure.Mappers;
+
+public class CarTariffPersistenceMapper : IPersistenceMapper<CarTariffEntity, CarTariffModel>
 {
-    public class CarTariffPersistenceMapper : IPersistenceMapper<CarTariffEntity, CarTariffModel>
+    public CarTariffModel MapToModel(CarTariffEntity entity)
     {
-        public CarTariffModel MapToModel(CarTariffEntity entity) => new()
+        if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+        return new CarTariffModel
         {
             Id = entity.Id,
             CarOfferId = entity.CarOfferId,
@@ -16,8 +20,13 @@ namespace RentalModule.Infrastructure.Mappers
             OneWeekPrice = entity.OneWeekPrice,
             OneMonthPrice = entity.OneMonthPrice
         };
+    }
 
-        public CarTariffEntity MapToEntity(CarTariffModel model) => new()
+    public CarTariffEntity MapToEntity(CarTariffModel model)
+    {
+        if (model == null) throw new ArgumentNullException(nameof(model));
+
+        return new CarTariffEntity
         {
             Id = model.Id,
             CarOfferId = model.CarOfferId,

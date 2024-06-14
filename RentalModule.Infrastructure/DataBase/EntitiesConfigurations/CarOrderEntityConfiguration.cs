@@ -22,6 +22,9 @@ public class CarOrderEntityConfiguration : IEntityTypeConfiguration<CarOrderEnti
             .IsRequired();
 
         builder.Property(entity => entity.CarOfferId)
+            .HasConversion(
+                id => (Guid)id,
+                value => new CarOfferId(value))
             .IsRequired();
 
         builder.Property(entity => entity.StartDate)

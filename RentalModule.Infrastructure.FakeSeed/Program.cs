@@ -8,13 +8,15 @@ IConfiguration configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .Build();
 
-var connectionString = configuration.GetConnectionString("CarRentalBlogDbConnectionString");
+var connectionString = configuration.GetConnectionString("CarRentalCarDbConnectionString");
 var dbContextOptions = new DbContextOptionsBuilder<RentalDbContext>().UseSqlServer(connectionString).Options;
-var blogDbContext = new RentalDbContext(dbContextOptions);
+var carDbContext = new RentalDbContext(dbContextOptions);
 
 var fakeOffers = CarOfferFaker.Generate(100);
-blogDbContext.CarOffers.AddRange(fakeOffers);
+carDbContext.CarOffers.AddRange(fakeOffers);
+var fakeOrders = CarOrderFaker.Generate(100,fakeOffers);
+carDbContext.CarOrders.AddRange(fakeOrders);
 
-var count = await blogDbContext.SaveChangesAsync();
+var count = await carDbContext.SaveChangesAsync();
 
-Console.WriteLine($"Number of fake Car offers added {count}");
+Console.WriteLine($"Number of fake Entities offers added {count}");

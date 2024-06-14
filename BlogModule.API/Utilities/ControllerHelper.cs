@@ -4,7 +4,7 @@ using Results.Application;
 using Results.Domain;
 using Results.Infrastructure;
 
-namespace Blog.API.Utilities;
+namespace BlogModule.API.Utilities;
 
 public static class ControllerHelper
 {

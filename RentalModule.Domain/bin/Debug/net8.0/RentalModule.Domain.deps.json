@@ -7,14 +7,27 @@
   "targets": {
     ".NETCoreApp,Version=v8.0": {
       "RentalModule.Domain/1.0.0": {
+        "dependencies": {
+          "Shared.Results": "1.0.0"
+        },
         "runtime": {
           "RentalModule.Domain.dll": {}
+        }
+      },
+      "Shared.Results/1.0.0": {
+        "runtime": {
+          "Shared.Results.dll": {}
         }
       }
     }
   },
   "libraries": {
     "RentalModule.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Shared.Results/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

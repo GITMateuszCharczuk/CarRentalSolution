@@ -10,6 +10,8 @@
     <ItemGroup>
       <ProjectReference Include="..\BlogModule.API\BlogModule.API.csproj" />
       <ProjectReference Include="..\BlogModule.Infrastructure\BlogModule.Infrastructure.csproj" />
+      <ProjectReference Include="..\RentalModule.API\RentalModule.API.csproj" />
+      <ProjectReference Include="..\RentalModule.Infrastructure\RentalModule.Infrastructure.csproj" />
       <ProjectReference Include="..\Shared.Behaviors\Shared.Behaviors.csproj" />
     </ItemGroup>
 

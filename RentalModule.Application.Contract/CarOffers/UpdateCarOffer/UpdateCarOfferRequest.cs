@@ -19,8 +19,12 @@ public record UpdateCarOfferRequest
     public string CarReturnLocation { get; init; }= string.Empty;
     public DateTime PublishedDate { get; init; }
     public bool Visible { get; init; }
-    public CarTariffModel? Tarrif { get; init; }
-    public ICollection<CarTagModel>? Tags { get; init; }
-    public ICollection<ImageUrlModel>? ImageUrls { get; init; }
-    public ICollection<TimePeriodModel>? UnavailableDates { get; init; }
+    public Double OneNormalDayPrice { get; init; }
+    public Double OneWeekendDayPrice { get; init; }
+    public Double FullWeekendPrice { get; init; }
+    public Double OneWeekPrice { get; init; }
+    public Double OneMonthPrice { get; init; }
+    public string[]? Tags { get; init; }
+    public string[]? ImageUrls { get; init; }
+    //public string[]? UnavailableDates { get; init; }
 }

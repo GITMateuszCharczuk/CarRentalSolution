@@ -82,7 +82,7 @@ public class CreateCarOfferCommand : ICommand<HandlerResult<CreateCarOfferRespon
     
     public ImmutableArray<string>? Tags { get; init; }
 
-    [Url]
+    //[Urls]todo
     public ImmutableArray<string>? ImageUrls { get; init; }
 
 }

@@ -1,5 +1,5 @@
 using Blog.API.Mappers;
-using Blog.API.Utilities;
+using BlogModule.API.Utilities;
 using BlogModule.Application.CommandHandlers.BlogPost.DeleteBlogPost;
 using BlogModule.Application.Contract.BlogPosts.CreateBlogPost;
 using BlogModule.Application.Contract.BlogPosts.GetBlogPosts;

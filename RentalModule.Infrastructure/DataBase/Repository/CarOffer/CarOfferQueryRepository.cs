@@ -20,14 +20,27 @@ namespace RentalModule.Infrastructure.DataBase.Repository.CarOffer
         }
 
         public override async Task<CarOfferModel?> GetByIdAsync(CarOfferId id, CancellationToken cancellationToken = default) =>
-            await base.GetByIdAsync(id, cancellationToken);
+            await DbContext.CarOffers
+                .Include(co => co.Tarrif)
+                .Include(co => co.Tags)
+                .Include(co => co.ImageUrls)
+                .Include(co => co.UnavailableDates)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(co => co.Id.Equals(id), cancellationToken)
+                .ContinueWith(x => x.Result is null ? null : Mapper.MapToModel(x.Result), cancellationToken);
+
 
         public override async Task<int> GetTotalCountAsync(CancellationToken cancellationToken = default) =>
             await base.GetTotalCountAsync(cancellationToken);
 
         public async Task<CarOfferModel?> GetByUrlAsync(string urlHandle, CancellationToken cancellationToken) =>
-            await DbContext.CarOffers.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.UrlHandle == urlHandle, cancellationToken)
+            await DbContext.CarOffers
+                .Include(co => co.Tarrif)
+                .Include(co => co.Tags)
+                .Include(co => co.ImageUrls)
+                .Include(co => co.UnavailableDates)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(co => co.UrlHandle == urlHandle, cancellationToken)
                 .ContinueWith(x => x.Result is null ? null : Mapper.MapToModel(x.Result), cancellationToken);
 
         public async Task<ImmutableArray<CarOfferModel>> GetCollectionAsync(
@@ -40,6 +53,7 @@ namespace RentalModule.Infrastructure.DataBase.Repository.CarOffer
             CancellationToken cancellationToken)
         {
             var queryableOffers = DbContext.CarOffers
+                .Include(co => co.Tarrif)
                 .Include(co => co.Tags)
                 .Include(co => co.ImageUrls)
                 .Include(co => co.UnavailableDates)

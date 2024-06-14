@@ -22,14 +22,14 @@ public class GetCarOrderQueryHandler : IQueryHandler<GetCarOrderQuery, HandlerRe
     public async Task<HandlerResult<GetCarOrderResponse, IErrorResult>> Handle(GetCarOrderQuery request,
         CancellationToken cancellationToken)
     {
-        Guid.TryParse(request.IdOrUrl, out var blogPostId);
+        Guid.TryParse(request.Id, out var blogPostId);
 
         var carOrder = await _repository.GetByIdAsync(new CarOrderId(blogPostId), cancellationToken);
 
         return carOrder is null ? new EntityNotFoundErrorResult()
             {
                 Title = "Blog post was not found",
-                Message = $"Blog post with ID/Url {request.IdOrUrl} was not found in the database."
+                Message = $"Blog post with ID/Url {request.Id} was not found in the database."
             } : new GetCarOrderResponse
         {
             Id = carOrder.Id,

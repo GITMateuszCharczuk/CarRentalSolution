@@ -1,11 +1,23 @@
 {
   "Version": 1,
-  "Hash": "L4zspRahnM2BCS9LAEeHKx7fBu4maxyQwwDqoW6HkjE=",
+  "Hash": "QyHr9r9H/tJ3ih10ndMFo6XXkHUq06275OmMufE5nfY=",
   "Source": "RentalModule.Infrastructure.FakeSeed",
   "BasePath": "_content/RentalModule.Infrastructure.FakeSeed",
   "Mode": "Default",
   "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "C:\\Users\\testo\\Documents\\GitHub\\CarRentalSolution\\RentalModule.Infrastructure\\RentalModule.Infrastructure.csproj",
+      "Version": 2,
+      "Source": "RentalModule.Infrastructure",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
+    }
+  ],
   "DiscoveryPatterns": [],
   "Assets": []
 }

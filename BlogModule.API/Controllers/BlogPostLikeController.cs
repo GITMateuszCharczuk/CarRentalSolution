@@ -1,5 +1,5 @@
 using Blog.API.Mappers;
-using Blog.API.Utilities;
+using BlogModule.API.Utilities;
 using BlogModule.Application.CommandHandlers.BlogPostLike.CreateLikeForBlogPost;
 using BlogModule.Application.Contract.BlogPostLikes.CreateLikeForBlogPost;
 using BlogModule.Application.QueryHandlers.BlogPostLike.GetLikesCount;
@@ -26,11 +26,11 @@ public class BlogPostLikeController : Controller
     public async Task<IActionResult> CreateBlogPostLikeAsync([FromBody] CreateLikeForBlogPostRequest request, CancellationToken cancellationToken) =>
         (await _mediator.Send(_mapper.MapToMessage(request), cancellationToken)).Match(Ok, this.ErrorResult);
       
-    [HttpGet("{idOrUrl}")]
+    [HttpGet("getcount/{idOrUrl}")]
     public async Task<IActionResult> GetLikesCountForBlogPost([FromRoute] string idOrUrl, CancellationToken cancellationToken) =>
         (await _mediator.Send(new GetLikesCountQuery { BlogPostId = idOrUrl }, cancellationToken)).Match(Ok, this.ErrorResult);
     
-    [HttpGet("getcount/{idOrUrl}")]
+    [HttpGet("{idOrUrl}")]
     public async Task<IActionResult> GetLikesForBlogPost([FromRoute] string idOrUrl, CancellationToken cancellationToken) =>
         (await _mediator.Send(new GetLikesForBlogPostQuery() { BlogPostId = idOrUrl }, cancellationToken)).Match(Ok, this.ErrorResult);
     // [HttpDelete("{id}")]

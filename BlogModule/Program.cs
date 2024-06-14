@@ -23,14 +23,33 @@ using BlogModule.Infrastructure.Decorators;
 using BlogModule.Infrastructure.Mappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using RentalModule.API.Mappers;
+using RentalModule.Application.QueryHandlers.CarOffer.GetCarOffers;
+using RentalModule.Domain.Models;
+using RentalModule.Domain.RepositoryInterfaces.CarOffer;
+using RentalModule.Domain.RepositoryInterfaces.CarOrder;
+using RentalModule.Domain.RepositoryInterfaces.CarTag;
+using RentalModule.Infrastructure.Binders.CarOfferId;
+using RentalModule.Infrastructure.DataBase.Context;
+using RentalModule.Infrastructure.DataBase.Entities;
+using RentalModule.Infrastructure.DataBase.Repository.CarOffer;
+using RentalModule.Infrastructure.DataBase.Repository.CarOrder;
+using RentalModule.Infrastructure.DataBase.Repository.CarTag;
+using RentalModule.Infrastructure.DataBase.UnitOfWork;
+using RentalModule.Infrastructure.Decorators;
+using RentalModule.Infrastructure.Mappers;
 using Shared.Behaviors;
 using Shared.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("CarRentalBlogDbConnectionString");
-ArgumentNullException.ThrowIfNull(connectionString, nameof(connectionString));
-builder.Services.AddDbContext<BlogDbContext>(options => options.UseSqlServer(connectionString));
+var connectionStringBLog = builder.Configuration.GetConnectionString("CarRentalBlogDbConnectionString");
+ArgumentNullException.ThrowIfNull(connectionStringBLog, nameof(connectionStringBLog));
+builder.Services.AddDbContext<BlogDbContext>(options => options.UseSqlServer(connectionStringBLog));
+
+var connectionStringCar = builder.Configuration.GetConnectionString("CarRentalCarDbConnectionString");
+ArgumentNullException.ThrowIfNull(connectionStringCar, nameof(connectionStringCar));
+builder.Services.AddDbContext<RentalDbContext>(options => options.UseSqlServer(connectionStringCar));
 
 builder.Services.AddScoped<IBlogUnitOfWork, BlogUnitOfWork>();
 builder.Services.AddScoped<IBlogPostLikeCommandRepository, BlogPostLikeCommandRepository>();
@@ -49,12 +68,35 @@ builder.Services.AddScoped<IPersistenceMapper<TagEntity, TagModel>, TagPersisten
 builder.Services.AddScoped<IPersistenceMapper<BlogPostEntity, BlogPostModel>, BlogPostPersistenceMapper>();
 
 
+builder.Services.AddScoped<IRentalUnitOfWork, RentalUnitOfWork>();
+
+// CarOffer Repositories
+builder.Services.AddScoped<ICarOfferCommandRepository, CarOfferCommandRepository>();
+builder.Services.AddScoped<ICarOfferQueryRepository, CarOfferQueryRepository>();
+builder.Services.AddScoped<ICarTagCommandRepository, CarTagCommandRepository>();
+builder.Services.AddScoped<ICarTagQueryRepository, CarTagQueryRepository>();
+builder.Services.AddScoped<ICarOrderCommandRepository, CarOrderCommandRepository>();
+builder.Services.AddScoped<ICarOrderQueryRepository, CarOrderQueryRepository>();
+
+// API Mappers
+builder.Services.AddScoped<ICarApiMapper, CarApiMapper>();
+
+// Persistence Mappers
+builder.Services.AddScoped<IPersistenceMapper<CarOfferEntity, CarOfferModel>, CarOfferPersistenceMapper>();
+builder.Services.AddScoped<IPersistenceMapper<CarTagEntity, CarTagModel>, CarTagPersistenceMapper>();
+builder.Services.AddScoped<IPersistenceMapper<CarOrderEntity, CarOrderModel>, CarOrderPersistenceMapper>();
+builder.Services.AddScoped<IPersistenceMapper<ImageUrlEntity, ImageUrlModel>, ImageUrlPersistenceMapper>();
+builder.Services.AddScoped<IPersistenceMapper<CarTariffEntity, CarTariffModel>, CarTariffPersistenceMapper>();
+builder.Services.AddScoped<IPersistenceMapper<TimePeriodEntity, TimePeriodModel>, TimePeriodPersistenceMapper>();
+
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(GetBlogPostsQuery).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(GetCarOffersQuery).Assembly);
 });
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationHandlerBehaviour<,>));
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(BlogCommandHandlerBehavior<,>));
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(RentalCommandHandlerBehavior<,>));
 
 builder.Services.AddControllers(options =>
     {
@@ -62,6 +104,8 @@ builder.Services.AddControllers(options =>
         options.ModelBinderProviders.Insert(0, new TagIdModelBinderProvider());
         options.ModelBinderProviders.Insert(0, new BlogPostCommentIdModelBinderProvider());
         options.ModelBinderProviders.Insert(0, new BlogPostLikeIdModelBinderProvider());
+        
+        options.ModelBinderProviders.Insert(0, new CarOfferIdModelBinderProvider());
     })
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
@@ -75,6 +119,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.MapControllers();
-app.MapGet("/", () => "BLOG API");
+app.MapGet("/", () => "API");
 
 app.Run();

@@ -67,4 +67,7 @@ namespace RentalModule.Infrastructure.Mappers
             UnavailableDates = model.UnavailableDates?.Select(period => _timePeriodMapper.MapToEntity(period)).ToArray() ?? Array.Empty<TimePeriodEntity>()
         };
     }
+    
+    
+    
 }

@@ -16,7 +16,7 @@ public record GetCarOrderResponse :  ISuccessResult
     
     public DateTime EndDate { get; init; }
 
-    public string Notes { get; init; } = string.Empty;
+    public string? Notes { get; init; } = string.Empty;
     
     public int NumOfDrivers { get; init; }
     

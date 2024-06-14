@@ -23,6 +23,6 @@ public record CreateCarOfferRequest
     public Double FullWeekendPrice { get; init; }
     public Double OneWeekPrice { get; init; }
     public Double OneMonthPrice { get; init; }
-    public string[] Tags { get; init; }
-    public string[] ImageUrls { get; init; }
+    public string[]? Tags { get; init; }
+    public string[]? ImageUrls { get; init; }
 }

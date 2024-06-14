@@ -20,9 +20,12 @@ public class BlogPostQueryRepository : QueryRepository<BlogPostEntity, BlogPostI
     {
     }
 
-    public override async Task<BlogPostModel?> GetByIdAsync(BlogPostId id,
-        CancellationToken cancellationToken = default) =>
-        await base.GetByIdAsync(id, cancellationToken);
+    public override async Task<BlogPostModel?> GetByIdAsync(BlogPostId id, CancellationToken cancellationToken = default) =>
+        await DbContext.BlogPosts.AsNoTracking()
+            .Include(co => co.Tags)
+            .Include(co => co.Comments)
+            .FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken)
+            .ContinueWith(x => x.Result is null ? null : Mapper.MapToModel(x.Result), cancellationToken);
 
     public override async Task<ImmutableArray<BlogPostModel>> GetByIdsAsync(ImmutableArray<BlogPostId> ids,
         CancellationToken cancellationToken = default) =>
@@ -33,6 +36,8 @@ public class BlogPostQueryRepository : QueryRepository<BlogPostEntity, BlogPostI
 
     public async Task<BlogPostModel?> GetByUrlAsync(string urlHandle, CancellationToken cancellationToken) =>
         await DbContext.BlogPosts.AsNoTracking()
+            .Include(co => co.Tags)
+            .Include(co => co.Comments)
             .FirstOrDefaultAsync(x => x.UrlHandle == urlHandle, cancellationToken)
             .ContinueWith(x => x.Result is null ? null : Mapper.MapToModel(x.Result), cancellationToken);
 
@@ -57,6 +62,8 @@ public class BlogPostQueryRepository : QueryRepository<BlogPostEntity, BlogPostI
         CancellationToken cancellationToken)
     {
         var queryablePosts = DbContext.BlogPosts
+            .Include(co => co.Tags)
+            .Include(co => co.Comments)
             .AsNoTracking()
             .AsQueryable();
 

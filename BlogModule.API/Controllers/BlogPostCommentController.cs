@@ -1,7 +1,7 @@
 using Blog.API.Mappers;
+using BlogModule.API.Utilities;
 using BlogModule.Application.Contract.BlogPostComments.CreateBlogPostComment;
 using BlogModule.Application.Contract.BlogPostComments.GetBlogPostComments;
-using Blog.API.Utilities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
