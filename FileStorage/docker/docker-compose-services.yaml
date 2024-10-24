@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:5.0
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  nats:
+    image: nats:2.9.6-alpine
+    container_name: nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    command: -js
+
+volumes:
+  mongo_data:
