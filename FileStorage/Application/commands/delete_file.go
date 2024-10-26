@@ -1,19 +1,26 @@
+// commands/delete_file.go
 package commands
 
 import (
-    "context"
-    "file-storage/Infrastructure/db"
+	"context"
+	"file-storage/Domain/repository"
 )
 
 type DeleteFileCommand struct {
-    FileID  string
-    OwnerID string
+	fileRepo repository.FileRepository
+	FileID   string
+	OwnerID  string
 }
 
-func DeleteFile(cmd DeleteFileCommand) error {
-    // Logic for deleting a file in MongoDB
-    if err := db.DeleteFileByID(context.Background(), cmd.FileID); err != nil {
-        return err
-    }
-    return nil
+func NewDeleteFileCommand(fileRepo repository.FileRepository) *DeleteFileCommand {
+	return &DeleteFileCommand{
+		fileRepo: fileRepo,
+	}
+}
+
+func (cmd *DeleteFileCommand) Execute() error {
+	if err := cmd.fileRepo.DeleteFileByID(context.Background(), cmd.FileID); err != nil {
+		return err
+	}
+	return nil
 }

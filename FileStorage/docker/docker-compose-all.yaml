@@ -1,8 +1,8 @@
 services:
   api:
     build:
-      context: .
-      dockerfile: ../docker/Dockerfile.API
+      context: ..
+      dockerfile: ./docker/Dockerfile.API
     ports:
       - "8080:8080"
     depends_on:

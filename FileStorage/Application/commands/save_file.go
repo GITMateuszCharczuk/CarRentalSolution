@@ -1,31 +1,45 @@
+// commands/save_file.go
 package commands
 
 import (
-    "context"
-    "file-storage/Domain/models"
-    "file-storage/Infrastructure/db"
-    "file-storage/Infrastructure/queue"
+	"context"
+	"file-storage/Domain/event"
+	"file-storage/Domain/models"
+	"file-storage/Domain/repository"
 )
 
 type SaveFileCommand struct {
-    FileID   string
-    OwnerID  string
-    FilePath string
+	FileID   string
+	OwnerID  string
+	FileName string
+	Content  []byte
+
+	fileRepo       repository.FileRepository
+	eventPublisher event.EventPublisher
 }
 
-func SaveFile(cmd SaveFileCommand) error {
-    file := models.File{
-        ID:       cmd.FileID,
-        OwnerID:  cmd.OwnerID,
-        FilePath: cmd.FilePath,
-    }
-    // Save file to MongoDB
-    if err := db.InsertFile(context.Background(), file.ID, file.OwnerID, file.FilePath); err != nil {
-        return err
-    }
+func NewSaveFileCommand(fileRepo repository.FileRepository, eventPublisher event.EventPublisher) *SaveFileCommand {
+	return &SaveFileCommand{
+		fileRepo:       fileRepo,
+		eventPublisher: eventPublisher,
+	}
+}
 
-    // Publish event to NATS JetStream
-    queue.PublishEvent("FileSaved")
+func (cmd *SaveFileCommand) Execute() error {
+	file := models.File{
+		ID:       cmd.FileID,
+		OwnerID:  cmd.OwnerID,
+		FileName: cmd.FileName,
+		Content:  cmd.Content,
+	}
 
-    return nil
+	if err := cmd.fileRepo.InsertFile(context.Background(), file); err != nil {
+		return err
+	}
+
+	if err := cmd.eventPublisher.PublishEvent("FileSaved", file); err != nil {
+		return err
+	}
+
+	return nil
 }

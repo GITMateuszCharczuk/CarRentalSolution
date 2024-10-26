@@ -1,60 +1,70 @@
 package handlers
 
 import (
-    "encoding/json"
-    "file-storage/Application/commands"
-    "file-storage/Application/queries"
-    "net/http"
+	"file-storage/Application/commands"
+	"file-storage/Application/queries"
+	"io"
+	"net/http"
 )
 
-// FileHandler handles file uploads
-func FileHandler(w http.ResponseWriter, r *http.Request) {
-    switch r.Method {
-    case http.MethodPost:
-        var cmd commands.SaveFileCommand
-        if err := json.NewDecoder(r.Body).Decode(&cmd); err != nil {
-            http.Error(w, "Invalid input", http.StatusBadRequest)
-            return
-        }
-        if err := commands.SaveFile(cmd); err != nil {
-            http.Error(w, err.Error(), http.StatusInternalServerError)
-            return
-        }
-        w.WriteHeader(http.StatusCreated)
-    default:
-        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-    }
+func SaveFileHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPost:
+		var cmd commands.SaveFileCommand
+		fileID := r.FormValue("file_id")
+		ownerID := r.FormValue("owner_id")
+		fileName := r.FormValue("owner_id")
+
+		fileContent, err := io.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, "Could not read file", http.StatusBadRequest)
+			return
+		}
+
+		cmd = commands.SaveFileCommand{
+			FileID:   fileID,
+			OwnerID:  ownerID,
+			FileName: fileName,
+			Content:  fileContent,
+		}
+
+		if err := cmd.Execute(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusCreated)
+	default:
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
 }
 
-// GetFileHandler handles file retrieval by ID
 func GetFileHandler(w http.ResponseWriter, r *http.Request) {
-    fileID := r.URL.Query().Get("fileID")
-    ownerID := r.URL.Query().Get("ownerID")
-    if fileID == "" || ownerID == "" {
-        http.Error(w, "fileID and ownerID are required", http.StatusBadRequest)
-        return
-    }
-    query := queries.GetFileQuery{FileID: fileID, OwnerID: ownerID}
-    filePath, err := queries.GetFile(query)
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
-    }
-    w.Write([]byte(filePath))
+	fileID := r.URL.Query().Get("fileID")
+	ownerID := r.URL.Query().Get("ownerID")
+	if fileID == "" || ownerID == "" {
+		http.Error(w, "fileID and ownerID are required", http.StatusBadRequest)
+		return
+	}
+	query := queries.GetFileQuery{FileID: fileID, OwnerID: ownerID}
+	filePath, err := query.Execute()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Write([]byte(filePath.Content))
 }
 
-// DeleteFileHandler handles file deletion by ID
 func DeleteFileHandler(w http.ResponseWriter, r *http.Request) {
-    fileID := r.URL.Query().Get("fileID")
-    ownerID := r.URL.Query().Get("ownerID")
-    if fileID == "" || ownerID == "" {
-        http.Error(w, "fileID and ownerID are required", http.StatusBadRequest)
-        return
-    }
-    query := commands.DeleteFileCommand{FileID: fileID, OwnerID: ownerID}
-    if err := commands.DeleteFile(query); err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
-    }
-    w.WriteHeader(http.StatusOK)
+	fileID := r.URL.Query().Get("fileID")
+	ownerID := r.URL.Query().Get("ownerID")
+	if fileID == "" || ownerID == "" {
+		http.Error(w, "fileID and ownerID are required", http.StatusBadRequest)
+		return
+	}
+	command := commands.DeleteFileCommand{FileID: fileID, OwnerID: ownerID}
+	if err := command.Execute(); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
 }
