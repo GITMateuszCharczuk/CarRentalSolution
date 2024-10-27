@@ -1,3 +1,5 @@
+// routes/router.go
+
 package routes
 
 import (
@@ -5,9 +7,16 @@ import (
 	"net/http"
 )
 
-// RegisterRoutes registers the API routes and their handlers
-func RegisterRoutes() {
-	http.HandleFunc("/files", handlers.SaveFileHandler)
-	http.HandleFunc("/files/delete", handlers.DeleteFileHandler)
-	http.HandleFunc("/files/get", handlers.GetFileHandler)
+type Router struct {
+	fileHandler *handlers.FileHandler
+}
+
+func NewRouter(fileHandler *handlers.FileHandler) *Router {
+	return &Router{fileHandler: fileHandler}
+}
+
+func (r *Router) RegisterRoutes() {
+	http.HandleFunc("/files", r.fileHandler.SaveFileHandler)
+	http.HandleFunc("/files/delete", r.fileHandler.DeleteFileHandler)
+	http.HandleFunc("/files/get", r.fileHandler.GetFileHandler)
 }

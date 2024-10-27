@@ -9,8 +9,10 @@ import (
 )
 
 type Config struct {
-	MongoDBURL string
-	StreamName string
+	MongoDBUrl      string
+	MongoDBName     string
+	MongoDBCollName string
+	StreamName      string
 }
 
 var (
@@ -27,8 +29,10 @@ func NewConfig(path string) (*Config, error) {
 		}
 
 		instance = &Config{
-			MongoDBURL: getEnv("MONGO_DB_URL", "mongodb://localhost:27017"),
-			StreamName: getEnv("STREAM_NAME", "default-stream"),
+			MongoDBUrl:      getEnv("MONGO_DB_URL", "mongodb://localhost:27017"),
+			MongoDBName:     getEnv("MONGO_DB_NAME", "FileDB"),
+			MongoDBCollName: getEnv("MONGO_DB_COLLECTION_NAME", "files"),
+			StreamName:      getEnv("STREAM_NAME", "default-stream"),
 		}
 	})
 	return instance, err

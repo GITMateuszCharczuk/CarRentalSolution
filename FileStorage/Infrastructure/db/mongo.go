@@ -16,10 +16,10 @@ var (
 	collectionOnce     sync.Once
 )
 
-func ConnectMongo() error {
+func ConnectMongo(mongoURI string) error {
 	var err error
 	clientOnce.Do(func() {
-		clientInstance, err = mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
+		clientInstance, err = mongo.Connect(context.TODO(), options.Client().ApplyURI(mongoURI))
 		if err != nil {
 			log.Fatalf("Failed to connect to MongoDB: %v", err)
 		}
@@ -27,19 +27,15 @@ func ConnectMongo() error {
 	return err
 }
 
-func GetMongoClient() *mongo.Client {
-	return clientInstance
-}
-
-func GetFilesCollection() *mongo.Collection {
+func GetFilesCollection(mongoURI string, dbName string, collName string) *mongo.Collection {
 	collectionOnce.Do(func() {
 		if clientInstance == nil {
-			err := ConnectMongo()
+			err := ConnectMongo(mongoURI)
 			if err != nil {
 				log.Fatalf("Failed to initialize MongoDB client: %v", err)
 			}
 		}
-		collectionInstance = clientInstance.Database("filedb").Collection("files")
+		collectionInstance = clientInstance.Database(dbName).Collection(collName)
 	})
 	return collectionInstance
 }
