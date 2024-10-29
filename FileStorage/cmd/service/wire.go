@@ -1,5 +1,6 @@
 // main/wire.go
 
+// go:build wireinject
 //go:build wireinject
 // +build wireinject
 
@@ -14,6 +15,7 @@ import (
 	"file-storage/Domain/repository_interfaces"
 	"file-storage/Infrastructure/config"
 	"file-storage/Infrastructure/db"
+	"file-storage/Infrastructure/processor"
 	"file-storage/Infrastructure/publisher"
 	"file-storage/Infrastructure/queue"
 	"file-storage/Infrastructure/receiver"
@@ -35,6 +37,7 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 		repository.WireSet,
 		queue.WireSet,
 		publisher.WireSet,
+		processor.WireSet,
 		receiver.WireSet,
 		wire.Struct(new(InfrastructureComponents), "*"),
 	)

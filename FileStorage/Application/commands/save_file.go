@@ -2,10 +2,10 @@
 package commands
 
 import (
-	"context"
 	"file-storage/Domain/event"
 	"file-storage/Domain/models"
 	"file-storage/Domain/repository_interfaces"
+	"fmt"
 )
 
 type SaveFileCommand struct {
@@ -26,19 +26,19 @@ func NewSaveFileCommand(fileRepo repository_interfaces.FileRepository, eventPubl
 }
 
 func (cmd *SaveFileCommand) Execute() error {
-	file := models.File{
+	fileData := models.File{
 		ID:       cmd.FileID,
 		OwnerID:  cmd.OwnerID,
 		FileName: cmd.FileName,
 		Content:  cmd.Content,
 	}
 
-	if err := cmd.fileRepo.InsertFile(context.Background(), file); err != nil {
-		return err
-	}
+	// if err := cmd.fileRepo.InsertFile(context.Background(), file); err != nil {
+	// 	return err
+	// }
 
-	if err := cmd.eventPublisher.PublishEvent("FileSaved", file); err != nil {
-		return err
+	if err := cmd.eventPublisher.PublishEvent("events.upload", fileData, models.EventTypeUpload); err != nil {
+		return fmt.Errorf("failed to publish event: %w", err)
 	}
 
 	return nil

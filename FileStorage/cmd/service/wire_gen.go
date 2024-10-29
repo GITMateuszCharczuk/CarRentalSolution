@@ -15,6 +15,7 @@ import (
 	"file-storage/Domain/repository_interfaces"
 	"file-storage/Infrastructure/config"
 	"file-storage/Infrastructure/db"
+	"file-storage/Infrastructure/processor"
 	"file-storage/Infrastructure/publisher"
 	"file-storage/Infrastructure/queue"
 	"file-storage/Infrastructure/receiver"
@@ -38,7 +39,8 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	if err != nil {
 		return nil, err
 	}
-	eventReceiver, err := receiver.NewJetStreamReceiver(jetStreamContext)
+	eventProcessor := processor.InitializeEventProcessor(fileRepository)
+	eventReceiver, err := receiver.NewJetStreamReceiver(jetStreamContext, eventProcessor)
 	if err != nil {
 		return nil, err
 	}

@@ -2,14 +2,18 @@
 package commands
 
 import (
-	"context"
+	"file-storage/Domain/event"
+	"file-storage/Domain/models"
 	"file-storage/Domain/repository_interfaces"
+	"fmt"
 )
 
 type DeleteFileCommand struct {
-	fileRepo repository_interfaces.FileRepository
-	FileID   string
-	OwnerID  string
+	FileID  string
+	OwnerID string
+
+	fileRepo       repository_interfaces.FileRepository
+	eventPublisher event.EventPublisher
 }
 
 func NewDeleteFileCommand(fileRepo repository_interfaces.FileRepository) *DeleteFileCommand {
@@ -19,8 +23,12 @@ func NewDeleteFileCommand(fileRepo repository_interfaces.FileRepository) *Delete
 }
 
 func (cmd *DeleteFileCommand) Execute() error {
-	if err := cmd.fileRepo.DeleteFileByID(context.Background(), cmd.FileID); err != nil {
-		return err
+	// if err := cmd.fileRepo.DeleteFileByID(context.Background(), cmd.FileID); err != nil {
+	// 	return err
+	// }
+
+	if err := cmd.eventPublisher.PublishEvent("events.delete", cmd.FileID, models.EventTypeDelete); err != nil {
+		return fmt.Errorf("failed to publish event: %w", err)
 	}
 	return nil
 }
