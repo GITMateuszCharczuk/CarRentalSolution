@@ -3,16 +3,16 @@ package commands
 
 import (
 	"context"
-	"file-storage/Domain/repository"
+	"file-storage/Domain/repository_interfaces"
 )
 
 type DeleteFileCommand struct {
-	fileRepo repository.FileRepository
+	fileRepo repository_interfaces.FileRepository
 	FileID   string
 	OwnerID  string
 }
 
-func NewDeleteFileCommand(fileRepo repository.FileRepository) *DeleteFileCommand {
+func NewDeleteFileCommand(fileRepo repository_interfaces.FileRepository) *DeleteFileCommand {
 	return &DeleteFileCommand{
 		fileRepo: fileRepo,
 	}

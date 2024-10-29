@@ -1,22 +1,54 @@
-// routes/router.go
-
 package routes
 
 import (
-	"file-storage/API/handlers"
+	"context"
+	"file-storage/Application/handlers"
+	"log"
 	"net/http"
+	"time"
 )
 
 type Router struct {
-	fileHandler *handlers.FileHandler
+	fileHandlers *handlers.Handlers
+	server       *http.Server
 }
 
-func NewRouter(fileHandler *handlers.FileHandler) *Router {
-	return &Router{fileHandler: fileHandler}
+func NewRouter(fileHandlers *handlers.Handlers) *Router {
+	return &Router{fileHandlers: fileHandlers}
 }
 
 func (r *Router) RegisterRoutes() {
-	http.HandleFunc("/files", r.fileHandler.SaveFileHandler)
-	http.HandleFunc("/files/delete", r.fileHandler.DeleteFileHandler)
-	http.HandleFunc("/files/get", r.fileHandler.GetFileHandler)
+	mux := http.NewServeMux()
+	for _, handler := range r.fileHandlers.All {
+		mux.HandleFunc(handler.Route(), handler.Handle)
+	}
+	r.server = &http.Server{
+		Addr:    ":8080",
+		Handler: mux,
+	}
+}
+
+func (r *Router) StartServer() error {
+	log.Println("Starting server on port")
+	if err := r.server.ListenAndServe(); err != http.ErrServerClosed {
+		return err
+	}
+	return nil
+}
+
+func (r *Router) StopServer(ctx context.Context) error {
+	if r.server == nil {
+		return nil
+	}
+	shutdownCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	log.Println("Stopping server gracefully...")
+	err := r.server.Shutdown(shutdownCtx)
+	if err != nil {
+		log.Printf("Error shutting down server: %v", err)
+		return err
+	}
+	log.Println("Server gracefully stopped.")
+	return nil
 }

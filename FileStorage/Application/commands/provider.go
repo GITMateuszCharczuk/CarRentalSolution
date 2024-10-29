@@ -1,24 +1,27 @@
-// commands/commands.go
-
 package commands
 
 import (
 	"file-storage/Domain/event"
-	"file-storage/Domain/repository"
+	"file-storage/Domain/repository_interfaces"
 
 	"github.com/google/wire"
 )
 
+func ProvideSaveFileCommand(fileRepo repository_interfaces.FileRepository, eventPublisher event.EventPublisher) *SaveFileCommand {
+	return NewSaveFileCommand(fileRepo, eventPublisher)
+}
+
+func ProvideDeleteFileCommand(fileRepo repository_interfaces.FileRepository) *DeleteFileCommand {
+	return NewDeleteFileCommand(fileRepo)
+}
+
 type Commands struct {
-	SaveFile   *SaveFileCommand
-	DeleteFile *DeleteFileCommand
+	SaveFileCommand   *SaveFileCommand
+	DeleteFileCommand *DeleteFileCommand
 }
 
-func ProvideCommands(fileRepo repository.FileRepository, eventPublisher event.EventPublisher) *Commands {
-	return &Commands{
-		SaveFile:   NewSaveFileCommand(fileRepo, eventPublisher),
-		DeleteFile: NewDeleteFileCommand(fileRepo),
-	}
-}
-
-var WireSet = wire.NewSet(ProvideCommands)
+var WireSet = wire.NewSet(
+	ProvideSaveFileCommand,
+	ProvideDeleteFileCommand,
+	wire.Struct(new(Commands), "*"),
+)

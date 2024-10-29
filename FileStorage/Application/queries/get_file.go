@@ -4,16 +4,16 @@ package queries
 import (
 	"context"
 	"file-storage/Domain/models"
-	"file-storage/Domain/repository"
+	"file-storage/Domain/repository_interfaces"
 )
 
 type GetFileQuery struct {
 	FileID   string
 	OwnerID  string
-	fileRepo repository.FileRepository
+	fileRepo repository_interfaces.FileRepository
 }
 
-func NewGetFileQuery(fileRepo repository.FileRepository) *GetFileQuery {
+func NewGetFileQuery(fileRepo repository_interfaces.FileRepository) *GetFileQuery {
 	return &GetFileQuery{
 		fileRepo: fileRepo,
 	}

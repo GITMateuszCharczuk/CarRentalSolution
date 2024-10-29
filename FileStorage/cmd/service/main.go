@@ -1,20 +1,60 @@
 package main
 
 import (
+	"context"
+	"file-storage/API/routes"
+	"file-storage/Domain/event"
 	"log"
-	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
 
 func main() {
-	router, err := InitializeApplication()
+	components, err := InitializeInfrastructureComponents()
 	if err != nil {
-		log.Fatalf("Failed to initialize application: %v", err)
+		log.Fatalf("Failed to initialize Infrastructure: %v", err)
 	}
+
+	router, err := InitializeApi(components.FileRepository, components.EventPublisher)
+	if err != nil {
+		log.Fatalf("Failed to initialize API: %v", err)
+	}
+
+	go func() {
+		if err := components.EventReceiver.StartReceiving(); err != nil {
+			log.Fatalf("Failed to start JetStream receiver: %v", err)
+		}
+	}()
 
 	router.RegisterRoutes()
 
-	log.Println("Starting server on :8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatalf("Server failed to start: %v", err)
+	go func() {
+		if err := router.StartServer(); err != nil {
+			log.Fatalf("Failed to start API server: %v", err)
+		}
+	}()
+
+	waitForShutdown(router, components.EventReceiver)
+}
+
+func waitForShutdown(router *routes.Router, receiver event.EventReceiver) {
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+
+	<-sigChan
+	log.Println("Shutting down application...")
+
+	if err := receiver.StopReceiving(); err != nil {
+		log.Printf("Error stopping JetStream receiver: %v", err)
 	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := router.StopServer(ctx); err != nil {
+		log.Printf("Error stopping API server: %v", err)
+	}
+
+	log.Println("Api gracefully stopped.")
 }

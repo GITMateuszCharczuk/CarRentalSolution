@@ -5,7 +5,7 @@ import (
 	"context"
 	"file-storage/Domain/event"
 	"file-storage/Domain/models"
-	"file-storage/Domain/repository"
+	"file-storage/Domain/repository_interfaces"
 )
 
 type SaveFileCommand struct {
@@ -14,11 +14,11 @@ type SaveFileCommand struct {
 	FileName string
 	Content  []byte
 
-	fileRepo       repository.FileRepository
+	fileRepo       repository_interfaces.FileRepository
 	eventPublisher event.EventPublisher
 }
 
-func NewSaveFileCommand(fileRepo repository.FileRepository, eventPublisher event.EventPublisher) *SaveFileCommand {
+func NewSaveFileCommand(fileRepo repository_interfaces.FileRepository, eventPublisher event.EventPublisher) *SaveFileCommand {
 	return &SaveFileCommand{
 		fileRepo:       fileRepo,
 		eventPublisher: eventPublisher,
