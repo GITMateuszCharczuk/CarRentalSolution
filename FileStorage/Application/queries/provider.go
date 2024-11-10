@@ -1,20 +1,21 @@
 package queries
 
 import (
+	get_query "file-storage/Application/queries/get_file"
 	"file-storage/Domain/repository_interfaces"
 
 	"github.com/google/wire"
 )
 
-func ProvideGetFileQuery(fileRepo repository_interfaces.FileRepository) *GetFileQuery {
-	return NewGetFileQuery(fileRepo)
+func ProvideGetFileQueryHandler(fileRepo repository_interfaces.FileRepository) *get_query.GetFileQueryHandler {
+	return get_query.NewGetFileQueryHandler(fileRepo)
 }
 
-type Queries struct {
-	GetFileQuery *GetFileQuery
+type QueryHandlers struct {
+	GetFileQuery *get_query.GetFileQuery
 }
 
 var WireSet = wire.NewSet(
-	ProvideGetFileQuery,
-	wire.Struct(new(Queries), "*"),
+	ProvideGetFileQueryHandler,
+	wire.Struct(new(QueryHandlers), "*"),
 )

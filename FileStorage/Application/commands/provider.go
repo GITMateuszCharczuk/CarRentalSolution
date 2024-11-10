@@ -1,27 +1,29 @@
 package commands
 
 import (
+	delete_command "file-storage/Application/commands/delete_file"
+	save_command "file-storage/Application/commands/save_file"
 	"file-storage/Domain/event"
 	"file-storage/Domain/repository_interfaces"
 
 	"github.com/google/wire"
 )
 
-func ProvideSaveFileCommand(fileRepo repository_interfaces.FileRepository, eventPublisher event.EventPublisher) *SaveFileCommand {
-	return NewSaveFileCommand(fileRepo, eventPublisher)
+func ProvideSaveFileCommandHandler(fileRepo repository_interfaces.FileRepository, eventPublisher event.EventPublisher) *save_command.SaveFileCommandHandler {
+	return save_command.NewSaveFileCommandHandler(fileRepo, eventPublisher)
 }
 
-func ProvideDeleteFileCommand(fileRepo repository_interfaces.FileRepository, eventPublisher event.EventPublisher) *DeleteFileCommand {
-	return NewDeleteFileCommand(fileRepo, eventPublisher)
+func ProvideDeleteFileCommandHandler(fileRepo repository_interfaces.FileRepository, eventPublisher event.EventPublisher) *delete_command.DeleteFileCommandHandler {
+	return delete_command.NewDeleteFileCommandHandler(fileRepo, eventPublisher)
 }
 
-type Commands struct {
-	SaveFileCommand   *SaveFileCommand
-	DeleteFileCommand *DeleteFileCommand
+type CommandHandlers struct {
+	SaveFileCommand   *save_command.SaveFileCommand
+	DeleteFileCommand *delete_command.DeleteFileCommand
 }
 
 var WireSet = wire.NewSet(
-	ProvideSaveFileCommand,
-	ProvideDeleteFileCommand,
-	wire.Struct(new(Commands), "*"),
+	ProvideSaveFileCommandHandler,
+	ProvideDeleteFileCommandHandler,
+	wire.Struct(new(CommandHandlers), "*"),
 )

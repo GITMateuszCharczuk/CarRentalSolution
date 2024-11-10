@@ -7,9 +7,9 @@
 package main
 
 import (
+	"file-storage/API/controllers"
 	"file-storage/API/routes"
 	"file-storage/Application/commands"
-	"file-storage/Application/handlers"
 	"file-storage/Application/queries"
 	"file-storage/Domain/event"
 	"file-storage/Domain/repository_interfaces"
@@ -53,15 +53,15 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 }
 
 func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPublisher event.EventPublisher) (*routes.Router, error) {
-	saveFileCommand := commands.ProvideSaveFileCommand(FileRepository, EventPublisher)
-	saveFileHandler := handlers.NewSaveFileHandler(saveFileCommand)
-	getFileQuery := queries.ProvideGetFileQuery(FileRepository)
-	getFileHandler := handlers.NewGetFileHandler(getFileQuery)
-	deleteFileCommand := commands.ProvideDeleteFileCommand(FileRepository)
-	deleteFileHandler := handlers.NewDeleteFileHandler(deleteFileCommand)
-	v := handlers.ProvideHandlers(saveFileHandler, getFileHandler, deleteFileHandler)
-	handlersHandlers := handlers.NewHandlers(v)
-	router := routes.NewRouter(handlersHandlers)
+	saveFileCommandHandler := commands.ProvideSaveFileCommandHandler(FileRepository, EventPublisher)
+	saveFileController := controllers.NewSaveFileController(saveFileCommandHandler)
+	getFileQueryHandler := queries.ProvideGetFileQueryHandler(FileRepository)
+	getFileController := controllers.NewGetFileController(getFileQueryHandler)
+	deleteFileCommandHandler := commands.ProvideDeleteFileCommandHandler(FileRepository, EventPublisher)
+	deleteFileController := controllers.NewDeleteFileController(deleteFileCommandHandler)
+	v := controllers.ProvideControllers(saveFileController, getFileController, deleteFileController)
+	controllersControllers := controllers.NewControllers(v)
+	router := routes.NewRouter(controllersControllers)
 	return router, nil
 }
 

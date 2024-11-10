@@ -7,9 +7,9 @@
 package main
 
 import (
+	"file-storage/API/controllers"
 	"file-storage/API/routes"
 	"file-storage/Application/commands"
-	"file-storage/Application/handlers"
 	"file-storage/Application/queries"
 	"file-storage/Domain/event"
 	"file-storage/Domain/repository_interfaces"
@@ -48,7 +48,7 @@ func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPub
 	wire.Build(
 		commands.WireSet,
 		queries.WireSet,
-		handlers.WireSet,
+		controllers.WireSet,
 		routes.NewRouter,
 	)
 	return &routes.Router{}, nil

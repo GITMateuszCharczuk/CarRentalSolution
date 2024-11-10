@@ -2,24 +2,24 @@ package routes
 
 import (
 	"context"
-	"file-storage/Application/handlers"
+	"file-storage/API/controllers"
 	"log"
 	"net/http"
 	"time"
 )
 
 type Router struct {
-	fileHandlers *handlers.Handlers
-	server       *http.Server
+	fileControllers *controllers.Controllers
+	server          *http.Server
 }
 
-func NewRouter(fileHandlers *handlers.Handlers) *Router {
-	return &Router{fileHandlers: fileHandlers}
+func NewRouter(fileControllers *controllers.Controllers) *Router {
+	return &Router{fileControllers: fileControllers}
 }
 
 func (r *Router) RegisterRoutes() {
 	mux := http.NewServeMux()
-	for _, handler := range r.fileHandlers.All {
+	for _, handler := range r.fileControllers.All {
 		mux.HandleFunc(handler.Route(), handler.Handle)
 	}
 	r.server = &http.Server{
