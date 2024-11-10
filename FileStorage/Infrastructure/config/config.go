@@ -13,6 +13,8 @@ type Config struct {
 	MongoDBName     string
 	MongoDBCollName string
 	StreamName      string
+	NatsUrl         string
+	StreamSubjects  string
 }
 
 var (
@@ -32,7 +34,9 @@ func NewConfig(path string) (*Config, error) {
 			MongoDBUrl:      getEnv("MONGO_DB_URL", "mongodb://localhost:27017"),
 			MongoDBName:     getEnv("MONGO_DB_NAME", "FileDB"),
 			MongoDBCollName: getEnv("MONGO_DB_COLLECTION_NAME", "files"),
-			StreamName:      getEnv("STREAM_NAME", "default-stream"),
+			NatsUrl:         getEnv("NATS_URL", "nats://localhost:4222"),
+			StreamName:      getEnv("STREAM_NAME", "file_stream"),
+			StreamSubjects:  getEnv("STREAM_SUBJECTS", "events.*"),
 		}
 	})
 	return instance, err

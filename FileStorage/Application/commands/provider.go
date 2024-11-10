@@ -11,8 +11,8 @@ func ProvideSaveFileCommand(fileRepo repository_interfaces.FileRepository, event
 	return NewSaveFileCommand(fileRepo, eventPublisher)
 }
 
-func ProvideDeleteFileCommand(fileRepo repository_interfaces.FileRepository) *DeleteFileCommand {
-	return NewDeleteFileCommand(fileRepo)
+func ProvideDeleteFileCommand(fileRepo repository_interfaces.FileRepository, eventPublisher event.EventPublisher) *DeleteFileCommand {
+	return NewDeleteFileCommand(fileRepo, eventPublisher)
 }
 
 type Commands struct {

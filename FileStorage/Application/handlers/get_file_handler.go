@@ -17,15 +17,16 @@ func NewGetFileHandler(qrs *queries.GetFileQuery) *GetFileHandler {
 
 func (h *GetFileHandler) Handle(w http.ResponseWriter, r *http.Request) {
 	fileID := r.URL.Query().Get("fileID")
-	ownerID := r.URL.Query().Get("ownerID")
-	if fileID == "" || ownerID == "" {
+	// ownerID := r.URL.Query().Get("ownerID")
+	// if fileID == "" || ownerID == "" {
+	if fileID == "" {
 		http.Error(w, "fileID and ownerID are required", http.StatusBadRequest)
 		return
 	}
 
 	query := h.query
 	query.FileID = fileID
-	query.OwnerID = ownerID
+	query.OwnerID = "123" //ownerID
 
 	filePath, err := query.Execute()
 	if err != nil {

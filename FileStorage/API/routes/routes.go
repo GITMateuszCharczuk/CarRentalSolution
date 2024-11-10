@@ -29,7 +29,7 @@ func (r *Router) RegisterRoutes() {
 }
 
 func (r *Router) StartServer() error {
-	log.Println("Starting server on port")
+	log.Println("Starting server on default port", r.server.Addr)
 	if err := r.server.ListenAndServe(); err != http.ErrServerClosed {
 		return err
 	}

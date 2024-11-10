@@ -8,7 +8,7 @@ import (
 )
 
 func ProvideJetStreamContext(cfg *config.Config) (nats.JetStreamContext, error) {
-	js, err := InitializeJetStream(cfg.StreamName)
+	js, err := InitializeJetStream(cfg.NatsUrl, cfg.StreamName, []string{cfg.StreamSubjects})
 	if err != nil {
 		return nil, err
 	}

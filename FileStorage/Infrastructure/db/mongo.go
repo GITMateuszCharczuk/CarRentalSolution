@@ -35,7 +35,22 @@ func GetFilesCollection(mongoURI string, dbName string, collName string) *mongo.
 				log.Fatalf("Failed to initialize MongoDB client: %v", err)
 			}
 		}
-		collectionInstance = clientInstance.Database(dbName).Collection(collName)
+
+		db := clientInstance.Database(dbName)
+		collectionInstance = db.Collection(collName)
+
+		collections, err := db.ListCollectionNames(context.TODO(), map[string]interface{}{"name": collName})
+		if err != nil {
+			log.Fatalf("Failed to list collections: %v", err)
+		}
+
+		if len(collections) == 0 {
+			if err := db.CreateCollection(context.TODO(), collName); err != nil {
+				log.Fatalf("Failed to create collection: %v", err)
+			}
+			log.Println("Collection created: %a", collName)
+		}
+		log.Println("Collection already exists:", collName)
 	})
 	return collectionInstance
 }

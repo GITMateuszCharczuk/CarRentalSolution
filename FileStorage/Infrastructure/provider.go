@@ -25,8 +25,8 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 		db.WireSet,
 		repository.WireSet,
 		queue.WireSet,
-		publisher.WireSet,
 		receiver.WireSet,
+		publisher.WireSet,
 		wire.Struct(new(InfrastructureComponents), "*"),
 	)
 	return &InfrastructureComponents{}, nil
