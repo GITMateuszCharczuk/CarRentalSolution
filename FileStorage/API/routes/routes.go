@@ -1,11 +1,16 @@
+// routes/router.go
+
 package routes
 
 import (
 	"context"
 	"file-storage/API/controllers"
+	"file-storage/API/middleware"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Router struct {
@@ -18,18 +23,36 @@ func NewRouter(fileControllers *controllers.Controllers) *Router {
 }
 
 func (r *Router) RegisterRoutes() {
-	mux := http.NewServeMux()
+	router := gin.Default()
+
+	router.Use(middleware.CORSMiddleware())
+
 	for _, handler := range r.fileControllers.All {
-		mux.HandleFunc(handler.Route(), handler.Handle)
+		route := handler.Route()
+		for _, method := range handler.Methods() {
+			switch method {
+			case "GET":
+				router.GET(route, func(c *gin.Context) { handler.Handle(c) })
+			case "POST":
+				router.POST(route, func(c *gin.Context) { handler.Handle(c) })
+			case "DELETE":
+				router.DELETE(route, func(c *gin.Context) { handler.Handle(c) })
+			case "PUT":
+				router.PUT(route, func(c *gin.Context) { handler.Handle(c) })
+			case "PATCH":
+				router.PATCH(route, func(c *gin.Context) { handler.Handle(c) })
+			}
+		}
 	}
+
 	r.server = &http.Server{
 		Addr:    ":8080",
-		Handler: mux,
+		Handler: router,
 	}
 }
 
 func (r *Router) StartServer() error {
-	log.Println("Starting server on default port", r.server.Addr)
+	log.Println("Starting server on port", r.server.Addr)
 	if err := r.server.ListenAndServe(); err != http.ErrServerClosed {
 		return err
 	}

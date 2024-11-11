@@ -1,8 +1,9 @@
 package controllers
 
-import "net/http"
+import "github.com/gin-gonic/gin"
 
 type Controller interface {
-	Handle(w http.ResponseWriter, r *http.Request)
+	Handle(c *gin.Context)
 	Route() string
+	Methods() []string
 }

@@ -1,14 +1,12 @@
-// handlers/save_file_handler.go
-
 package controllers
 
 import (
-	"encoding/json"
 	"file-storage/API/mappers"
 	contract "file-storage/Application.contract/SaveFile"
 	command "file-storage/Application/commands/save_file"
-	"io"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type SaveFileController struct {
@@ -19,36 +17,32 @@ func NewSaveFileController(cmd *command.SaveFileCommandHandler) *SaveFileControl
 	return &SaveFileController{commandHandler: cmd}
 }
 
-func (h *SaveFileController) Handle(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
-
+func (h *SaveFileController) Handle(c *gin.Context) {
 	var req contract.SaveFileRequest
-	if err := json.Unmarshal(body, &req); err != nil {
-		http.Error(w, "Invalid JSON format", http.StatusBadRequest)
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON format"})
 		return
 	}
 
 	command := mappers.MapToSaveFileCommand(&req)
-	resp, err := h.commandHandler.Execute(command)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	if command == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating GUID"})
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(resp)
+	resp, err := h.commandHandler.Execute(*command)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, resp)
 }
 
 func (h *SaveFileController) Route() string {
 	return "/files"
+}
+
+func (h *SaveFileController) Methods() []string {
+	return []string{"POST"}
 }

@@ -7,6 +7,9 @@ import (
 	delete_command "file-storage/Application/commands/delete_file"
 	save_command "file-storage/Application/commands/save_file"
 	get_queries "file-storage/Application/queries/get_file"
+	"fmt"
+
+	"github.com/google/uuid"
 )
 
 func MapToDeleteFileCommand(req *delete_contract.DeleteFileRequest) delete_command.DeleteFileCommand {
@@ -16,9 +19,14 @@ func MapToDeleteFileCommand(req *delete_contract.DeleteFileRequest) delete_comma
 	}
 }
 
-func MapToSaveFileCommand(req *save_contract.SaveFileRequest) save_command.SaveFileCommand {
-	return save_command.SaveFileCommand{
-		FileID:   req.FileID,
+func MapToSaveFileCommand(req *save_contract.SaveFileRequest) *save_command.SaveFileCommand {
+	u, err := uuid.NewUUID()
+	if err != nil {
+		fmt.Println("Error generating UUID:", err)
+		return nil
+	}
+	return &save_command.SaveFileCommand{
+		FileID:   u.String(),
 		OwnerID:  req.OwnerID,
 		FileName: req.FileName,
 		Content:  req.Content,

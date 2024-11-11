@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"encoding/json"
 	"file-storage/API/mappers"
 	contract "file-storage/Application.contract/DeleteFile"
 	commands "file-storage/Application/commands/delete_file"
+	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -16,23 +16,27 @@ func NewDeleteFileController(cmd *commands.DeleteFileCommandHandler) *DeleteFile
 	return &DeleteFileController{commandHandler: cmd}
 }
 
-func (h *DeleteFileController) Handle(w http.ResponseWriter, r *http.Request) {
+func (h *DeleteFileController) Handle(c *gin.Context) {
 	var req contract.DeleteFileRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Invalid request", http.StatusBadRequest)
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
 
 	command := mappers.MapToDeleteFileCommand(&req)
 	resp, err := h.commandHandler.Execute(command)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	json.NewEncoder(w).Encode(resp)
+	c.JSON(http.StatusOK, resp)
 }
 
 func (h *DeleteFileController) Route() string {
 	return "/files/delete"
+}
+
+func (h *DeleteFileController) Methods() []string {
+	return []string{"DELETE"}
 }
