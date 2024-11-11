@@ -10,7 +10,11 @@ import (
 	"net/http"
 	"time"
 
+	// _ "file-storage/docs"
+
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Router struct {
@@ -44,6 +48,8 @@ func (r *Router) RegisterRoutes() {
 			}
 		}
 	}
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.server = &http.Server{
 		Addr:    ":8080",

@@ -17,6 +17,17 @@ func NewGetFileController(qrs *queries.GetFileQueryHandler) *GetFileController {
 	return &GetFileController{queryHandler: qrs}
 }
 
+// Handle godoc
+// @Summary Get a file
+// @Description Retrieve a file from the storage by its ID
+// @Tags files
+// @Accept  json
+// @Produce  json
+// @Param file body contract.GetFileRequest true "File ID"
+// @Success 200 {object} contract.GetFileResponse
+// @Failure 400 {object} gin.H{"error": "Invalid request"}
+// @Failure 500 {object} gin.H{"error": "Internal Server Error"}
+// @Router /files/get [get]
 func (h *GetFileController) Handle(c *gin.Context) {
 	var req contract.GetFileRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

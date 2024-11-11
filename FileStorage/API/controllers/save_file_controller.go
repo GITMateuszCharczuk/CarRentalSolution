@@ -17,6 +17,16 @@ func NewSaveFileController(cmd *command.SaveFileCommandHandler) *SaveFileControl
 	return &SaveFileController{commandHandler: cmd}
 }
 
+// Handle godoc
+// @Summary Save a new file
+// @Description Save a file to the storage
+// @Tags files
+// @Accept  json
+// @Produce  json
+// @Param file body contract.SaveFileRequest true "File information"
+// @Success 200 {object} contract.SaveFileResponse
+// @Failure 400 {object} gin.H{"error": "Bad request"}
+// @Router /files [post]
 func (h *SaveFileController) Handle(c *gin.Context) {
 	var req contract.SaveFileRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
