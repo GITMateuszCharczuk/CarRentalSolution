@@ -7,8 +7,7 @@ import (
 )
 
 func InitializeEventProcessor(fileRepo repository_interfaces.FileRepository) *EventProcessor {
-	wire.Build(NewEventProcessor)
-	return &EventProcessor{}
+	return NewEventProcessor(fileRepo)
 }
 
-var WireSet = wire.NewSet(InitializeEventProcessor)
+var WireSet = wire.NewSet(NewEventProcessor)

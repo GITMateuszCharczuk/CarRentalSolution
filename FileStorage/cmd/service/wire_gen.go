@@ -26,11 +26,10 @@ import (
 
 func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	configConfig := config.ProvideConfig()
-	collection, err := db.ProvideMongoCollection(configConfig)
-	if err != nil {
-		return nil, err
-	}
-	fileRepository := repository.ProvideFileRepository(collection)
+	database := db.ProvideMongoDB(configConfig)
+	collection := db.ProvideMongoCollection(database, configConfig)
+	bucket := db.ProvideBucket(database)
+	fileRepository := repository.ProvideFileRepository(collection, bucket)
 	jetStreamContext, err := queue.ProvideJetStreamContext(configConfig)
 	if err != nil {
 		return nil, err
@@ -39,7 +38,7 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	if err != nil {
 		return nil, err
 	}
-	eventProcessor := processor.InitializeEventProcessor(fileRepository)
+	eventProcessor := processor.NewEventProcessor(fileRepository)
 	eventReceiver, err := receiver.NewJetStreamReceiver(jetStreamContext, eventProcessor)
 	if err != nil {
 		return nil, err

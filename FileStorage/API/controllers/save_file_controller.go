@@ -2,9 +2,10 @@ package controllers
 
 import (
 	"file-storage/API/mappers"
+	"file-storage/API/services"
 	contract "file-storage/Application.contract/SaveFile"
 	command "file-storage/Application/commands/save_file"
-	"net/http"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,34 +20,39 @@ func NewSaveFileController(cmd *command.SaveFileCommandHandler) *SaveFileControl
 
 // Handle godoc
 // @Summary Save a new file
-// @Description Save a file to the storage
+// @Description Uploads and saves a file in the storage system, including metadata and content.
 // @Tags files
-// @Accept  json
-// @Produce  json
-// @Param file body contract.SaveFileRequest true "File information"
-// @Success 200 {object} contract.SaveFileResponse
-// @Failure 400 {object} gin.H{"error": "Bad request"}
+// @Accept json
+// @Produce json
+// @Param file body contract.SaveFileRequest true "File metadata and content for saving"
+// @Success 201 {object} contract.SaveFileResponse "File saved successfully with unique ID and details"
+// @Failure 400 {object} contract.SaveFileResponse "Invalid request format or file data"
+// @Failure 500 {object} contract.SaveFileResponse "Server encountered an error during file save operation"
 // @Router /files [post]
 func (h *SaveFileController) Handle(c *gin.Context) {
+	responseSender := services.NewResponseSender(c)
+
 	var req contract.SaveFileRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON format"})
+		responseSender.Send(contract.SaveFileResponse{
+			Title:   "StatusBadRequest",
+			Message: fmt.Sprintf("Invalid JSON format: %v", err),
+		})
 		return
 	}
 
 	command := mappers.MapToSaveFileCommand(&req)
-	if command == nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating GUID"})
-		return
-	}
 
-	resp, err := h.commandHandler.Execute(*command)
+	resp, err := h.commandHandler.Execute(command)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		responseSender.Send(contract.SaveFileResponse{
+			Title:   "StatusInternalServerError",
+			Message: fmt.Sprintf("Something went wrong: %v", err),
+		})
 		return
 	}
 
-	c.JSON(http.StatusCreated, resp)
+	responseSender.Send(resp)
 }
 
 func (h *SaveFileController) Route() string {

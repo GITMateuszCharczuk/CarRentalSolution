@@ -23,14 +23,14 @@ func NewDeleteFileCommandHandler(fileRepo repository_interfaces.FileRepository, 
 
 func (cmd *DeleteFileCommandHandler) Execute(command DeleteFileCommand) (contract.DeleteFileResponse, error) {
 	if err := cmd.eventPublisher.PublishEvent("events.delete", command.FileID, models.EventTypeDelete); err != nil {
-		return contract.DeleteFileResponse{
-			Title:   "Error",
+		return contract.DeleteFileResponse{ //TODO dodać checka
+			Title:   "StatusInternalServerError",
 			Message: fmt.Sprintf("Failed to delete file: %v", err),
 		}, err
 	}
 
 	return contract.DeleteFileResponse{
-		Title:   "Success",
+		Title:   "StatusOK",
 		Message: "File deleted successfully",
 	}, nil
 }

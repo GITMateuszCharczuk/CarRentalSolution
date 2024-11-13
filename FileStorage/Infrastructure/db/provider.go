@@ -5,11 +5,19 @@ import (
 
 	"github.com/google/wire"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/gridfs"
 )
 
-func ProvideMongoCollection(cfg *config.Config) (*mongo.Collection, error) {
-	col := GetFilesCollection(cfg.MongoDBUrl, cfg.MongoDBName, cfg.MongoDBCollName)
-	return col, nil
+func ProvideMongoDB(cfg *config.Config) *mongo.Database {
+	return InitializeDB(cfg.MongoDBUrl, cfg.MongoDBName)
 }
 
-var WireSet = wire.NewSet(ProvideMongoCollection)
+func ProvideMongoCollection(db *mongo.Database, cfg *config.Config) *mongo.Collection {
+	return InitializeFilesCollection(db, cfg.MongoDBCollName)
+}
+
+func ProvideBucket(db *mongo.Database) *gridfs.Bucket {
+	return InitializeBucket(db)
+}
+
+var WireSet = wire.NewSet(ProvideMongoDB, ProvideMongoCollection, ProvideBucket)

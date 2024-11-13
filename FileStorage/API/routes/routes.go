@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"time"
 
-	// _ "file-storage/docs"
+	_ "file-storage/docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

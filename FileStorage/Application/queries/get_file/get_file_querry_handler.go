@@ -21,14 +21,14 @@ func (cmd *GetFileQueryHandler) Execute(query GetFileQuery) (contract.GetFileRes
 	file, err := cmd.fileRepo.GetFileByID(context.Background(), query.FileID)
 	if err != nil {
 		return contract.GetFileResponse{
-			Title:   "Error",
+			Title:   "StatusNotFound",
 			Message: "File not found",
 		}, err
 	}
 
 	return contract.GetFileResponse{
-		Title:   "Success",
+		Title:   "StatusOK",
 		Message: "File retrieved successfully",
-		File:    file.Content,
+		File:    file,
 	}, nil
 }

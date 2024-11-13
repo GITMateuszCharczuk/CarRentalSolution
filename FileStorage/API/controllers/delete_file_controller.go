@@ -2,14 +2,14 @@ package controllers
 
 import (
 	"file-storage/API/mappers"
+	"file-storage/API/services"
 	contract "file-storage/Application.contract/DeleteFile"
 	commands "file-storage/Application/commands/delete_file"
-	"net/http"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
 
-// DeleteFileController handles file deletion requests
 type DeleteFileController struct {
 	commandHandler *commands.DeleteFileCommandHandler
 }
@@ -20,30 +20,39 @@ func NewDeleteFileController(cmd *commands.DeleteFileCommandHandler) *DeleteFile
 
 // Handle godoc
 // @Summary Delete a file
-// @Description Delete a file by ID
+// @Description Deletes a file from storage by its unique ID. The file ID should be a valid identifier for an existing file.
 // @Tags files
 // @Accept json
 // @Produce json
-// @Param fileId path string true "File ID"
-// @Success 200 {object} contract.DeleteFileResponse
-// @Failure 400 {object} ErrorResponse "Invalid request"
-// @Failure 500 {object} ErrorResponse "Server error"
+// @Param fileId path string true "Unique File ID to be deleted"
+// @Success 200 {object} contract.DeleteFileResponse "File deletion was successful"
+// @Failure 400 {object} contract.DeleteFileResponse "Invalid request format or parameters"
+// @Failure 404 {object} contract.DeleteFileResponse "File not found with the given ID"
+// @Failure 500 {object} contract.DeleteFileResponse "Server encountered an error during file deletion"
 // @Router /files/delete [delete]
 func (h *DeleteFileController) Handle(c *gin.Context) {
+	responseSender := services.NewResponseSender(c)
+
 	var req contract.DeleteFileRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		responseSender.Send(contract.DeleteFileResponse{
+			Title:   "StatusBadRequest",
+			Message: fmt.Sprintf("Invalid request: %v", err),
+		})
 		return
 	}
 
 	command := mappers.MapToDeleteFileCommand(&req)
 	resp, err := h.commandHandler.Execute(command)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		responseSender.Send(contract.DeleteFileResponse{
+			Title:   "StatusInternalServerError",
+			Message: fmt.Sprintf("Something went wrong: %v", err),
+		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	responseSender.Send(resp)
 }
 
 func (h *DeleteFileController) Route() string {

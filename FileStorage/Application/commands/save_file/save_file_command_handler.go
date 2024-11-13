@@ -7,6 +7,8 @@ import (
 	"file-storage/Domain/models"
 	"file-storage/Domain/repository_interfaces"
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 type SaveFileCommandHandler struct {
@@ -22,8 +24,17 @@ func NewSaveFileCommandHandler(fileRepo repository_interfaces.FileRepository, ev
 }
 
 func (cmd *SaveFileCommandHandler) Execute(command SaveFileCommand) (*contract.SaveFileResponse, error) {
+	u, err := uuid.NewUUID()
+	if err != nil {
+		return &contract.SaveFileResponse{
+			Title:   "StatusInternalServerError",
+			Message: "Error generating GUID",
+		}, err
+	}
+	fileId := u.String()
+
 	fileData := models.File{
-		ID:       command.FileID,
+		ID:       fileId,
 		OwnerID:  command.OwnerID,
 		FileName: command.FileName,
 		Content:  command.Content,
@@ -31,13 +42,14 @@ func (cmd *SaveFileCommandHandler) Execute(command SaveFileCommand) (*contract.S
 
 	if err := cmd.eventPublisher.PublishEvent("events.upload", fileData, models.EventTypeUpload); err != nil {
 		return &contract.SaveFileResponse{
-			Title:   "Error",
+			Title:   "StatusInternalServerError",
 			Message: fmt.Sprintf("Failed to save file: %v", err),
 		}, err
 	}
 
 	return &contract.SaveFileResponse{
-		Title:   "Success",
+		Title:   "StatusOK",
 		Message: "File saved successfully",
+		Id:      fileId,
 	}, nil
 }

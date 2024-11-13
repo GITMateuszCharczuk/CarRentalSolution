@@ -1,6 +1,7 @@
 package mappers
 
 import (
+	"encoding/base64"
 	"errors"
 	"file-storage/Domain/models"
 	"fmt"
@@ -16,11 +17,34 @@ func MapToFile(data interface{}) (models.File, error) {
 		return models.File{}, fmt.Errorf("%w: expected map[string]interface{}", ErrInvalidDataType)
 	}
 
-	file := models.File{
-		ID:       fileData["ID"].(string),
-		OwnerID:  fileData["OwnerID"].(string),
-		FileName: fileData["FileName"].(string),
-		Content:  fileData["Content"].([]byte),
+	file := models.File{}
+
+	if id, ok := fileData["ID"].(string); ok {
+		file.ID = id
+	} else {
+		return models.File{}, fmt.Errorf("invalid type for ID")
+	}
+
+	if ownerID, ok := fileData["OwnerID"].(string); ok {
+		file.OwnerID = ownerID
+	} else {
+		return models.File{}, fmt.Errorf("invalid type for OwnerID")
+	}
+
+	if fileName, ok := fileData["FileName"].(string); ok {
+		file.FileName = fileName
+	} else {
+		return models.File{}, fmt.Errorf("invalid type for FileName")
+	}
+
+	if contentStr, ok := fileData["Content"].(string); ok {
+		contentBytes, err := base64.StdEncoding.DecodeString(contentStr)
+		if err != nil {
+			return models.File{}, fmt.Errorf("failed to decode Content: %w", err)
+		}
+		file.Content = contentBytes
+	} else {
+		return models.File{}, fmt.Errorf("invalid type for Content")
 	}
 
 	return file, nil

@@ -1,0 +1,147 @@
+definitions:
+  contract.DeleteFileResponse:
+    properties:
+      message:
+        type: string
+      title:
+        type: string
+    type: object
+  contract.GetFileResponse:
+    properties:
+      file:
+        items:
+          type: integer
+        type: array
+      message:
+        type: string
+      title:
+        type: string
+    type: object
+  contract.SaveFileRequest:
+    properties:
+      content:
+        items:
+          type: integer
+        type: array
+      file_name:
+        type: string
+      owner_id:
+        type: string
+    type: object
+  contract.SaveFileResponse:
+    properties:
+      id:
+        type: string
+      message:
+        type: string
+      title:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /files:
+    post:
+      consumes:
+      - application/json
+      description: Uploads and saves a file in the storage system, including metadata
+        and content.
+      parameters:
+      - description: File metadata and content for saving
+        in: body
+        name: file
+        required: true
+        schema:
+          $ref: '#/definitions/contract.SaveFileRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: File saved successfully with unique ID and details
+          schema:
+            $ref: '#/definitions/contract.SaveFileResponse'
+        "400":
+          description: Invalid request format or file data
+          schema:
+            $ref: '#/definitions/contract.SaveFileResponse'
+        "500":
+          description: Server encountered an error during file save operation
+          schema:
+            $ref: '#/definitions/contract.SaveFileResponse'
+      summary: Save a new file
+      tags:
+      - files
+  /files/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a file from storage by its unique ID. The file ID should
+        be a valid identifier for an existing file.
+      parameters:
+      - description: Unique File ID to be deleted
+        in: path
+        name: fileId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: File deletion was successful
+          schema:
+            $ref: '#/definitions/contract.DeleteFileResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            $ref: '#/definitions/contract.DeleteFileResponse'
+        "404":
+          description: File not found with the given ID
+          schema:
+            $ref: '#/definitions/contract.DeleteFileResponse'
+        "500":
+          description: Server encountered an error during file deletion
+          schema:
+            $ref: '#/definitions/contract.DeleteFileResponse'
+      summary: Delete a file
+      tags:
+      - files
+  /files/get:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a file from storage by its unique identifier. The ID
+        should refer to a valid, stored file.
+      parameters:
+      - description: File ID
+        in: query
+        name: file_id
+        required: true
+        type: string
+      - description: Owner ID
+        in: query
+        name: owner_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful retrieval of file details
+          schema:
+            $ref: '#/definitions/contract.GetFileResponse'
+        "400":
+          description: Request contains invalid format or parameters
+          schema:
+            $ref: '#/definitions/contract.GetFileResponse'
+        "404":
+          description: File not found with the given ID
+          schema:
+            $ref: '#/definitions/contract.GetFileResponse'
+        "500":
+          description: Server encountered an error during file retrieval
+          schema:
+            $ref: '#/definitions/contract.GetFileResponse'
+      summary: Get a file
+      tags:
+      - files
+swagger: "2.0"

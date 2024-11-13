@@ -20,7 +20,7 @@ func (p *EventProcessor) ProcessUploadEvent(data interface{}) error {
 	if err != nil {
 		return err
 	}
-
+	log.Println(file)
 	if err := p.fileRepo.InsertFile(context.Background(), file); err != nil {
 		log.Printf("Failed to insert file: %v", err)
 		return err
