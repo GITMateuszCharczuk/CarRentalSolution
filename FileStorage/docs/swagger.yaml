@@ -8,24 +8,9 @@ definitions:
     type: object
   contract.GetFileResponse:
     properties:
-      file:
-        items:
-          type: integer
-        type: array
       message:
         type: string
       title:
-        type: string
-    type: object
-  contract.SaveFileRequest:
-    properties:
-      content:
-        items:
-          type: integer
-        type: array
-      file_name:
-        type: string
-      owner_id:
         type: string
     type: object
   contract.SaveFileResponse:
@@ -43,16 +28,20 @@ paths:
   /files:
     post:
       consumes:
-      - application/json
+      - multipart/form-data
       description: Uploads and saves a file in the storage system, including metadata
         and content.
       parameters:
-      - description: File metadata and content for saving
-        in: body
+      - description: Owner ID associated with the file
+        in: formData
+        name: owner_id
+        required: true
+        type: string
+      - description: Binary file content (JPEG, PNG, etc.) to be saved
+        in: formData
         name: file
         required: true
-        schema:
-          $ref: '#/definitions/contract.SaveFileRequest'
+        type: file
       produces:
       - application/json
       responses:
@@ -61,7 +50,7 @@ paths:
           schema:
             $ref: '#/definitions/contract.SaveFileResponse'
         "400":
-          description: Invalid request format or file data
+          description: Invalid request format or missing parameters
           schema:
             $ref: '#/definitions/contract.SaveFileResponse'
         "500":
@@ -110,25 +99,31 @@ paths:
       consumes:
       - application/json
       description: Retrieves a file from storage by its unique identifier. The ID
-        should refer to a valid, stored file.
+        should refer to a valid, stored file, and the file is returned in its original
+        format (e.g., JPEG, PNG).
       parameters:
-      - description: File ID
+      - description: Unique File ID for retrieval
         in: query
         name: file_id
         required: true
         type: string
-      - description: Owner ID
+      - description: Owner ID associated with the file
         in: query
         name: owner_id
         required: true
         type: string
+      - description: File Name of the file to retrieve
+        in: query
+        name: file_name
+        required: true
+        type: string
       produces:
-      - application/json
+      - application/octet-stream
       responses:
         "200":
-          description: Successful retrieval of file details
+          description: Successful retrieval of file in binary format
           schema:
-            $ref: '#/definitions/contract.GetFileResponse'
+            type: file
         "400":
           description: Request contains invalid format or parameters
           schema:

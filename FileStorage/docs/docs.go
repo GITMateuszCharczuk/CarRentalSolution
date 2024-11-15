@@ -19,7 +19,7 @@ const docTemplate = `{
             "post": {
                 "description": "Uploads and saves a file in the storage system, including metadata and content.",
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -30,13 +30,18 @@ const docTemplate = `{
                 "summary": "Save a new file",
                 "parameters": [
                     {
-                        "description": "File metadata and content for saving",
+                        "type": "string",
+                        "description": "Owner ID associated with the file",
+                        "name": "owner_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Binary file content (JPEG, PNG, etc.) to be saved",
                         "name": "file",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/contract.SaveFileRequest"
-                        }
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -47,7 +52,7 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Invalid request format or file data",
+                        "description": "Invalid request format or missing parameters",
                         "schema": {
                             "$ref": "#/definitions/contract.SaveFileResponse"
                         }
@@ -113,12 +118,12 @@ const docTemplate = `{
         },
         "/files/get": {
             "get": {
-                "description": "Retrieves a file from storage by its unique identifier. The ID should refer to a valid, stored file.",
+                "description": "Retrieves a file from storage by its unique identifier. The ID should refer to a valid, stored file, and the file is returned in its original format (e.g., JPEG, PNG).",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "application/json"
+                    "application/octet-stream"
                 ],
                 "tags": [
                     "files"
@@ -127,24 +132,31 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "File ID",
+                        "description": "Unique File ID for retrieval",
                         "name": "file_id",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "Owner ID",
+                        "description": "Owner ID associated with the file",
                         "name": "owner_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "File Name of the file to retrieve",
+                        "name": "file_name",
                         "in": "query",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful retrieval of file details",
+                        "description": "Successful retrieval of file in binary format",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetFileResponse"
+                            "type": "file"
                         }
                     },
                     "400": {
@@ -184,33 +196,10 @@ const docTemplate = `{
         "contract.GetFileResponse": {
             "type": "object",
             "properties": {
-                "file": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
                 "message": {
                     "type": "string"
                 },
                 "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "contract.SaveFileRequest": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
-                "file_name": {
-                    "type": "string"
-                },
-                "owner_id": {
                     "type": "string"
                 }
             }

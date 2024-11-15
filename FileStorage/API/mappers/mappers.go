@@ -18,9 +18,8 @@ func MapToDeleteFileCommand(req *delete_contract.DeleteFileRequest) delete_comma
 
 func MapToSaveFileCommand(req *save_contract.SaveFileRequest) save_command.SaveFileCommand {
 	return save_command.SaveFileCommand{
-		OwnerID:  req.OwnerID,
-		FileName: req.FileName,
-		Content:  req.Content,
+		OwnerID: req.OwnerID,
+		File:    req.File,
 	}
 }
 

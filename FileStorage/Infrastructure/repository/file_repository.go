@@ -45,7 +45,7 @@ func (r *FileRepositoryImpl) InsertFile(ctx context.Context, file models.File) e
 	return err
 }
 
-func (r *FileRepositoryImpl) GetFileByID(ctx context.Context, fileID string) (models.File, error) {
+func (r *FileRepositoryImpl) GetFileByID(ctx context.Context, fileID string) (models.FileStream, error) {
 	var metadata struct {
 		ID       string `bson:"id"`
 		OwnerID  string `bson:"owner_id"`
@@ -53,25 +53,21 @@ func (r *FileRepositoryImpl) GetFileByID(ctx context.Context, fileID string) (mo
 	}
 
 	if err := r.collection.FindOne(ctx, bson.M{"id": fileID}).Decode(&metadata); err != nil {
-		return models.File{}, fmt.Errorf("file not found: %w", err)
+		return models.FileStream{}, fmt.Errorf("file not found: %w", err)
 	}
 
 	gridFSDownloadStream, err := r.bucket.OpenDownloadStreamByName(fileID)
 	if err != nil {
-		return models.File{}, fmt.Errorf("error downloading file content: %w", err)
-	}
-	defer gridFSDownloadStream.Close()
-
-	var buffer bytes.Buffer
-	if _, err := io.Copy(&buffer, gridFSDownloadStream); err != nil {
-		return models.File{}, err
+		return models.FileStream{}, fmt.Errorf("error downloading file content: %w", err)
 	}
 
-	return models.File{
-		ID:       metadata.ID,
+	fileSize := gridFSDownloadStream.GetFile().Length
+
+	return models.FileStream{
 		OwnerID:  metadata.OwnerID,
 		FileName: metadata.FileName,
-		Content:  buffer.Bytes(),
+		FileSize: fileSize,
+		Stream:   gridFSDownloadStream,
 	}, nil
 }
 

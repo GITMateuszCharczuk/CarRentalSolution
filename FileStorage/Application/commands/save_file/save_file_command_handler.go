@@ -7,6 +7,7 @@ import (
 	"file-storage/Domain/models"
 	"file-storage/Domain/repository_interfaces"
 	"fmt"
+	"io"
 
 	"github.com/google/uuid"
 )
@@ -33,11 +34,28 @@ func (cmd *SaveFileCommandHandler) Execute(command SaveFileCommand) (*contract.S
 	}
 	fileId := u.String()
 
+	fileContent, err := command.File.Open()
+	if err != nil {
+		return &contract.SaveFileResponse{
+			Title:   "StatusInternalServerError",
+			Message: fmt.Sprintf("Failed to open file: %v", err),
+		}, err
+	}
+	defer fileContent.Close()
+
+	content, err := io.ReadAll(fileContent)
+	if err != nil {
+		return &contract.SaveFileResponse{
+			Title:   "StatusInternalServerError",
+			Message: fmt.Sprintf("Failed to read file content: %v", err),
+		}, err
+	}
+
 	fileData := models.File{
 		ID:       fileId,
 		OwnerID:  command.OwnerID,
-		FileName: command.FileName,
-		Content:  command.Content,
+		FileName: command.File.Filename,
+		Content:  content,
 	}
 
 	if err := cmd.eventPublisher.PublishEvent("events.upload", fileData, models.EventTypeUpload); err != nil {
