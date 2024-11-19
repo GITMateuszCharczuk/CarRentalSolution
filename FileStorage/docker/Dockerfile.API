@@ -10,7 +10,7 @@ RUN go mod tidy
 
 COPY . .
 
-RUN go build -o /go-api cmd/service/main.go
+RUN go build -o /go-api ./cmd/service
 
 RUN ls -la /app
 

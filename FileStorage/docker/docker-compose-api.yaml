@@ -1,0 +1,21 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile.API
+    ports:
+      - "8080:8080"
+    environment:
+      MONGO_DB_NAME: FileDB
+      MONGO_DB_URL: mongodb://mongo:27017
+      MONGO_DB_COLLECTION_NAME: files
+      NATS_URL: nats://nats:4222
+      STREAM_NAME: file_stream
+      STREAM_SUBJECTS: events.*
+      ENV: prod
+    networks:
+      - file-network
+
+networks:
+  file-network:
+    driver: bridge

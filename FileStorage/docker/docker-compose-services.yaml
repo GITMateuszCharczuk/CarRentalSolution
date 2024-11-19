@@ -3,14 +3,23 @@ version: '3.8'
 services:
   mongo:
     image: mongo:5.0
+    networks:
+      - file-network
     container_name: mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongo --eval 'db.currentOp()'"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   mongo-express:
     image: mongo-express:latest
+    networks:
+      - file-network
     container_name: mongo-express
     ports:
       - "8081:8081"
@@ -22,6 +31,8 @@ services:
 
   nats:
     image: nats:2.9.6-alpine
+    networks:
+      - file-network
     container_name: nats
     ports:
       - "4222:4222"
@@ -30,3 +41,7 @@ services:
 
 volumes:
   mongo_data:
+
+networks:
+  file-network:
+    driver: bridge

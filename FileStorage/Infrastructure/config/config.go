@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"strings"
 	"sync"
 
 	"github.com/joho/godotenv"
@@ -25,9 +26,13 @@ var (
 func NewConfig(path string) (*Config, error) {
 	var err error
 	once.Do(func() {
-		err = godotenv.Load(path)
-		if err != nil {
-			log.Printf("Warning: could not load .env file: %v", err)
+		env := getEnv("ENV", "")
+		if strings.ToLower(env) == "test" || env == "" {
+			err = godotenv.Load(path)
+		}
+
+		if err != nil && strings.ToLower(env) != "prod" {
+			log.Printf("Warning: could not load .env file: %v, %v", err, env)
 		}
 
 		instance = &Config{
