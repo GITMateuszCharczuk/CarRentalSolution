@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  nats:
+    image: nats:2.9.6-alpine
+    networks:
+      - file-network
+    container_name: nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    command: -js
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    environment:
+      MH_STORAGE: "memory" 
+
+volumes:
+  mongo_data:
+
+networks:
+  file-network:
+    driver: bridge

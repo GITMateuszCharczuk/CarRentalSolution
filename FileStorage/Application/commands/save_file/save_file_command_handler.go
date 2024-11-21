@@ -5,7 +5,6 @@ import (
 	contract "file-storage/Application.contract/SaveFile"
 	"file-storage/Domain/event"
 	"file-storage/Domain/models"
-	"file-storage/Domain/repository_interfaces"
 	"fmt"
 	"io"
 
@@ -13,13 +12,11 @@ import (
 )
 
 type SaveFileCommandHandler struct {
-	fileRepo       repository_interfaces.FileRepository
 	eventPublisher event.EventPublisher
 }
 
-func NewSaveFileCommandHandler(fileRepo repository_interfaces.FileRepository, eventPublisher event.EventPublisher) *SaveFileCommandHandler {
+func NewSaveFileCommandHandler(eventPublisher event.EventPublisher) *SaveFileCommandHandler {
 	return &SaveFileCommandHandler{
-		fileRepo:       fileRepo,
 		eventPublisher: eventPublisher,
 	}
 }

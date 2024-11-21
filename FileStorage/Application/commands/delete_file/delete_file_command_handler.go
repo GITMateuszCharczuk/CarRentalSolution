@@ -5,18 +5,15 @@ import (
 	contract "file-storage/Application.contract/DeleteFile"
 	"file-storage/Domain/event"
 	"file-storage/Domain/models"
-	"file-storage/Domain/repository_interfaces"
 	"fmt"
 )
 
 type DeleteFileCommandHandler struct {
-	fileRepo       repository_interfaces.FileRepository
 	eventPublisher event.EventPublisher
 }
 
-func NewDeleteFileCommandHandler(fileRepo repository_interfaces.FileRepository, eventPublisher event.EventPublisher) *DeleteFileCommandHandler {
+func NewDeleteFileCommandHandler(eventPublisher event.EventPublisher) *DeleteFileCommandHandler {
 	return &DeleteFileCommandHandler{
-		fileRepo:       fileRepo,
 		eventPublisher: eventPublisher,
 	}
 }

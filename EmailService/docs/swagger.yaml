@@ -1,0 +1,142 @@
+definitions:
+  contract.DeleteFileResponse:
+    properties:
+      message:
+        type: string
+      title:
+        type: string
+    type: object
+  contract.GetFileResponse:
+    properties:
+      message:
+        type: string
+      title:
+        type: string
+    type: object
+  contract.SaveFileResponse:
+    properties:
+      id:
+        type: string
+      message:
+        type: string
+      title:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /files:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads and saves a file in the storage system, including metadata
+        and content.
+      parameters:
+      - description: Owner ID associated with the file
+        in: formData
+        name: owner_id
+        required: true
+        type: string
+      - description: Binary file content (JPEG, PNG, etc.) to be saved
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: File saved successfully with unique ID and details
+          schema:
+            $ref: '#/definitions/contract.SaveFileResponse'
+        "400":
+          description: Invalid request format or missing parameters
+          schema:
+            $ref: '#/definitions/contract.SaveFileResponse'
+        "500":
+          description: Server encountered an error during file save operation
+          schema:
+            $ref: '#/definitions/contract.SaveFileResponse'
+      summary: Save a new file
+      tags:
+      - files
+  /files/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a file from storage by its unique ID. The file ID should
+        be a valid identifier for an existing file.
+      parameters:
+      - description: Unique File ID to be deleted
+        in: path
+        name: fileId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: File deletion was successful
+          schema:
+            $ref: '#/definitions/contract.DeleteFileResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            $ref: '#/definitions/contract.DeleteFileResponse'
+        "404":
+          description: File not found with the given ID
+          schema:
+            $ref: '#/definitions/contract.DeleteFileResponse'
+        "500":
+          description: Server encountered an error during file deletion
+          schema:
+            $ref: '#/definitions/contract.DeleteFileResponse'
+      summary: Delete a file
+      tags:
+      - files
+  /files/get:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a file from storage by its unique identifier. The ID
+        should refer to a valid, stored file, and the file is returned in its original
+        format (e.g., JPEG, PNG).
+      parameters:
+      - description: Unique File ID for retrieval
+        in: query
+        name: file_id
+        required: true
+        type: string
+      - description: Owner ID associated with the file
+        in: query
+        name: owner_id
+        required: true
+        type: string
+      - description: File Name of the file to retrieve
+        in: query
+        name: file_name
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: Successful retrieval of file in binary format
+          schema:
+            type: file
+        "400":
+          description: Request contains invalid format or parameters
+          schema:
+            $ref: '#/definitions/contract.GetFileResponse'
+        "404":
+          description: File not found with the given ID
+          schema:
+            $ref: '#/definitions/contract.GetFileResponse'
+        "500":
+          description: Server encountered an error during file retrieval
+          schema:
+            $ref: '#/definitions/contract.GetFileResponse'
+      summary: Get a file
+      tags:
+      - files
+swagger: "2.0"

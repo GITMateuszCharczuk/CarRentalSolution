@@ -52,11 +52,11 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 }
 
 func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPublisher event.EventPublisher) (*routes.Router, error) {
-	saveFileCommandHandler := commands.ProvideSaveFileCommandHandler(FileRepository, EventPublisher)
+	saveFileCommandHandler := commands.ProvideSaveFileCommandHandler(EventPublisher)
 	saveFileController := controllers.NewSaveFileController(saveFileCommandHandler)
 	getFileQueryHandler := queries.ProvideGetFileQueryHandler(FileRepository)
 	getFileController := controllers.NewGetFileController(getFileQueryHandler)
-	deleteFileCommandHandler := commands.ProvideDeleteFileCommandHandler(FileRepository, EventPublisher)
+	deleteFileCommandHandler := commands.ProvideDeleteFileCommandHandler(EventPublisher)
 	deleteFileController := controllers.NewDeleteFileController(deleteFileCommandHandler)
 	v := controllers.ProvideControllers(saveFileController, getFileController, deleteFileController)
 	controllersControllers := controllers.NewControllers(v)
