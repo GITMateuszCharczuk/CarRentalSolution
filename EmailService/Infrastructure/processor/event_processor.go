@@ -2,8 +2,8 @@ package processor
 
 import (
 	"context"
-	"file-storage/Infrastructure/mappers"
-	"file-storage/Infrastructure/smtp"
+	"email-service/Infrastructure/mappers"
+	"email-service/Infrastructure/smtp"
 	"log"
 )
 

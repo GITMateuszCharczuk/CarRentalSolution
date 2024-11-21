@@ -1,7 +1,7 @@
 package processor
 
 import (
-	"file-storage/Infrastructure/smtp"
+	"email-service/Infrastructure/smtp"
 
 	"github.com/google/wire"
 )

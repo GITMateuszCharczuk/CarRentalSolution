@@ -7,17 +7,17 @@
 package main
 
 import (
-	"file-storage/API/controllers"
-	"file-storage/API/routes"
-	"file-storage/Application/commands"
-	"file-storage/Application/queries"
-	"file-storage/Domain/event"
-	"file-storage/Domain/repository_interfaces"
-	"file-storage/Infrastructure/config"
-	"file-storage/Infrastructure/processor"
-	"file-storage/Infrastructure/publisher"
-	"file-storage/Infrastructure/queue"
-	"file-storage/Infrastructure/receiver"
+	"email-service/API/controllers"
+	"email-service/API/routes"
+	"email-service/Application/commands"
+	"email-service/Application/queries"
+	"email-service/Domain/event"
+	"email-service/Domain/repository_interfaces"
+	"email-service/Infrastructure/config"
+	"email-service/Infrastructure/processor"
+	"email-service/Infrastructure/publisher"
+	"email-service/Infrastructure/queue"
+	"email-service/Infrastructure/receiver"
 
 	"github.com/google/wire"
 )

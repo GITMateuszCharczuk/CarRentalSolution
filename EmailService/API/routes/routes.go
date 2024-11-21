@@ -4,13 +4,13 @@ package routes
 
 import (
 	"context"
-	"file-storage/API/controllers"
-	"file-storage/API/middleware"
+	"email-service/API/controllers"
+	"email-service/API/middleware"
 	"log"
 	"net/http"
 	"time"
 
-	_ "file-storage/docs"
+	_ "email-service/docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

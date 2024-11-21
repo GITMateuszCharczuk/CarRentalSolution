@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"file-storage/API/mappers"
-	"file-storage/API/services"
-	contract "file-storage/Application.contract/GetFile"
-	queries "file-storage/Application/queries/get_file"
+	"email-service/API/mappers"
+	"email-service/API/services"
+	contract "email-service/Application.contract/GetFile"
+	queries "email-service/Application/queries/get_file"
 	"fmt"
 
 	"github.com/gin-gonic/gin"

@@ -1,12 +1,12 @@
 package infrastructure
 
 import (
-	"file-storage/Domain/event"
-	smtp "file-storage/Infrastructure/MailHog"
-	"file-storage/Infrastructure/config"
-	"file-storage/Infrastructure/publisher"
-	"file-storage/Infrastructure/queue"
-	"file-storage/Infrastructure/receiver"
+	"email-service/Domain/event"
+	smtp "email-service/Infrastructure/MailHog"
+	"email-service/Infrastructure/config"
+	"email-service/Infrastructure/publisher"
+	"email-service/Infrastructure/queue"
+	"email-service/Infrastructure/receiver"
 
 	"github.com/google/wire"
 )

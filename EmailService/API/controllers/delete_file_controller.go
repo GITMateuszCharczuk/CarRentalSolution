@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"file-storage/API/mappers"
-	"file-storage/API/services"
-	contract "file-storage/Application.contract/DeleteFile"
-	commands "file-storage/Application/commands/delete_file"
+	"email-service/API/mappers"
+	"email-service/API/services"
+	contract "email-service/Application.contract/DeleteFile"
+	commands "email-service/Application/commands/delete_file"
 	"fmt"
 
 	"github.com/gin-gonic/gin"

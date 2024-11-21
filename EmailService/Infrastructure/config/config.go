@@ -15,9 +15,10 @@ type Config struct {
 	StreamSubjects  string
 	MailhogHost     string
 	Env             string
-	MaihogPort      string
+	MailhogPort     string
 	MailhogUsername string
-	MaihogPassword  string
+	MailhogPassword string
+	MailhogUrl      string
 }
 
 var (
@@ -43,9 +44,10 @@ func NewConfig(path string) (*Config, error) {
 			StreamSubjects:  getEnv("STREAM_SUBJECTS", "events.*"),
 			Env:             getEnv("ENV", "test"),
 			MailhogHost:     getEnv("MAILHOG_HOST", "mailhog"),
-			MaihogPort:      getEnv("MAILHOG_PORT", "1025"),
+			MailhogPort:     getEnv("MAILHOG_PORT", "1025"),
 			MailhogUsername: getEnv("MAILHOG_USERNAME", ""),
-			MaihogPassword:  getEnv("MAILHOG_PASSWORD", ""),
+			MailhogPassword: getEnv("MAILHOG_PASSWORD", ""),
+			MailhogUrl:      getEnv("MAILHOG_URL", "localhost:8025"),
 		}
 	})
 	return instance, err

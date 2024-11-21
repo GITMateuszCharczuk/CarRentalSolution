@@ -1,9 +1,9 @@
 package mappers
 
 import (
+	"email-service/Domain/models"
 	"encoding/base64"
 	"errors"
-	"file-storage/Domain/models"
 	"fmt"
 )
 

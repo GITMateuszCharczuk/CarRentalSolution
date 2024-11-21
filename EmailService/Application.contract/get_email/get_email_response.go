@@ -1,6 +1,6 @@
 package contract
 
-import "file-storage/Domain/models"
+import "email-service/Domain/models"
 
 type GetEmailResponse struct {
 	Title   string       `json:"title"`

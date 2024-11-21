@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"file-storage/API/mappers"
-	"file-storage/API/services"
-	contract "file-storage/Application.contract/send_email"
-	command "file-storage/Application/commands/send_email"
+	"email-service/API/mappers"
+	"email-service/API/services"
+	contract "email-service/Application.contract/send_email"
+	command "email-service/Application/commands/send_email"
 	"fmt"
 	"net/http"
 

@@ -1,7 +1,7 @@
 package queue
 
 import (
-	"file-storage/Infrastructure/config"
+	"email-service/Infrastructure/config"
 
 	"github.com/google/wire"
 	"github.com/nats-io/nats.go"

@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"file-storage/API/routes"
-	"file-storage/Domain/event"
+	"email-service/API/routes"
+	"email-service/Domain/event"
 	"log"
 	"os"
 	"os/signal"

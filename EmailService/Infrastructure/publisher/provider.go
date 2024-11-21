@@ -1,7 +1,7 @@
 package publisher
 
 import (
-	"file-storage/Domain/event"
+	"email-service/Domain/event"
 
 	"github.com/google/wire"
 	"github.com/nats-io/nats.go"

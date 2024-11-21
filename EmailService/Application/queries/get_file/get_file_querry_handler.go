@@ -3,9 +3,9 @@ package queries
 
 import (
 	"context"
-	contract "file-storage/Application.contract/GetFile"
-	"file-storage/Domain/models"
-	"file-storage/Domain/repository_interfaces"
+	contract "email-service/Application.contract/GetFile"
+	"email-service/Domain/models"
+	"email-service/Domain/repository_interfaces"
 	"path/filepath"
 )
 

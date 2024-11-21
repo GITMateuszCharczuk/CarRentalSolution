@@ -1,21 +1,39 @@
 package queries
 
 import (
-	"file-storage/API/services"
-	"fmt"
+	contract "email-service/Application.contract/get_emails"
+	datafetcher "email-service/Infrastructure/data_fetcher"
 )
 
-type GetEmailsQueryHandler struct{}
-
-func NewGetEmailsQueryHandler() *GetEmailsQueryHandler {
-	return &GetEmailsQueryHandler{}
+type GetEmailsQueryHandler struct {
+	fetcher datafetcher.DataFetcher
 }
 
-func (h *GetEmailsQueryHandler) Execute(query GetEmailsQuery) (*GetAllEmailsResponse, error) {
-	emails, err := services.GetAllEmails()
+func NewGetEmailsQueryHandler(fetcher datafetcher.DataFetcher) *GetEmailsQueryHandler {
+	return &GetEmailsQueryHandler{fetcher: fetcher}
+}
+
+func (h *GetEmailsQueryHandler) Execute(query GetEmailsQuery) *contract.GetEmailsResponse {
+	emails, err := h.fetcher.GetEmails()
 	if err != nil {
-		return nil, fmt.Errorf("failed to retrieve emails: %w", err)
+		println("failed to retrieve emails:", err.Error())
+		return &contract.GetEmailsResponse{
+			Title:   "StatusInternalServerError",
+			Message: "Something went wrong",
+		}
 	}
 
-	return &GetAllEmailsResponse{Emails: emails}, nil
+	if len(*emails) == 0 {
+		println("No emails found")
+		return &contract.GetEmailsResponse{
+			Title:   "StatusNotFound",
+			Message: "No emails found",
+		}
+	}
+
+	return &contract.GetEmailsResponse{
+		Title:   "StatusOK",
+		Message: "Emails retrieved successfully",
+		Emails:  *emails,
+	}
 }

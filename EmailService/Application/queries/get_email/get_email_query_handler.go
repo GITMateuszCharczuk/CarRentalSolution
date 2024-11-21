@@ -1,34 +1,52 @@
 package queries
 
 import (
-	"file-storage/API/services"
-	"fmt"
+	contract "email-service/Application.contract/get_email"
+	"email-service/Domain/models"
+	datafetcher "email-service/Infrastructure/data_fetcher"
 )
 
-type GetEmailQueryHandler struct{}
-
-func NewGetEmailQueryHandler() *GetEmailQueryHandler {
-	return &GetEmailQueryHandler{}
+type GetEmailQueryHandler struct {
+	fetcher datafetcher.DataFetcher
 }
 
-func (h *GetEmailQueryHandler) Execute(command GetEmailQuery) (*GetEmailResponse, error) {
-	emails, err := services.GetAllEmails()
+func NewGetEmailQueryHandler(fetcher datafetcher.DataFetcher) *GetEmailQueryHandler {
+	return &GetEmailQueryHandler{fetcher: fetcher}
+}
 
+func (cmd *GetEmailQueryHandler) Execute(command GetEmailQuery) *contract.GetEmailResponse {
+	emails, err := cmd.fetcher.GetEmails()
 	if err != nil {
-		return nil, fmt.Errorf("failed to retrieve emails: %w", err)
-	}
-
-	for _, email := range emails {
-		if email.ID == command.ID {
-			return &GetEmailResponse{
-				ID:      email.ID,
-				From:    email.From,
-				To:      email.To,
-				Subject: email.Subject,
-				Body:    email.Body,
-			}, nil
+		println("failed to retrieve emails:", err.Error())
+		return &contract.GetEmailResponse{
+			Title:   "StatusInternalServerError",
+			Message: "Something went wrong",
 		}
 	}
 
-	return nil, ErrEmailNotFound
+	if len(*emails) == 0 {
+		println("No emails found")
+
+	}
+
+	var resEmail *models.Email = nil
+
+	for _, email := range *emails {
+		if email.ID == command.ID {
+			resEmail = &email
+		}
+	}
+
+	if resEmail == nil {
+		return &contract.GetEmailResponse{
+			Title:   "StatusNotFound",
+			Message: "No emails found",
+		}
+	}
+
+	return &contract.GetEmailResponse{
+		Title:   "StatusOK",
+		Message: "Emails retrieved successfully",
+		Email:   *resEmail,
+	}
 }

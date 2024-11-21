@@ -3,9 +3,9 @@
 package publisher
 
 import (
+	"email-service/Domain/event"
+	"email-service/Domain/models"
 	"encoding/json"
-	"file-storage/Domain/event"
-	"file-storage/Domain/models"
 	"log"
 
 	"github.com/nats-io/nats.go"

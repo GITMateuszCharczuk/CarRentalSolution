@@ -1,9 +1,9 @@
 package commands
 
 import (
-	contract "file-storage/Application.contract/send_email"
-	"file-storage/Domain/event"
-	"file-storage/Domain/models"
+	contract "email-service/Application.contract/send_email"
+	"email-service/Domain/event"
+	"email-service/Domain/models"
 	"fmt"
 )
 

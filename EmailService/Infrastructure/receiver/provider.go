@@ -1,8 +1,8 @@
 package receiver
 
 import (
-	"file-storage/Domain/event"
-	"file-storage/Infrastructure/processor"
+	"email-service/Domain/event"
+	"email-service/Infrastructure/processor"
 
 	"github.com/google/wire"
 	"github.com/nats-io/nats.go"

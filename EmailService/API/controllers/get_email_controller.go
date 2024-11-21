@@ -1,11 +1,10 @@
 package controllers
 
 import (
-	"file-storage/API/mappers"
-	"file-storage/API/services"
-	contract "file-storage/Application.contract/get_email"
-	queries "file-storage/Application/queries/get_email"
-	"fmt"
+	"email-service/API/mappers"
+	"email-service/API/services"
+	contract "email-service/Application.contract/get_email"
+	queries "email-service/Application/queries/get_email"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,14 +25,7 @@ func (h *GetEmailController) Handle(c *gin.Context) {
 
 	req := contract.GetEmailRequest{ID: emailID}
 	query := mappers.MapToGetEmailQuery(&req)
-	resp, err := h.queryHandler.Execute(query)
-	if err != nil {
-		responseSender.Send(contract.GetEmailResponse{
-			Title:   "StatusInternalServerError",
-			Message: fmt.Sprintf("Something went wrong: %v", err),
-		})
-		return
-	}
+	resp := h.queryHandler.Execute(query)
 
 	responseSender.Send(resp)
 }

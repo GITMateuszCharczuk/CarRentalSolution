@@ -1,8 +1,8 @@
 package commands
 
 import (
-	send_email_command "file-storage/Application/commands/send_email"
-	"file-storage/Domain/event"
+	send_email_command "email-service/Application/commands/send_email"
+	"email-service/Domain/event"
 
 	"github.com/google/wire"
 )

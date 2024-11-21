@@ -1,10 +1,10 @@
 package receiver
 
 import (
+	"email-service/Domain/event"
+	"email-service/Domain/models"
+	"email-service/Infrastructure/processor"
 	"encoding/json"
-	"file-storage/Domain/event"
-	"file-storage/Domain/models"
-	"file-storage/Infrastructure/processor"
 	"log"
 	"time"
 

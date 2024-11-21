@@ -2,10 +2,10 @@
 package commands
 
 import (
-	contract "file-storage/Application.contract/DeleteFile"
-	"file-storage/Domain/event"
-	"file-storage/Domain/models"
-	"file-storage/Domain/repository_interfaces"
+	contract "email-service/Application.contract/DeleteFile"
+	"email-service/Domain/event"
+	"email-service/Domain/models"
+	"email-service/Domain/repository_interfaces"
 	"fmt"
 )
 
