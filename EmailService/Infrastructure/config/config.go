@@ -40,8 +40,8 @@ func NewConfig(path string) (*Config, error) {
 
 		instance = &Config{
 			NatsUrl:         getEnv("NATS_URL", "nats://localhost:4222"),
-			StreamName:      getEnv("STREAM_NAME", "file_stream"),
-			StreamSubjects:  getEnv("STREAM_SUBJECTS", "events.*"),
+			StreamName:      getEnv("STREAM_NAME", "email_stream"),
+			StreamSubjects:  getEnv("STREAM_SUBJECTS", "email-events.*"),
 			Env:             getEnv("ENV", "test"),
 			MailhogHost:     getEnv("MAILHOG_HOST", "mailhog"),
 			MailhogPort:     getEnv("MAILHOG_PORT", "1025"),

@@ -29,6 +29,16 @@ func (h *GetEmailsController) Handle(c *gin.Context) {
 	responseSender.Send(resp)
 }
 
+// Handle godoc
+// @Summary Get all emails
+// @Description Retrieves a list of all emails.
+// @Tags emails
+// @Accept json
+// @Produce json
+// @Success 200 {object} contract.GetEmailsResponse "List of emails retrieved successfully"
+// @Failure 400 {object} contract.GetEmailsResponse "Invalid request parameters"
+// @Failure 500 {object} contract.GetEmailsResponse "Server error during emails retrieval"
+// @Router /emails [get]
 func (h *GetEmailsController) Route() string {
 	return "/emails"
 }

@@ -5,7 +5,7 @@ package models
 type EventType string
 
 const (
-	EventTypeSend EventType = "send"
+	EventTypeSendEmail EventType = "send_email"
 )
 
 type Event struct {

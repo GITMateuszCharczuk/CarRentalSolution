@@ -24,7 +24,7 @@ func (cmd *SendEmailCommandHandler) Execute(command SendEmailCommand) (contract.
 		Subject: command.Subject,
 		Body:    command.Body,
 	}
-	if err := cmd.eventPublisher.PublishEvent("events.send_email", event, models.EventTypeSend); err != nil {
+	if err := cmd.eventPublisher.PublishEvent("email-events.send_email", event, models.EventTypeSendEmail); err != nil {
 		return contract.SendEmailResponse{
 			Title:   "StatusInternalServerError",
 			Message: fmt.Sprintf("Failed to delete file: %v", err),

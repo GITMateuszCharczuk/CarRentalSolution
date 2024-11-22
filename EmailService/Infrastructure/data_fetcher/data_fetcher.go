@@ -18,7 +18,7 @@ func NewDataFetcherImpl(mailHogUrl string) *DataFetcherImpl {
 }
 
 func (cmd *DataFetcherImpl) GetEmails() (*[]models.Email, error) {
-	route := fmt.Sprintf("https://%s/api/v2/messages", cmd.mailHogUrl)
+	route := fmt.Sprintf("http://%s/api/v2/messages", cmd.mailHogUrl)
 	resp, err := http.Get(route)
 	if err != nil {
 		return nil, fmt.Errorf("failed to retrieve emails: %w", err)

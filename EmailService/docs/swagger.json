@@ -4,60 +4,44 @@
         "contact": {}
     },
     "paths": {
-        "/files": {
-            "post": {
-                "description": "Uploads and saves a file in the storage system, including metadata and content.",
+        "/emails": {
+            "get": {
+                "description": "Retrieves a list of all emails.",
                 "consumes": [
-                    "multipart/form-data"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "files"
+                    "emails"
                 ],
-                "summary": "Save a new file",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Owner ID associated with the file",
-                        "name": "owner_id",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "file",
-                        "description": "Binary file content (JPEG, PNG, etc.) to be saved",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
+                "summary": "Get all emails",
                 "responses": {
-                    "201": {
-                        "description": "File saved successfully with unique ID and details",
+                    "200": {
+                        "description": "List of emails retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.SaveFileResponse"
+                            "$ref": "#/definitions/contract.GetEmailsResponse"
                         }
                     },
                     "400": {
-                        "description": "Invalid request format or missing parameters",
+                        "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.SaveFileResponse"
+                            "$ref": "#/definitions/contract.GetEmailsResponse"
                         }
                     },
                     "500": {
-                        "description": "Server encountered an error during file save operation",
+                        "description": "Server error during emails retrieval",
                         "schema": {
-                            "$ref": "#/definitions/contract.SaveFileResponse"
+                            "$ref": "#/definitions/contract.GetEmailsResponse"
                         }
                     }
                 }
             }
         },
-        "/files/delete": {
-            "delete": {
-                "description": "Deletes a file from storage by its unique ID. The file ID should be a valid identifier for an existing file.",
+        "/emails/{id}": {
+            "get": {
+                "description": "Retrieves an email based on its unique ID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -65,105 +49,87 @@
                     "application/json"
                 ],
                 "tags": [
-                    "files"
+                    "emails"
                 ],
-                "summary": "Delete a file",
+                "summary": "Get email by ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Unique File ID to be deleted",
-                        "name": "fileId",
+                        "description": "Unique Email ID",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "File deletion was successful",
+                        "description": "Email details retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteFileResponse"
+                            "$ref": "#/definitions/contract.GetEmailResponse"
                         }
                     },
                     "400": {
-                        "description": "Invalid request format or parameters",
+                        "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteFileResponse"
+                            "$ref": "#/definitions/contract.GetEmailResponse"
                         }
                     },
                     "404": {
-                        "description": "File not found with the given ID",
+                        "description": "Email not found",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteFileResponse"
+                            "$ref": "#/definitions/contract.GetEmailResponse"
                         }
                     },
                     "500": {
-                        "description": "Server encountered an error during file deletion",
+                        "description": "Server error during email retrieval",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteFileResponse"
+                            "$ref": "#/definitions/contract.GetEmailResponse"
                         }
                     }
                 }
             }
         },
-        "/files/get": {
-            "get": {
-                "description": "Retrieves a file from storage by its unique identifier. The ID should refer to a valid, stored file, and the file is returned in its original format (e.g., JPEG, PNG).",
+        "/send-email": {
+            "post": {
+                "description": "Sends an email using the provided data.",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "application/octet-stream"
+                    "application/json"
                 ],
                 "tags": [
-                    "files"
+                    "emails"
                 ],
-                "summary": "Get a file",
+                "summary": "Send an email",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Unique File ID for retrieval",
-                        "name": "file_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Owner ID associated with the file",
-                        "name": "owner_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "File Name of the file to retrieve",
-                        "name": "file_name",
-                        "in": "query",
-                        "required": true
+                        "description": "Email data",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.SendEmailRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful retrieval of file in binary format",
+                        "description": "Email sent successfully",
                         "schema": {
-                            "type": "file"
+                            "$ref": "#/definitions/contract.SendEmailResponse"
                         }
                     },
                     "400": {
-                        "description": "Request contains invalid format or parameters",
+                        "description": "Invalid request format or data",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetFileResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "File not found with the given ID",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetFileResponse"
+                            "$ref": "#/definitions/contract.SendEmailResponse"
                         }
                     },
                     "500": {
-                        "description": "Server encountered an error during file retrieval",
+                        "description": "Server error during email sending",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetFileResponse"
+                            "$ref": "#/definitions/contract.SendEmailResponse"
                         }
                     }
                 }
@@ -171,7 +137,61 @@
         }
     },
     "definitions": {
-        "contract.DeleteFileResponse": {
+        "contract.GetEmailResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "$ref": "#/definitions/models.Email"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "contract.GetEmailsResponse": {
+            "type": "object",
+            "properties": {
+                "emails": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Email"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "contract.SendEmailRequest": {
+            "type": "object",
+            "required": [
+                "body",
+                "from",
+                "subject",
+                "to"
+            ],
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "subject": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                }
+            }
+        },
+        "contract.SendEmailResponse": {
             "type": "object",
             "properties": {
                 "message": {
@@ -182,27 +202,22 @@
                 }
             }
         },
-        "contract.GetFileResponse": {
+        "models.Email": {
             "type": "object",
             "properties": {
-                "message": {
+                "body": {
                     "type": "string"
                 },
-                "title": {
+                "from": {
                     "type": "string"
-                }
-            }
-        },
-        "contract.SaveFileResponse": {
-            "type": "object",
-            "properties": {
+                },
                 "id": {
                     "type": "string"
                 },
-                "message": {
+                "subject": {
                     "type": "string"
                 },
-                "title": {
+                "to": {
                     "type": "string"
                 }
             }

@@ -1,142 +1,147 @@
 definitions:
-  contract.DeleteFileResponse:
+  contract.GetEmailResponse:
+    properties:
+      email:
+        $ref: '#/definitions/models.Email'
+      message:
+        type: string
+      title:
+        type: string
+    type: object
+  contract.GetEmailsResponse:
+    properties:
+      emails:
+        items:
+          $ref: '#/definitions/models.Email'
+        type: array
+      message:
+        type: string
+      title:
+        type: string
+    type: object
+  contract.SendEmailRequest:
+    properties:
+      body:
+        type: string
+      from:
+        type: string
+      subject:
+        type: string
+      to:
+        type: string
+    required:
+    - body
+    - from
+    - subject
+    - to
+    type: object
+  contract.SendEmailResponse:
     properties:
       message:
         type: string
       title:
         type: string
     type: object
-  contract.GetFileResponse:
+  models.Email:
     properties:
-      message:
+      body:
         type: string
-      title:
+      from:
         type: string
-    type: object
-  contract.SaveFileResponse:
-    properties:
       id:
         type: string
-      message:
+      subject:
         type: string
-      title:
+      to:
         type: string
     type: object
 info:
   contact: {}
 paths:
-  /files:
-    post:
-      consumes:
-      - multipart/form-data
-      description: Uploads and saves a file in the storage system, including metadata
-        and content.
-      parameters:
-      - description: Owner ID associated with the file
-        in: formData
-        name: owner_id
-        required: true
-        type: string
-      - description: Binary file content (JPEG, PNG, etc.) to be saved
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: File saved successfully with unique ID and details
-          schema:
-            $ref: '#/definitions/contract.SaveFileResponse'
-        "400":
-          description: Invalid request format or missing parameters
-          schema:
-            $ref: '#/definitions/contract.SaveFileResponse'
-        "500":
-          description: Server encountered an error during file save operation
-          schema:
-            $ref: '#/definitions/contract.SaveFileResponse'
-      summary: Save a new file
-      tags:
-      - files
-  /files/delete:
-    delete:
-      consumes:
-      - application/json
-      description: Deletes a file from storage by its unique ID. The file ID should
-        be a valid identifier for an existing file.
-      parameters:
-      - description: Unique File ID to be deleted
-        in: path
-        name: fileId
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: File deletion was successful
-          schema:
-            $ref: '#/definitions/contract.DeleteFileResponse'
-        "400":
-          description: Invalid request format or parameters
-          schema:
-            $ref: '#/definitions/contract.DeleteFileResponse'
-        "404":
-          description: File not found with the given ID
-          schema:
-            $ref: '#/definitions/contract.DeleteFileResponse'
-        "500":
-          description: Server encountered an error during file deletion
-          schema:
-            $ref: '#/definitions/contract.DeleteFileResponse'
-      summary: Delete a file
-      tags:
-      - files
-  /files/get:
+  /emails:
     get:
       consumes:
       - application/json
-      description: Retrieves a file from storage by its unique identifier. The ID
-        should refer to a valid, stored file, and the file is returned in its original
-        format (e.g., JPEG, PNG).
+      description: Retrieves a list of all emails.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of emails retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetEmailsResponse'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.GetEmailsResponse'
+        "500":
+          description: Server error during emails retrieval
+          schema:
+            $ref: '#/definitions/contract.GetEmailsResponse'
+      summary: Get all emails
+      tags:
+      - emails
+  /emails/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves an email based on its unique ID.
       parameters:
-      - description: Unique File ID for retrieval
-        in: query
-        name: file_id
-        required: true
-        type: string
-      - description: Owner ID associated with the file
-        in: query
-        name: owner_id
-        required: true
-        type: string
-      - description: File Name of the file to retrieve
-        in: query
-        name: file_name
+      - description: Unique Email ID
+        in: path
+        name: id
         required: true
         type: string
       produces:
-      - application/octet-stream
+      - application/json
       responses:
         "200":
-          description: Successful retrieval of file in binary format
+          description: Email details retrieved successfully
           schema:
-            type: file
+            $ref: '#/definitions/contract.GetEmailResponse'
         "400":
-          description: Request contains invalid format or parameters
+          description: Invalid request parameters
           schema:
-            $ref: '#/definitions/contract.GetFileResponse'
+            $ref: '#/definitions/contract.GetEmailResponse'
         "404":
-          description: File not found with the given ID
+          description: Email not found
           schema:
-            $ref: '#/definitions/contract.GetFileResponse'
+            $ref: '#/definitions/contract.GetEmailResponse'
         "500":
-          description: Server encountered an error during file retrieval
+          description: Server error during email retrieval
           schema:
-            $ref: '#/definitions/contract.GetFileResponse'
-      summary: Get a file
+            $ref: '#/definitions/contract.GetEmailResponse'
+      summary: Get email by ID
       tags:
-      - files
+      - emails
+  /send-email:
+    post:
+      consumes:
+      - application/json
+      description: Sends an email using the provided data.
+      parameters:
+      - description: Email data
+        in: body
+        name: email
+        required: true
+        schema:
+          $ref: '#/definitions/contract.SendEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Email sent successfully
+          schema:
+            $ref: '#/definitions/contract.SendEmailResponse'
+        "400":
+          description: Invalid request format or data
+          schema:
+            $ref: '#/definitions/contract.SendEmailResponse'
+        "500":
+          description: Server error during email sending
+          schema:
+            $ref: '#/definitions/contract.SendEmailResponse'
+      summary: Send an email
+      tags:
+      - emails
 swagger: "2.0"

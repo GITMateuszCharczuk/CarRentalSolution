@@ -6,7 +6,6 @@ import (
 	contract "email-service/Application.contract/send_email"
 	command "email-service/Application/commands/send_email"
 	"fmt"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,12 +20,26 @@ func NewSendEmailController(handler *command.SendEmailCommandHandler) *SendEmail
 	}
 }
 
+// Handle godoc
+// @Summary Send an email
+// @Description Sends an email using the provided data.
+// @Tags emails
+// @Accept json
+// @Produce json
+// @Param email body contract.SendEmailRequest true "Email data"
+// @Success 200 {object} contract.SendEmailResponse "Email sent successfully"
+// @Failure 400 {object} contract.SendEmailResponse "Invalid request format or data"
+// @Failure 500 {object} contract.SendEmailResponse "Server error during email sending"
+// @Router /send-email [post]
 func (h *SendEmailController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 
-	var req contract.SendEmailRequest
+	var req contract.SendEmailRequest //bindowanie z taga emaila
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		responseSender.Send(contract.SendEmailResponse{
+			Title:   "StatusBadRequest",
+			Message: fmt.Sprintf("Bad input data: %v", err),
+		})
 		return
 	}
 

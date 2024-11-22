@@ -16,13 +16,13 @@ func ProvideGetEmailsQueryHandler(fetcher datafetcher.DataFetcher) *get_emails_q
 	return get_emails_query.NewGetEmailsQueryHandler(fetcher)
 }
 
-// type QueryHandlers struct {
-// 	GetEmailsQuery *get_emails_query.GetEmailsQuery
-// 	GetEmailQuery  *get_email_query.GetEmailQuery
-// }
+type QueryHandlers struct {
+	GetEmailsQuery *get_emails_query.GetEmailsQueryHandler
+	GetEmailQuery  *get_email_query.GetEmailQueryHandler
+}
 
 var WireSet = wire.NewSet(
 	ProvideGetEmailQueryHandler,
 	ProvideGetEmailsQueryHandler,
-	// wire.Struct(new(QueryHandlers), "*"),
+	wire.Struct(new(QueryHandlers), "*"),
 )

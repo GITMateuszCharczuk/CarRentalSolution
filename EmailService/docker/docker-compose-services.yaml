@@ -19,9 +19,6 @@ services:
     environment:
       MH_STORAGE: "memory" 
 
-volumes:
-  mongo_data:
-
 networks:
   file-network:
     driver: bridge

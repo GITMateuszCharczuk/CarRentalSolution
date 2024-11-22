@@ -2,11 +2,12 @@ package infrastructure
 
 import (
 	"email-service/Domain/event"
-	smtp "email-service/Infrastructure/MailHog"
 	"email-service/Infrastructure/config"
-	"email-service/Infrastructure/publisher"
+	fetcher "email-service/Infrastructure/data_fetcher"
+	smtp "email-service/Infrastructure/email_sender"
+	publisher "email-service/Infrastructure/event_publisher"
+	receiver "email-service/Infrastructure/event_receiver"
 	"email-service/Infrastructure/queue"
-	"email-service/Infrastructure/receiver"
 
 	"github.com/google/wire"
 )
@@ -21,6 +22,7 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 		config.WireSet,
 		queue.WireSet,
 		smtp.WireSet,
+		fetcher.WireSet,
 		receiver.WireSet,
 		publisher.WireSet,
 		wire.Struct(new(InfrastructureComponents), "*"),
