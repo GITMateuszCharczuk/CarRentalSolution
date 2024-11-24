@@ -27,10 +27,10 @@ func NewSendEmailController(handler *command.SendEmailCommandHandler) *SendEmail
 // @Accept json
 // @Produce json
 // @Param email body contract.SendEmailRequest true "Email data"
-// @Success 200 {object} contract.SendEmailResponse "Email sent successfully"
-// @Failure 400 {object} contract.SendEmailResponse "Invalid request format or data"
-// @Failure 500 {object} contract.SendEmailResponse "Server error during email sending"
-// @Router /send-email [post]
+// @Success 200 {object} contract.SendEmailResponse200 "Email sent successfully"
+// @Failure 400 {object} contract.SendEmailResponse400 "Invalid request format or data"
+// @Failure 500 {object} contract.SendEmailResponse500 "Server error during email sending"
+// @Router /email-service/api/send-email [post]
 func (h *SendEmailController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 

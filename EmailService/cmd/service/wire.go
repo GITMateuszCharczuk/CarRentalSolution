@@ -12,8 +12,9 @@ import (
 	"email-service/Application/commands"
 	"email-service/Application/queries"
 	"email-service/Domain/event"
+	fetcher "email-service/Domain/fetcher"
 	"email-service/Infrastructure/config"
-	fetcher "email-service/Infrastructure/data_fetcher"
+	data_fetcher "email-service/Infrastructure/data_fetcher"
 	smtp "email-service/Infrastructure/email_sender"
 	processor "email-service/Infrastructure/event_processor"
 	publisher "email-service/Infrastructure/event_publisher"
@@ -27,13 +28,14 @@ type InfrastructureComponents struct {
 	EventPublisher event.EventPublisher
 	EventReceiver  event.EventReceiver
 	DataFetcher    fetcher.DataFetcher
+	Config         *config.Config
 }
 
 func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	wire.Build(
 		config.WireSet,
 		queue.WireSet,
-		fetcher.WireSet,
+		data_fetcher.WireSet,
 		smtp.WireSet,
 		publisher.WireSet,
 		processor.WireSet,
@@ -43,12 +45,12 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	return &InfrastructureComponents{}, nil
 }
 
-func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher) (*routes.Router, error) {
+func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher, cfg *config.Config) (*routes.Router, error) {
 	wire.Build(
 		commands.WireSet,
 		queries.WireSet,
 		controllers.WireSet,
-		routes.NewRouter,
+		routes.WireSet,
 	)
 	return &routes.Router{}, nil
 }

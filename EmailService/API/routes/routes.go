@@ -6,6 +6,7 @@ import (
 	"context"
 	"email-service/API/controllers"
 	"email-service/API/middleware"
+	"email-service/Infrastructure/config"
 	"log"
 	"net/http"
 	"time"
@@ -18,47 +19,53 @@ import (
 )
 
 type Router struct {
+	Config      *config.Config
 	Controllers *controllers.Controllers
 	server      *http.Server
 }
 
-func NewRouter(Controllers *controllers.Controllers) *Router {
-	return &Router{Controllers: Controllers}
+func NewRouter(Controllers *controllers.Controllers, Config *config.Config) *Router {
+	return &Router{
+		Controllers: Controllers,
+		Config:      Config,
+	}
 }
 
 func (r *Router) RegisterRoutes() {
 	router := gin.Default()
-
 	router.Use(middleware.CORSMiddleware())
 
-	for _, handler := range r.Controllers.All {
-		route := handler.Route()
-		for _, method := range handler.Methods() {
-			switch method {
-			case "GET":
-				router.GET(route, func(c *gin.Context) { handler.Handle(c) })
-			case "POST":
-				router.POST(route, func(c *gin.Context) { handler.Handle(c) })
-			case "DELETE":
-				router.DELETE(route, func(c *gin.Context) { handler.Handle(c) })
-			case "PUT":
-				router.PUT(route, func(c *gin.Context) { handler.Handle(c) })
-			case "PATCH":
-				router.PATCH(route, func(c *gin.Context) { handler.Handle(c) })
+	apiGroup := router.Group(r.Config.ServiceAddress)
+	{
+		for _, handler := range r.Controllers.All {
+			route := handler.Route()
+			for _, method := range handler.Methods() {
+				switch method {
+				case "GET":
+					apiGroup.GET(route, func(c *gin.Context) { handler.Handle(c) })
+				case "POST":
+					apiGroup.POST(route, func(c *gin.Context) { handler.Handle(c) })
+				case "DELETE":
+					apiGroup.DELETE(route, func(c *gin.Context) { handler.Handle(c) })
+				case "PUT":
+					apiGroup.PUT(route, func(c *gin.Context) { handler.Handle(c) })
+				case "PATCH":
+					apiGroup.PATCH(route, func(c *gin.Context) { handler.Handle(c) })
+				}
 			}
 		}
+
+		apiGroup.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	r.server = &http.Server{
-		Addr:    ":8080",
+		Addr:    r.Config.ServicePort,
 		Handler: router,
 	}
 }
 
 func (r *Router) StartServer() error {
-	log.Println("Starting server on port", r.server.Addr)
+	log.Println("Starting server on address:", r.server.Addr)
 	if err := r.server.ListenAndServe(); err != http.ErrServerClosed {
 		return err
 	}

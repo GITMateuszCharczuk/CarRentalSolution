@@ -12,6 +12,7 @@ import (
 	"email-service/Application/commands"
 	"email-service/Application/queries"
 	"email-service/Domain/event"
+	"email-service/Domain/fetcher"
 	"email-service/Infrastructure/config"
 	"email-service/Infrastructure/data_fetcher"
 	"email-service/Infrastructure/email_sender"
@@ -47,20 +48,21 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 		EventPublisher: eventPublisher,
 		EventReceiver:  eventReceiver,
 		DataFetcher:    dataFetcher,
+		Config:         configConfig,
 	}
 	return infrastructureComponents, nil
 }
 
-func InitializeApi(DataFetcher datafetcher.DataFetcher, EventPublisher event.EventPublisher) (*routes.Router, error) {
+func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher, cfg *config.Config) (*routes.Router, error) {
 	getEmailQueryHandler := queries.ProvideGetEmailQueryHandler(DataFetcher)
 	getEmailController := controllers.NewGetEmailController(getEmailQueryHandler)
 	getEmailsQueryHandler := queries.ProvideGetEmailsQueryHandler(DataFetcher)
 	getEmailsController := controllers.NewGetEmailsController(getEmailsQueryHandler)
-	sendEmailCommandHandler := commands.ProvideSendEmailCommandHandler(EventPublisher)
+	sendEmailCommandHandler := commands.ProvideSendEmailCommandHandler(EventPublisher, cfg)
 	sendEmailController := controllers.NewSendEmailController(sendEmailCommandHandler)
 	v := controllers.ProvideControllers(getEmailController, getEmailsController, sendEmailController)
 	controllersControllers := controllers.NewControllers(v)
-	router := routes.NewRouter(controllersControllers)
+	router := routes.ProvideRouter(controllersControllers, cfg)
 	return router, nil
 }
 
@@ -69,5 +71,6 @@ func InitializeApi(DataFetcher datafetcher.DataFetcher, EventPublisher event.Eve
 type InfrastructureComponents struct {
 	EventPublisher event.EventPublisher
 	EventReceiver  event.EventReceiver
-	DataFetcher    datafetcher.DataFetcher
+	DataFetcher    fetcher.DataFetcher
+	Config         *config.Config
 }

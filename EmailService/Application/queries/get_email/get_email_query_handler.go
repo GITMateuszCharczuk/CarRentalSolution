@@ -2,15 +2,15 @@ package queries
 
 import (
 	contract "email-service/Application.contract/get_email"
+	fetcher "email-service/Domain/fetcher"
 	"email-service/Domain/models"
-	datafetcher "email-service/Infrastructure/data_fetcher"
 )
 
 type GetEmailQueryHandler struct {
-	fetcher datafetcher.DataFetcher
+	fetcher fetcher.DataFetcher
 }
 
-func NewGetEmailQueryHandler(fetcher datafetcher.DataFetcher) *GetEmailQueryHandler {
+func NewGetEmailQueryHandler(fetcher fetcher.DataFetcher) *GetEmailQueryHandler {
 	return &GetEmailQueryHandler{fetcher: fetcher}
 }
 
@@ -22,11 +22,6 @@ func (cmd *GetEmailQueryHandler) Execute(command GetEmailQuery) *contract.GetEma
 			Title:   "StatusInternalServerError",
 			Message: "Something went wrong",
 		}
-	}
-
-	if len(*emails) == 0 {
-		println("No emails found")
-
 	}
 
 	var resEmail *models.Email = nil

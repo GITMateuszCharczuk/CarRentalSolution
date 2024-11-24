@@ -16,8 +16,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to initialize Infrastructure: %v", err)
 	}
-
-	router, err := InitializeApi(components.DataFetcher, components.EventPublisher)
+	router, err := InitializeApi(components.DataFetcher, components.EventPublisher, components.Config)
 	if err != nil {
 		log.Fatalf("Failed to initialize API: %v", err)
 	}

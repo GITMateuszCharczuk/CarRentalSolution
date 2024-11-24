@@ -35,10 +35,10 @@ func (h *GetEmailsController) Handle(c *gin.Context) {
 // @Tags emails
 // @Accept json
 // @Produce json
-// @Success 200 {object} contract.GetEmailsResponse "List of emails retrieved successfully"
-// @Failure 400 {object} contract.GetEmailsResponse "Invalid request parameters"
-// @Failure 500 {object} contract.GetEmailsResponse "Server error during emails retrieval"
-// @Router /emails [get]
+// @Success 200 {object} contract.GetEmailsResponse200 "List of emails retrieved successfully"
+// @Failure 400 {object} contract.GetEmailsResponse400 "Invalid request parameters"
+// @Failure 500 {object} contract.GetEmailsResponse500 "Server error during emails retrieval"
+// @Router /email-service/api/emails [get]
 func (h *GetEmailsController) Route() string {
 	return "/emails"
 }

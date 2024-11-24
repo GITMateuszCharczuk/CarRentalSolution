@@ -2,14 +2,14 @@ package queries
 
 import (
 	contract "email-service/Application.contract/get_emails"
-	datafetcher "email-service/Infrastructure/data_fetcher"
+	fetcher "email-service/Domain/fetcher"
 )
 
 type GetEmailsQueryHandler struct {
-	fetcher datafetcher.DataFetcher
+	fetcher fetcher.DataFetcher
 }
 
-func NewGetEmailsQueryHandler(fetcher datafetcher.DataFetcher) *GetEmailsQueryHandler {
+func NewGetEmailsQueryHandler(fetcher fetcher.DataFetcher) *GetEmailsQueryHandler {
 	return &GetEmailsQueryHandler{fetcher: fetcher}
 }
 
@@ -24,7 +24,6 @@ func (h *GetEmailsQueryHandler) Execute(query GetEmailsQuery) *contract.GetEmail
 	}
 
 	if len(*emails) == 0 {
-		println("No emails found")
 		return &contract.GetEmailsResponse{
 			Title:   "StatusNotFound",
 			Message: "No emails found",

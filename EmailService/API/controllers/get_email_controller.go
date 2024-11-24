@@ -26,11 +26,11 @@ func NewGetEmailController(handler *queries.GetEmailQueryHandler) *GetEmailContr
 // @Accept json
 // @Produce json
 // @Param id path string true "Unique Email ID"
-// @Success 200 {object} contract.GetEmailResponse "Email details retrieved successfully"
-// @Failure 400 {object} contract.GetEmailResponse "Invalid request parameters"
-// @Failure 404 {object} contract.GetEmailResponse "Email not found"
-// @Failure 500 {object} contract.GetEmailResponse "Server error during email retrieval"
-// @Router /emails/{id} [get]
+// @Success 200 {object} contract.GetEmailResponse200 "Email details retrieved successfully"
+// @Failure 400 {object} contract.GetEmailResponse400 "Invalid request parameters"
+// @Failure 404 {object} contract.GetEmailResponse404 "Email not found"
+// @Failure 500 {object} contract.GetEmailResponse500 "Server error during email retrieval"
+// @Router /email-service/api/emails/{id} [get]
 func (h *GetEmailController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 	emailID := c.Param("id")

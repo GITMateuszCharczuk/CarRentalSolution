@@ -4,7 +4,7 @@
         "contact": {}
     },
     "paths": {
-        "/emails": {
+        "/email-service/api/emails": {
             "get": {
                 "description": "Retrieves a list of all emails.",
                 "consumes": [
@@ -21,25 +21,25 @@
                     "200": {
                         "description": "List of emails retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailsResponse"
+                            "$ref": "#/definitions/contract.GetEmailsResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailsResponse"
+                            "$ref": "#/definitions/contract.GetEmailsResponse400"
                         }
                     },
                     "500": {
                         "description": "Server error during emails retrieval",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailsResponse"
+                            "$ref": "#/definitions/contract.GetEmailsResponse500"
                         }
                     }
                 }
             }
         },
-        "/emails/{id}": {
+        "/email-service/api/emails/{id}": {
             "get": {
                 "description": "Retrieves an email based on its unique ID.",
                 "consumes": [
@@ -65,31 +65,31 @@
                     "200": {
                         "description": "Email details retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailResponse"
+                            "$ref": "#/definitions/contract.GetEmailResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailResponse"
+                            "$ref": "#/definitions/contract.GetEmailResponse400"
                         }
                     },
                     "404": {
                         "description": "Email not found",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailResponse"
+                            "$ref": "#/definitions/contract.GetEmailResponse404"
                         }
                     },
                     "500": {
                         "description": "Server error during email retrieval",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailResponse"
+                            "$ref": "#/definitions/contract.GetEmailResponse500"
                         }
                     }
                 }
             }
         },
-        "/send-email": {
+        "/email-service/api/send-email": {
             "post": {
                 "description": "Sends an email using the provided data.",
                 "consumes": [
@@ -117,19 +117,19 @@
                     "200": {
                         "description": "Email sent successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.SendEmailResponse"
+                            "$ref": "#/definitions/contract.SendEmailResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request format or data",
                         "schema": {
-                            "$ref": "#/definitions/contract.SendEmailResponse"
+                            "$ref": "#/definitions/contract.SendEmailResponse400"
                         }
                     },
                     "500": {
                         "description": "Server error during email sending",
                         "schema": {
-                            "$ref": "#/definitions/contract.SendEmailResponse"
+                            "$ref": "#/definitions/contract.SendEmailResponse500"
                         }
                     }
                 }
@@ -137,21 +137,74 @@
         }
     },
     "definitions": {
-        "contract.GetEmailResponse": {
+        "contract.GetEmailResponse200": {
             "type": "object",
             "properties": {
                 "email": {
                     "$ref": "#/definitions/models.Email"
                 },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Email retrieved successfully."
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Success"
                 }
             }
         },
-        "contract.GetEmailsResponse": {
+        "contract.GetEmailResponse400": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "Empty email object",
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Invalid email request."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Bad Request"
+                }
+            }
+        },
+        "contract.GetEmailResponse404": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "Empty email object",
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "The requested email was not found."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Not Found"
+                }
+            }
+        },
+        "contract.GetEmailResponse500": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "Empty email object",
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "An unexpected error occurred."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Internal Server Error"
+                }
+            }
+        },
+        "contract.GetEmailsResponse200": {
             "type": "object",
             "properties": {
                 "emails": {
@@ -161,10 +214,50 @@
                     }
                 },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Emails retrieved successfully."
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Success"
+                }
+            }
+        },
+        "contract.GetEmailsResponse400": {
+            "type": "object",
+            "properties": {
+                "emails": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request for emails."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Bad Request"
+                }
+            }
+        },
+        "contract.GetEmailsResponse500": {
+            "type": "object",
+            "properties": {
+                "emails": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "An unexpected error occurred."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Internal Server Error"
                 }
             }
         },
@@ -178,27 +271,59 @@
             ],
             "properties": {
                 "body": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "This is the body of the email."
                 },
                 "from": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "example@example.com"
                 },
                 "subject": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Hello"
                 },
                 "to": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "recipient@example.com"
                 }
             }
         },
-        "contract.SendEmailResponse": {
+        "contract.SendEmailResponse200": {
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Email sent successfully."
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Success"
+                }
+            }
+        },
+        "contract.SendEmailResponse400": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request for sending email."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Bad Request"
+                }
+            }
+        },
+        "contract.SendEmailResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "An unexpected error occurred while sending email."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Internal Server Error"
                 }
             }
         },
@@ -206,19 +331,24 @@
             "type": "object",
             "properties": {
                 "body": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "This is the body of the email."
                 },
                 "from": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "example@example.com"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "12345"
                 },
                 "subject": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Hello World"
                 },
                 "to": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "recipient@example.com"
                 }
             }
         }
