@@ -35,6 +35,9 @@ func (s *ResponseSender) Send(obj interface{}) {
 		case "StatusNotFound":
 			s.c.JSON(http.StatusNotFound, obj)
 			return
+		case "StatusCreated":
+			s.c.JSON(http.StatusCreated, obj)
+			return
 		case "StatusInternalServerError":
 			s.c.JSON(http.StatusInternalServerError, obj)
 			return

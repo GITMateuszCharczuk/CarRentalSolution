@@ -1,31 +1,111 @@
 definitions:
-  contract.DeleteFileResponse:
+  contract.DeleteFileRequest:
     properties:
-      message:
+      file_id:
         type: string
-      title:
+      owner_id:
         type: string
     type: object
-  contract.GetFileResponse:
+  contract.DeleteFileResponse200:
     properties:
       message:
+        example: File deleted successfully.
         type: string
       title:
+        example: StatusOK
         type: string
     type: object
-  contract.SaveFileResponse:
+  contract.DeleteFileResponse400:
+    properties:
+      message:
+        example: Invalid delete file request.
+        type: string
+      title:
+        example: Bad Request
+        type: string
+    type: object
+  contract.DeleteFileResponse404:
+    properties:
+      message:
+        example: The requested file was not found.
+        type: string
+      title:
+        example: Not Found
+        type: string
+    type: object
+  contract.DeleteFileResponse500:
+    properties:
+      message:
+        example: An unexpected error occurred.
+        type: string
+      title:
+        example: Internal Server Error
+        type: string
+    type: object
+  contract.GetFileResponse400:
+    properties:
+      message:
+        example: Invalid file request.
+        type: string
+      title:
+        example: Bad Request
+        type: string
+    type: object
+  contract.GetFileResponse404:
+    properties:
+      message:
+        example: The requested file was not found.
+        type: string
+      title:
+        example: Not Found
+        type: string
+    type: object
+  contract.GetFileResponse500:
+    properties:
+      message:
+        example: An unexpected error occurred.
+        type: string
+      title:
+        example: Internal Server Error
+        type: string
+    type: object
+  contract.SaveFileResponse201:
     properties:
       id:
         type: string
       message:
+        example: File saved successfully.
         type: string
       title:
+        example: StatusCreated
+        type: string
+    type: object
+  contract.SaveFileResponse400:
+    properties:
+      id:
+        type: string
+      message:
+        example: Invalid save file request.
+        type: string
+      title:
+        example: Bad Request
+        type: string
+    type: object
+  contract.SaveFileResponse500:
+    properties:
+      id:
+        type: string
+      message:
+        example: An unexpected error occurred.
+        type: string
+      title:
+        example: Internal Server Error
         type: string
     type: object
 info:
   contact: {}
 paths:
-  /files:
+  /file-storage/api/files:
     post:
       consumes:
       - multipart/form-data
@@ -48,53 +128,54 @@ paths:
         "201":
           description: File saved successfully with unique ID and details
           schema:
-            $ref: '#/definitions/contract.SaveFileResponse'
+            $ref: '#/definitions/contract.SaveFileResponse201'
         "400":
           description: Invalid request format or missing parameters
           schema:
-            $ref: '#/definitions/contract.SaveFileResponse'
+            $ref: '#/definitions/contract.SaveFileResponse400'
         "500":
           description: Server encountered an error during file save operation
           schema:
-            $ref: '#/definitions/contract.SaveFileResponse'
+            $ref: '#/definitions/contract.SaveFileResponse500'
       summary: Save a new file
       tags:
       - files
-  /files/delete:
+  /file-storage/api/files/delete:
     delete:
       consumes:
       - application/json
       description: Deletes a file from storage by its unique ID. The file ID should
         be a valid identifier for an existing file.
       parameters:
-      - description: Unique File ID to be deleted
-        in: path
-        name: fileId
+      - description: Delete file request object
+        in: body
+        name: request
         required: true
-        type: string
+        schema:
+          $ref: '#/definitions/contract.DeleteFileRequest'
       produces:
       - application/json
       responses:
         "200":
           description: File deletion was successful
           schema:
-            $ref: '#/definitions/contract.DeleteFileResponse'
+            $ref: '#/definitions/contract.DeleteFileResponse200'
         "400":
           description: Invalid request format or parameters
           schema:
-            $ref: '#/definitions/contract.DeleteFileResponse'
+            $ref: '#/definitions/contract.DeleteFileResponse400'
         "404":
           description: File not found with the given ID
           schema:
-            $ref: '#/definitions/contract.DeleteFileResponse'
+            $ref: '#/definitions/contract.DeleteFileResponse404'
         "500":
           description: Server encountered an error during file deletion
           schema:
-            $ref: '#/definitions/contract.DeleteFileResponse'
+            $ref: '#/definitions/contract.DeleteFileResponse500'
       summary: Delete a file
       tags:
       - files
-  /files/get:
+  /file-storage/api/files/get:
     get:
       consumes:
       - application/json
@@ -112,30 +193,30 @@ paths:
         name: owner_id
         required: true
         type: string
-      - description: File Name of the file to retrieve
+      - description: File binary content or file to download
         in: query
-        name: file_name
-        required: true
+        name: download
         type: string
       produces:
       - application/octet-stream
       responses:
         "200":
-          description: Successful retrieval of file in binary format
+          description: Successful retrieval of file in binary format or file to download
+            in attachment
           schema:
             type: file
         "400":
           description: Request contains invalid format or parameters
           schema:
-            $ref: '#/definitions/contract.GetFileResponse'
+            $ref: '#/definitions/contract.GetFileResponse400'
         "404":
           description: File not found with the given ID
           schema:
-            $ref: '#/definitions/contract.GetFileResponse'
+            $ref: '#/definitions/contract.GetFileResponse404'
         "500":
           description: Server encountered an error during file retrieval
           schema:
-            $ref: '#/definitions/contract.GetFileResponse'
+            $ref: '#/definitions/contract.GetFileResponse500'
       summary: Get a file
       tags:
       - files

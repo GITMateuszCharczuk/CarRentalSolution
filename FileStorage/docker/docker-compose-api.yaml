@@ -4,17 +4,19 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile.API
     ports:
-      - "8080:8080"
+      - "8082:8082"
     environment:
       MONGO_DB_NAME: FileDB
       MONGO_DB_URL: mongodb://mongo:27017
       MONGO_DB_COLLECTION_NAME: files
       NATS_URL: nats://nats:4222
       STREAM_NAME: file_stream
-      STREAM_SUBJECTS: events.*
+      STREAM_SUBJECTS: file-events.*
       ENV: prod
+      SERVER_ADDRESS: :8082
+      SERVICE_ADDRESS: /file-storage/api
     networks:
-      - file-network
+      - docker-network
 
 networks:
   file-network:

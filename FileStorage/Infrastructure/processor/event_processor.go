@@ -7,20 +7,19 @@ import (
 	"log"
 )
 
-type EventProcessor struct {
+type EventProcessorImpl struct {
 	fileRepo repository_interfaces.FileRepository
 }
 
-func NewEventProcessor(fileRepo repository_interfaces.FileRepository) *EventProcessor {
-	return &EventProcessor{fileRepo: fileRepo}
+func NewEventProcessorImpl(fileRepo repository_interfaces.FileRepository) *EventProcessorImpl {
+	return &EventProcessorImpl{fileRepo: fileRepo}
 }
 
-func (p *EventProcessor) ProcessUploadEvent(data interface{}) error {
+func (p *EventProcessorImpl) ProcessUploadEvent(data interface{}) error {
 	file, err := mappers.MapToFile(data)
 	if err != nil {
 		return err
 	}
-	log.Println(file)
 	if err := p.fileRepo.InsertFile(context.Background(), file); err != nil {
 		log.Printf("Failed to insert file: %v", err)
 		return err
@@ -30,7 +29,7 @@ func (p *EventProcessor) ProcessUploadEvent(data interface{}) error {
 	return nil
 }
 
-func (p *EventProcessor) ProcessDeleteEvent(data interface{}) error {
+func (p *EventProcessorImpl) ProcessDeleteEvent(data interface{}) error {
 	fileID, err := mappers.MapToFileID(data)
 	if err != nil {
 		return err

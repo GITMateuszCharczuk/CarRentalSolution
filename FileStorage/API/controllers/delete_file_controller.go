@@ -24,12 +24,12 @@ func NewDeleteFileController(cmd *commands.DeleteFileCommandHandler) *DeleteFile
 // @Tags files
 // @Accept json
 // @Produce json
-// @Param fileId path string true "Unique File ID to be deleted"
-// @Success 200 {object} contract.DeleteFileResponse "File deletion was successful"
-// @Failure 400 {object} contract.DeleteFileResponse "Invalid request format or parameters"
-// @Failure 404 {object} contract.DeleteFileResponse "File not found with the given ID"
-// @Failure 500 {object} contract.DeleteFileResponse "Server encountered an error during file deletion"
-// @Router /files/delete [delete]
+// @Param request body contract.DeleteFileRequest true "Delete file request object"
+// @Success 200 {object} contract.DeleteFileResponse200 "File deletion was successful"
+// @Failure 400 {object} contract.DeleteFileResponse400 "Invalid request format or parameters"
+// @Failure 404 {object} contract.DeleteFileResponse404 "File not found with the given ID"
+// @Failure 500 {object} contract.DeleteFileResponse500 "Server encountered an error during file deletion"
+// @Router /file-storage/api/files/delete [delete]
 func (h *DeleteFileController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 
@@ -43,14 +43,7 @@ func (h *DeleteFileController) Handle(c *gin.Context) {
 	}
 
 	command := mappers.MapToDeleteFileCommand(&req)
-	resp, err := h.commandHandler.Execute(command)
-	if err != nil {
-		responseSender.Send(contract.DeleteFileResponse{
-			Title:   "StatusInternalServerError",
-			Message: fmt.Sprintf("Something went wrong: %v", err),
-		})
-		return
-	}
+	resp := h.commandHandler.Execute(command)
 
 	responseSender.Send(resp)
 }

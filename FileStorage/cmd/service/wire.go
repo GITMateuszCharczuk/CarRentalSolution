@@ -8,7 +8,7 @@ package main
 
 import (
 	"file-storage/API/controllers"
-	"file-storage/API/routes"
+	"file-storage/API/server"
 	"file-storage/Application/commands"
 	"file-storage/Application/queries"
 	"file-storage/Domain/event"
@@ -25,6 +25,7 @@ import (
 )
 
 type InfrastructureComponents struct {
+	Config         *config.Config
 	FileRepository repository_interfaces.FileRepository
 	EventPublisher event.EventPublisher
 	EventReceiver  event.EventReceiver
@@ -44,12 +45,12 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	return &InfrastructureComponents{}, nil
 }
 
-func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPublisher event.EventPublisher) (*routes.Router, error) {
+func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPublisher event.EventPublisher, Config *config.Config) (*server.Server, error) {
 	wire.Build(
 		commands.WireSet,
 		queries.WireSet,
 		controllers.WireSet,
-		routes.NewRouter,
+		server.WireSet,
 	)
-	return &routes.Router{}, nil
+	return &server.Server{}, nil
 }

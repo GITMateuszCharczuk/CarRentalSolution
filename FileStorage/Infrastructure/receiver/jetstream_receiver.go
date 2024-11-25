@@ -11,15 +11,15 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-type JetStreamReceiver struct {
+type JetStreamReceiverImpl struct {
 	subscription   *nats.Subscription
-	eventProcessor *processor.EventProcessor
+	eventProcessor *processor.EventProcessorImpl
 }
 
-func NewJetStreamReceiver(js nats.JetStreamContext, eventProcessor *processor.EventProcessor) (event.EventReceiver, error) {
-	receiver := &JetStreamReceiver{eventProcessor: eventProcessor}
+func NewJetStreamReceiver(js nats.JetStreamContext, eventProcessor *processor.EventProcessorImpl) (event.EventReceiver, error) {
+	receiver := &JetStreamReceiverImpl{eventProcessor: eventProcessor}
 
-	sub, err := js.Subscribe("events.*", receiver.ProcessEvent,
+	sub, err := js.Subscribe("file-events.*", receiver.ProcessEvent,
 		nats.Durable("durable-consumer"),
 		nats.AckWait(30*time.Second),
 		nats.ManualAck(),
@@ -33,7 +33,7 @@ func NewJetStreamReceiver(js nats.JetStreamContext, eventProcessor *processor.Ev
 	return receiver, nil
 }
 
-func (r *JetStreamReceiver) ProcessEvent(m *nats.Msg) {
+func (r *JetStreamReceiverImpl) ProcessEvent(m *nats.Msg) {
 	var evt models.Event
 	if err := json.Unmarshal(m.Data, &evt); err != nil {
 		log.Printf("Failed to unmarshal event: %v", err)
@@ -43,7 +43,7 @@ func (r *JetStreamReceiver) ProcessEvent(m *nats.Msg) {
 
 	switch evt.Type {
 	case models.EventTypeUpload:
-		log.Printf("Processing 'upload' event with data: %v", evt.Data)
+		log.Printf("Processing 'upload' event")
 		if err := r.eventProcessor.ProcessUploadEvent(evt.Data); err != nil {
 			log.Printf("Error processing upload event: %v", err)
 			m.Nak()
@@ -51,7 +51,7 @@ func (r *JetStreamReceiver) ProcessEvent(m *nats.Msg) {
 		m.Ack()
 
 	case models.EventTypeDelete:
-		log.Printf("Processing 'delete' event with data: %v", evt.Data)
+		log.Printf("Processing 'delete' event")
 		if err := r.eventProcessor.ProcessDeleteEvent(evt.Data); err != nil {
 			log.Printf("Error processing delete event: %v", err)
 			m.Nak()
@@ -64,12 +64,12 @@ func (r *JetStreamReceiver) ProcessEvent(m *nats.Msg) {
 	}
 }
 
-func (r *JetStreamReceiver) StartReceiving() error {
+func (r *JetStreamReceiverImpl) StartReceiving() error {
 	log.Println("JetStream receiver is now listening for events...")
 	return nil
 }
 
-func (r *JetStreamReceiver) StopReceiving() error {
+func (r *JetStreamReceiverImpl) StopReceiving() error {
 	if r.subscription != nil {
 		return r.subscription.Unsubscribe()
 	}

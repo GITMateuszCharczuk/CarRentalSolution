@@ -6,8 +6,8 @@ import (
 	"github.com/google/wire"
 )
 
-func InitializeEventProcessor(fileRepo repository_interfaces.FileRepository) *EventProcessor {
-	return NewEventProcessor(fileRepo)
+func InitializeEventProcessor(fileRepo repository_interfaces.FileRepository) EventProcessor {
+	return NewEventProcessorImpl(fileRepo)
 }
 
-var WireSet = wire.NewSet(NewEventProcessor)
+var WireSet = wire.NewSet(NewEventProcessorImpl)

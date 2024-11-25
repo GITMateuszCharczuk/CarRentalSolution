@@ -5,9 +5,6 @@ import (
 	"file-storage/API/services"
 	contract "file-storage/Application.contract/SaveFile"
 	command "file-storage/Application/commands/save_file"
-	"file-storage/Domain/constants"
-	"fmt"
-	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,10 +25,10 @@ func NewSaveFileController(cmd *command.SaveFileCommandHandler) *SaveFileControl
 // @Produce json
 // @Param owner_id formData string true "Owner ID associated with the file"
 // @Param file formData file true "Binary file content (JPEG, PNG, etc.) to be saved"
-// @Success 201 {object} contract.SaveFileResponse "File saved successfully with unique ID and details"
-// @Failure 400 {object} contract.SaveFileResponse "Invalid request format or missing parameters"
-// @Failure 500 {object} contract.SaveFileResponse "Server encountered an error during file save operation"
-// @Router /files [post]
+// @Success 201 {object} contract.SaveFileResponse201 "File saved successfully with unique ID and details"
+// @Failure 400 {object} contract.SaveFileResponse400 "Invalid request format or missing parameters"
+// @Failure 500 {object} contract.SaveFileResponse500 "Server encountered an error during file save operation"
+// @Router /file-storage/api/files [post]
 func (h *SaveFileController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 
@@ -41,24 +38,7 @@ func (h *SaveFileController) Handle(c *gin.Context) {
 	if err != nil || ownerID == "" {
 		responseSender.Send(contract.SaveFileResponse{
 			Title:   "StatusBadRequest",
-			Message: "Missing file, owner_id, or file_name",
-		})
-		return
-	}
-
-	fileExtension := filepath.Ext(file.Filename)
-	if fileExtension == "" {
-		responseSender.Send(contract.SaveFileResponse{
-			Title:   "StatusBadRequest",
-			Message: "File must have a valid extension",
-		})
-		return
-	}
-
-	if !constants.IsAllowedExtension(fileExtension) {
-		responseSender.Send(contract.SaveFileResponse{
-			Title:   "StatusBadRequest",
-			Message: fmt.Sprintf("File extension '%s' is not allowed", fileExtension),
+			Message: "Missing file or owner_id",
 		})
 		return
 	}
@@ -69,14 +49,7 @@ func (h *SaveFileController) Handle(c *gin.Context) {
 	}
 
 	command := mappers.MapToSaveFileCommand(req)
-	resp, err := h.commandHandler.Execute(command)
-	if err != nil {
-		responseSender.Send(contract.SaveFileResponse{
-			Title:   "StatusInternalServerError",
-			Message: fmt.Sprintf("Something went wrong: %v", err),
-		})
-		return
-	}
+	resp := h.commandHandler.Execute(command)
 
 	responseSender.Send(resp)
 }

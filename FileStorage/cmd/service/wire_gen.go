@@ -8,7 +8,7 @@ package main
 
 import (
 	"file-storage/API/controllers"
-	"file-storage/API/routes"
+	"file-storage/API/server"
 	"file-storage/Application/commands"
 	"file-storage/Application/queries"
 	"file-storage/Domain/event"
@@ -38,12 +38,13 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	if err != nil {
 		return nil, err
 	}
-	eventProcessor := processor.NewEventProcessor(fileRepository)
-	eventReceiver, err := receiver.NewJetStreamReceiver(jetStreamContext, eventProcessor)
+	eventProcessorImpl := processor.NewEventProcessorImpl(fileRepository)
+	eventReceiver, err := receiver.NewJetStreamReceiver(jetStreamContext, eventProcessorImpl)
 	if err != nil {
 		return nil, err
 	}
 	infrastructureComponents := &InfrastructureComponents{
+		Config:         configConfig,
 		FileRepository: fileRepository,
 		EventPublisher: eventPublisher,
 		EventReceiver:  eventReceiver,
@@ -51,7 +52,7 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	return infrastructureComponents, nil
 }
 
-func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPublisher event.EventPublisher) (*routes.Router, error) {
+func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPublisher event.EventPublisher, Config *config.Config) (*server.Server, error) {
 	saveFileCommandHandler := commands.ProvideSaveFileCommandHandler(EventPublisher)
 	saveFileController := controllers.NewSaveFileController(saveFileCommandHandler)
 	getFileQueryHandler := queries.ProvideGetFileQueryHandler(FileRepository)
@@ -60,13 +61,14 @@ func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPub
 	deleteFileController := controllers.NewDeleteFileController(deleteFileCommandHandler)
 	v := controllers.ProvideControllers(saveFileController, getFileController, deleteFileController)
 	controllersControllers := controllers.NewControllers(v)
-	router := routes.NewRouter(controllersControllers)
-	return router, nil
+	serverServer := server.ProvideRoutes(controllersControllers, Config)
+	return serverServer, nil
 }
 
 // wire.go:
 
 type InfrastructureComponents struct {
+	Config         *config.Config
 	FileRepository repository_interfaces.FileRepository
 	EventPublisher event.EventPublisher
 	EventReceiver  event.EventReceiver

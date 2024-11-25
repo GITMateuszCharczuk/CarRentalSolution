@@ -8,7 +8,7 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-func ProvideEventReceiver(jsContext nats.JetStreamContext, eventProcessor *processor.EventProcessor) (event.EventReceiver, error) {
+func ProvideEventReceiver(jsContext nats.JetStreamContext, eventProcessor *processor.EventProcessorImpl) (event.EventReceiver, error) {
 	return NewJetStreamReceiver(jsContext, eventProcessor)
 }
 

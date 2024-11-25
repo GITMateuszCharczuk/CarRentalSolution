@@ -16,6 +16,8 @@ type Config struct {
 	StreamName      string
 	NatsUrl         string
 	StreamSubjects  string
+	ServerAddress   string
+	ServiceAddress  string
 }
 
 var (
@@ -41,7 +43,9 @@ func NewConfig(path string) (*Config, error) {
 			MongoDBCollName: getEnv("MONGO_DB_COLLECTION_NAME", "files"),
 			NatsUrl:         getEnv("NATS_URL", "nats://localhost:4222"),
 			StreamName:      getEnv("STREAM_NAME", "file_stream"),
-			StreamSubjects:  getEnv("STREAM_SUBJECTS", "events.*"),
+			StreamSubjects:  getEnv("STREAM_SUBJECTS", "file-events.*"),
+			ServerAddress:   getEnv("SERVER_ADDRESS", ":8081"),
+			ServiceAddress:  getEnv("SERVICE_ADDRESS", "/file-storage/api"),
 		}
 	})
 	return instance, err

@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/files": {
+        "/file-storage/api/files": {
             "post": {
                 "description": "Uploads and saves a file in the storage system, including metadata and content.",
                 "consumes": [
@@ -48,25 +48,25 @@ const docTemplate = `{
                     "201": {
                         "description": "File saved successfully with unique ID and details",
                         "schema": {
-                            "$ref": "#/definitions/contract.SaveFileResponse"
+                            "$ref": "#/definitions/contract.SaveFileResponse201"
                         }
                     },
                     "400": {
                         "description": "Invalid request format or missing parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.SaveFileResponse"
+                            "$ref": "#/definitions/contract.SaveFileResponse400"
                         }
                     },
                     "500": {
                         "description": "Server encountered an error during file save operation",
                         "schema": {
-                            "$ref": "#/definitions/contract.SaveFileResponse"
+                            "$ref": "#/definitions/contract.SaveFileResponse500"
                         }
                     }
                 }
             }
         },
-        "/files/delete": {
+        "/file-storage/api/files/delete": {
             "delete": {
                 "description": "Deletes a file from storage by its unique ID. The file ID should be a valid identifier for an existing file.",
                 "consumes": [
@@ -81,42 +81,44 @@ const docTemplate = `{
                 "summary": "Delete a file",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Unique File ID to be deleted",
-                        "name": "fileId",
-                        "in": "path",
-                        "required": true
+                        "description": "Delete file request object",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteFileRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "File deletion was successful",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteFileResponse"
+                            "$ref": "#/definitions/contract.DeleteFileResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request format or parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteFileResponse"
+                            "$ref": "#/definitions/contract.DeleteFileResponse400"
                         }
                     },
                     "404": {
                         "description": "File not found with the given ID",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteFileResponse"
+                            "$ref": "#/definitions/contract.DeleteFileResponse404"
                         }
                     },
                     "500": {
                         "description": "Server encountered an error during file deletion",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteFileResponse"
+                            "$ref": "#/definitions/contract.DeleteFileResponse500"
                         }
                     }
                 }
             }
         },
-        "/files/get": {
+        "/file-storage/api/files/get": {
             "get": {
                 "description": "Retrieves a file from storage by its unique identifier. The ID should refer to a valid, stored file, and the file is returned in its original format (e.g., JPEG, PNG).",
                 "consumes": [
@@ -146,15 +148,14 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "File Name of the file to retrieve",
-                        "name": "file_name",
-                        "in": "query",
-                        "required": true
+                        "description": "File binary content or file to download",
+                        "name": "download",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful retrieval of file in binary format",
+                        "description": "Successful retrieval of file in binary format or file to download in attachment",
                         "schema": {
                             "type": "file"
                         }
@@ -162,19 +163,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Request contains invalid format or parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetFileResponse"
+                            "$ref": "#/definitions/contract.GetFileResponse400"
                         }
                     },
                     "404": {
                         "description": "File not found with the given ID",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetFileResponse"
+                            "$ref": "#/definitions/contract.GetFileResponse404"
                         }
                     },
                     "500": {
                         "description": "Server encountered an error during file retrieval",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetFileResponse"
+                            "$ref": "#/definitions/contract.GetFileResponse500"
                         }
                     }
                 }
@@ -182,39 +183,153 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "contract.DeleteFileResponse": {
+        "contract.DeleteFileRequest": {
             "type": "object",
             "properties": {
-                "message": {
+                "file_id": {
                     "type": "string"
                 },
-                "title": {
+                "owner_id": {
                     "type": "string"
                 }
             }
         },
-        "contract.GetFileResponse": {
+        "contract.DeleteFileResponse200": {
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "File deleted successfully."
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "StatusOK"
                 }
             }
         },
-        "contract.SaveFileResponse": {
+        "contract.DeleteFileResponse400": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid delete file request."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Bad Request"
+                }
+            }
+        },
+        "contract.DeleteFileResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "The requested file was not found."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Not Found"
+                }
+            }
+        },
+        "contract.DeleteFileResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "An unexpected error occurred."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Internal Server Error"
+                }
+            }
+        },
+        "contract.GetFileResponse400": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid file request."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Bad Request"
+                }
+            }
+        },
+        "contract.GetFileResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "The requested file was not found."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Not Found"
+                }
+            }
+        },
+        "contract.GetFileResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "An unexpected error occurred."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Internal Server Error"
+                }
+            }
+        },
+        "contract.SaveFileResponse201": {
             "type": "object",
             "properties": {
                 "id": {
                     "type": "string"
                 },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "File saved successfully."
                 },
                 "title": {
+                    "type": "string",
+                    "example": "StatusCreated"
+                }
+            }
+        },
+        "contract.SaveFileResponse400": {
+            "type": "object",
+            "properties": {
+                "id": {
                     "type": "string"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Invalid save file request."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Bad Request"
+                }
+            }
+        },
+        "contract.SaveFileResponse500": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "An unexpected error occurred."
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Internal Server Error"
                 }
             }
         }

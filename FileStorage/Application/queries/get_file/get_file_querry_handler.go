@@ -3,6 +3,7 @@ package queries
 
 import (
 	"context"
+	"errors"
 	contract "file-storage/Application.contract/GetFile"
 	"file-storage/Domain/models"
 	"file-storage/Domain/repository_interfaces"
@@ -20,6 +21,13 @@ func NewGetFileQueryHandler(fileRepo repository_interfaces.FileRepository) *GetF
 }
 
 func (cmd *GetFileQueryHandler) Execute(query GetFileQuery) (contract.GetFileResponse, *models.FileStream, *string, error) {
+	if query.FileID == "" || query.OwnerID == "" {
+		return contract.GetFileResponse{
+			Title:   "StatusBadRequest",
+			Message: "Missing required query parameters: file_id or owner_id",
+		}, nil, nil, errors.New("missing required query parameters: file_id or owner_id")
+	}
+
 	file, err := cmd.fileRepo.GetFileByID(context.Background(), query.FileID)
 	if err != nil {
 		return contract.GetFileResponse{

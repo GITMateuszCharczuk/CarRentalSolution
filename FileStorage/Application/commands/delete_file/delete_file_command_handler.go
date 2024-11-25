@@ -18,16 +18,16 @@ func NewDeleteFileCommandHandler(eventPublisher event.EventPublisher) *DeleteFil
 	}
 }
 
-func (cmd *DeleteFileCommandHandler) Execute(command DeleteFileCommand) (contract.DeleteFileResponse, error) {
-	if err := cmd.eventPublisher.PublishEvent("events.delete", command.FileID, models.EventTypeDelete); err != nil {
+func (cmd *DeleteFileCommandHandler) Execute(command DeleteFileCommand) contract.DeleteFileResponse {
+	if err := cmd.eventPublisher.PublishEvent("file-events.delete", command.FileID, models.EventTypeDelete); err != nil {
 		return contract.DeleteFileResponse{ //TODO dodać checka
 			Title:   "StatusInternalServerError",
 			Message: fmt.Sprintf("Failed to delete file: %v", err),
-		}, err
+		}
 	}
 
 	return contract.DeleteFileResponse{
 		Title:   "StatusOK",
 		Message: "File deleted successfully",
-	}, nil
+	}
 }
