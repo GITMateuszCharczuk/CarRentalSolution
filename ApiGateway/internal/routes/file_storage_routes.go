@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterFileRoutes(router *gin.Engine, serviceURL string) {
-	router.GET("/files/:id", services.ReverseProxy(serviceURL))
-	router.POST("/files/upload", services.ReverseProxy(serviceURL))
-	router.DELETE("/files/:id", services.ReverseProxy(serviceURL))
+func RegisterFileRoutes(router *gin.Engine, serviceURL string, mainApiRoute string) {
+	router.POST(mainApiRoute+"/files", services.ReverseProxy(serviceURL, "/file-storage/api", mainApiRoute))
+	router.GET(mainApiRoute+"/files/get", services.ReverseProxy(serviceURL, "/file-storage/api", mainApiRoute))
+	router.DELETE(mainApiRoute+"/files/delete", services.ReverseProxy(serviceURL, "/file-storage/api", mainApiRoute))
 }

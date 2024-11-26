@@ -1,9 +1,8 @@
-version: '3.8'
-
 services:
   api-gateway:
     build:
-      context: .
+      context: ..
+      dockerfile: ./docker/Dockerfile
     ports:
       - "8000:8000"
     environment:
@@ -13,27 +12,14 @@ services:
       - REQUEST_SENT_LIMIT=100
       - REQUEST_SENT_TIME_WINDOW=60
       - REQUEST_SIZE_LIMIT=10
-      - ENV=TEST
-    depends_on:
-      - file-service
-      - email-service
+      - MAIN_API_ROUTE=/car-rental/api
+      - ENV=PROD
+    # depends_on:
+    #   - file-service
+    #   - email-service
     networks:
-      - api-gateway-network
-
-  file-service:
-    image: file-service:latest
-    ports:
-      - "8080:8080"
-    networks:
-      - api-gateway-network
-
-  email-service:
-    image: email-service:latest
-    ports:
-      - "8081:8080"
-    networks:
-      - api-gateway-network
+      - docker-network
 
 networks:
-  api-gateway-network:
+  docker-network:
     driver: bridge

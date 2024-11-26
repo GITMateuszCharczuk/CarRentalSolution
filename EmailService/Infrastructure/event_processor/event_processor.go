@@ -19,12 +19,10 @@ func (p *EventProcessorImpl) ProcessSendEmailEvent(data interface{}) error {
 	if err != nil {
 		return err
 	}
-
 	if err := p.sender.SendEmail(email.From, email.To, email.Subject, email.Body); err != nil {
 		log.Printf("Failed to send email: %v", err)
 		return err
 	}
 
-	log.Printf("Successfully processed 'send_email' event for email to: %s", email.To)
 	return nil
 }

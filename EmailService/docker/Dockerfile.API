@@ -18,6 +18,6 @@ FROM alpine:latest
 
 COPY --from=builder /go-api /go-api
 
-EXPOSE 8080
+EXPOSE 8084
 
 CMD ["/go-api"]

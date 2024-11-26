@@ -47,7 +47,7 @@ func NewConfig(path string) (*Config, error) {
 			StreamSubjects:     getEnv("STREAM_SUBJECTS", "email-events.*"),
 			Env:                getEnv("ENV", "test"),
 			MailhogHost:        getEnv("MAILHOG_HOST", "mailhog"),
-			MailhogPort:        getEnv("MAILHOG_PORT", "1025"),
+			MailhogPort:        getEnv("MAILHOG_PORT", "8025"),
 			MailhogUsername:    getEnv("MAILHOG_USERNAME", ""),
 			MailhogPassword:    getEnv("MAILHOG_PASSWORD", ""),
 			MailhogUrl:         getEnv("MAILHOG_URL", "localhost:8025"),

@@ -19,5 +19,5 @@ services:
       - docker-network
 
 networks:
-  file-network:
+  docker-network:
     driver: bridge

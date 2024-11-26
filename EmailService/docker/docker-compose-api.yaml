@@ -4,17 +4,23 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile.API
     ports:
-      - "8080:8080"
+      - "8083:8083"
     environment:
       NATS_URL: nats://nats:4222
-      STREAM_NAME: file_stream
-      STREAM_SUBJECTS: events.*
-      MAILHOG_HOST: "mailhog"
-      MAILHOG_PORT: "1025"
+      STREAM_NAME: email_stream
+      STREAM_SUBJECTS: email-events.*
+      MAILHOG_HOST: mailhog
+      MAILHOG_PORT: 1025
+      MAILHOG_USERNAME:
+      MAILHOG_PASSWORD:
+      MAILHOG_URL: mailhog:8025
+      SERVICE_ADDRESS: /email-service/api
+      SERVICE_PORT: :8083
+      DEFAULT_EMAIL_SENDER: test@test.com
       ENV: prod
     networks:
-      - file-network
+      - docker-network
 
 networks:
-  file-network:
+  docker-network:
     driver: bridge

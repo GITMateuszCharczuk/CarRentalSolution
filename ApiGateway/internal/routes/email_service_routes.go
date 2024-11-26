@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterEmailRoutes(router *gin.Engine, serviceURL string) {
-	router.GET("/emails/:id", services.ReverseProxy(serviceURL))
-	router.GET("/emails", services.ReverseProxy(serviceURL))
-	router.POST("/send-email", services.ReverseProxy(serviceURL))
+func RegisterEmailRoutes(router *gin.Engine, serviceURL string, mainApiRoute string) {
+	router.GET(mainApiRoute+"/emails/:id", services.ReverseProxy(serviceURL, "/email-service/api", mainApiRoute))
+	router.GET(mainApiRoute+"/emails", services.ReverseProxy(serviceURL, "/email-service/api", mainApiRoute))
+	router.POST(mainApiRoute+"/send-email", services.ReverseProxy(serviceURL, "/email-service/api", mainApiRoute))
 }

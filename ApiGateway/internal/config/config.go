@@ -19,6 +19,7 @@ type Config struct {
 	RequestSentLimit      int
 	RequestSentTimeWindow time.Duration
 	RequestSizeLimit      int64
+	MainApiRoute          string
 }
 
 var (
@@ -65,6 +66,7 @@ func NewConfig(path string) *Config {
 			RequestSentLimit:      RequestSentLimit,
 			RequestSentTimeWindow: RequestSentTimeWindowMinutes,
 			RequestSizeLimit:      RequestSizeLimit,
+			MainApiRoute:          getEnv("MAIN_API_ROUTE", "/car-rental/api"),
 		}
 	})
 	return instance

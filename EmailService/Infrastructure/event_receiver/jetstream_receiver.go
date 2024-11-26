@@ -49,6 +49,7 @@ func (r *JetStreamReceiver) ProcessEvent(m *nats.Msg) {
 			m.Nak()
 			return
 		}
+		log.Printf("Successfully processed 'send_email' event with data: %s", evt.Data)
 		m.Ack()
 
 	default:
