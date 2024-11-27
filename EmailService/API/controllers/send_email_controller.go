@@ -4,20 +4,18 @@ import (
 	"email-service/API/mappers"
 	"email-service/API/services"
 	contract "email-service/Application.contract/send_email"
-	command "email-service/Application/commands/send_email"
+	commandHandlers "email-service/Application/commmand_handlers/send_email"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mehdihadeli/go-mediatr"
 )
 
 type SendEmailController struct {
-	commandHandler *command.SendEmailCommandHandler
 }
 
-func NewSendEmailController(handler *command.SendEmailCommandHandler) *SendEmailController {
-	return &SendEmailController{
-		commandHandler: handler,
-	}
+func NewSendEmailController() *SendEmailController {
+	return &SendEmailController{}
 }
 
 // Handle godoc
@@ -34,7 +32,7 @@ func NewSendEmailController(handler *command.SendEmailCommandHandler) *SendEmail
 func (h *SendEmailController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 
-	var req contract.SendEmailRequest //bindowanie z taga emaila
+	var req contract.SendEmailRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		responseSender.Send(contract.SendEmailResponse{
 			Title:   "StatusBadRequest",
@@ -44,7 +42,7 @@ func (h *SendEmailController) Handle(c *gin.Context) {
 	}
 
 	command := mappers.MapToSendEmailCommand(&req)
-	resp, err := h.commandHandler.Execute(command)
+	resp, err := mediatr.Send[*commandHandlers.SendEmailCommand, *contract.SendEmailResponse](c.Request.Context(), &command)
 	if err != nil {
 		responseSender.Send(contract.SendEmailResponse{
 			Title:   "StatusInternalServerError",

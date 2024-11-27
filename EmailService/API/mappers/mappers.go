@@ -4,9 +4,9 @@ import (
 	get_email_contract "email-service/Application.contract/get_email"
 	get_emails_contract "email-service/Application.contract/get_emails"
 	send_email_contract "email-service/Application.contract/send_email"
-	send_email "email-service/Application/commands/send_email"
-	get_email "email-service/Application/queries/get_email"
-	get_emails "email-service/Application/queries/get_emails"
+	send_email "email-service/Application/commmand_handlers/send_email"
+	get_email "email-service/Application/query_handlers/get_email"
+	get_emails "email-service/Application/query_handlers/get_emails"
 )
 
 func MapToSendEmailCommand(req *send_email_contract.SendEmailRequest) send_email.SendEmailCommand {

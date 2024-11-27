@@ -9,8 +9,6 @@ package main
 import (
 	"email-service/API/controllers"
 	"email-service/API/routes"
-	"email-service/Application/commands"
-	"email-service/Application/queries"
 	"email-service/Domain/event"
 	"email-service/Domain/fetcher"
 	"email-service/Infrastructure/config"
@@ -54,12 +52,9 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 }
 
 func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher, cfg *config.Config) (*routes.Router, error) {
-	getEmailQueryHandler := queries.ProvideGetEmailQueryHandler(DataFetcher)
-	getEmailController := controllers.NewGetEmailController(getEmailQueryHandler)
-	getEmailsQueryHandler := queries.ProvideGetEmailsQueryHandler(DataFetcher)
-	getEmailsController := controllers.NewGetEmailsController(getEmailsQueryHandler)
-	sendEmailCommandHandler := commands.ProvideSendEmailCommandHandler(EventPublisher, cfg)
-	sendEmailController := controllers.NewSendEmailController(sendEmailCommandHandler)
+	getEmailController := controllers.NewGetEmailController()
+	getEmailsController := controllers.NewGetEmailsController()
+	sendEmailController := controllers.NewSendEmailController()
 	v := controllers.ProvideControllers(getEmailController, getEmailsController, sendEmailController)
 	controllersControllers := controllers.NewControllers(v)
 	router := routes.ProvideRouter(controllersControllers, cfg)

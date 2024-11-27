@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"email-service/API/routes"
+	commandHandlers "email-service/Application/commmand_handlers"
+	queryHandlers "email-service/Application/query_handlers"
 	"email-service/Domain/event"
 	"log"
 	"os"
@@ -16,6 +18,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to initialize Infrastructure: %v", err)
 	}
+
+	commandHandlers.RegisterCommandHandlers(components.EventPublisher, components.Config)
+	queryHandlers.RegisterQueryHandlers(components.DataFetcher)
+
 	router, err := InitializeApi(components.DataFetcher, components.EventPublisher, components.Config)
 	if err != nil {
 		log.Fatalf("Failed to initialize API: %v", err)
