@@ -5,6 +5,7 @@ import (
 	contract "email-service/Application.contract/send_email"
 	"email-service/Domain/event"
 	"email-service/Domain/models"
+	"email-service/Domain/responses"
 	"fmt"
 )
 
@@ -20,6 +21,12 @@ func NewSendEmailCommandHandler(eventPublisher event.EventPublisher, defaultEmai
 	}
 }
 
+func createResponse(statusCode int, message string) *contract.SendEmailResponse {
+	return &contract.SendEmailResponse{
+		BaseResponse: responses.NewBaseResponse(statusCode, message),
+	}
+}
+
 func (cmd *SendEmailCommandHandler) Handle(ctx context.Context, command *SendEmailCommand) (*contract.SendEmailResponse, error) {
 	event := models.SendEmailEvent{
 		From:    command.From,
@@ -27,21 +34,14 @@ func (cmd *SendEmailCommandHandler) Handle(ctx context.Context, command *SendEma
 		Subject: command.Subject,
 		Body:    command.Body,
 	}
+
 	if !(command.From == cmd.defaultEmailSender || command.To == cmd.defaultEmailSender) {
-		return &contract.SendEmailResponse{
-			Title:   "StatusBadRequest",
-			Message: "From or to is not the desired email address",
-		}, nil
-	}
-	if err := cmd.eventPublisher.PublishEvent("email-events.send_email", event, models.EventTypeSendEmail); err != nil {
-		return &contract.SendEmailResponse{
-			Title:   "StatusInternalServerError",
-			Message: fmt.Sprintf("Failed to delete file: %v", err),
-		}, err
+		return createResponse(400, "From or to is not the desired email address"), nil
 	}
 
-	return &contract.SendEmailResponse{
-		Title:   "StatusOK",
-		Message: "Email sent successfully",
-	}, nil
+	if err := cmd.eventPublisher.PublishEvent("email-events.send_email", event, models.EventTypeSendEmail); err != nil {
+		return createResponse(500, fmt.Sprintf("Failed to send email: %v", err)), nil
+	}
+
+	return createResponse(200, "Email sent successfully"), nil
 }

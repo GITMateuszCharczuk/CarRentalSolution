@@ -4,17 +4,17 @@ import (
 	"file-storage/API/mappers"
 	"file-storage/API/services"
 	contract "file-storage/Application.contract/SaveFile"
-	command "file-storage/Application/commands/save_file"
+	commands "file-storage/Application/commands/save_file"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mehdihadeli/go-mediatr"
 )
 
 type SaveFileController struct {
-	commandHandler *command.SaveFileCommandHandler
 }
 
-func NewSaveFileController(cmd *command.SaveFileCommandHandler) *SaveFileController {
-	return &SaveFileController{commandHandler: cmd}
+func NewSaveFileController() *SaveFileController {
+	return &SaveFileController{}
 }
 
 // Handle godoc
@@ -49,7 +49,14 @@ func (h *SaveFileController) Handle(c *gin.Context) {
 	}
 
 	command := mappers.MapToSaveFileCommand(req)
-	resp := h.commandHandler.Execute(command)
+	resp, err := mediatr.Send[*commands.SaveFileCommand, *contract.SaveFileResponse](c.Request.Context(), &command)
+	if err != nil {
+		responseSender.Send(contract.SaveFileResponse{
+			Title:   "StatusInternalServerError",
+			Message: "Something went wrong",
+		})
+		return
+	}
 
 	responseSender.Send(resp)
 }

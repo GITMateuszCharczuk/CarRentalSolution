@@ -8,7 +8,7 @@ package main
 
 import (
 	"email-service/API/controllers"
-	"email-service/API/routes"
+	"email-service/API/server"
 	"email-service/Domain/event"
 	fetcher "email-service/Domain/fetcher"
 	"email-service/Infrastructure/config"
@@ -43,10 +43,10 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	return &InfrastructureComponents{}, nil
 }
 
-func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher, cfg *config.Config) (*routes.Router, error) {
+func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher, cfg *config.Config) (*server.Server, error) {
 	wire.Build(
 		controllers.WireSet,
-		routes.WireSet,
+		server.WireSet,
 	)
-	return &routes.Router{}, nil
+	return &server.Server{}, nil
 }

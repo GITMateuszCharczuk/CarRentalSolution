@@ -9,22 +9,20 @@ import (
 	"github.com/mehdihadeli/go-mediatr"
 )
 
-func registerGetEmailQueryHandler(fetcher fetcher.DataFetcher) *get_email_query.GetEmailQueryHandler {
+func registerGetEmailQueryHandler(fetcher fetcher.DataFetcher) {
 	handler := get_email_query.NewGetEmailQueryHandler(fetcher)
 	err := mediatr.RegisterRequestHandler(handler)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return handler
 }
 
-func registerGetEmailsQueryHandler(fetcher fetcher.DataFetcher) *get_emails_query.GetEmailsQueryHandler {
+func registerGetEmailsQueryHandler(fetcher fetcher.DataFetcher) {
 	handler := get_emails_query.NewGetEmailsQueryHandler(fetcher)
 	err := mediatr.RegisterRequestHandler(handler)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return handler
 }
 
 func RegisterQueryHandlers(fetcher fetcher.DataFetcher) {

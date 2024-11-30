@@ -2,6 +2,7 @@
 package commands
 
 import (
+	"context"
 	contract "file-storage/Application.contract/SaveFile"
 	"file-storage/Domain/constants"
 	"file-storage/Domain/event"
@@ -23,20 +24,20 @@ func NewSaveFileCommandHandler(eventPublisher event.EventPublisher) *SaveFileCom
 	}
 }
 
-func (cmd *SaveFileCommandHandler) Execute(command SaveFileCommand) *contract.SaveFileResponse {
+func (cmd *SaveFileCommandHandler) Handle(ctx context.Context, command *SaveFileCommand) (*contract.SaveFileResponse, error) {
 	fileExtension := filepath.Ext(command.File.Filename)
 	if fileExtension == "" {
 		return &contract.SaveFileResponse{
 			Title:   "StatusBadRequest",
 			Message: "File must have a valid extension",
-		}
+		}, nil
 	}
 
 	if !constants.IsAllowedExtension(fileExtension) {
 		return &contract.SaveFileResponse{
 			Title:   "StatusBadRequest",
 			Message: fmt.Sprintf("File extension '%s' is not allowed", fileExtension),
-		}
+		}, nil
 	}
 
 	u, err := uuid.NewUUID()
@@ -44,7 +45,7 @@ func (cmd *SaveFileCommandHandler) Execute(command SaveFileCommand) *contract.Sa
 		return &contract.SaveFileResponse{
 			Title:   "StatusInternalServerError",
 			Message: "Error generating GUID",
-		}
+		}, nil
 	}
 
 	fileId := u.String()
@@ -54,7 +55,7 @@ func (cmd *SaveFileCommandHandler) Execute(command SaveFileCommand) *contract.Sa
 		return &contract.SaveFileResponse{
 			Title:   "StatusInternalServerError",
 			Message: fmt.Sprintf("Failed to open file: %v", err),
-		}
+		}, nil
 	}
 	defer fileContent.Close()
 
@@ -63,7 +64,7 @@ func (cmd *SaveFileCommandHandler) Execute(command SaveFileCommand) *contract.Sa
 		return &contract.SaveFileResponse{
 			Title:   "StatusInternalServerError",
 			Message: fmt.Sprintf("Failed to read file content: %v", err),
-		}
+		}, nil
 	}
 
 	fileData := models.File{
@@ -77,12 +78,12 @@ func (cmd *SaveFileCommandHandler) Execute(command SaveFileCommand) *contract.Sa
 		return &contract.SaveFileResponse{
 			Title:   "StatusInternalServerError",
 			Message: fmt.Sprintf("Failed to save file: %v", err),
-		}
+		}, nil
 	}
 
 	return &contract.SaveFileResponse{
 		Title:   "StatusOK",
 		Message: "File saved successfully",
 		Id:      fileId,
-	}
+	}, nil
 }

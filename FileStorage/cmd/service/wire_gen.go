@@ -9,8 +9,6 @@ package main
 import (
 	"file-storage/API/controllers"
 	"file-storage/API/server"
-	"file-storage/Application/commands"
-	"file-storage/Application/queries"
 	"file-storage/Domain/event"
 	"file-storage/Domain/repository_interfaces"
 	"file-storage/Infrastructure/config"
@@ -53,12 +51,9 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 }
 
 func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPublisher event.EventPublisher, Config *config.Config) (*server.Server, error) {
-	saveFileCommandHandler := commands.ProvideSaveFileCommandHandler(EventPublisher)
-	saveFileController := controllers.NewSaveFileController(saveFileCommandHandler)
-	getFileQueryHandler := queries.ProvideGetFileQueryHandler(FileRepository)
-	getFileController := controllers.NewGetFileController(getFileQueryHandler)
-	deleteFileCommandHandler := commands.ProvideDeleteFileCommandHandler(EventPublisher)
-	deleteFileController := controllers.NewDeleteFileController(deleteFileCommandHandler)
+	saveFileController := controllers.NewSaveFileController()
+	getFileController := controllers.NewGetFileController()
+	deleteFileController := controllers.NewDeleteFileController()
 	v := controllers.ProvideControllers(saveFileController, getFileController, deleteFileController)
 	controllersControllers := controllers.NewControllers(v)
 	serverServer := server.ProvideRoutes(controllersControllers, Config)

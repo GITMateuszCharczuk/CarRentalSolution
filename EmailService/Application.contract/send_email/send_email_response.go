@@ -1,8 +1,9 @@
 package contract
 
+import "email-service/Domain/responses"
+
 type SendEmailResponse struct {
-	Title   string `json:"title"`
-	Message string `json:"message"`
+	responses.BaseResponse
 }
 
 type SendEmailResponse200 struct {

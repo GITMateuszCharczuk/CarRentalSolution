@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"email-service/API/routes"
+	"email-service/API/server"
 	commandHandlers "email-service/Application/commmand_handlers"
 	queryHandlers "email-service/Application/query_handlers"
 	"email-service/Domain/event"
@@ -22,7 +22,7 @@ func main() {
 	commandHandlers.RegisterCommandHandlers(components.EventPublisher, components.Config)
 	queryHandlers.RegisterQueryHandlers(components.DataFetcher)
 
-	router, err := InitializeApi(components.DataFetcher, components.EventPublisher, components.Config)
+	server, err := InitializeApi(components.DataFetcher, components.EventPublisher, components.Config)
 	if err != nil {
 		log.Fatalf("Failed to initialize API: %v", err)
 	}
@@ -33,18 +33,18 @@ func main() {
 		}
 	}()
 
-	router.RegisterRoutes()
+	server.RegisterRoutes()
 
 	go func() {
-		if err := router.StartServer(); err != nil {
+		if err := server.StartServer(); err != nil {
 			log.Fatalf("Failed to start API server: %v", err)
 		}
 	}()
 
-	waitForShutdown(router, components.EventReceiver)
+	waitForShutdown(server, components.EventReceiver)
 }
 
-func waitForShutdown(router *routes.Router, receiver event.EventReceiver) {
+func waitForShutdown(server *server.Server, receiver event.EventReceiver) {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
@@ -57,7 +57,7 @@ func waitForShutdown(router *routes.Router, receiver event.EventReceiver) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	if err := router.StopServer(ctx); err != nil {
+	if err := server.StopServer(ctx); err != nil {
 		log.Printf("Error stopping API server: %v", err)
 	}
 

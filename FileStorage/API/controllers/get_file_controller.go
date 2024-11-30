@@ -8,14 +8,14 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mehdihadeli/go-mediatr"
 )
 
 type GetFileController struct {
-	queryHandler *queries.GetFileQueryHandler
 }
 
-func NewGetFileController(qrs *queries.GetFileQueryHandler) *GetFileController {
-	return &GetFileController{queryHandler: qrs}
+func NewGetFileController() *GetFileController {
+	return &GetFileController{}
 }
 
 // Handle godoc
@@ -45,11 +45,22 @@ func (h *GetFileController) Handle(c *gin.Context) {
 	}
 
 	query := mappers.MapToGetFileQuery(&req)
-	errorResponse, fileStream, fileExt, err := h.queryHandler.Execute(query)
+	response, err := mediatr.Send[*queries.GetFileQuery, *contract.GetFileResponse](c.Request.Context(), &query)
 	if err != nil {
-		responseSender.Send(errorResponse)
+		responseSender.Send(contract.GetFileResponse{
+			Title:   "StatusInternalServerError",
+			Message: "Something went wrong",
+		})
 		return
 	}
+
+	if response.Title != "StatusOK" {
+		responseSender.Send(response)
+		return
+	}
+
+	fileStream := response.FileStream
+	fileExt := response.FileExtension
 
 	c.Header("Content-Type", *fileExt)
 	if download == "true" {

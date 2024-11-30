@@ -8,14 +8,14 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mehdihadeli/go-mediatr"
 )
 
 type DeleteFileController struct {
-	commandHandler *commands.DeleteFileCommandHandler
 }
 
-func NewDeleteFileController(cmd *commands.DeleteFileCommandHandler) *DeleteFileController {
-	return &DeleteFileController{commandHandler: cmd}
+func NewDeleteFileController() *DeleteFileController {
+	return &DeleteFileController{}
 }
 
 // Handle godoc
@@ -43,7 +43,14 @@ func (h *DeleteFileController) Handle(c *gin.Context) {
 	}
 
 	command := mappers.MapToDeleteFileCommand(&req)
-	resp := h.commandHandler.Execute(command)
+	resp, err := mediatr.Send[*commands.DeleteFileCommand, *contract.DeleteFileResponse](c.Request.Context(), &command)
+	if err != nil {
+		responseSender.Send(contract.DeleteFileResponse{
+			Title:   "StatusInternalServerError",
+			Message: "Something went wrong",
+		})
+		return
+	}
 
 	responseSender.Send(resp)
 }

@@ -1,11 +1,13 @@
 package contract
 
-import "email-service/Domain/models"
+import (
+	"email-service/Domain/models"
+	"email-service/Domain/responses"
+)
 
 type GetEmailResponse struct {
-	Title   string       `json:"title"`
-	Message string       `json:"message"`
-	Email   models.Email `json:"email"`
+	responses.BaseResponse
+	Email models.Email `json:"email,omitempty"`
 }
 
 type GetEmailResponse404 struct {

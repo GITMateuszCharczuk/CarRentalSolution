@@ -3,10 +3,9 @@ package queries
 
 import (
 	"context"
-	"errors"
 	contract "file-storage/Application.contract/GetFile"
-	"file-storage/Domain/models"
 	"file-storage/Domain/repository_interfaces"
+	"log"
 	"path/filepath"
 )
 
@@ -20,33 +19,36 @@ func NewGetFileQueryHandler(fileRepo repository_interfaces.FileRepository) *GetF
 	}
 }
 
-func (cmd *GetFileQueryHandler) Execute(query GetFileQuery) (contract.GetFileResponse, *models.FileStream, *string, error) {
+func (cmd *GetFileQueryHandler) Handle(ctx context.Context, query *GetFileQuery) (*contract.GetFileResponse, error) {
 	if query.FileID == "" || query.OwnerID == "" {
-		return contract.GetFileResponse{
+		return &contract.GetFileResponse{
 			Title:   "StatusBadRequest",
 			Message: "Missing required query parameters: file_id or owner_id",
-		}, nil, nil, errors.New("missing required query parameters: file_id or owner_id")
+		}, nil
 	}
 
-	file, err := cmd.fileRepo.GetFileByID(context.Background(), query.FileID)
+	file, err := cmd.fileRepo.GetFileByID(ctx, query.FileID)
 	if err != nil {
-		return contract.GetFileResponse{
+		log.Println("Error getting file:", err)
+		return &contract.GetFileResponse{
 			Title:   "StatusNotFound",
 			Message: "File not found",
-		}, nil, nil, err
+		}, nil
 	}
 
 	fileExtension := filepath.Ext(file.FileName)
+
 	if fileExtension == "" {
-		return contract.GetFileResponse{
+		return &contract.GetFileResponse{
 			Title:   "StatusBadRequest",
 			Message: "File must have a valid extension",
-		}, nil, nil, err
-	}
-	resp := contract.GetFileResponse{
-		Title:   "StatusOK",
-		Message: "File retrieved successfully",
+		}, nil
 	}
 
-	return resp, &file, &fileExtension, nil
+	return &contract.GetFileResponse{
+		Title:         "StatusOK",
+		Message:       "File retrieved successfully",
+		FileStream:    &file,
+		FileExtension: &fileExtension,
+	}, nil
 }

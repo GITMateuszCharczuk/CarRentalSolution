@@ -8,7 +8,7 @@ package main
 
 import (
 	"email-service/API/controllers"
-	"email-service/API/routes"
+	"email-service/API/server"
 	"email-service/Domain/event"
 	"email-service/Domain/fetcher"
 	"email-service/Infrastructure/config"
@@ -51,14 +51,14 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	return infrastructureComponents, nil
 }
 
-func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher, cfg *config.Config) (*routes.Router, error) {
+func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher, cfg *config.Config) (*server.Server, error) {
 	getEmailController := controllers.NewGetEmailController()
 	getEmailsController := controllers.NewGetEmailsController()
 	sendEmailController := controllers.NewSendEmailController()
 	v := controllers.ProvideControllers(getEmailController, getEmailsController, sendEmailController)
 	controllersControllers := controllers.NewControllers(v)
-	router := routes.ProvideRouter(controllersControllers, cfg)
-	return router, nil
+	serverServer := server.ProvideServer(controllersControllers, cfg)
+	return serverServer, nil
 }
 
 // wire.go:

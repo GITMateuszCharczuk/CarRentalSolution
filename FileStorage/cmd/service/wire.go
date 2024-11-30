@@ -9,8 +9,6 @@ package main
 import (
 	"file-storage/API/controllers"
 	"file-storage/API/server"
-	"file-storage/Application/commands"
-	"file-storage/Application/queries"
 	"file-storage/Domain/event"
 	"file-storage/Domain/repository_interfaces"
 	"file-storage/Infrastructure/config"
@@ -47,8 +45,6 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 
 func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPublisher event.EventPublisher, Config *config.Config) (*server.Server, error) {
 	wire.Build(
-		commands.WireSet,
-		queries.WireSet,
 		controllers.WireSet,
 		server.WireSet,
 	)

@@ -5,10 +5,9 @@ import (
 	"email-service/API/services"
 	contract "email-service/Application.contract/send_email"
 	commandHandlers "email-service/Application/commmand_handlers/send_email"
-	"fmt"
+	"email-service/Domain/responses"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mehdihadeli/go-mediatr"
 )
 
 type SendEmailController struct {
@@ -31,26 +30,15 @@ func NewSendEmailController() *SendEmailController {
 // @Router /email-service/api/send-email [post]
 func (h *SendEmailController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
-
 	var req contract.SendEmailRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		responseSender.Send(contract.SendEmailResponse{
-			Title:   "StatusBadRequest",
-			Message: fmt.Sprintf("Bad input data: %v", err),
+			BaseResponse: responses.NewBaseResponse(400, "Invalid request parameters"),
 		})
 		return
 	}
-
 	command := mappers.MapToSendEmailCommand(&req)
-	resp, err := mediatr.Send[*commandHandlers.SendEmailCommand, *contract.SendEmailResponse](c.Request.Context(), &command)
-	if err != nil {
-		responseSender.Send(contract.SendEmailResponse{
-			Title:   "StatusInternalServerError",
-			Message: fmt.Sprintf("Something went wrong: %v", err),
-		})
-		return
-	}
-
+	resp := services.SendToMediator[*commandHandlers.SendEmailCommand, *contract.SendEmailResponse](c.Request.Context(), &command)
 	responseSender.Send(resp)
 }
 

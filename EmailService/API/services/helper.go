@@ -22,27 +22,33 @@ func (s *ResponseSender) Send(obj interface{}) {
 		value = value.Elem()
 	}
 
-	titleField := value.FieldByName("Title")
+	baseResponseField := value.FieldByName("BaseResponse")
 
-	if titleField.IsValid() && titleField.Kind() == reflect.String {
-		switch titleField.String() {
-		case "StatusOK":
-			s.c.JSON(http.StatusOK, obj)
-			return
-		case "StatusBadRequest":
-			s.c.JSON(http.StatusBadRequest, obj)
-			return
-		case "StatusNotFound":
-			s.c.JSON(http.StatusNotFound, obj)
-			return
-		case "StatusInternalServerError":
-			s.c.JSON(http.StatusInternalServerError, obj)
-			return
-		default:
-			s.c.JSON(http.StatusInternalServerError, obj)
-			return
+	var statusCode int
+	if baseResponseField.IsValid() {
+		statusCodeField := baseResponseField.FieldByName("StatusCode")
+		if statusCodeField.IsValid() && statusCodeField.Kind() == reflect.Int {
+			statusCode = int(statusCodeField.Int())
+		} else {
+			statusCode = http.StatusInternalServerError
+		}
+	} else {
+		statusCode = http.StatusInternalServerError
+	}
+
+	response := make(map[string]interface{})
+
+	if baseResponseField.IsValid() {
+		response["success"] = baseResponseField.FieldByName("Success").Bool()
+		response["message"] = baseResponseField.FieldByName("Message").String()
+	}
+
+	for i := 0; i < value.NumField(); i++ {
+		field := value.Type().Field(i)
+		if field.Name != "BaseResponse" && field.Type.Kind() != reflect.Struct {
+			response[field.Name] = value.Field(i).Interface()
 		}
 	}
 
-	s.c.JSON(http.StatusInternalServerError, obj)
+	s.c.JSON(statusCode, response)
 }

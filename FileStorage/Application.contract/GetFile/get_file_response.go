@@ -1,8 +1,12 @@
 package contract
 
+import "file-storage/Domain/models"
+
 type GetFileResponse struct {
-	Title   string `json:"title"`
-	Message string `json:"message"`
+	Title         string             `json:"title"`
+	Message       string             `json:"message"`
+	FileStream    *models.FileStream `json:"file_stream,omitempty"`
+	FileExtension *string            `json:"file_extension,omitempty"`
 }
 
 type GetFileResponse404 struct {

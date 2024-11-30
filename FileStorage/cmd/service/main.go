@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"file-storage/API/server"
+	"file-storage/Application/commands"
+	"file-storage/Application/queries"
 	"file-storage/Domain/event"
 	"log"
 	"os"
@@ -16,6 +18,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to initialize Infrastructure: %v", err)
 	}
+
+	commands.RegisterCommandHandlers(components.EventPublisher)
+	queries.RegisterQueryHandlers(components.FileRepository)
 
 	server, err := InitializeApi(components.FileRepository, components.EventPublisher, components.Config)
 	if err != nil {

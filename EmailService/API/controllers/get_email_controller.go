@@ -5,10 +5,8 @@ import (
 	"email-service/API/services"
 	contract "email-service/Application.contract/get_email"
 	queryHandlers "email-service/Application/query_handlers/get_email"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mehdihadeli/go-mediatr"
 )
 
 type GetEmailController struct {
@@ -33,18 +31,9 @@ func NewGetEmailController() *GetEmailController {
 func (h *GetEmailController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 	emailID := c.Param("id")
-
 	req := contract.GetEmailRequest{ID: emailID}
 	query := mappers.MapToGetEmailQuery(&req)
-	resp, err := mediatr.Send[*queryHandlers.GetEmailQuery, *contract.GetEmailResponse](c.Request.Context(), &query)
-	if err != nil {
-		responseSender.Send(contract.GetEmailResponse{
-			Title:   "StatusInternalServerError",
-			Message: fmt.Sprintf("Something went wrong: %v", err),
-		})
-		return
-	}
-
+	resp := services.SendToMediator[*queryHandlers.GetEmailQuery, *contract.GetEmailResponse](c.Request.Context(), &query)
 	responseSender.Send(resp)
 }
 

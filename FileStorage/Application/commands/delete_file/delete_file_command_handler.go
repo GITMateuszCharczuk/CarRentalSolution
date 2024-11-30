@@ -2,6 +2,7 @@
 package commands
 
 import (
+	"context"
 	contract "file-storage/Application.contract/DeleteFile"
 	"file-storage/Domain/event"
 	"file-storage/Domain/models"
@@ -18,16 +19,16 @@ func NewDeleteFileCommandHandler(eventPublisher event.EventPublisher) *DeleteFil
 	}
 }
 
-func (cmd *DeleteFileCommandHandler) Execute(command DeleteFileCommand) contract.DeleteFileResponse {
+func (cmd *DeleteFileCommandHandler) Handle(ctx context.Context, command *DeleteFileCommand) (*contract.DeleteFileResponse, error) {
 	if err := cmd.eventPublisher.PublishEvent("file-events.delete", command.FileID, models.EventTypeDelete); err != nil {
-		return contract.DeleteFileResponse{ //TODO dodać checka
+		return &contract.DeleteFileResponse{ //TODO dodać checka
 			Title:   "StatusInternalServerError",
 			Message: fmt.Sprintf("Failed to delete file: %v", err),
-		}
+		}, nil
 	}
 
-	return contract.DeleteFileResponse{
+	return &contract.DeleteFileResponse{
 		Title:   "StatusOK",
 		Message: "File deleted successfully",
-	}
+	}, nil
 }

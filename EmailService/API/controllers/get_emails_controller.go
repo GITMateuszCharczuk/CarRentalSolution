@@ -5,10 +5,8 @@ import (
 	"email-service/API/services"
 	contract "email-service/Application.contract/get_emails"
 	queries "email-service/Application/query_handlers/get_emails"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mehdihadeli/go-mediatr"
 )
 
 type GetEmailsController struct {
@@ -16,23 +14,6 @@ type GetEmailsController struct {
 
 func NewGetEmailsController() *GetEmailsController {
 	return &GetEmailsController{}
-}
-
-func (h *GetEmailsController) Handle(c *gin.Context) {
-	responseSender := services.NewResponseSender(c)
-
-	req := contract.GetEmailsRequest{}
-	query := mappers.MapToGetEmailsQuery(&req)
-	resp, err := mediatr.Send[*queries.GetEmailsQuery, *contract.GetEmailsResponse](c.Request.Context(), &query)
-	if err != nil {
-		responseSender.Send(contract.GetEmailsResponse{
-			Title:   "StatusInternalServerError",
-			Message: fmt.Sprintf("Something went wrong: %v", err),
-		})
-		return
-	}
-
-	responseSender.Send(resp)
 }
 
 // Handle godoc
@@ -45,6 +26,14 @@ func (h *GetEmailsController) Handle(c *gin.Context) {
 // @Failure 400 {object} contract.GetEmailsResponse400 "Invalid request parameters"
 // @Failure 500 {object} contract.GetEmailsResponse500 "Server error during emails retrieval"
 // @Router /email-service/api/emails [get]
+func (h *GetEmailsController) Handle(c *gin.Context) {
+	responseSender := services.NewResponseSender(c)
+	req := contract.GetEmailsRequest{}
+	query := mappers.MapToGetEmailsQuery(&req)
+	resp := services.SendToMediator[*queries.GetEmailsQuery, *contract.GetEmailsResponse](c.Request.Context(), &query)
+	responseSender.Send(resp)
+}
+
 func (h *GetEmailsController) Route() string {
 	return "/emails"
 }
