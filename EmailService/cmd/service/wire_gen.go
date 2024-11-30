@@ -52,9 +52,10 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 }
 
 func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher, cfg *config.Config) (*server.Server, error) {
-	getEmailController := controllers.NewGetEmailController()
+	validate := controllers.ProvideValidator()
+	getEmailController := controllers.NewGetEmailController(validate)
 	getEmailsController := controllers.NewGetEmailsController()
-	sendEmailController := controllers.NewSendEmailController()
+	sendEmailController := controllers.NewSendEmailController(validate)
 	v := controllers.ProvideControllers(getEmailController, getEmailsController, sendEmailController)
 	controllersControllers := controllers.NewControllers(v)
 	serverServer := server.ProvideServer(controllersControllers, cfg)

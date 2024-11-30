@@ -1,6 +1,9 @@
 package controllers
 
-import "github.com/google/wire"
+import (
+	"github.com/go-playground/validator/v10"
+	"github.com/google/wire"
+)
 
 type Controllers struct {
 	All []Controller
@@ -18,10 +21,15 @@ func ProvideControllers(
 	return []Controller{getEmailController, getEmailsController, SendEmailController}
 }
 
+func ProvideValidator() *validator.Validate {
+	return validator.New()
+}
+
 var WireSet = wire.NewSet(
 	NewGetEmailController,
 	NewGetEmailsController,
 	NewSendEmailController,
 	ProvideControllers,
 	NewControllers,
+	ProvideValidator,
 )

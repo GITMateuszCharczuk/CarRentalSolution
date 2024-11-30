@@ -7,13 +7,15 @@ import (
 	queryHandlers "email-service/Application/query_handlers/get_email"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type GetEmailController struct {
+	validator *validator.Validate
 }
 
-func NewGetEmailController() *GetEmailController {
-	return &GetEmailController{}
+func NewGetEmailController(validator *validator.Validate) *GetEmailController {
+	return &GetEmailController{validator: validator}
 }
 
 // Handle godoc
@@ -32,6 +34,10 @@ func (h *GetEmailController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 	emailID := c.Param("id")
 	req := contract.GetEmailRequest{ID: emailID}
+	if validateResponse := services.ValidateRequest[contract.GetEmailResponse](&req, h.validator); validateResponse != nil {
+		responseSender.Send(validateResponse)
+		return
+	}
 	query := mappers.MapToGetEmailQuery(&req)
 	resp := services.SendToMediator[*queryHandlers.GetEmailQuery, *contract.GetEmailResponse](c.Request.Context(), &query)
 	responseSender.Send(resp)

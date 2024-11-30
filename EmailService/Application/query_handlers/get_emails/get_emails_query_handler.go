@@ -19,7 +19,7 @@ func NewGetEmailsQueryHandler(fetcher fetcher.DataFetcher) *GetEmailsQueryHandle
 func (h *GetEmailsQueryHandler) Handle(ctx context.Context, query *GetEmailsQuery) (*contract.GetEmailsResponse, error) {
 	emails, err := h.fetcher.GetEmails()
 	if err != nil {
-		return createResponse(500, "Something went wrong", nil), nil
+		return createResponse(500, "Something went wrong", &[]models.Email{}), nil
 	}
 
 	if len(*emails) == 0 {
@@ -29,9 +29,15 @@ func (h *GetEmailsQueryHandler) Handle(ctx context.Context, query *GetEmailsQuer
 	return createResponse(200, "Emails retrieved successfully", emails), nil
 }
 
-func createResponse(statusCode int, message string, emails *[]models.Email) *contract.GetEmailsResponse {
+func createResponse(statusCode int, message string, emails ...*[]models.Email) *contract.GetEmailsResponse {
+	var emailList *[]models.Email
+	if len(emails) > 0 {
+		emailList = emails[0]
+	} else {
+		emailList = &[]models.Email{}
+	}
 	return &contract.GetEmailsResponse{
 		BaseResponse: responses.NewBaseResponse(statusCode, message),
-		Emails:       *emails,
+		Emails:       *emailList,
 	}
 }

@@ -6,15 +6,20 @@ import (
 	contract "email-service/Application.contract/send_email"
 	commandHandlers "email-service/Application/commmand_handlers/send_email"
 	"email-service/Domain/responses"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type SendEmailController struct {
+	validator *validator.Validate
 }
 
-func NewSendEmailController() *SendEmailController {
-	return &SendEmailController{}
+func NewSendEmailController(validator *validator.Validate) *SendEmailController {
+	return &SendEmailController{
+		validator: validator,
+	}
 }
 
 // Handle godoc
@@ -35,6 +40,11 @@ func (h *SendEmailController) Handle(c *gin.Context) {
 		responseSender.Send(contract.SendEmailResponse{
 			BaseResponse: responses.NewBaseResponse(400, "Invalid request parameters"),
 		})
+		return
+	}
+	if validateResponse := services.ValidateRequest[contract.SendEmailResponse](&req, h.validator); validateResponse != nil {
+		fmt.Println(validateResponse)
+		responseSender.Send(validateResponse)
 		return
 	}
 	command := mappers.MapToSendEmailCommand(&req)
