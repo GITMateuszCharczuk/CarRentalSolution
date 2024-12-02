@@ -6,45 +6,42 @@ definitions:
       message:
         example: Email retrieved successfully.
         type: string
-      title:
-        example: Success
-        type: string
+      success:
+        example: true
+        type: boolean
     type: object
   contract.GetEmailResponse400:
     properties:
       email:
-        description: Empty email object
         type: object
       message:
         example: Invalid email request.
         type: string
-      title:
-        example: Bad Request
-        type: string
+      success:
+        example: false
+        type: boolean
     type: object
   contract.GetEmailResponse404:
     properties:
       email:
-        description: Empty email object
         type: object
       message:
         example: The requested email was not found.
         type: string
-      title:
-        example: Not Found
-        type: string
+      success:
+        example: false
+        type: boolean
     type: object
   contract.GetEmailResponse500:
     properties:
       email:
-        description: Empty email object
         type: object
       message:
         example: An unexpected error occurred.
         type: string
-      title:
-        example: Internal Server Error
-        type: string
+      success:
+        example: false
+        type: boolean
     type: object
   contract.GetEmailsResponse200:
     properties:
@@ -55,9 +52,9 @@ definitions:
       message:
         example: Emails retrieved successfully.
         type: string
-      title:
-        example: Success
-        type: string
+      success:
+        example: true
+        type: boolean
     type: object
   contract.GetEmailsResponse400:
     properties:
@@ -68,9 +65,9 @@ definitions:
       message:
         example: Invalid request for emails.
         type: string
-      title:
-        example: Bad Request
-        type: string
+      success:
+        example: false
+        type: boolean
     type: object
   contract.GetEmailsResponse500:
     properties:
@@ -81,20 +78,24 @@ definitions:
       message:
         example: An unexpected error occurred.
         type: string
-      title:
-        example: Internal Server Error
-        type: string
+      success:
+        example: false
+        type: boolean
     type: object
   contract.SendEmailRequest:
     properties:
       body:
         example: This is the body of the email.
+        maxLength: 1000
+        minLength: 5
         type: string
       from:
-        example: example@example.com
+        example: test@test.com
         type: string
       subject:
         example: Hello
+        maxLength: 100
+        minLength: 5
         type: string
       to:
         example: recipient@example.com
@@ -110,27 +111,27 @@ definitions:
       message:
         example: Email sent successfully.
         type: string
-      title:
-        example: Success
-        type: string
+      success:
+        example: true
+        type: boolean
     type: object
   contract.SendEmailResponse400:
     properties:
       message:
         example: Invalid request for sending email.
         type: string
-      title:
-        example: Bad Request
-        type: string
+      success:
+        example: false
+        type: boolean
     type: object
   contract.SendEmailResponse500:
     properties:
       message:
         example: An unexpected error occurred while sending email.
         type: string
-      title:
-        example: Internal Server Error
-        type: string
+      success:
+        example: false
+        type: boolean
     type: object
   models.Email:
     properties:
@@ -158,6 +159,17 @@ paths:
       consumes:
       - application/json
       description: Retrieves a list of all emails.
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of emails per page
+        in: query
+        name: page_size
+        type: integer
       produces:
       - application/json
       responses:

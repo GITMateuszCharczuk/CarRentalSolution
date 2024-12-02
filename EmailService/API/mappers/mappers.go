@@ -19,7 +19,9 @@ func MapToSendEmailCommand(req *send_email_contract.SendEmailRequest) send_email
 }
 
 func MapToGetEmailsQuery(req *get_emails_contract.GetEmailsRequest) get_emails.GetEmailsQuery {
-	return get_emails.GetEmailsQuery{}
+	return get_emails.GetEmailsQuery{
+		Pagination: req.Pagination,
+	}
 }
 
 func MapToGetEmailQuery(req *get_email_contract.GetEmailRequest) get_email.GetEmailQuery {

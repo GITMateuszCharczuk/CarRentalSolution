@@ -11,25 +11,25 @@ type GetEmailResponse struct {
 }
 
 type GetEmailResponse404 struct {
-	Title   string       `json:"title" example:"Not Found" swaggertype:"string"`
+	Success bool         `json:"success" example:"false" swaggertype:"boolean"`
 	Message string       `json:"message" example:"The requested email was not found." swaggertype:"string"`
-	Email   models.Email `json:"email" swaggertype:"object"` // Empty email object
+	Email   models.Email `json:"email" swaggertype:"object"`
 }
 
 type GetEmailResponse200 struct {
-	Title   string       `json:"title" example:"Success" swaggertype:"string"`
+	Success bool         `json:"success" example:"true" swaggertype:"boolean"`
 	Message string       `json:"message" example:"Email retrieved successfully." swaggertype:"string"`
 	Email   models.Email `json:"email"`
 }
 
 type GetEmailResponse400 struct {
-	Title   string       `json:"title" example:"Bad Request" swaggertype:"string"`
+	Success bool         `json:"success" example:"false" swaggertype:"boolean"`
 	Message string       `json:"message" example:"Invalid email request." swaggertype:"string"`
-	Email   models.Email `json:"email" swaggertype:"object"` // Empty email object
+	Email   models.Email `json:"email" swaggertype:"object"`
 }
 
 type GetEmailResponse500 struct {
-	Title   string       `json:"title" example:"Internal Server Error" swaggertype:"string"`
+	Success bool         `json:"success" example:"false" swaggertype:"boolean"`
 	Message string       `json:"message" example:"An unexpected error occurred." swaggertype:"string"`
-	Email   models.Email `json:"email" swaggertype:"object"` // Empty email object
+	Email   models.Email `json:"email" swaggertype:"object"`
 }

@@ -1,7 +1,8 @@
 package fetcher
 
 import "email-service/Domain/models"
+import pagination "email-service/Domain/requests"
 
 type DataFetcher interface {
-	GetEmails() (*[]models.Email, error)
+	GetEmails(pagination pagination.Pagination) (*[]models.Email, error)
 }

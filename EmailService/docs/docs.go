@@ -28,6 +28,22 @@ const docTemplate = `{
                     "emails"
                 ],
                 "summary": "Get all emails",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Number of emails per page",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "List of emails retrieved successfully",
@@ -158,9 +174,9 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Email retrieved successfully."
                 },
-                "title": {
-                    "type": "string",
-                    "example": "Success"
+                "success": {
+                    "type": "boolean",
+                    "example": true
                 }
             }
         },
@@ -168,16 +184,15 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "description": "Empty email object",
                     "type": "object"
                 },
                 "message": {
                     "type": "string",
                     "example": "Invalid email request."
                 },
-                "title": {
-                    "type": "string",
-                    "example": "Bad Request"
+                "success": {
+                    "type": "boolean",
+                    "example": false
                 }
             }
         },
@@ -185,16 +200,15 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "description": "Empty email object",
                     "type": "object"
                 },
                 "message": {
                     "type": "string",
                     "example": "The requested email was not found."
                 },
-                "title": {
-                    "type": "string",
-                    "example": "Not Found"
+                "success": {
+                    "type": "boolean",
+                    "example": false
                 }
             }
         },
@@ -202,16 +216,15 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "description": "Empty email object",
                     "type": "object"
                 },
                 "message": {
                     "type": "string",
                     "example": "An unexpected error occurred."
                 },
-                "title": {
-                    "type": "string",
-                    "example": "Internal Server Error"
+                "success": {
+                    "type": "boolean",
+                    "example": false
                 }
             }
         },
@@ -228,9 +241,9 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Emails retrieved successfully."
                 },
-                "title": {
-                    "type": "string",
-                    "example": "Success"
+                "success": {
+                    "type": "boolean",
+                    "example": true
                 }
             }
         },
@@ -247,9 +260,9 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Invalid request for emails."
                 },
-                "title": {
-                    "type": "string",
-                    "example": "Bad Request"
+                "success": {
+                    "type": "boolean",
+                    "example": false
                 }
             }
         },
@@ -266,9 +279,9 @@ const docTemplate = `{
                     "type": "string",
                     "example": "An unexpected error occurred."
                 },
-                "title": {
-                    "type": "string",
-                    "example": "Internal Server Error"
+                "success": {
+                    "type": "boolean",
+                    "example": false
                 }
             }
         },
@@ -283,14 +296,18 @@ const docTemplate = `{
             "properties": {
                 "body": {
                     "type": "string",
+                    "maxLength": 1000,
+                    "minLength": 5,
                     "example": "This is the body of the email."
                 },
                 "from": {
                     "type": "string",
-                    "example": "example@example.com"
+                    "example": "test@test.com"
                 },
                 "subject": {
                     "type": "string",
+                    "maxLength": 100,
+                    "minLength": 5,
                     "example": "Hello"
                 },
                 "to": {
@@ -306,9 +323,9 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Email sent successfully."
                 },
-                "title": {
-                    "type": "string",
-                    "example": "Success"
+                "success": {
+                    "type": "boolean",
+                    "example": true
                 }
             }
         },
@@ -319,9 +336,9 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Invalid request for sending email."
                 },
-                "title": {
-                    "type": "string",
-                    "example": "Bad Request"
+                "success": {
+                    "type": "boolean",
+                    "example": false
                 }
             }
         },
@@ -332,9 +349,9 @@ const docTemplate = `{
                     "type": "string",
                     "example": "An unexpected error occurred while sending email."
                 },
-                "title": {
-                    "type": "string",
-                    "example": "Internal Server Error"
+                "success": {
+                    "type": "boolean",
+                    "example": false
                 }
             }
         },

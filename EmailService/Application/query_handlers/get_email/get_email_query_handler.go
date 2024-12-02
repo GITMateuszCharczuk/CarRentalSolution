@@ -5,6 +5,7 @@ import (
 	contract "email-service/Application.contract/get_email"
 	fetcher "email-service/Domain/fetcher"
 	"email-service/Domain/models"
+	pagination "email-service/Domain/requests"
 	"email-service/Domain/responses"
 )
 
@@ -17,9 +18,10 @@ func NewGetEmailQueryHandler(fetcher fetcher.DataFetcher) *GetEmailQueryHandler 
 }
 
 func (h *GetEmailQueryHandler) Handle(ctx context.Context, query *GetEmailQuery) (*contract.GetEmailResponse, error) {
-	emails, err := h.fetcher.GetEmails()
+	emptyPagination := pagination.Pagination{}
+	emails, err := h.fetcher.GetEmails(emptyPagination)
 	if err != nil {
-		return createResponse(500, "Something went wrong", nil), nil
+		return createResponse(500, "Something went wrong", &models.Email{}), nil
 	}
 
 	var resEmail *models.Email = nil
@@ -32,7 +34,7 @@ func (h *GetEmailQueryHandler) Handle(ctx context.Context, query *GetEmailQuery)
 	}
 
 	if resEmail == nil {
-		return createResponse(404, "No emails found", nil), nil
+		return createResponse(404, "No emails found", &models.Email{}), nil
 	}
 
 	return createResponse(200, "Email retrieved successfully", resEmail), nil
