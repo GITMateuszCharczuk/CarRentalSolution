@@ -10,4 +10,4 @@ func NewRedisConfigProvider(cfg *config.Config) (*RedisConfig, error) {
 	return NewRedisConfig(cfg.RedisHost, cfg.RedisPort, cfg.RedisPassword)
 }
 
-var ProviderSet = wire.NewSet(NewRedisConfigProvider)
+var WireSet = wire.NewSet(NewRedisConfigProvider)

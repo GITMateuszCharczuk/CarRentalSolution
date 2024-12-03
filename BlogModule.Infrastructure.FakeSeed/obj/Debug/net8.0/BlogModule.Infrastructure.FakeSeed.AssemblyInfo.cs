@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BlogModule.Infrastructure.FakeSeed")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1bb6789f3f40aeb3154820ab4f438af90ad3a21e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9c652b5081dfb88cfe56391ed7356140531adc36")]
 [assembly: System.Reflection.AssemblyProductAttribute("BlogModule.Infrastructure.FakeSeed")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BlogModule.Infrastructure.FakeSeed")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

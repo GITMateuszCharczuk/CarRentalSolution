@@ -5,7 +5,7 @@ namespace Shared.CQRS.Repository;
 
 public abstract class CommandRepository<TEntity, TId, TModel, TDbContext>
     where TEntity : class, IEntity<TId>
-    where TId : struct //BaseId<TId>
+    where TId : struct
     where TModel : class
     where TDbContext : DbContext
 {

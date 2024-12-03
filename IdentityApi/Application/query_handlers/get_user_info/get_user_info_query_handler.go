@@ -2,26 +2,71 @@ package queries
 
 import (
 	"context"
-	"identity-api/Application/contract"
-	"identity-api/Domain/models"
+	contract "identity-api/Application.contract/get_user_info"
+	"identity-api/Application/services"
+	models "identity-api/Domain/models/user"
+	repository_interfaces "identity-api/Domain/repository_interfaces/user_repository"
 	"identity-api/Domain/responses"
+	"identity-api/Domain/service_interfaces"
 )
 
-type GetUserInfoQueryHandler struct{}
-
-func NewGetUserInfoQueryHandler() *GetUserInfoQueryHandler {
-	return &GetUserInfoQueryHandler{}
+type GetUserInfoQueryHandler struct {
+	userQueryRepository repository_interfaces.UserQueryRepository
+	tokenService        service_interfaces.JWTTokenService
 }
 
-func createResponse(statusCode int, message string, userInfo models.UserSecureInfo) *contract.GetUserInfoResponse {
-	return &contract.GetUserInfoResponse{
-		BaseResponse:   responses.NewBaseResponse(statusCode, message),
-		UserSecureInfo: userInfo,
+func NewGetUserInfoQueryHandler(
+	userQueryRepository repository_interfaces.UserQueryRepository,
+	tokenService service_interfaces.JWTTokenService,
+) *GetUserInfoQueryHandler {
+	return &GetUserInfoQueryHandler{
+		userQueryRepository: userQueryRepository,
+		tokenService:        tokenService,
 	}
 }
 
 func (h *GetUserInfoQueryHandler) Handle(ctx context.Context, query *GetUserInfoQuery) (*contract.GetUserInfoResponse, error) {
-	// Logic to retrieve user info based on token
-	userInfo := models.UserSecureInfo{} // Replace with actual user info retrieval logic
-	return createResponse(200, "User info retrieved successfully", userInfo), nil
+	requesterID, requesterRoles, err := h.tokenService.ValidateToken(query.JwtToken)
+	if err != nil {
+		return &contract.GetUserInfoResponse{
+			BaseResponse: responses.NewBaseResponse(401, "Unauthorized"),
+		}, nil
+	}
+
+	isAdmin := services.IsAdminOrSuperAdmin(requesterRoles)
+
+	userID := requesterID
+
+	if query.Id != "" && isAdmin {
+		userID = query.Id
+	}
+
+	existingUser, err := h.userQueryRepository.GetUserByID(userID)
+	if err != nil || existingUser == nil {
+		return &contract.GetUserInfoResponse{
+			BaseResponse: responses.NewBaseResponse(404, "User not found"),
+		}, nil
+	}
+
+	userInfo := models.UserSecureInfo{
+		UserInfo: models.UserInfo{
+			Name:         existingUser.Name,
+			Surname:      existingUser.Surname,
+			PhoneNumber:  existingUser.PhoneNumber,
+			EmailAddress: existingUser.EmailAddress,
+			Address:      existingUser.Address,
+			PostalCode:   existingUser.PostalCode,
+			City:         existingUser.City,
+		},
+	}
+
+	if isAdmin {
+		userInfo.ID = existingUser.ID
+		userInfo.Roles = services.ConvertRolesToString(existingUser.Roles)
+	}
+
+	return &contract.GetUserInfoResponse{
+		BaseResponse:   responses.NewBaseResponse(200, "User info retrieved successfully"),
+		UserSecureInfo: userInfo,
+	}, nil
 }

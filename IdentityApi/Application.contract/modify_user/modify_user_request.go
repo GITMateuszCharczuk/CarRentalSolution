@@ -1,6 +1,8 @@
 package contract
 
-import "identity-api/Domain/models"
+import (
+	models "identity-api/Domain/models/token"
+)
 
 type ModifyUserRequest struct {
 	Name            string   `json:"name,omitempty" example:"John"`

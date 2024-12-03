@@ -1,8 +1,8 @@
 package contract
 
 import (
-	"identity-api/Domain/models"
-	"identity-api/Domain/responses"
+	models "identity-api/Domain/models/user"
+	responses "identity-api/Domain/responses"
 )
 
 type GetAllUsersResponse struct {

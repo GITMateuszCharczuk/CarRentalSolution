@@ -5,25 +5,27 @@ import (
 	"time"
 
 	"identity-api/Domain/constants"
-	"identity-api/Domain/models"
-	"identity-api/Domain/repository_interfaces"
+	models "identity-api/Domain/models/token"
+	repository_interfaces "identity-api/Domain/repository_interfaces/refresh_token_repository"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
 type JWTTokenServiceImpl struct {
-	refreshTokenRepo repository_interfaces.RefreshTokenRepository
-	AccessTokenTTL   time.Duration
-	RefreshTokenTTL  time.Duration
-	SecretKey        []byte
+	commandRepo     repository_interfaces.RefreshTokenCommandRepository
+	queryRepo       repository_interfaces.RefreshTokenQueryRepository
+	AccessTokenTTL  time.Duration
+	RefreshTokenTTL time.Duration
+	SecretKey       []byte
 }
 
-func NewJWTTokenService(accessTokenTTL, refreshTokenTTL time.Duration, secretKey string, refreshTokenRepo repository_interfaces.RefreshTokenRepository) *JWTTokenServiceImpl {
+func NewJWTTokenService(accessTokenTTL, refreshTokenTTL time.Duration, secretKey string, commandRepo repository_interfaces.RefreshTokenCommandRepository, queryRepo repository_interfaces.RefreshTokenQueryRepository) *JWTTokenServiceImpl {
 	return &JWTTokenServiceImpl{
-		AccessTokenTTL:   accessTokenTTL,
-		RefreshTokenTTL:  refreshTokenTTL,
-		refreshTokenRepo: refreshTokenRepo,
-		SecretKey:        []byte(secretKey),
+		AccessTokenTTL:  accessTokenTTL,
+		RefreshTokenTTL: refreshTokenTTL,
+		commandRepo:     commandRepo,
+		queryRepo:       queryRepo,
+		SecretKey:       []byte(secretKey),
 	}
 }
 
@@ -38,7 +40,7 @@ func (s *JWTTokenServiceImpl) GenerateTokens(userID string, roles []constants.JW
 		return models.NewJwtToken(""), models.NewRefreshToken(""), fmt.Errorf("could not generate refresh token: %v", err)
 	}
 
-	err = s.refreshTokenRepo.SaveRefreshToken(userID, string(refreshToken), int(s.RefreshTokenTTL.Hours()))
+	err = s.commandRepo.SaveRefreshToken(userID, string(refreshToken), int(s.RefreshTokenTTL.Hours()))
 	if err != nil {
 		return models.NewJwtToken(""), models.NewRefreshToken(""), fmt.Errorf("could not save refresh token: %v", err)
 	}
@@ -64,7 +66,7 @@ func (s *JWTTokenServiceImpl) createAccessToken(userID string, roles []constants
 }
 
 func (s *JWTTokenServiceImpl) createRefreshToken(userID string) (string, error) {
-	refreshToken := fmt.Sprintf("%s:%d", userID, time.Now().UnixNano()) //random number
+	refreshToken := fmt.Sprintf("%s:%d", userID, time.Now().UnixNano())
 	return refreshToken, nil
 }
 
@@ -99,7 +101,7 @@ func (s *JWTTokenServiceImpl) ValidateToken(token models.JwtToken) (string, []co
 }
 
 func (s *JWTTokenServiceImpl) RefreshToken(refreshToken models.JwtRefreshToken) (models.JwtToken, error) {
-	userID, err := s.refreshTokenRepo.GetRefreshToken(string(refreshToken.RefreshToken))
+	userID, err := s.queryRepo.GetRefreshToken(string(refreshToken.RefreshToken))
 	if err != nil {
 		return models.NewJwtToken(""), fmt.Errorf("invalid refresh token: %v", err)
 	}
@@ -119,7 +121,7 @@ func (s *JWTTokenServiceImpl) RefreshToken(refreshToken models.JwtRefreshToken) 
 }
 
 func (s *JWTTokenServiceImpl) RevokeToken(token models.JwtRefreshToken) error {
-	err := s.refreshTokenRepo.RevokeRefreshToken(string(token.RefreshToken))
+	err := s.commandRepo.RevokeRefreshToken(string(token.RefreshToken))
 	if err != nil {
 		return fmt.Errorf("could not revoke refresh token: %v", err)
 	}

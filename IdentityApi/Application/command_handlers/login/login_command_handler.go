@@ -2,27 +2,42 @@ package commands
 
 import (
 	"context"
-	"identity-api/Application/contract"
+	contract "identity-api/Application.contract/login"
+	services "identity-api/Application/services"
+	repository_interfaces "identity-api/Domain/repository_interfaces/user_repository"
 	"identity-api/Domain/responses"
+	"identity-api/Domain/service_interfaces"
 )
 
-type LoginCommandHandler struct{}
-
-func NewLoginCommandHandler() *LoginCommandHandler {
-	return &LoginCommandHandler{}
+type LoginCommandHandler struct {
+	hasher              service_interfaces.PasswordHasher
+	tokenService        service_interfaces.JWTTokenService
+	userQueryRepository repository_interfaces.UserQueryRepository
 }
 
-func createResponse(statusCode int, message string, token string, roles []string) *contract.LoginResponse {
-	return &contract.LoginResponse{
-		BaseResponse: responses.NewBaseResponse(statusCode, message),
-		Token:        token,
-		Roles:        roles,
-	}
+func NewLoginCommandHandler(hasher service_interfaces.PasswordHasher, tokenService service_interfaces.JWTTokenService, userQueryRepository repository_interfaces.UserQueryRepository) *LoginCommandHandler {
+	return &LoginCommandHandler{hasher: hasher, tokenService: tokenService, userQueryRepository: userQueryRepository}
 }
 
 func (h *LoginCommandHandler) Handle(ctx context.Context, command *LoginCommand) (*contract.LoginResponse, error) {
-	// Logic to authenticate user and generate token
-	token := "generated_jwt_token" // Replace with actual token generation logic
-	roles := []string{"user"}      // Replace with actual role retrieval logic
-	return createResponse(200, "Login successful", token, roles), nil
+	notAuthorized := contract.LoginResponse{BaseResponse: responses.NewBaseResponse(401, "Invalid email or password")}
+	user, err := h.userQueryRepository.GetUserByEmail(command.Email)
+	if err != nil || user == nil {
+		return &notAuthorized, nil
+	}
+	if valid, err := h.hasher.VerifyPassword(user.Password, command.Password); err != nil || !valid {
+		return &notAuthorized, nil
+	}
+
+	token, refreshToken, err := h.tokenService.GenerateTokens(user.ID, user.Roles)
+	if err != nil {
+		return &notAuthorized, nil
+	}
+
+	return &contract.LoginResponse{
+		BaseResponse:    responses.NewBaseResponse(200, "Login successful"),
+		JwtToken:        token,
+		JwtRefreshToken: refreshToken,
+		Roles:           services.ConvertRolesToString(user.Roles),
+	}, nil
 }
