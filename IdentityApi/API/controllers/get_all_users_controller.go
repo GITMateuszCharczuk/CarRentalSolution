@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"identity-api/API/mappers"
 	"identity-api/API/services"
 	contract "identity-api/Application.contract/get_all_users"
 	queries "identity-api/Application/query_handlers/get_all_users"
@@ -30,13 +31,13 @@ func NewGetAllUsersController(validator *validator.Validate) *GetAllUsersControl
 // @Router /identity-api/api/users [get]
 func (h *GetAllUsersController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
-	token := c.Query("token")
-	req := contract.GetAllUsersRequest{Token: token}
+	token := services.GetJwtTokenFromQuery(c)
+	req := contract.GetAllUsersRequest{JwtToken: token}
 	if validateResponse := services.ValidateRequest[contract.GetAllUsersResponse](&req, h.validator); validateResponse != nil {
 		responseSender.Send(validateResponse)
 		return
 	}
-	query := queries.GetAllUsersQuery{Token: token}
+	query := mappers.MapToGetAllUsersQuery(&req)
 	resp := services.SendToMediator[*queries.GetAllUsersQuery, *contract.GetAllUsersResponse](c.Request.Context(), &query)
 	responseSender.Send(resp)
 }

@@ -39,7 +39,7 @@ func (r *QueryRepository[TEntity, TId, TModel]) GetByIds(ids []TId) ([]*TModel, 
 	return models, nil
 }
 
-func (r *QueryRepository[TEntity, TId, TModel]) GetByProp(propName string, value interface{}) (*TModel, error) {
+func (r *QueryRepository[TEntity, TId, TModel]) GetFirstByProp(propName string, value interface{}) (*TModel, error) {
 	var entity TEntity
 
 	if !r.propertyExists(propName) {
@@ -65,4 +65,70 @@ func (r *QueryRepository[TEntity, TId, TModel]) propertyExists(propName string) 
 	entityType := reflect.TypeOf(new(TEntity)).Elem()
 	_, found := entityType.FieldByName(propName)
 	return found
+}
+
+func (r *QueryRepository[TEntity, TId, TModel]) GetAll() ([]*TModel, error) {
+	var entities []TEntity
+	if err := r.dbContext.Find(&entities).Error; err != nil {
+		return nil, err
+	}
+
+	models := make([]*TModel, len(entities))
+	for i, entity := range entities {
+		model := r.mapper.MapToModel(entity)
+		models[i] = &model
+	}
+	return models, nil
+}
+
+// func (r *QueryRepository[TEntity, TId, TModel]) GetByPropValues(props map[string]interface{}) ([]*TModel, error) {
+// 	var entities []TEntity
+
+// 	// Validate all properties exist
+// 	var entity TEntity
+// 	for propName := range props {
+// 		if !r.propertyExists(propName) {
+// 			return nil, errors.New("property " + propName + " does not exist on type " + reflect.TypeOf(entity).Name())
+// 		}
+// 	}
+
+// 	// Build query with all property-value pairs
+// 	query := r.dbContext
+// 	for propName, value := range props {
+// 		query = query.Where(propName+" = ?", value)
+// 	}
+
+// 	// Execute query
+// 	if err := query.Find(&entities).Error; err != nil {
+// 		return nil, err
+// 	}
+
+// 	// Map all entities to models
+// 	models := make([]*TModel, len(entities))
+// 	for i, entity := range entities {
+// 		model := r.mapper.MapToModel(entity)
+// 		models[i] = &model
+// 	}
+
+// 	return models, nil
+// }
+
+func (r *QueryRepository[TEntity, TId, TModel]) GetAllByPropValues(propName string, values ...interface{}) ([]*TModel, error) {
+	var entities []TEntity
+
+	if !r.propertyExists(propName) {
+		return nil, errors.New("property " + propName + " does not exist on type " + reflect.TypeOf(new(TEntity)).Name())
+	}
+
+	if err := r.dbContext.Where(propName+" && ?", values).Find(&entities).Error; err != nil {
+		return nil, err
+	}
+
+	models := make([]*TModel, len(entities))
+	for i, entity := range entities {
+		model := r.mapper.MapToModel(entity)
+		models[i] = &model
+	}
+
+	return models, nil
 }

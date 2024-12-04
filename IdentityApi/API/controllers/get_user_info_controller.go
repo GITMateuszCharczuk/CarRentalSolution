@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"identity-api/API/mappers"
 	"identity-api/API/services"
 	contract "identity-api/Application.contract/get_user_info"
 	queries "identity-api/Application/query_handlers/get_user_info"
@@ -31,13 +32,13 @@ func NewGetUserInfoController(validator *validator.Validate) *GetUserInfoControl
 // @Router /identity-api/api/user/info [get]
 func (h *GetUserInfoController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
-	token := c.Query("token")
-	req := contract.GetUserInfoRequest{Token: token}
+	token := services.GetJwtTokenFromQuery(c)
+	req := contract.GetUserInfoRequest{JwtToken: token}
 	if validateResponse := services.ValidateRequest[contract.GetUserInfoResponse](&req, h.validator); validateResponse != nil {
 		responseSender.Send(validateResponse)
 		return
 	}
-	query := queries.GetUserInfoQuery{Token: token}
+	query := mappers.MapToGetUserInfoQuery(&req)
 	resp := services.SendToMediator[*queries.GetUserInfoQuery, *contract.GetUserInfoResponse](c.Request.Context(), &query)
 	responseSender.Send(resp)
 }

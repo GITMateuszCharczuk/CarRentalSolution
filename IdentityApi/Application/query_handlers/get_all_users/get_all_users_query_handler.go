@@ -4,6 +4,7 @@ import (
 	"context"
 	contract "identity-api/Application.contract/get_all_users"
 	"identity-api/Application/services"
+	utils "identity-api/Application/services"
 	"identity-api/Domain/constants"
 	models "identity-api/Domain/models/user"
 	repository_interfaces "identity-api/Domain/repository_interfaces/user_repository"
@@ -34,21 +35,23 @@ func (h *GetAllUsersQueryHandler) Handle(ctx context.Context, query *GetAllUsers
 		}, nil
 	}
 
-	hasAdminRole := false
-	for _, role := range roles {
-		if role == constants.Admin || role == constants.SuperAdmin {
-			hasAdminRole = true
-			break
-		}
-	}
+	isAdmin := utils.IsAdminOrSuperAdmin(roles)
+	hasSuperAdminRole := utils.IsRole(constants.SuperAdmin, roles)
 
-	if !hasAdminRole {
+	if !isAdmin {
 		return &contract.GetAllUsersResponse{
 			BaseResponse: responses.NewBaseResponse(403, "Insufficient privileges"),
 		}, nil
 	}
 
-	users, err := h.userQueryRepository.GetAllUsers()
+	var users []*models.UserModel
+
+	if hasSuperAdminRole {
+		users, err = h.userQueryRepository.GetUsersByRoles(constants.Admin, constants.SuperAdmin)
+	} else {
+		users, err = h.userQueryRepository.GetUsersByRoles(constants.Admin)
+	}
+
 	if err != nil {
 		return &contract.GetAllUsersResponse{
 			BaseResponse: responses.NewBaseResponse(500, "Failed to retrieve users"),

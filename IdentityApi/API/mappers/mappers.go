@@ -1,31 +1,76 @@
 package mappers
 
 import (
-	get_email_contract "identity-api/Application.contract/get_email"
-	get_emails_contract "identity-api/Application.contract/get_emails"
-	send_email_contract "identity-api/Application.contract/send_email"
-	send_email "identity-api/Application/commmand_handlers/send_email"
-	get_email "identity-api/Application/query_handlers/get_email"
-	get_emails "identity-api/Application/query_handlers/get_emails"
+	get_all_users_contract "identity-api/Application.contract/get_all_users"
+	get_user_id_contract "identity-api/Application.contract/get_user_id"
+	get_user_info_contract "identity-api/Application.contract/get_user_info"
+	login_contract "identity-api/Application.contract/login"
+	modify_user_contract "identity-api/Application.contract/modify_user"
+	register_contract "identity-api/Application.contract/register"
+	validate_token_contract "identity-api/Application.contract/validate_token"
+	login "identity-api/Application/command_handlers/login"
+	modify_user "identity-api/Application/command_handlers/modify_user"
+	register "identity-api/Application/command_handlers/register"
+	validate_token "identity-api/Application/command_handlers/validate_token"
+	get_all_users "identity-api/Application/query_handlers/get_all_users"
+	get_user_id "identity-api/Application/query_handlers/get_user_id"
+	get_user_info "identity-api/Application/query_handlers/get_user_info"
 )
 
-func MapToSendEmailCommand(req *send_email_contract.SendEmailRequest) send_email.SendEmailCommand {
-	return send_email.SendEmailCommand{
-		From:    req.From,
-		To:      req.To,
-		Subject: req.Subject,
-		Body:    req.Body,
+func MapToRegisterCommand(req *register_contract.RegisterUserRequest) register.RegisterUserCommand {
+	return register.RegisterUserCommand{
+		Name:         req.Name,
+		Surname:      req.Surname,
+		PhoneNumber:  req.PhoneNumber,
+		EmailAddress: req.EmailAddress,
+		Address:      req.Address,
+		PostalCode:   req.PostalCode,
+		City:         req.City,
+		Password:     req.Password,
+		Roles:        req.Roles,
 	}
 }
 
-func MapToGetEmailsQuery(req *get_emails_contract.GetEmailsRequest) get_emails.GetEmailsQuery {
-	return get_emails.GetEmailsQuery{
-		Pagination: req.Pagination,
+func MapToLoginCommand(req *login_contract.LoginRequest) login.LoginCommand {
+	return login.LoginCommand{
+		Email:    req.Email,
+		Password: req.Password,
 	}
 }
 
-func MapToGetEmailQuery(req *get_email_contract.GetEmailRequest) get_email.GetEmailQuery {
-	return get_email.GetEmailQuery{
-		ID: req.ID,
+func MapToModifyUserCommand(req *modify_user_contract.ModifyUserRequest) modify_user.ModifyUserCommand {
+	return modify_user.ModifyUserCommand{
+		JwtToken:    req.JwtToken,
+		UserID:      req.UserID,
+		Name:        req.Name,
+		Surname:     req.Surname,
+		PhoneNumber: req.PhoneNumber,
+		Address:     req.Address,
+		PostalCode:  req.PostalCode,
+		City:        req.City,
+	}
+}
+
+func MapToValidateTokenCommand(req *validate_token_contract.ValidateTokenRequest) validate_token.ValidateTokenCommand {
+	return validate_token.ValidateTokenCommand{
+		JwtToken: req.JwtToken,
+	}
+}
+
+func MapToGetAllUsersQuery(req *get_all_users_contract.GetAllUsersRequest) get_all_users.GetAllUsersQuery {
+	return get_all_users.GetAllUsersQuery{
+		JwtToken: req.JwtToken,
+	}
+}
+
+func MapToGetUserIDQuery(req *get_user_id_contract.GetUserIDRequest) get_user_id.GetUserIDQuery {
+	return get_user_id.GetUserIDQuery{
+		JwtToken: req.JwtToken,
+	}
+}
+
+func MapToGetUserInfoQuery(req *get_user_info_contract.GetUserInfoRequest) get_user_info.GetUserInfoQuery {
+	return get_user_info.GetUserInfoQuery{
+		JwtToken: req.JwtToken,
 	}
 }

@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"identity-api/Domain/responses"
 )
 
 type DeleteUserController struct {
@@ -19,31 +20,36 @@ func NewDeleteUserController(validator *validator.Validate) *DeleteUserControlle
 
 // Handle godoc
 // @Summary Delete user
-// @Description Deletes a user based on the provided token.
+// @Description Deletes a user from the system
 // @Tags users
 // @Accept json
 // @Produce json
-// @Param token query string true "User token"
+// @Param delete body contract.DeleteUserRequest true "User deletion details"
 // @Success 200 {object} contract.DeleteUserResponse "User deleted successfully"
 // @Failure 400 {object} contract.DeleteUserResponse "Invalid request parameters"
-// @Failure 404 {object} contract.DeleteUserResponse "User not found"
-// @Failure 500 {object} contract.DeleteUserResponse "Server error during deletion"
-// @Router /identity-api/api/user/delete [delete]
+// @Failure 401 {object} contract.DeleteUserResponse "Unauthorized"
+// @Router /identity-api/api/user [delete]
 func (h *DeleteUserController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
-	token := c.Query("token")
-	req := contract.DeleteUserRequest{Token: token}
+	var req contract.DeleteUserRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		responseSender.Send(responses.NewBaseResponse(400, "Invalid request parameters"))
+		return
+	}
 	if validateResponse := services.ValidateRequest[contract.DeleteUserResponse](&req, h.validator); validateResponse != nil {
 		responseSender.Send(validateResponse)
 		return
 	}
-	command := commands.DeleteUserCommand{Token: token}
+	command := commands.DeleteUserCommand{
+		JwtToken: req.JwtToken,
+		ID:       req.ID,
+	}
 	resp := services.SendToMediator[*commands.DeleteUserCommand, *contract.DeleteUserResponse](c.Request.Context(), &command)
 	responseSender.Send(resp)
 }
 
 func (h *DeleteUserController) Route() string {
-	return "/user/delete"
+	return "/user"
 }
 
 func (h *DeleteUserController) Methods() []string {

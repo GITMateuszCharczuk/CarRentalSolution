@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"identity-api/API/mappers"
 	"identity-api/API/services"
 	contract "identity-api/Application.contract/validate_token"
 	commands "identity-api/Application/command_handlers/validate_token"
@@ -31,13 +32,13 @@ func NewValidateTokenController(validator *validator.Validate) *ValidateTokenCon
 // @Router /identity-api/api/token/validate [get]
 func (h *ValidateTokenController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
-	token := c.Query("token")
-	req := contract.ValidateTokenRequest{Token: token}
+	token := services.GetJwtTokenFromQuery(c)
+	req := contract.ValidateTokenRequest{JwtToken: token}
 	if validateResponse := services.ValidateRequest[contract.ValidateTokenResponse](&req, h.validator); validateResponse != nil {
 		responseSender.Send(validateResponse)
 		return
 	}
-	command := commands.ValidateTokenCommand{Token: token}
+	command := mappers.MapToValidateTokenCommand(&req)
 	resp := services.SendToMediator[*commands.ValidateTokenCommand, *contract.ValidateTokenResponse](c.Request.Context(), &command)
 	responseSender.Send(resp)
 }

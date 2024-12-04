@@ -5,6 +5,7 @@ import (
 )
 
 type ModifyUserRequest struct {
+	UserID          string   `json:"user_id,omitempty" example:"1234567890"`
 	Name            string   `json:"name,omitempty" example:"John"`
 	Surname         string   `json:"surname,omitempty" example:"Doe"`
 	PhoneNumber     string   `json:"phone_number,omitempty" example:"+1234567890"`

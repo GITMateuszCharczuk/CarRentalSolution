@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	mappers "identity-api/API/mappers"
 	"identity-api/API/services"
 	contract "identity-api/Application.contract/register"
 	commands "identity-api/Application/command_handlers/register"
+	"identity-api/Domain/responses"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -32,24 +34,14 @@ func (h *RegisterController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 	var req contract.RegisterUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		responseSender.Send(createErrorResponse(400, "Invalid request parameters"))
+		responseSender.Send(responses.NewBaseResponse(400, "Invalid request parameters"))
 		return
 	}
 	if validateResponse := services.ValidateRequest[contract.RegisterUserResponse](&req, h.validator); validateResponse != nil {
 		responseSender.Send(validateResponse)
 		return
 	}
-	command := commands.RegisterUserCommand{
-		Name:         req.Name,
-		Surname:      req.Surname,
-		PhoneNumber:  req.PhoneNumber,
-		EmailAddress: req.EmailAddress,
-		Address:      req.Address,
-		PostalCode:   req.PostalCode,
-		City:         req.City,
-		Password:     req.Password,
-		Role:         req.Role,
-	}
+	command := mappers.MapToRegisterCommand(&req)
 	resp := services.SendToMediator[*commands.RegisterUserCommand, *contract.RegisterUserResponse](c.Request.Context(), &command)
 	responseSender.Send(resp)
 }
