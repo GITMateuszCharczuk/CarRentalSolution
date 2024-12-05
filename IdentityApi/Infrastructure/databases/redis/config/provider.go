@@ -6,7 +6,7 @@ import (
 	"github.com/google/wire"
 )
 
-func NewRedisConfigProvider(cfg *config.Config) (*RedisConfig, error) {
+func NewRedisConfigProvider(cfg *config.Config) (*RedisDatabase, error) {
 	return NewRedisConfig(cfg.RedisHost, cfg.RedisPort, cfg.RedisPassword)
 }
 

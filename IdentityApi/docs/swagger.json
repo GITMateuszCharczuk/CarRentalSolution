@@ -4,9 +4,9 @@
         "contact": {}
     },
     "paths": {
-        "/identity-api/api/emails": {
-            "get": {
-                "description": "Retrieves a list of all emails.",
+        "/identity-api/api/login": {
+            "post": {
+                "description": "Authenticates a user and returns JWT tokens",
                 "consumes": [
                     "application/json"
                 ],
@@ -14,50 +14,45 @@
                     "application/json"
                 ],
                 "tags": [
-                    "emails"
+                    "auth"
                 ],
-                "summary": "Get all emails",
+                "summary": "Login user",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "default": 1,
-                        "description": "Page number",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "default": 10,
-                        "description": "Number of emails per page",
-                        "name": "page_size",
-                        "in": "query"
+                        "description": "Login credentials",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.LoginRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of emails retrieved successfully",
+                        "description": "Login successful",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailsResponse200"
+                            "$ref": "#/definitions/contract.LoginResponse"
                         }
                     },
                     "400": {
-                        "description": "Invalid request parameters",
+                        "description": "Invalid credentials",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailsResponse400"
+                            "$ref": "#/definitions/contract.LoginResponse"
                         }
                     },
-                    "500": {
-                        "description": "Server error during emails retrieval",
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailsResponse500"
+                            "$ref": "#/definitions/contract.LoginResponse"
                         }
                     }
                 }
             }
         },
-        "/identity-api/api/emails/{id}": {
-            "get": {
-                "description": "Retrieves an email based on its unique ID.",
+        "/identity-api/api/register": {
+            "post": {
+                "description": "Registers a new user with the provided details.",
                 "consumes": [
                     "application/json"
                 ],
@@ -65,49 +60,141 @@
                     "application/json"
                 ],
                 "tags": [
-                    "emails"
+                    "users"
                 ],
-                "summary": "Get email by ID",
+                "summary": "Register a new user",
+                "parameters": [
+                    {
+                        "description": "User registration details",
+                        "name": "register",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.RegisterUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.RegisterUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.RegisterUserResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during registration",
+                        "schema": {
+                            "$ref": "#/definitions/contract.RegisterUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/identity-api/api/token/refresh": {
+            "post": {
+                "description": "Refreshes the JWT token using a refresh token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Refresh token",
+                "parameters": [
+                    {
+                        "description": "Refresh token",
+                        "name": "refresh",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.RefreshTokenRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Token refreshed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.RefreshTokenResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.RefreshTokenResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid refresh token",
+                        "schema": {
+                            "$ref": "#/definitions/contract.RefreshTokenResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/identity-api/api/token/validate": {
+            "get": {
+                "description": "Validates the provided JWT token and returns user roles.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Validate token",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Unique Email ID",
-                        "name": "id",
-                        "in": "path",
+                        "description": "User token",
+                        "name": "token",
+                        "in": "query",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Email details retrieved successfully",
+                        "description": "Token is valid",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailResponse200"
+                            "$ref": "#/definitions/contract.ValidateTokenResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailResponse400"
+                            "$ref": "#/definitions/contract.ValidateTokenResponse"
                         }
                     },
-                    "404": {
-                        "description": "Email not found",
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailResponse404"
+                            "$ref": "#/definitions/contract.ValidateTokenResponse"
                         }
                     },
                     "500": {
-                        "description": "Server error during email retrieval",
+                        "description": "Server error during validation",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetEmailResponse500"
+                            "$ref": "#/definitions/contract.ValidateTokenResponse"
                         }
                     }
                 }
             }
         },
-        "/identity-api/api/send-email": {
-            "post": {
-                "description": "Sends an email using the provided data.",
+        "/identity-api/api/user": {
+            "put": {
+                "description": "Modifies user information",
                 "consumes": [
                     "application/json"
                 ],
@@ -115,37 +202,225 @@
                     "application/json"
                 ],
                 "tags": [
-                    "emails"
+                    "users"
                 ],
-                "summary": "Send an email",
+                "summary": "Modify user",
                 "parameters": [
                     {
-                        "description": "Email data",
-                        "name": "email",
+                        "description": "User modification details",
+                        "name": "modify",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/contract.SendEmailRequest"
+                            "$ref": "#/definitions/contract.ModifyUserRequest"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Email sent successfully",
+                        "description": "User modified successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.SendEmailResponse200"
+                            "$ref": "#/definitions/contract.ModifyUserResponse"
                         }
                     },
                     "400": {
-                        "description": "Invalid request format or data",
+                        "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.SendEmailResponse400"
+                            "$ref": "#/definitions/contract.ModifyUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ModifyUserResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes a user from the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete user",
+                "parameters": [
+                    {
+                        "description": "User deletion details",
+                        "name": "delete",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/identity-api/api/user/id": {
+            "get": {
+                "description": "Retrieves user ID based on the provided token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get user ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User ID retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserIDResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserIDResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserIDResponse"
                         }
                     },
                     "500": {
-                        "description": "Server error during email sending",
+                        "description": "Server error during retrieval",
                         "schema": {
-                            "$ref": "#/definitions/contract.SendEmailResponse500"
+                            "$ref": "#/definitions/contract.GetUserIDResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/identity-api/api/user/info": {
+            "get": {
+                "description": "Retrieves user information based on the provided token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get user info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User info retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInfoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInfoResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInfoResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInfoResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/identity-api/api/users": {
+            "get": {
+                "description": "Retrieves a list of all users.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get all users",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Users retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetAllUsersResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetAllUsersResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetAllUsersResponse"
                         }
                     }
                 }
@@ -153,219 +428,415 @@
         }
     },
     "definitions": {
-        "contract.GetEmailResponse200": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "$ref": "#/definitions/models.Email"
-                },
-                "message": {
-                    "type": "string",
-                    "example": "Email retrieved successfully."
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": true
-                }
-            }
+        "constants.StatusCode": {
+            "type": "integer",
+            "enum": [
+                200,
+                201,
+                400,
+                404,
+                500,
+                409
+            ],
+            "x-enum-varnames": [
+                "StatusOK",
+                "StatusCreated",
+                "StatusBadRequest",
+                "StatusNotFound",
+                "StatusInternalServerError",
+                "StatusConflict"
+            ]
         },
-        "contract.GetEmailResponse400": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "object"
-                },
-                "message": {
-                    "type": "string",
-                    "example": "Invalid email request."
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.GetEmailResponse404": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "object"
-                },
-                "message": {
-                    "type": "string",
-                    "example": "The requested email was not found."
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.GetEmailResponse500": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "object"
-                },
-                "message": {
-                    "type": "string",
-                    "example": "An unexpected error occurred."
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.GetEmailsResponse200": {
-            "type": "object",
-            "properties": {
-                "emails": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Email"
-                    }
-                },
-                "message": {
-                    "type": "string",
-                    "example": "Emails retrieved successfully."
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": true
-                }
-            }
-        },
-        "contract.GetEmailsResponse400": {
-            "type": "object",
-            "properties": {
-                "emails": {
-                    "type": "array",
-                    "items": {
-                        "type": "object"
-                    }
-                },
-                "message": {
-                    "type": "string",
-                    "example": "Invalid request for emails."
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.GetEmailsResponse500": {
-            "type": "object",
-            "properties": {
-                "emails": {
-                    "type": "array",
-                    "items": {
-                        "type": "object"
-                    }
-                },
-                "message": {
-                    "type": "string",
-                    "example": "An unexpected error occurred."
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.SendEmailRequest": {
+        "contract.DeleteUserRequest": {
             "type": "object",
             "required": [
-                "body",
-                "from",
-                "subject",
-                "to"
+                "id",
+                "token"
             ],
             "properties": {
-                "body": {
+                "id": {
                     "type": "string",
-                    "maxLength": 1000,
-                    "minLength": 5,
-                    "example": "This is the body of the email."
+                    "example": "12345"
                 },
-                "from": {
+                "token": {
                     "type": "string",
-                    "example": "test@test.com"
-                },
-                "subject": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 5,
-                    "example": "Hello"
-                },
-                "to": {
-                    "type": "string",
-                    "example": "recipient@example.com"
+                    "example": "jwt.token.here"
                 }
             }
         },
-        "contract.SendEmailResponse200": {
+        "contract.DeleteUserResponse": {
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string",
-                    "example": "Email sent successfully."
+                    "type": "string"
+                },
+                "status_code": {
+                    "$ref": "#/definitions/constants.StatusCode"
                 },
                 "success": {
-                    "type": "boolean",
-                    "example": true
+                    "type": "boolean"
                 }
             }
         },
-        "contract.SendEmailResponse400": {
+        "contract.GetAllUsersResponse": {
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string",
-                    "example": "Invalid request for sending email."
+                    "type": "string"
+                },
+                "status_code": {
+                    "$ref": "#/definitions/constants.StatusCode"
                 },
                 "success": {
-                    "type": "boolean",
-                    "example": false
+                    "type": "boolean"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
                 }
             }
         },
-        "contract.SendEmailResponse500": {
+        "contract.GetUserIDResponse": {
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string",
-                    "example": "An unexpected error occurred while sending email."
+                    "type": "string"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[user",
+                        " admin]"
+                    ]
+                },
+                "status_code": {
+                    "$ref": "#/definitions/constants.StatusCode"
                 },
                 "success": {
-                    "type": "boolean",
-                    "example": false
+                    "type": "boolean"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "12345"
                 }
             }
         },
-        "models.Email": {
+        "contract.GetUserInfoResponse": {
             "type": "object",
             "properties": {
-                "body": {
+                "address": {
                     "type": "string",
-                    "example": "This is the body of the email."
+                    "example": "123 Main St"
                 },
-                "from": {
+                "city": {
                     "type": "string",
-                    "example": "example@example.com"
+                    "example": "New York"
+                },
+                "email_address": {
+                    "type": "string",
+                    "example": "user@example.com"
                 },
                 "id": {
                     "type": "string",
                     "example": "12345"
                 },
-                "subject": {
-                    "type": "string",
-                    "example": "Hello World"
+                "message": {
+                    "type": "string"
                 },
-                "to": {
+                "name": {
                     "type": "string",
-                    "example": "recipient@example.com"
+                    "example": "John"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+1234567890"
+                },
+                "postal_code": {
+                    "type": "string",
+                    "example": "12345"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[user",
+                        " admin]"
+                    ]
+                },
+                "status_code": {
+                    "$ref": "#/definitions/constants.StatusCode"
+                },
+                "success": {
+                    "type": "boolean"
+                },
+                "surname": {
+                    "type": "string",
+                    "example": "Doe"
+                }
+            }
+        },
+        "contract.LoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "user@example.com"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "password123"
+                }
+            }
+        },
+        "contract.LoginResponse": {
+            "type": "object",
+            "required": [
+                "refresh_token",
+                "token"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string",
+                    "example": "jwt.refresh.token.here"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[user",
+                        " admin]"
+                    ]
+                },
+                "status_code": {
+                    "$ref": "#/definitions/constants.StatusCode"
+                },
+                "success": {
+                    "type": "boolean"
+                },
+                "token": {
+                    "type": "string",
+                    "example": "jwt.token.here"
+                }
+            }
+        },
+        "contract.ModifyUserRequest": {
+            "type": "object",
+            "required": [
+                "token"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "example": "123 Main St"
+                },
+                "city": {
+                    "type": "string",
+                    "example": "New York"
+                },
+                "email_address": {
+                    "type": "string",
+                    "example": "user@example.com"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+1234567890"
+                },
+                "postal_code": {
+                    "type": "string",
+                    "example": "12345"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[user",
+                        " admin]"
+                    ]
+                },
+                "surname": {
+                    "type": "string",
+                    "example": "Doe"
+                },
+                "token": {
+                    "type": "string",
+                    "example": "jwt.token.here"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "1234567890"
+                }
+            }
+        },
+        "contract.ModifyUserResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "$ref": "#/definitions/constants.StatusCode"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "contract.RefreshTokenRequest": {
+            "type": "object",
+            "required": [
+                "refresh_token"
+            ],
+            "properties": {
+                "refresh_token": {
+                    "type": "string",
+                    "example": "jwt.refresh.token.here"
+                }
+            }
+        },
+        "contract.RefreshTokenResponse": {
+            "type": "object",
+            "required": [
+                "token"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "$ref": "#/definitions/constants.StatusCode"
+                },
+                "success": {
+                    "type": "boolean"
+                },
+                "token": {
+                    "type": "string",
+                    "example": "jwt.token.here"
+                }
+            }
+        },
+        "contract.RegisterUserRequest": {
+            "type": "object",
+            "required": [
+                "address",
+                "city",
+                "email_address",
+                "name",
+                "password",
+                "phone_number",
+                "postal_code",
+                "surname"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "example": "123 Main St"
+                },
+                "city": {
+                    "type": "string",
+                    "example": "New York"
+                },
+                "email_address": {
+                    "type": "string",
+                    "example": "user@example.com"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "password123"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+1234567890"
+                },
+                "postal_code": {
+                    "type": "string",
+                    "example": "12345"
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "user",
+                        "admin",
+                        "superadmin"
+                    ],
+                    "example": "user"
+                },
+                "surname": {
+                    "type": "string",
+                    "example": "Doe"
+                }
+            }
+        },
+        "contract.RegisterUserResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "$ref": "#/definitions/constants.StatusCode"
+                },
+                "success": {
+                    "type": "boolean"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "12345"
+                }
+            }
+        },
+        "contract.ValidateTokenResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[user",
+                        " admin]"
+                    ]
+                },
+                "status_code": {
+                    "$ref": "#/definitions/constants.StatusCode"
+                },
+                "success": {
+                    "type": "boolean"
+                },
+                "valid": {
+                    "type": "boolean",
+                    "example": true
                 }
             }
         }

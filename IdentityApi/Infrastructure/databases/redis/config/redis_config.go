@@ -8,17 +8,17 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-type RedisConfig struct {
+type RedisDatabase struct {
 	Client *redis.Client
 	Ctx    context.Context
 }
 
 var (
-	instance *RedisConfig
+	instance *RedisDatabase
 	once     sync.Once
 )
 
-func NewRedisConfig(redisHost, redisPort, redisPassword string) (*RedisConfig, error) {
+func NewRedisConfig(redisHost, redisPort, redisPassword string) (*RedisDatabase, error) {
 	var err error
 	once.Do(func() {
 		instance, err = initializeRedisConfig(redisHost, redisPort, redisPassword)
@@ -26,7 +26,7 @@ func NewRedisConfig(redisHost, redisPort, redisPassword string) (*RedisConfig, e
 	return instance, err
 }
 
-func initializeRedisConfig(redisHost, redisPort, redisPassword string) (*RedisConfig, error) {
+func initializeRedisConfig(redisHost, redisPort, redisPassword string) (*RedisDatabase, error) {
 	ctx := context.Background()
 
 	client := redis.NewClient(&redis.Options{
@@ -39,12 +39,12 @@ func initializeRedisConfig(redisHost, redisPort, redisPassword string) (*RedisCo
 		return nil, fmt.Errorf("could not connect to Redis: %v", err)
 	}
 
-	return &RedisConfig{
+	return &RedisDatabase{
 		Client: client,
 		Ctx:    ctx,
 	}, nil
 }
 
-func (r *RedisConfig) Close() error {
+func (r *RedisDatabase) Close() error {
 	return r.Client.Close()
 }

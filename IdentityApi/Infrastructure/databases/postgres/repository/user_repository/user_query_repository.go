@@ -3,11 +3,10 @@ package repository
 import (
 	"identity-api/Domain/constants"
 	models "identity-api/Domain/models/user"
+	postgres_db "identity-api/Infrastructure/databases/postgres/config"
 	"identity-api/Infrastructure/databases/postgres/entities"
 	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
 	base "identity-api/Infrastructure/databases/postgres/repository/base"
-
-	"gorm.io/gorm"
 )
 
 type UserQueryRepositoryImpl struct {
@@ -15,9 +14,9 @@ type UserQueryRepositoryImpl struct {
 	mapper mappers.PersistenceMapper[entities.UserEntity, models.UserModel]
 }
 
-func NewUserQueryRepositoryImpl(dbContext *gorm.DB, mapper mappers.PersistenceMapper[entities.UserEntity, models.UserModel]) *UserQueryRepositoryImpl {
+func NewUserQueryRepositoryImpl(postgresDatabase *postgres_db.PostgresDatabase, mapper mappers.PersistenceMapper[entities.UserEntity, models.UserModel]) *UserQueryRepositoryImpl {
 	return &UserQueryRepositoryImpl{
-		QueryRepository: base.NewQueryRepository[entities.UserEntity, string, models.UserModel](dbContext, mapper),
+		QueryRepository: base.NewQueryRepository[entities.UserEntity, string, models.UserModel](postgresDatabase.DB, mapper),
 		mapper:          mapper,
 	}
 }

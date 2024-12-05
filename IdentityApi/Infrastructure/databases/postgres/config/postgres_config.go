@@ -11,18 +11,18 @@ import (
 	"gorm.io/gorm"
 )
 
-type DatabaseConfig struct {
+type PostgresDatabase struct {
 	DB *gorm.DB
 }
 
 var (
-	instance *DatabaseConfig
+	instance *PostgresDatabase
 	once     sync.Once
 )
 
-func GetDatabaseConfig(user, password, name, host, port string, runPostgresMigration bool) *DatabaseConfig {
+func NewPostgresConfig(user, password, name, host, port string, runPostgresMigration bool) *PostgresDatabase {
 	once.Do(func() {
-		instance = &DatabaseConfig{}
+		instance = &PostgresDatabase{}
 		instance.connect(user, password, name, host, port)
 		instance.createUserRoleEnumType()
 		instance.runMigration(runPostgresMigration)
@@ -30,7 +30,7 @@ func GetDatabaseConfig(user, password, name, host, port string, runPostgresMigra
 	return instance
 }
 
-func (dc *DatabaseConfig) connect(user, password, name, host, port string) {
+func (dc *PostgresDatabase) connect(user, password, name, host, port string) {
 	var err error
 
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
@@ -44,7 +44,7 @@ func (dc *DatabaseConfig) connect(user, password, name, host, port string) {
 	log.Println("Successfully connected to the PostgreSQL database!")
 }
 
-func (dc *DatabaseConfig) runMigration(shouldMigrate bool) {
+func (dc *PostgresDatabase) runMigration(shouldMigrate bool) {
 	if shouldMigrate {
 		err := dc.DB.AutoMigrate(&entities.UserEntity{})
 		if err != nil {
@@ -56,8 +56,13 @@ func (dc *DatabaseConfig) runMigration(shouldMigrate bool) {
 	}
 }
 
-func (dc *DatabaseConfig) createUserRoleEnumType() {
-	err := dc.DB.Exec("DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN CREATE TYPE user_role AS ENUM ('user', 'admin', 'superadmin'); END IF; $$;").Error
+func (dc *PostgresDatabase) createUserRoleEnumType() {
+	err := dc.DB.Exec(`DO $$ 
+	BEGIN 
+		IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN 
+			CREATE TYPE user_role AS ENUM ('user', 'admin', 'superadmin');
+		END IF;
+	END $$;`).Error
 	if err != nil {
 		log.Fatalf("Error creating enum type: %v", err)
 	}

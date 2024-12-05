@@ -7,12 +7,12 @@ import (
 	"github.com/google/wire"
 )
 
-func ProvideRefreshTokenRepository(redisConfig *redis_config.RedisConfig) repository_interfaces.RefreshTokenCommandRepository {
+func ProvideRefreshTokenCommandRepository(redisConfig *redis_config.RedisDatabase) repository_interfaces.RefreshTokenCommandRepository {
 	return NewRefreshTokenCommandRepositoryImpl(redisConfig.Client, redisConfig.Ctx)
 }
 
-func ProvideRefreshTokenQueryRepository(redisConfig *redis_config.RedisConfig) repository_interfaces.RefreshTokenQueryRepository {
+func ProvideRefreshTokenQueryRepository(redisConfig *redis_config.RedisDatabase) repository_interfaces.RefreshTokenQueryRepository {
 	return NewRefreshTokenQueryRepositoryImpl(redisConfig.Client, redisConfig.Ctx)
 }
 
-var WireSet = wire.NewSet(ProvideRefreshTokenRepository, ProvideRefreshTokenQueryRepository)
+var WireSet = wire.NewSet(ProvideRefreshTokenCommandRepository, ProvideRefreshTokenQueryRepository)

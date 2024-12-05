@@ -2,20 +2,19 @@ package repository
 
 import (
 	models "identity-api/Domain/models/user"
+	postgres_db "identity-api/Infrastructure/databases/postgres/config"
 	"identity-api/Infrastructure/databases/postgres/entities"
 	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
 	base "identity-api/Infrastructure/databases/postgres/repository/base"
-
-	"gorm.io/gorm"
 )
 
 type UserCommandRepositoryImpl struct {
 	*base.CommandRepository[entities.UserEntity, string, models.UserModel]
 }
 
-func NewUserCommandRepositoryImpl(dbContext *gorm.DB, mapper mappers.PersistenceMapper[entities.UserEntity, models.UserModel]) *UserCommandRepositoryImpl {
+func NewUserCommandRepositoryImpl(postgresDatabase *postgres_db.PostgresDatabase, mapper mappers.PersistenceMapper[entities.UserEntity, models.UserModel]) *UserCommandRepositoryImpl {
 	return &UserCommandRepositoryImpl{
-		CommandRepository: base.NewCommandRepository[entities.UserEntity, string, models.UserModel](dbContext, mapper),
+		CommandRepository: base.NewCommandRepository[entities.UserEntity, string, models.UserModel](postgresDatabase.DB, mapper),
 	}
 }
 

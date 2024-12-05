@@ -9,41 +9,54 @@ package main
 import (
 	"identity-api/API/controllers"
 	"identity-api/API/server"
-	"identity-api/Domain/event"
-	fetcher "identity-api/Domain/fetcher"
-	"identity-api/Infrastructure/config"
-	data_fetcher "identity-api/Infrastructure/data_fetcher"
-	smtp "identity-api/Infrastructure/email_sender"
-	processor "identity-api/Infrastructure/event_processor"
-	publisher "identity-api/Infrastructure/event_publisher"
-	receiver "identity-api/Infrastructure/event_receiver"
-	"identity-api/Infrastructure/queue"
+	repository_interfaces "identity-api/Domain/repository_interfaces/user_repository"
+	service_interfaces "identity-api/Domain/service_interfaces"
+	config "identity-api/Infrastructure/config"
+	postgres_db "identity-api/Infrastructure/databases/postgres/config"
+	user_mappers "identity-api/Infrastructure/databases/postgres/mappers"
+	user_repository "identity-api/Infrastructure/databases/postgres/repository/user_repository"
+	redis_db "identity-api/Infrastructure/databases/redis/config"
+	refresh_token_repository "identity-api/Infrastructure/databases/redis/repository/refresh_token_repository"
+	jwt_token_service "identity-api/Infrastructure/jwt_tocken_service"
+
+	"identity-api/Infrastructure/password_hasher"
 
 	"github.com/google/wire"
 )
 
 type InfrastructureComponents struct {
-	EventPublisher event.EventPublisher
-	EventReceiver  event.EventReceiver
-	DataFetcher    fetcher.DataFetcher
-	Config         *config.Config
+	Config          *config.Config
+	UserQueryRepo   repository_interfaces.UserQueryRepository
+	UserCommandRepo repository_interfaces.UserCommandRepository
+	TokenService    service_interfaces.JWTTokenService
+	PasswordHasher  service_interfaces.PasswordHasher
 }
 
 func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	wire.Build(
+		// Config
 		config.WireSet,
-		queue.WireSet,
-		data_fetcher.WireSet,
-		smtp.WireSet,
-		publisher.WireSet,
-		processor.WireSet,
-		receiver.WireSet,
+		// Database
+		postgres_db.WireSet,
+		redis_db.WireSet,
+		// Repository
+		user_repository.WireSet,
+		refresh_token_repository.WireSet,
+		// Mappers
+		user_mappers.WireSet,
+		// Services
+		jwt_token_service.WireSet,
+		password_hasher.WireSet,
 		wire.Struct(new(InfrastructureComponents), "*"),
 	)
 	return &InfrastructureComponents{}, nil
 }
 
-func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher, cfg *config.Config) (*server.Server, error) {
+func InitializeApi(userQueryRepo repository_interfaces.UserQueryRepository,
+	userCommandRepo repository_interfaces.UserCommandRepository,
+	tokenService service_interfaces.JWTTokenService,
+	passwordHasher service_interfaces.PasswordHasher,
+	config *config.Config) (*server.Server, error) {
 	wire.Build(
 		controllers.WireSet,
 		server.WireSet,

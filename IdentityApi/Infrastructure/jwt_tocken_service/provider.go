@@ -5,6 +5,8 @@ import (
 	service_interfaces "identity-api/Domain/service_interfaces"
 	"identity-api/Infrastructure/config"
 	"time"
+
+	"github.com/google/wire"
 )
 
 func ProvideJWTTokenService(cfg *config.Config, commandRepo repository_interfaces.RefreshTokenCommandRepository, queryRepo repository_interfaces.RefreshTokenQueryRepository) service_interfaces.JWTTokenService {
@@ -12,3 +14,5 @@ func ProvideJWTTokenService(cfg *config.Config, commandRepo repository_interface
 	refreshTokenTTL := time.Duration(cfg.RefreshTokenTTL) * time.Minute
 	return NewJWTTokenService(accessTokenTTL, refreshTokenTTL, cfg.SecretKey, commandRepo, queryRepo)
 }
+
+var WireSet = wire.NewSet(ProvideJWTTokenService)

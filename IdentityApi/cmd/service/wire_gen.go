@@ -9,64 +9,67 @@ package main
 import (
 	"identity-api/API/controllers"
 	"identity-api/API/server"
-	"identity-api/Domain/event"
-	"identity-api/Domain/fetcher"
+	"identity-api/Domain/repository_interfaces/user_repository"
+	"identity-api/Domain/service_interfaces"
 	"identity-api/Infrastructure/config"
-	"identity-api/Infrastructure/data_fetcher"
-	"identity-api/Infrastructure/email_sender"
-	"identity-api/Infrastructure/event_processor"
-	"identity-api/Infrastructure/event_publisher"
-	"identity-api/Infrastructure/event_receiver"
-	"identity-api/Infrastructure/queue"
+	config2 "identity-api/Infrastructure/databases/postgres/config"
+	"identity-api/Infrastructure/databases/postgres/mappers"
+	"identity-api/Infrastructure/databases/postgres/repository/user_repository"
+	"identity-api/Infrastructure/databases/redis/config"
+	repository2 "identity-api/Infrastructure/databases/redis/repository/refresh_token_repository"
+	"identity-api/Infrastructure/jwt_tocken_service"
+	"identity-api/Infrastructure/password_hasher"
 )
 
 // Injectors from wire.go:
 
 func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	configConfig := config.ProvideConfig()
-	jetStreamContext, err := queue.ProvideJetStreamContext(configConfig)
+	postgresDatabase := config2.NewPostgresConfigProvider(configConfig)
+	persistenceMapper := mappers.ProvideUserPersistenceMapper()
+	userQueryRepository := repository.ProvideUserQueryRepository(postgresDatabase, persistenceMapper)
+	userCommandRepository := repository.ProvideUserCommandRepository(postgresDatabase, persistenceMapper)
+	redisDatabase, err := redis_config.NewRedisConfigProvider(configConfig)
 	if err != nil {
 		return nil, err
 	}
-	eventPublisher, err := publisher.ProvideEventPublisher(jetStreamContext)
-	if err != nil {
-		return nil, err
-	}
-	emailSender, err := smtp.ProvideEmailService(configConfig)
-	if err != nil {
-		return nil, err
-	}
-	eventProcessorImpl := processor.NewEventProcessor(emailSender)
-	eventReceiver, err := receiver.NewJetStreamReceiver(jetStreamContext, eventProcessorImpl)
-	if err != nil {
-		return nil, err
-	}
-	dataFetcher := datafetcher.ProvideDataFetcherImpl(configConfig)
+	refreshTokenCommandRepository := repository2.ProvideRefreshTokenCommandRepository(redisDatabase)
+	refreshTokenQueryRepository := repository2.ProvideRefreshTokenQueryRepository(redisDatabase)
+	jwtTokenService := jwt_token_service.ProvideJWTTokenService(configConfig, refreshTokenCommandRepository, refreshTokenQueryRepository)
+	passwordHasher := password_hasher.ProvidePasswordHasher()
 	infrastructureComponents := &InfrastructureComponents{
-		EventPublisher: eventPublisher,
-		EventReceiver:  eventReceiver,
-		DataFetcher:    dataFetcher,
-		Config:         configConfig,
+		Config:          configConfig,
+		UserQueryRepo:   userQueryRepository,
+		UserCommandRepo: userCommandRepository,
+		TokenService:    jwtTokenService,
+		PasswordHasher:  passwordHasher,
 	}
 	return infrastructureComponents, nil
 }
 
-func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher, cfg *config.Config) (*server.Server, error) {
+func InitializeApi(userQueryRepo repository_interfaces.UserQueryRepository, userCommandRepo repository_interfaces.UserCommandRepository, tokenService service_interfaces.JWTTokenService, passwordHasher service_interfaces.PasswordHasher, config3 *config.Config) (*server.Server, error) {
 	validate := controllers.ProvideValidator()
-	getEmailController := controllers.NewGetEmailController(validate)
-	getEmailsController := controllers.NewGetEmailsController(validate)
-	sendEmailController := controllers.NewSendEmailController(validate)
-	v := controllers.ProvideControllers(getEmailController, getEmailsController, sendEmailController)
+	getAllUsersController := controllers.NewGetAllUsersController(validate)
+	getUserIDController := controllers.NewGetUserIDController(validate)
+	getUserInfoController := controllers.NewGetUserInfoController(validate)
+	registerController := controllers.NewRegisterController(validate)
+	loginController := controllers.NewLoginController(validate)
+	modifyUserController := controllers.NewModifyUserController(validate)
+	deleteUserController := controllers.NewDeleteUserController(validate)
+	validateTokenController := controllers.NewValidateTokenController(validate)
+	refreshTokenController := controllers.NewRefreshTokenController(validate)
+	v := controllers.ProvideControllers(getAllUsersController, getUserIDController, getUserInfoController, registerController, loginController, modifyUserController, deleteUserController, validateTokenController, refreshTokenController)
 	controllersControllers := controllers.NewControllers(v)
-	serverServer := server.ProvideServer(controllersControllers, cfg)
+	serverServer := server.ProvideServer(controllersControllers, config3)
 	return serverServer, nil
 }
 
 // wire.go:
 
 type InfrastructureComponents struct {
-	EventPublisher event.EventPublisher
-	EventReceiver  event.EventReceiver
-	DataFetcher    fetcher.DataFetcher
-	Config         *config.Config
+	Config          *config.Config
+	UserQueryRepo   repository_interfaces.UserQueryRepository
+	UserCommandRepo repository_interfaces.UserCommandRepository
+	TokenService    service_interfaces.JWTTokenService
+	PasswordHasher  service_interfaces.PasswordHasher
 }

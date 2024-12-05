@@ -43,7 +43,9 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	return &InfrastructureComponents{}, nil
 }
 
-func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher, cfg *config.Config) (*server.Server, error) {
+func InitializeApi(DataFetcher fetcher.DataFetcher,
+	EventPublisher event.EventPublisher,
+	cfg *config.Config) (*server.Server, error) {
 	wire.Build(
 		controllers.WireSet,
 		server.WireSet,

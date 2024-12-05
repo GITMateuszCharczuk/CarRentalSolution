@@ -7,5 +7,5 @@ import (
 
 type GetAllUsersResponse struct {
 	responses.BaseResponse
-	Users []models.UserSecureInfo `json:"users" swaggertype:"array"`
+	Users []models.UserSecureInfo `json:"users" swaggertype:"array,object"`
 }
