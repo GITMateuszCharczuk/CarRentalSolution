@@ -27,16 +27,14 @@ func NewGetUserIDQueryHandler(
 func (h *GetUserIDQueryHandler) Handle(ctx context.Context, query *GetUserIDQuery) (*contract.GetUserIDResponse, error) { //TODO: Restrtict from outside
 	userID, _, err := h.tokenService.ValidateToken(query.JwtToken)
 	if err != nil {
-		return &contract.GetUserIDResponse{
-			BaseResponse: responses.NewBaseResponse(401, "Unauthorized"),
-		}, nil
+		response := responses.NewResponse[contract.GetUserIDResponse](401, "Unauthorized")
+		return &response, nil
 	}
 
 	user, err := h.userQueryRepository.GetUserByID(userID)
 	if err != nil || user == nil {
-		return &contract.GetUserIDResponse{
-			BaseResponse: responses.NewBaseResponse(404, "User not found"),
-		}, nil
+		response := responses.NewResponse[contract.GetUserIDResponse](404, "User not found")
+		return &response, nil
 	}
 
 	return &contract.GetUserIDResponse{

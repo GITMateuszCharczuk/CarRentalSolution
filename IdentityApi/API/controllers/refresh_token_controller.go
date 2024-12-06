@@ -23,7 +23,7 @@ func NewRefreshTokenController(validator *validator.Validate) *RefreshTokenContr
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param refresh body contract.RefreshTokenRequest true "Refresh token"
+// @Param token query string true "Refresh token" example:"your.refresh.token.here"
 // @Success 200 {object} contract.RefreshTokenResponse "Token refreshed successfully"
 // @Failure 400 {object} contract.RefreshTokenResponse "Invalid request parameters"
 // @Failure 401 {object} contract.RefreshTokenResponse "Invalid refresh token"

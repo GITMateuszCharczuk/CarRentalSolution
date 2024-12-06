@@ -24,7 +24,7 @@ func NewGetUserIDController(validator *validator.Validate) *GetUserIDController 
 // @Tags users
 // @Accept json
 // @Produce json
-// @Param token query string true "User token"
+// @Param token query string true "JWT token" example:"your.jwt.token.here"
 // @Success 200 {object} contract.GetUserIDResponse "User ID retrieved successfully"
 // @Failure 400 {object} contract.GetUserIDResponse "Invalid request parameters"
 // @Failure 404 {object} contract.GetUserIDResponse "User not found"

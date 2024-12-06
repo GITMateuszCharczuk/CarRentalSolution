@@ -29,8 +29,10 @@ func (s *ResponseSender) Send(obj interface{}) {
 	if baseResponseField.IsValid() {
 		statusCodeField := baseResponseField.FieldByName("StatusCode")
 		if statusCodeField.IsValid() && statusCodeField.Kind() == reflect.Int {
+			log.Println("statusCodeField", statusCodeField)
 			statusCode = int(statusCodeField.Int())
 		} else {
+			log.Println("statusCodeField is not valid or not int")
 			statusCode = http.StatusInternalServerError
 		}
 	} else {

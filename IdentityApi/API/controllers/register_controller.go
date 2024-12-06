@@ -34,7 +34,8 @@ func (h *RegisterController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 	var req contract.RegisterUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		responseSender.Send(responses.NewBaseResponse(400, "Invalid request parameters"))
+		response := responses.NewResponse[contract.RegisterUserResponse](400, "Invalid request parameters")
+		responseSender.Send(response)
 		return
 	}
 	if validateResponse := services.ValidateRequest[contract.RegisterUserResponse](&req, h.validator); validateResponse != nil {

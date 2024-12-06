@@ -122,13 +122,11 @@ const docTemplate = `{
                 "summary": "Refresh token",
                 "parameters": [
                     {
+                        "type": "string",
                         "description": "Refresh token",
-                        "name": "refresh",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/contract.RefreshTokenRequest"
-                        }
+                        "name": "token",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -169,7 +167,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User token",
+                        "description": "JWT token",
                         "name": "token",
                         "in": "query",
                         "required": true
@@ -218,6 +216,13 @@ const docTemplate = `{
                 "summary": "Modify user",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "description": "User modification details",
                         "name": "modify",
                         "in": "body",
@@ -247,50 +252,6 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "delete": {
-                "description": "Deletes a user from the system",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Delete user",
-                "parameters": [
-                    {
-                        "description": "User deletion details",
-                        "name": "delete",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteUserRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User deleted successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteUserResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteUserResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteUserResponse"
-                        }
-                    }
-                }
             }
         },
         "/identity-api/api/user/id": {
@@ -309,7 +270,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User token",
+                        "description": "JWT token",
                         "name": "token",
                         "in": "query",
                         "required": true
@@ -343,9 +304,60 @@ const docTemplate = `{
                 }
             }
         },
-        "/identity-api/api/user/info": {
+        "/identity-api/api/user/{id}": {
+            "delete": {
+                "description": "Deletes a user from the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/identity-api/api/user/{id}/info": {
             "get": {
-                "description": "Retrieves user information based on the provided token.",
+                "description": "Retrieves user information based on the provided token and user ID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -359,9 +371,16 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User token",
+                        "description": "JWT token",
                         "name": "token",
                         "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -409,7 +428,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User token",
+                        "description": "JWT token",
                         "name": "token",
                         "in": "query",
                         "required": true
@@ -457,23 +476,6 @@ const docTemplate = `{
                 "StatusInternalServerError",
                 "StatusConflict"
             ]
-        },
-        "contract.DeleteUserRequest": {
-            "type": "object",
-            "required": [
-                "id",
-                "token"
-            ],
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "example": "12345"
-                },
-                "token": {
-                    "type": "string",
-                    "example": "jwt.token.here"
-                }
-            }
         },
         "contract.DeleteUserResponse": {
             "type": "object",
@@ -613,17 +615,9 @@ const docTemplate = `{
         },
         "contract.LoginResponse": {
             "type": "object",
-            "required": [
-                "refresh_token",
-                "token"
-            ],
             "properties": {
                 "message": {
                     "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string",
-                    "example": "jwt.refresh.token.here"
                 },
                 "roles": {
                     "type": "array",
@@ -640,18 +634,11 @@ const docTemplate = `{
                 },
                 "success": {
                     "type": "boolean"
-                },
-                "token": {
-                    "type": "string",
-                    "example": "jwt.token.here"
                 }
             }
         },
         "contract.ModifyUserRequest": {
             "type": "object",
-            "required": [
-                "token"
-            ],
             "properties": {
                 "address": {
                     "type": "string",
@@ -691,10 +678,6 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Doe"
                 },
-                "token": {
-                    "type": "string",
-                    "example": "jwt.token.here"
-                },
                 "user_id": {
                     "type": "string",
                     "example": "1234567890"
@@ -715,23 +698,8 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.RefreshTokenRequest": {
-            "type": "object",
-            "required": [
-                "refresh_token"
-            ],
-            "properties": {
-                "refresh_token": {
-                    "type": "string",
-                    "example": "jwt.refresh.token.here"
-                }
-            }
-        },
         "contract.RefreshTokenResponse": {
             "type": "object",
-            "required": [
-                "token"
-            ],
             "properties": {
                 "message": {
                     "type": "string"
@@ -741,10 +709,6 @@ const docTemplate = `{
                 },
                 "success": {
                     "type": "boolean"
-                },
-                "token": {
-                    "type": "string",
-                    "example": "jwt.token.here"
                 }
             }
         },
@@ -789,15 +753,6 @@ const docTemplate = `{
                 "postal_code": {
                     "type": "string",
                     "example": "12345"
-                },
-                "role": {
-                    "type": "string",
-                    "enum": [
-                        "user",
-                        "admin",
-                        "superadmin"
-                    ],
-                    "example": "user"
                 },
                 "surname": {
                     "type": "string",

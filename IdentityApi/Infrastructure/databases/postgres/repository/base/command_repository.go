@@ -3,6 +3,7 @@ package cqrs
 import (
 	"errors"
 	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -20,6 +21,7 @@ func (r *CommandRepository[TEntity, TId, TModel]) Add(model TModel) (TModel, err
 	entity := r.mapper.MapToEntity(model)
 	result := r.dbContext.Create(&entity)
 	if result.Error != nil {
+		log.Println(entity)
 		return model, result.Error
 	}
 	return r.mapper.MapToModel(entity), nil

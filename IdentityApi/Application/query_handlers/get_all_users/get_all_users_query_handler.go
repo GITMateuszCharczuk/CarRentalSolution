@@ -4,7 +4,6 @@ import (
 	"context"
 	contract "identity-api/Application.contract/get_all_users"
 	"identity-api/Application/services"
-	utils "identity-api/Application/services"
 	"identity-api/Domain/constants"
 	models "identity-api/Domain/models/user"
 	repository_interfaces "identity-api/Domain/repository_interfaces/user_repository"
@@ -30,18 +29,16 @@ func NewGetAllUsersQueryHandler(
 func (h *GetAllUsersQueryHandler) Handle(ctx context.Context, query *GetAllUsersQuery) (*contract.GetAllUsersResponse, error) {
 	_, roles, err := h.tokenService.ValidateToken(query.JwtToken)
 	if err != nil {
-		return &contract.GetAllUsersResponse{
-			BaseResponse: responses.NewBaseResponse(401, "Unauthorized"),
-		}, nil
+		response := responses.NewResponse[contract.GetAllUsersResponse](401, "Unauthorized")
+		return &response, nil
 	}
 
-	isAdmin := utils.IsAdminOrSuperAdmin(roles)
-	hasSuperAdminRole := utils.IsRole(constants.SuperAdmin, roles)
+	isAdmin := services.IsAdminOrSuperAdmin(roles)
+	hasSuperAdminRole := services.IsRole(constants.SuperAdmin, roles)
 
 	if !isAdmin {
-		return &contract.GetAllUsersResponse{
-			BaseResponse: responses.NewBaseResponse(403, "Insufficient privileges"),
-		}, nil
+		response := responses.NewResponse[contract.GetAllUsersResponse](403, "Insufficient privileges")
+		return &response, nil
 	}
 
 	var users []*models.UserModel
@@ -53,9 +50,8 @@ func (h *GetAllUsersQueryHandler) Handle(ctx context.Context, query *GetAllUsers
 	}
 
 	if err != nil {
-		return &contract.GetAllUsersResponse{
-			BaseResponse: responses.NewBaseResponse(500, "Failed to retrieve users"),
-		}, nil
+		response := responses.NewResponse[contract.GetAllUsersResponse](500, "Failed to retrieve users")
+		return &response, nil
 	}
 
 	userInfos := make([]models.UserSecureInfo, len(users))

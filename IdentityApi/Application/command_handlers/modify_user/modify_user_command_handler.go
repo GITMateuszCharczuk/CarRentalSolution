@@ -33,9 +33,8 @@ func (h *ModifyUserCommandHandler) Handle(ctx context.Context, command *ModifyUs
 	requesterID, requesterRoles, err := h.tokenService.ValidateToken(command.JwtToken)
 	var existingUser *models.UserModel
 	if err != nil {
-		return &contract.ModifyUserResponse{
-			BaseResponse: responses.NewBaseResponse(401, "Unauthorized"),
-		}, nil
+		response := responses.NewResponse[contract.ModifyUserResponse](401, "Unauthorized")
+		return &response, nil
 	}
 
 	isAdmin := services.IsAdminOrSuperAdmin(requesterRoles)
@@ -43,16 +42,14 @@ func (h *ModifyUserCommandHandler) Handle(ctx context.Context, command *ModifyUs
 	if command.UserID != "" && isAdmin {
 		existingUser, err = h.userQueryRepository.GetUserByID(command.UserID)
 		if err != nil || existingUser == nil {
-			return &contract.ModifyUserResponse{
-				BaseResponse: responses.NewBaseResponse(404, "User not found"),
-			}, nil
+			response := responses.NewResponse[contract.ModifyUserResponse](404, "User not found")
+			return &response, nil
 		}
 	} else {
 		existingUser, err = h.userQueryRepository.GetUserByID(requesterID)
 		if err != nil || existingUser == nil {
-			return &contract.ModifyUserResponse{
-				BaseResponse: responses.NewBaseResponse(404, "User not found"),
-			}, nil
+			response := responses.NewResponse[contract.ModifyUserResponse](404, "User not found")
+			return &response, nil
 		}
 	}
 
@@ -69,12 +66,10 @@ func (h *ModifyUserCommandHandler) Handle(ctx context.Context, command *ModifyUs
 	}
 
 	if err := h.userCommandRepository.UpdateUser(existingUser); err != nil {
-		return &contract.ModifyUserResponse{
-			BaseResponse: responses.NewBaseResponse(500, "Failed to update user"),
-		}, nil
+		response := responses.NewResponse[contract.ModifyUserResponse](500, "Failed to update user")
+		return &response, nil
 	}
 
-	return &contract.ModifyUserResponse{
-		BaseResponse: responses.NewBaseResponse(200, "User updated successfully"),
-	}, nil
+	response := responses.NewResponse[contract.ModifyUserResponse](200, "User updated successfully")
+	return &response, nil
 }

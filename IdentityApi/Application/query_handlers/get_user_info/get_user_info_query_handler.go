@@ -28,9 +28,8 @@ func NewGetUserInfoQueryHandler(
 func (h *GetUserInfoQueryHandler) Handle(ctx context.Context, query *GetUserInfoQuery) (*contract.GetUserInfoResponse, error) {
 	requesterID, requesterRoles, err := h.tokenService.ValidateToken(query.JwtToken)
 	if err != nil {
-		return &contract.GetUserInfoResponse{
-			BaseResponse: responses.NewBaseResponse(401, "Unauthorized"),
-		}, nil
+		response := responses.NewResponse[contract.GetUserInfoResponse](401, "Unauthorized")
+		return &response, nil
 	}
 
 	isAdmin := services.IsAdminOrSuperAdmin(requesterRoles)
@@ -43,9 +42,8 @@ func (h *GetUserInfoQueryHandler) Handle(ctx context.Context, query *GetUserInfo
 
 	existingUser, err := h.userQueryRepository.GetUserByID(userID)
 	if err != nil || existingUser == nil {
-		return &contract.GetUserInfoResponse{
-			BaseResponse: responses.NewBaseResponse(404, "User not found"),
-		}, nil
+		response := responses.NewResponse[contract.GetUserInfoResponse](404, "User not found")
+		return &response, nil
 	}
 
 	userInfo := models.UserSecureInfo{

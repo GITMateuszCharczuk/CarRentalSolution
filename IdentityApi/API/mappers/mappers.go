@@ -27,7 +27,6 @@ func MapToRegisterCommand(req *register_contract.RegisterUserRequest) register.R
 		PostalCode:   req.PostalCode,
 		City:         req.City,
 		Password:     req.Password,
-		Roles:        req.Roles,
 	}
 }
 

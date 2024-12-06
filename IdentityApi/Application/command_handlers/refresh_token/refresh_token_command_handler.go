@@ -20,9 +20,8 @@ func (h *RefreshTokenCommandHandler) Handle(ctx context.Context, command *Refres
 	constructedRefreshToken := models.NewRefreshToken(command.RefreshToken)
 	token, err := h.tokenService.RefreshToken(constructedRefreshToken)
 	if err != nil {
-		return &contract.RefreshTokenResponse{
-			BaseResponse: responses.NewBaseResponse(401, "Invalid refresh token"),
-		}, nil
+		response := responses.NewResponse[contract.RefreshTokenResponse](401, "Invalid refresh token")
+		return &response, nil
 	}
 
 	return &contract.RefreshTokenResponse{

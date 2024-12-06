@@ -24,7 +24,7 @@ func NewValidateTokenController(validator *validator.Validate) *ValidateTokenCon
 // @Tags users
 // @Accept json
 // @Produce json
-// @Param token query string true "User token"
+// @Param token query string true "JWT token" example:"your.jwt.token.here"
 // @Success 200 {object} contract.ValidateTokenResponse "Token is valid"
 // @Failure 400 {object} contract.ValidateTokenResponse "Invalid request parameters"
 // @Failure 401 {object} contract.ValidateTokenResponse "Unauthorized"

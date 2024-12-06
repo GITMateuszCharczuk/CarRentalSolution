@@ -30,9 +30,8 @@ func NewDeleteUserCommandHandler(
 func (h *DeleteUserCommandHandler) Handle(ctx context.Context, command *DeleteUserCommand) (*contract.DeleteUserResponse, error) {
 	_, requesterRoles, err := h.tokenService.ValidateToken(command.JwtToken)
 	if err != nil {
-		return &contract.DeleteUserResponse{
-			BaseResponse: responses.NewBaseResponse(401, "Unauthorized"),
-		}, nil
+		response := responses.NewResponse[contract.DeleteUserResponse](401, "Unauthorized")
+		return &response, nil
 	}
 
 	isSuperAdmin := false
@@ -48,33 +47,28 @@ func (h *DeleteUserCommandHandler) Handle(ctx context.Context, command *DeleteUs
 	}
 
 	if !isAdmin && !isSuperAdmin {
-		return &contract.DeleteUserResponse{
-			BaseResponse: responses.NewBaseResponse(403, "Insufficient privileges"),
-		}, nil
+		response := responses.NewResponse[contract.DeleteUserResponse](403, "Insufficient privileges")
+		return &response, nil
 	}
 
 	userToDelete, err := h.userQueryRepository.GetUserByID(command.ID)
 	if err != nil || userToDelete == nil {
-		return &contract.DeleteUserResponse{
-			BaseResponse: responses.NewBaseResponse(404, "User not found"),
-		}, nil
+		response := responses.NewResponse[contract.DeleteUserResponse](404, "User not found")
+		return &response, nil
 	}
 
 	for _, role := range userToDelete.Roles {
 		if role == constants.SuperAdmin && !isSuperAdmin {
-			return &contract.DeleteUserResponse{
-				BaseResponse: responses.NewBaseResponse(403, "Cannot delete SuperAdmin user"),
-			}, nil
+			response := responses.NewResponse[contract.DeleteUserResponse](403, "Cannot delete SuperAdmin user")
+			return &response, nil
 		}
 	}
 
 	if err := h.userCommandRepository.DeleteUser(command.ID); err != nil {
-		return &contract.DeleteUserResponse{
-			BaseResponse: responses.NewBaseResponse(500, "Failed to delete user"),
-		}, nil
+		response := responses.NewResponse[contract.DeleteUserResponse](500, "Failed to delete user")
+		return &response, nil
 	}
 
-	return &contract.DeleteUserResponse{
-		BaseResponse: responses.NewBaseResponse(200, "User deleted successfully"),
-	}, nil
+	response := responses.NewResponse[contract.DeleteUserResponse](200, "User deleted successfully")
+	return &response, nil
 }

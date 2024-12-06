@@ -4,6 +4,9 @@ import (
 	"errors"
 	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
 	"reflect"
+	"strings"
+
+	selector "identity-api/Domain/property_selector"
 
 	"gorm.io/gorm"
 )
@@ -39,14 +42,14 @@ func (r *QueryRepository[TEntity, TId, TModel]) GetByIds(ids []TId) ([]*TModel, 
 	return models, nil
 }
 
-func (r *QueryRepository[TEntity, TId, TModel]) GetFirstByProp(propName string, value interface{}) (*TModel, error) {
+func (r *QueryRepository[TEntity, TId, TModel]) GetFirstByProp(selector selector.PropertySelector[TEntity], value interface{}) (*TModel, error) {
 	var entity TEntity
-
-	if !r.propertyExists(propName) {
-		return nil, errors.New("property " + propName + " does not exist on type " + reflect.TypeOf(entity).Name())
+	columnName := r.getColumnName(selector.FieldName)
+	if columnName == "" {
+		return nil, errors.New("property " + selector.FieldName + " does not exist on type " + reflect.TypeOf(entity).Name())
 	}
 
-	if err := r.dbContext.Where(propName+" = ?", value).First(&entity).Error; err != nil {
+	if err := r.dbContext.Where(columnName+" = ?", value).First(&entity).Error; err != nil {
 		return nil, err
 	}
 	model := r.mapper.MapToModel(entity)
@@ -59,12 +62,6 @@ func (r *QueryRepository[TEntity, TId, TModel]) GetTotalCount() (int64, error) {
 		return 0, err
 	}
 	return count, nil
-}
-
-func (r *QueryRepository[TEntity, TId, TModel]) propertyExists(propName string) bool {
-	entityType := reflect.TypeOf(new(TEntity)).Elem()
-	_, found := entityType.FieldByName(propName)
-	return found
 }
 
 func (r *QueryRepository[TEntity, TId, TModel]) GetAll() ([]*TModel, error) {
@@ -81,46 +78,16 @@ func (r *QueryRepository[TEntity, TId, TModel]) GetAll() ([]*TModel, error) {
 	return models, nil
 }
 
-// func (r *QueryRepository[TEntity, TId, TModel]) GetByPropValues(props map[string]interface{}) ([]*TModel, error) {
-// 	var entities []TEntity
+func (r *QueryRepository[TEntity, TId, TModel]) GetAllByPropValues(selector selector.PropertySelector[TEntity], values ...interface{}) ([]*TModel, error) {
+	var entity TEntity
 
-// 	// Validate all properties exist
-// 	var entity TEntity
-// 	for propName := range props {
-// 		if !r.propertyExists(propName) {
-// 			return nil, errors.New("property " + propName + " does not exist on type " + reflect.TypeOf(entity).Name())
-// 		}
-// 	}
-
-// 	// Build query with all property-value pairs
-// 	query := r.dbContext
-// 	for propName, value := range props {
-// 		query = query.Where(propName+" = ?", value)
-// 	}
-
-// 	// Execute query
-// 	if err := query.Find(&entities).Error; err != nil {
-// 		return nil, err
-// 	}
-
-// 	// Map all entities to models
-// 	models := make([]*TModel, len(entities))
-// 	for i, entity := range entities {
-// 		model := r.mapper.MapToModel(entity)
-// 		models[i] = &model
-// 	}
-
-// 	return models, nil
-// }
-
-func (r *QueryRepository[TEntity, TId, TModel]) GetAllByPropValues(propName string, values ...interface{}) ([]*TModel, error) {
-	var entities []TEntity
-
-	if !r.propertyExists(propName) {
-		return nil, errors.New("property " + propName + " does not exist on type " + reflect.TypeOf(new(TEntity)).Name())
+	columnName := r.getColumnName(selector.FieldName)
+	if columnName == "" {
+		return nil, errors.New("property " + selector.FieldName + " does not exist on type " + reflect.TypeOf(entity).Name())
 	}
 
-	if err := r.dbContext.Where(propName+" && ?", values).Find(&entities).Error; err != nil {
+	var entities []TEntity
+	if err := r.dbContext.Where(columnName+" IN ?", values).Find(&entities).Error; err != nil {
 		return nil, err
 	}
 
@@ -129,6 +96,26 @@ func (r *QueryRepository[TEntity, TId, TModel]) GetAllByPropValues(propName stri
 		model := r.mapper.MapToModel(entity)
 		models[i] = &model
 	}
-
 	return models, nil
+}
+
+func (r *QueryRepository[TEntity, TId, TModel]) getColumnName(propName string) string {
+	entityType := reflect.TypeOf(new(TEntity)).Elem()
+
+	for i := 0; i < entityType.NumField(); i++ {
+		field := entityType.Field(i)
+
+		jsonTag := field.Tag.Get("json")
+		if jsonTag == propName {
+			if gormTag := field.Tag.Get("gorm"); gormTag != "" {
+				for _, tag := range strings.Split(gormTag, ";") {
+					if strings.HasPrefix(tag, "column:") {
+						return strings.TrimPrefix(tag, "column:")
+					}
+				}
+			}
+			return jsonTag
+		}
+	}
+	return ""
 }

@@ -24,7 +24,7 @@ func NewGetAllUsersController(validator *validator.Validate) *GetAllUsersControl
 // @Tags users
 // @Accept json
 // @Produce json
-// @Param token query string true "User token"
+// @Param token query string true "JWT token" example:"your.jwt.token.here"
 // @Success 200 {object} contract.GetAllUsersResponse "Users retrieved successfully"
 // @Failure 400 {object} contract.GetAllUsersResponse "Invalid request parameters"
 // @Failure 500 {object} contract.GetAllUsersResponse "Server error during retrieval"

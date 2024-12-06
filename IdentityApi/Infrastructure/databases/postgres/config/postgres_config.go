@@ -24,7 +24,6 @@ func NewPostgresConfig(user, password, name, host, port string, runPostgresMigra
 	once.Do(func() {
 		instance = &PostgresDatabase{}
 		instance.connect(user, password, name, host, port)
-		instance.createUserRoleEnumType()
 		instance.runMigration(runPostgresMigration)
 	})
 	return instance
@@ -53,17 +52,5 @@ func (dc *PostgresDatabase) runMigration(shouldMigrate bool) {
 		log.Println("Database migrated successfully!")
 	} else {
 		log.Println("Migrations are not required at this time.")
-	}
-}
-
-func (dc *PostgresDatabase) createUserRoleEnumType() {
-	err := dc.DB.Exec(`DO $$ 
-	BEGIN 
-		IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN 
-			CREATE TYPE user_role AS ENUM ('user', 'admin', 'superadmin');
-		END IF;
-	END $$;`).Error
-	if err != nil {
-		log.Fatalf("Error creating enum type: %v", err)
 	}
 }

@@ -1,6 +1,9 @@
 package responses
 
-import "identity-api/Domain/constants"
+import (
+	"identity-api/Domain/constants"
+	"reflect"
+)
 
 type BaseResponse struct {
 	Success    bool                 `json:"success"`
@@ -37,4 +40,16 @@ func NewBaseResponse(statusCode int, customMessage ...string) BaseResponse {
 		Message:    message,
 		StatusCode: constants.StatusCode(statusCode),
 	}
+}
+
+func NewResponse[TResponse any](statusCode int, customMessage ...string) TResponse {
+	var response TResponse
+	responseValue := reflect.ValueOf(&response).Elem()
+	baseResponseField := responseValue.FieldByName("BaseResponse")
+	if !baseResponseField.IsValid() {
+		panic("TResponse must embed BaseResponse")
+	}
+	baseResponse := NewBaseResponse(statusCode, customMessage...)
+	baseResponseField.Set(reflect.ValueOf(baseResponse))
+	return response
 }

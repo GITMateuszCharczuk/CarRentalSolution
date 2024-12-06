@@ -31,19 +31,17 @@ func NewRegisterCommandHandler(
 	}
 }
 
-func (h *RegisterCommandHandler) Handle(ctx context.Context, command *contract.RegisterUserRequest) (*contract.RegisterUserResponse, error) {
+func (h *RegisterCommandHandler) Handle(ctx context.Context, command *RegisterUserCommand) (*contract.RegisterUserResponse, error) {
 	existingUser, _ := h.userQueryRepository.GetUserByEmail(command.EmailAddress)
 	if existingUser != nil {
-		return &contract.RegisterUserResponse{
-			BaseResponse: responses.NewBaseResponse(400, "Email already exists"),
-		}, nil
+		response := responses.NewResponse[contract.RegisterUserResponse](400, "Email already exists")
+		return &response, nil
 	}
 
 	hashedPassword, err := h.hasher.HashPassword(command.Password)
 	if err != nil {
-		return &contract.RegisterUserResponse{
-			BaseResponse: responses.NewBaseResponse(500, "Error processing registration"),
-		}, nil
+		response := responses.NewResponse[contract.RegisterUserResponse](500, "Error processing registration")
+		return &response, nil
 	}
 
 	user := &models.UserModel{
@@ -62,12 +60,10 @@ func (h *RegisterCommandHandler) Handle(ctx context.Context, command *contract.R
 	}
 
 	if err := h.userCommandRepository.CreateUser(user); err != nil {
-		return &contract.RegisterUserResponse{
-			BaseResponse: responses.NewBaseResponse(500, "Failed to create user"),
-		}, nil
+		response := responses.NewResponse[contract.RegisterUserResponse](500, "Failed to create user")
+		return &response, nil
 	}
 
-	return &contract.RegisterUserResponse{
-		BaseResponse: responses.NewBaseResponse(201, "User registered successfully"),
-	}, nil
+	response := responses.NewResponse[contract.RegisterUserResponse](201, "User registered successfully")
+	return &response, nil
 }

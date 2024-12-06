@@ -26,6 +26,7 @@ func NewModifyUserController(validator *validator.Validate) *ModifyUserControlle
 // @Tags users
 // @Accept json
 // @Produce json
+// @Param token query string true "JWT token" example:"your.jwt.token.here"
 // @Param modify body contract.ModifyUserRequest true "User modification details"
 // @Success 200 {object} contract.ModifyUserResponse "User modified successfully"
 // @Failure 400 {object} contract.ModifyUserResponse "Invalid request parameters"
@@ -33,11 +34,14 @@ func NewModifyUserController(validator *validator.Validate) *ModifyUserControlle
 // @Router /identity-api/api/user [put]
 func (h *ModifyUserController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
+	token := services.GetJwtTokenFromQuery(c)
 	var req contract.ModifyUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		responseSender.Send(responses.NewBaseResponse(400, "Invalid request parameters"))
+		response := responses.NewResponse[contract.ModifyUserResponse](400, "Invalid request parameters")
+		responseSender.Send(response)
 		return
 	}
+	req.JwtToken = token
 	if validateResponse := services.ValidateRequest[contract.ModifyUserResponse](&req, h.validator); validateResponse != nil {
 		responseSender.Send(validateResponse)
 		return

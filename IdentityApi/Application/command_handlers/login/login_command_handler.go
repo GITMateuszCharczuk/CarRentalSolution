@@ -7,6 +7,7 @@ import (
 	repository_interfaces "identity-api/Domain/repository_interfaces/user_repository"
 	"identity-api/Domain/responses"
 	"identity-api/Domain/service_interfaces"
+	"log"
 )
 
 type LoginCommandHandler struct {
@@ -20,9 +21,10 @@ func NewLoginCommandHandler(hasher service_interfaces.PasswordHasher, tokenServi
 }
 
 func (h *LoginCommandHandler) Handle(ctx context.Context, command *LoginCommand) (*contract.LoginResponse, error) {
-	notAuthorized := contract.LoginResponse{BaseResponse: responses.NewBaseResponse(401, "Invalid email or password")}
+	notAuthorized := responses.NewResponse[contract.LoginResponse](401, "Invalid email or password")
 	user, err := h.userQueryRepository.GetUserByEmail(command.Email)
 	if err != nil || user == nil {
+		log.Println(err)
 		return &notAuthorized, nil
 	}
 	if valid, err := h.hasher.VerifyPassword(user.Password, command.Password); err != nil || !valid {

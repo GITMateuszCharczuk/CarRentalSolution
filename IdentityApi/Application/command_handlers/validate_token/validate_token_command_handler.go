@@ -19,10 +19,9 @@ func NewValidateTokenCommandHandler(tokenService service_interfaces.JWTTokenServ
 func (h *ValidateTokenCommandHandler) Handle(ctx context.Context, command *ValidateTokenCommand) (*contract.ValidateTokenResponse, error) {
 	_, roles, err := h.tokenService.ValidateToken(command.JwtToken)
 	if err != nil {
-		return &contract.ValidateTokenResponse{
-			BaseResponse: responses.NewBaseResponse(401, "Invalid token"),
-			Valid:        false,
-		}, nil
+		response := responses.NewResponse[contract.ValidateTokenResponse](401, "Invalid token")
+		response.Valid = false
+		return &response, nil
 	}
 
 	return &contract.ValidateTokenResponse{

@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"identity-api/Domain/responses"
 )
 
 type DeleteUserController struct {
@@ -24,32 +23,38 @@ func NewDeleteUserController(validator *validator.Validate) *DeleteUserControlle
 // @Tags users
 // @Accept json
 // @Produce json
-// @Param delete body contract.DeleteUserRequest true "User deletion details"
+// @Param token query string true "JWT token" example:"your.jwt.token.here"
+// @Param id path string true "User ID" example:"123e4567-e89b-12d3-a456-426614174000"
 // @Success 200 {object} contract.DeleteUserResponse "User deleted successfully"
 // @Failure 400 {object} contract.DeleteUserResponse "Invalid request parameters"
 // @Failure 401 {object} contract.DeleteUserResponse "Unauthorized"
-// @Router /identity-api/api/user [delete]
+// @Router /identity-api/api/user/{id} [delete]
 func (h *DeleteUserController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
-	var req contract.DeleteUserRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		responseSender.Send(responses.NewBaseResponse(400, "Invalid request parameters"))
-		return
+	token := services.GetJwtTokenFromQuery(c)
+	userID := c.Param("id")
+
+	req := contract.DeleteUserRequest{
+		JwtToken: token,
+		ID:       userID,
 	}
+
 	if validateResponse := services.ValidateRequest[contract.DeleteUserResponse](&req, h.validator); validateResponse != nil {
 		responseSender.Send(validateResponse)
 		return
 	}
+
 	command := commands.DeleteUserCommand{
 		JwtToken: req.JwtToken,
 		ID:       req.ID,
 	}
+
 	resp := services.SendToMediator[*commands.DeleteUserCommand, *contract.DeleteUserResponse](c.Request.Context(), &command)
 	responseSender.Send(resp)
 }
 
 func (h *DeleteUserController) Route() string {
-	return "/user"
+	return "/user/:id"
 }
 
 func (h *DeleteUserController) Methods() []string {

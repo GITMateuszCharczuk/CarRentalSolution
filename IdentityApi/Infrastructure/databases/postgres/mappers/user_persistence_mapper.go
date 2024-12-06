@@ -4,6 +4,8 @@ import (
 	"identity-api/Domain/constants"
 	models "identity-api/Domain/models/user"
 	"identity-api/Infrastructure/databases/postgres/entities"
+	"log"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -15,6 +17,7 @@ func NewUserPersistenceMapper() *UserMapper {
 }
 
 func (m *UserMapper) MapToModel(entity entities.UserEntity) models.UserModel {
+	log.Println(entity)
 	return models.UserModel{
 		ID:           entity.ID.String(),
 		Roles:        convertRoles(entity.Roles),
@@ -32,8 +35,15 @@ func (m *UserMapper) MapToModel(entity entities.UserEntity) models.UserModel {
 }
 
 func (m *UserMapper) MapToEntity(model models.UserModel) entities.UserEntity {
+	var id uuid.UUID
+	if model.ID == "" {
+		id = uuid.New()
+	} else {
+		id, _ = uuid.Parse(model.ID)
+	}
+
 	return entities.UserEntity{
-		ID:           uuid.New(),
+		ID:           id,
 		Roles:        convertRolesBack(model.Roles),
 		Name:         model.Name,
 		Surname:      model.Surname,
@@ -43,10 +53,12 @@ func (m *UserMapper) MapToEntity(model models.UserModel) entities.UserEntity {
 		Address:      model.Address,
 		PostalCode:   model.PostalCode,
 		City:         model.City,
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
 	}
 }
 
-func convertRoles(roles []entities.JWTRoleEntity) []constants.JWTRole {
+func convertRoles(roles entities.RoleArray) []constants.JWTRole {
 	jwtRoles := make([]constants.JWTRole, len(roles))
 	for i, role := range roles {
 		jwtRoles[i] = constants.JWTRole(role)
@@ -54,10 +66,14 @@ func convertRoles(roles []entities.JWTRoleEntity) []constants.JWTRole {
 	return jwtRoles
 }
 
-func convertRolesBack(roles []constants.JWTRole) []entities.JWTRoleEntity {
+func convertRolesBack(roles []constants.JWTRole) entities.RoleArray {
+	if len(roles) == 0 {
+		return entities.RoleArray{entities.User}
+	}
+
 	roleEntities := make([]entities.JWTRoleEntity, len(roles))
 	for i, role := range roles {
 		roleEntities[i] = entities.JWTRoleEntity(role)
 	}
-	return roleEntities
+	return entities.RoleArray(roleEntities)
 }
