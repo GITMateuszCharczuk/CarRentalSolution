@@ -56,11 +56,11 @@ func (h *GetUserInfoQueryHandler) Handle(ctx context.Context, query *GetUserInfo
 			PostalCode:   existingUser.PostalCode,
 			City:         existingUser.City,
 		},
+		Roles: services.ConvertRolesToString(existingUser.Roles),
 	}
 
 	if isAdmin {
 		userInfo.ID = existingUser.ID
-		userInfo.Roles = services.ConvertRolesToString(existingUser.Roles)
 	}
 
 	return &contract.GetUserInfoResponse{

@@ -20,23 +20,34 @@ func NewGetAllUsersController(validator *validator.Validate) *GetAllUsersControl
 
 // Handle godoc
 // @Summary Get all users
-// @Description Retrieves a list of all users.
+// @Description Retrieves a list of all users with optional pagination and sorting.
 // @Tags users
 // @Accept json
 // @Produce json
 // @Param token query string true "JWT token" example:"your.jwt.token.here"
-// @Success 200 {object} contract.GetAllUsersResponse "Users retrieved successfully"
-// @Failure 400 {object} contract.GetAllUsersResponse "Invalid request parameters"
-// @Failure 500 {object} contract.GetAllUsersResponse "Server error during retrieval"
+// @Param page_size query int false "Page size" example:"10"
+// @Param current_page query int false "Current page" example:"1"
+// @Param sort_fields query []string false "Sort fields (format: field:direction)" example:"name:asc,email:desc"
+// @Success 200 {object} contract.GetAllUsersResponse200 "Users retrieved successfully"
+// @Failure 400 {object} responses.BaseResponse "Invalid request parameters"
+// @Failure 401 {object} responses.BaseResponse "Unauthorized"
+// @Failure 403 {object} responses.BaseResponse "Insufficient privileges"
+// @Failure 500 {object} responses.BaseResponse "Server error during retrieval"
 // @Router /identity-api/api/users [get]
 func (h *GetAllUsersController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
-	token := services.GetJwtTokenFromQuery(c)
-	req := contract.GetAllUsersRequest{JwtToken: token}
+
+	req := contract.GetAllUsersRequest{
+		JwtToken:   services.GetJwtTokenFromQuery(c),
+		Pagination: services.ExtractPagination(c),
+		SortQuery:  services.ExtractSortQuery(c),
+	}
+
 	if validateResponse := services.ValidateRequest[contract.GetAllUsersResponse](&req, h.validator); validateResponse != nil {
 		responseSender.Send(validateResponse)
 		return
 	}
+
 	query := mappers.MapToGetAllUsersQuery(&req)
 	resp := services.SendToMediator[*queries.GetAllUsersQuery, *contract.GetAllUsersResponse](c.Request.Context(), &query)
 	responseSender.Send(resp)

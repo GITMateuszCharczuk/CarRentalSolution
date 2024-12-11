@@ -6,6 +6,7 @@ import (
 	"identity-api/Application/services"
 	"identity-api/Domain/constants"
 	models "identity-api/Domain/models/user"
+	"identity-api/Domain/pagination"
 	repository_interfaces "identity-api/Domain/repository_interfaces/user_repository"
 	"identity-api/Domain/responses"
 	"identity-api/Domain/service_interfaces"
@@ -41,12 +42,12 @@ func (h *GetAllUsersQueryHandler) Handle(ctx context.Context, query *GetAllUsers
 		return &response, nil
 	}
 
-	var users []*models.UserModel
+	var result *pagination.PaginatedResult[models.UserModel]
 
 	if hasSuperAdminRole {
-		users, err = h.userQueryRepository.GetUsersByRoles(constants.Admin, constants.SuperAdmin)
+		result, err = h.userQueryRepository.GetUsersByRoles([]constants.JWTRole{constants.User, constants.Admin, constants.SuperAdmin}, &query.Pagination, &query.Sortable)
 	} else {
-		users, err = h.userQueryRepository.GetUsersByRoles(constants.Admin)
+		result, err = h.userQueryRepository.GetUsersByRoles([]constants.JWTRole{constants.User, constants.Admin}, &query.Pagination, &query.Sortable)
 	}
 
 	if err != nil {
@@ -54,8 +55,8 @@ func (h *GetAllUsersQueryHandler) Handle(ctx context.Context, query *GetAllUsers
 		return &response, nil
 	}
 
-	userInfos := make([]models.UserSecureInfo, len(users))
-	for i, user := range users {
+	userInfos := make([]models.UserSecureInfo, len(result.Items))
+	for i, user := range result.Items {
 		userInfos[i] = models.UserSecureInfo{
 			ID:    user.ID,
 			Roles: services.ConvertRolesToString(user.Roles),
@@ -73,6 +74,12 @@ func (h *GetAllUsersQueryHandler) Handle(ctx context.Context, query *GetAllUsers
 
 	return &contract.GetAllUsersResponse{
 		BaseResponse: responses.NewBaseResponse(200, "Users retrieved successfully"),
-		Users:        userInfos,
+		PaginatedResult: pagination.PaginatedResult[models.UserSecureInfo]{
+			Items:       userInfos,
+			TotalItems:  result.TotalItems,
+			TotalPages:  result.TotalPages,
+			CurrentPage: result.CurrentPage,
+			PageSize:    result.PageSize,
+		},
 	}, nil
 }

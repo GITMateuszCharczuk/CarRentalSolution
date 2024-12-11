@@ -304,6 +304,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/identity-api/api/user/info": {
+            "get": {
+                "description": "Retrieves user information based on the provided token and user ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get user info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User info retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInfoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInfoResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInfoResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInfoResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/identity-api/api/user/{id}": {
             "delete": {
                 "description": "Deletes a user from the system",
@@ -355,66 +411,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/identity-api/api/user/{id}/info": {
-            "get": {
-                "description": "Retrieves user information based on the provided token and user ID.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Get user info",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JWT token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User info retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserInfoResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserInfoResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "User not found",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserInfoResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during retrieval",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserInfoResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/identity-api/api/users": {
             "get": {
-                "description": "Retrieves a list of all users.",
+                "description": "Retrieves a list of all users with optional pagination and sorting.",
                 "consumes": [
                     "application/json"
                 ],
@@ -432,25 +431,59 @@ const docTemplate = `{
                         "name": "token",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Current page",
+                        "name": "current_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Sort fields (format: field:direction)",
+                        "name": "sort_fields",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Users retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetAllUsersResponse"
+                            "$ref": "#/definitions/contract.GetAllUsersResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetAllUsersResponse"
+                            "$ref": "#/definitions/responses.BaseResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/responses.BaseResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Insufficient privileges",
+                        "schema": {
+                            "$ref": "#/definitions/responses.BaseResponse"
                         }
                     },
                     "500": {
                         "description": "Server error during retrieval",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetAllUsersResponse"
+                            "$ref": "#/definitions/responses.BaseResponse"
                         }
                     }
                 }
@@ -491,23 +524,95 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.GetAllUsersResponse": {
+        "contract.GetAllUsersResponse200": {
             "type": "object",
             "properties": {
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "current_page": {
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "has_next": {
+                            "type": "boolean",
+                            "example": true
+                        },
+                        "has_previous": {
+                            "type": "boolean",
+                            "example": false
+                        },
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "address": {
+                                        "type": "string",
+                                        "example": "123 Main St"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "New York"
+                                    },
+                                    "email_address": {
+                                        "type": "string",
+                                        "example": "user@example.com"
+                                    },
+                                    "id": {
+                                        "type": "string",
+                                        "example": "12345"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "phone_number": {
+                                        "type": "string",
+                                        "example": "+1234567890"
+                                    },
+                                    "postal_code": {
+                                        "type": "string",
+                                        "example": "12345"
+                                    },
+                                    "roles": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "user",
+                                            "admin"
+                                        ]
+                                    },
+                                    "surname": {
+                                        "type": "string",
+                                        "example": "Doe"
+                                    }
+                                }
+                            }
+                        },
+                        "page_size": {
+                            "type": "integer",
+                            "example": 10
+                        },
+                        "total_items": {
+                            "type": "integer",
+                            "example": 100
+                        },
+                        "total_pages": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    }
+                },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Users retrieved successfully"
                 },
                 "status_code": {
-                    "$ref": "#/definitions/constants.StatusCode"
-                },
-                "success": {
-                    "type": "boolean"
-                },
-                "users": {
-                    "type": "array",
-                    "items": {
-                        "type": "object"
-                    }
+                    "type": "integer",
+                    "example": 200
                 }
             }
         },
@@ -639,13 +744,25 @@ const docTemplate = `{
         },
         "contract.ModifyUserRequest": {
             "type": "object",
+            "required": [
+                "address",
+                "city",
+                "name",
+                "phone_number",
+                "postal_code",
+                "surname"
+            ],
             "properties": {
                 "address": {
                     "type": "string",
+                    "maxLength": 100,
+                    "minLength": 5,
                     "example": "123 Main St"
                 },
                 "city": {
                     "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2,
                     "example": "New York"
                 },
                 "email_address": {
@@ -654,6 +771,8 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2,
                     "example": "John"
                 },
                 "phone_number": {
@@ -662,6 +781,8 @@ const docTemplate = `{
                 },
                 "postal_code": {
                     "type": "string",
+                    "maxLength": 10,
+                    "minLength": 5,
                     "example": "12345"
                 },
                 "roles": {
@@ -670,12 +791,14 @@ const docTemplate = `{
                         "type": "string"
                     },
                     "example": [
-                        "[user",
-                        " admin]"
+                        "user",
+                        "admin"
                     ]
                 },
                 "surname": {
                     "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2,
                     "example": "Doe"
                 },
                 "user_id": {
@@ -803,6 +926,20 @@ const docTemplate = `{
                 "valid": {
                     "type": "boolean",
                     "example": true
+                }
+            }
+        },
+        "responses.BaseResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "$ref": "#/definitions/constants.StatusCode"
+                },
+                "success": {
+                    "type": "boolean"
                 }
             }
         }

@@ -3,7 +3,9 @@ package repository
 import (
 	"identity-api/Domain/constants"
 	models "identity-api/Domain/models/user"
+	pagination "identity-api/Domain/pagination"
 	property_selector "identity-api/Domain/property_selector"
+	sorting "identity-api/Domain/sorting"
 	postgres_db "identity-api/Infrastructure/databases/postgres/config"
 	"identity-api/Infrastructure/databases/postgres/entities"
 	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
@@ -35,12 +37,17 @@ func (r *UserQueryRepositoryImpl) GetUserByEmail(email string) (*models.UserMode
 	return r.GetFirstByProp(emailProp, email)
 }
 
-func (r *UserQueryRepositoryImpl) GetUsersByRoles(roles ...constants.JWTRole) ([]*models.UserModel, error) {
+func (r *UserQueryRepositoryImpl) GetUsersByRoles(
+	roles []constants.JWTRole,
+	pagination *pagination.Pagination,
+	sorting *sorting.Sortable,
+) (*pagination.PaginatedResult[models.UserModel], error) {
 	roleEntities := make([]entities.JWTRoleEntity, len(roles))
 	for i, role := range roles {
 		roleEntities[i] = entities.JWTRoleEntity(role)
 	}
 
 	rolesProp := property_selector.NewPropertySelector[entities.UserEntity]("roles")
-	return r.GetAllByPropValues(rolesProp, roleEntities)
+	res, err := r.GetAllByPropValues(rolesProp, roleEntities, pagination, sorting)
+	return res, err
 }

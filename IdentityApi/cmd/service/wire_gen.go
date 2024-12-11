@@ -9,6 +9,7 @@ package main
 import (
 	"identity-api/API/controllers"
 	"identity-api/API/server"
+	"identity-api/API/validators"
 	"identity-api/Domain/repository_interfaces/user_repository"
 	"identity-api/Domain/service_interfaces"
 	"identity-api/Infrastructure/config"
@@ -35,7 +36,7 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	}
 	refreshTokenCommandRepository := repository2.ProvideRefreshTokenCommandRepository(redisDatabase)
 	refreshTokenQueryRepository := repository2.ProvideRefreshTokenQueryRepository(redisDatabase)
-	jwtTokenService := jwt_token_service.ProvideJWTTokenService(configConfig, refreshTokenCommandRepository, refreshTokenQueryRepository)
+	jwtTokenService := jwt_token_service.ProvideJWTTokenService(configConfig, refreshTokenCommandRepository, refreshTokenQueryRepository, userQueryRepository)
 	passwordHasher := password_hasher.ProvidePasswordHasher()
 	infrastructureComponents := &InfrastructureComponents{
 		Config:          configConfig,
@@ -48,7 +49,7 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 }
 
 func InitializeApi(userQueryRepo repository_interfaces.UserQueryRepository, userCommandRepo repository_interfaces.UserCommandRepository, tokenService service_interfaces.JWTTokenService, passwordHasher service_interfaces.PasswordHasher, config3 *config.Config) (*server.Server, error) {
-	validate := controllers.ProvideValidator()
+	validate := validators.ProvideValidator()
 	getAllUsersController := controllers.NewGetAllUsersController(validate)
 	getUserIDController := controllers.NewGetUserIDController(validate)
 	getUserInfoController := controllers.NewGetUserInfoController(validate)

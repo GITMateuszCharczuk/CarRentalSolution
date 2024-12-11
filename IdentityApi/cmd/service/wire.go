@@ -9,6 +9,7 @@ package main
 import (
 	"identity-api/API/controllers"
 	"identity-api/API/server"
+	validators "identity-api/API/validators"
 	repository_interfaces "identity-api/Domain/repository_interfaces/user_repository"
 	service_interfaces "identity-api/Domain/service_interfaces"
 	config "identity-api/Infrastructure/config"
@@ -18,7 +19,6 @@ import (
 	redis_db "identity-api/Infrastructure/databases/redis/config"
 	refresh_token_repository "identity-api/Infrastructure/databases/redis/repository/refresh_token_repository"
 	jwt_token_service "identity-api/Infrastructure/jwt_tocken_service"
-
 	"identity-api/Infrastructure/password_hasher"
 
 	"github.com/google/wire"
@@ -58,6 +58,7 @@ func InitializeApi(userQueryRepo repository_interfaces.UserQueryRepository,
 	passwordHasher service_interfaces.PasswordHasher,
 	config *config.Config) (*server.Server, error) {
 	wire.Build(
+		validators.WireSet,
 		controllers.WireSet,
 		server.WireSet,
 	)

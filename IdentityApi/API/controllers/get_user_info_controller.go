@@ -25,16 +25,16 @@ func NewGetUserInfoController(validator *validator.Validate) *GetUserInfoControl
 // @Accept json
 // @Produce json
 // @Param token query string true "JWT token" example:"your.jwt.token.here"
-// @Param id path string true "User ID" example:"123e4567-e89b-12d3-a456-426614174000"
+// @Param id query string false "User ID" example:"123e4567-e89b-12d3-a456-426614174000"
 // @Success 200 {object} contract.GetUserInfoResponse "User info retrieved successfully"
 // @Failure 400 {object} contract.GetUserInfoResponse "Invalid request parameters"
 // @Failure 404 {object} contract.GetUserInfoResponse "User not found"
 // @Failure 500 {object} contract.GetUserInfoResponse "Server error during retrieval"
-// @Router /identity-api/api/user/{id}/info [get]
+// @Router /identity-api/api/user/info [get]
 func (h *GetUserInfoController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 	token := services.GetJwtTokenFromQuery(c)
-	userID := c.Param("id")
+	userID := c.Query("id")
 
 	req := contract.GetUserInfoRequest{
 		JwtToken: token,
@@ -52,7 +52,7 @@ func (h *GetUserInfoController) Handle(c *gin.Context) {
 }
 
 func (h *GetUserInfoController) Route() string {
-	return "/user/:id/info"
+	return "/user/info"
 }
 
 func (h *GetUserInfoController) Methods() []string {

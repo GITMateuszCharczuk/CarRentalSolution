@@ -7,6 +7,7 @@ import (
 	"identity-api/Domain/constants"
 	models "identity-api/Domain/models/token"
 	repository_interfaces "identity-api/Domain/repository_interfaces/refresh_token_repository"
+	user_repository_interfaces "identity-api/Domain/repository_interfaces/user_repository"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -14,18 +15,25 @@ import (
 type JWTTokenServiceImpl struct {
 	commandRepo     repository_interfaces.RefreshTokenCommandRepository
 	queryRepo       repository_interfaces.RefreshTokenQueryRepository
+	userQueryRepo   user_repository_interfaces.UserQueryRepository
 	AccessTokenTTL  time.Duration
 	RefreshTokenTTL time.Duration
 	SecretKey       []byte
 }
 
-func NewJWTTokenService(accessTokenTTL, refreshTokenTTL time.Duration, secretKey string, commandRepo repository_interfaces.RefreshTokenCommandRepository, queryRepo repository_interfaces.RefreshTokenQueryRepository) *JWTTokenServiceImpl {
+func NewJWTTokenService(accessTokenTTL,
+	refreshTokenTTL time.Duration,
+	secretKey string,
+	commandRepo repository_interfaces.RefreshTokenCommandRepository,
+	queryRepo repository_interfaces.RefreshTokenQueryRepository,
+	userQueryRepo user_repository_interfaces.UserQueryRepository) *JWTTokenServiceImpl {
 	return &JWTTokenServiceImpl{
 		AccessTokenTTL:  accessTokenTTL,
 		RefreshTokenTTL: refreshTokenTTL,
 		commandRepo:     commandRepo,
 		queryRepo:       queryRepo,
 		SecretKey:       []byte(secretKey),
+		userQueryRepo:   userQueryRepo,
 	}
 }
 
@@ -106,13 +114,13 @@ func (s *JWTTokenServiceImpl) RefreshToken(refreshToken models.JwtRefreshToken) 
 		return models.NewJwtToken(""), fmt.Errorf("invalid refresh token: %v", err)
 	}
 
-	// // Retrieve user claims (roles) from a user repository or service
-	// roles, err := s.getUserRoles(userID) // Implement this method to fetch roles
-	// if err != nil {
-	// 	return models.NewJwtToken(""), fmt.Errorf("could not retrieve user roles: %v", err)
-	// }
+	// Retrieve user claims (roles) from a user repository or service
+	user, err := s.userQueryRepo.GetUserByID(userID)
+	if err != nil {
+		return models.NewJwtToken(""), fmt.Errorf("could not retrieve user roles: %v", err)
+	}
 
-	newAccessToken, _, err := s.GenerateTokens(userID, []constants.JWTRole{constants.User})
+	newAccessToken, _, err := s.GenerateTokens(userID, user.Roles)
 	if err != nil {
 		return models.NewJwtToken(""), fmt.Errorf("could not generate new access token: %v", err)
 	}

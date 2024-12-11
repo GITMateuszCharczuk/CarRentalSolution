@@ -24,18 +24,71 @@ definitions:
       success:
         type: boolean
     type: object
-  contract.GetAllUsersResponse:
+  contract.GetAllUsersResponse200:
     properties:
+      data:
+        properties:
+          current_page:
+            example: 1
+            type: integer
+          has_next:
+            example: true
+            type: boolean
+          has_previous:
+            example: false
+            type: boolean
+          items:
+            items:
+              properties:
+                address:
+                  example: 123 Main St
+                  type: string
+                city:
+                  example: New York
+                  type: string
+                email_address:
+                  example: user@example.com
+                  type: string
+                id:
+                  example: "12345"
+                  type: string
+                name:
+                  example: John
+                  type: string
+                phone_number:
+                  example: "+1234567890"
+                  type: string
+                postal_code:
+                  example: "12345"
+                  type: string
+                roles:
+                  example:
+                  - user
+                  - admin
+                  items:
+                    type: string
+                  type: array
+                surname:
+                  example: Doe
+                  type: string
+              type: object
+            type: array
+          page_size:
+            example: 10
+            type: integer
+          total_items:
+            example: 100
+            type: integer
+          total_pages:
+            example: 10
+            type: integer
+        type: object
       message:
+        example: Users retrieved successfully
         type: string
       status_code:
-        $ref: '#/definitions/constants.StatusCode'
-      success:
-        type: boolean
-      users:
-        items:
-          type: object
-        type: array
+        example: 200
+        type: integer
     type: object
   contract.GetUserIDResponse:
     properties:
@@ -129,35 +182,52 @@ definitions:
     properties:
       address:
         example: 123 Main St
+        maxLength: 100
+        minLength: 5
         type: string
       city:
         example: New York
+        maxLength: 50
+        minLength: 2
         type: string
       email_address:
         example: user@example.com
         type: string
       name:
         example: John
+        maxLength: 50
+        minLength: 2
         type: string
       phone_number:
         example: "+1234567890"
         type: string
       postal_code:
         example: "12345"
+        maxLength: 10
+        minLength: 5
         type: string
       roles:
         example:
-        - '[user'
-        - ' admin]'
+        - user
+        - admin
         items:
           type: string
         type: array
       surname:
         example: Doe
+        maxLength: 50
+        minLength: 2
         type: string
       user_id:
         example: "1234567890"
         type: string
+    required:
+    - address
+    - city
+    - name
+    - phone_number
+    - postal_code
+    - surname
     type: object
   contract.ModifyUserResponse:
     properties:
@@ -243,6 +313,15 @@ definitions:
         type: boolean
       valid:
         example: true
+        type: boolean
+    type: object
+  responses.BaseResponse:
+    properties:
+      message:
+        type: string
+      status_code:
+        $ref: '#/definitions/constants.StatusCode'
+      success:
         type: boolean
     type: object
 info:
@@ -439,45 +518,6 @@ paths:
       summary: Delete user
       tags:
       - users
-  /identity-api/api/user/{id}/info:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves user information based on the provided token and user
-        ID.
-      parameters:
-      - description: JWT token
-        in: query
-        name: token
-        required: true
-        type: string
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: User info retrieved successfully
-          schema:
-            $ref: '#/definitions/contract.GetUserInfoResponse'
-        "400":
-          description: Invalid request parameters
-          schema:
-            $ref: '#/definitions/contract.GetUserInfoResponse'
-        "404":
-          description: User not found
-          schema:
-            $ref: '#/definitions/contract.GetUserInfoResponse'
-        "500":
-          description: Server error during retrieval
-          schema:
-            $ref: '#/definitions/contract.GetUserInfoResponse'
-      summary: Get user info
-      tags:
-      - users
   /identity-api/api/user/id:
     get:
       consumes:
@@ -511,32 +551,93 @@ paths:
       summary: Get user ID
       tags:
       - users
-  /identity-api/api/users:
+  /identity-api/api/user/info:
     get:
       consumes:
       - application/json
-      description: Retrieves a list of all users.
+      description: Retrieves user information based on the provided token and user
+        ID.
       parameters:
       - description: JWT token
         in: query
         name: token
         required: true
         type: string
+      - description: User ID
+        in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User info retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetUserInfoResponse'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.GetUserInfoResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/contract.GetUserInfoResponse'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetUserInfoResponse'
+      summary: Get user info
+      tags:
+      - users
+  /identity-api/api/users:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all users with optional pagination and sorting.
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Current page
+        in: query
+        name: current_page
+        type: integer
+      - collectionFormat: csv
+        description: 'Sort fields (format: field:direction)'
+        in: query
+        items:
+          type: string
+        name: sort_fields
+        type: array
       produces:
       - application/json
       responses:
         "200":
           description: Users retrieved successfully
           schema:
-            $ref: '#/definitions/contract.GetAllUsersResponse'
+            $ref: '#/definitions/contract.GetAllUsersResponse200'
         "400":
           description: Invalid request parameters
           schema:
-            $ref: '#/definitions/contract.GetAllUsersResponse'
+            $ref: '#/definitions/responses.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.BaseResponse'
+        "403":
+          description: Insufficient privileges
+          schema:
+            $ref: '#/definitions/responses.BaseResponse'
         "500":
           description: Server error during retrieval
           schema:
-            $ref: '#/definitions/contract.GetAllUsersResponse'
+            $ref: '#/definitions/responses.BaseResponse'
       summary: Get all users
       tags:
       - users

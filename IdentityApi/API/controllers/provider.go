@@ -3,7 +3,6 @@ package controllers
 import (
 	base "identity-api/API/controllers/base"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/google/wire"
 )
 
@@ -39,10 +38,6 @@ func ProvideControllers(
 	}
 }
 
-func ProvideValidator() *validator.Validate {
-	return validator.New()
-}
-
 var WireSet = wire.NewSet(
 	NewGetAllUsersController,
 	NewGetUserIDController,
@@ -55,5 +50,4 @@ var WireSet = wire.NewSet(
 	NewRefreshTokenController,
 	ProvideControllers,
 	NewControllers,
-	ProvideValidator,
 )

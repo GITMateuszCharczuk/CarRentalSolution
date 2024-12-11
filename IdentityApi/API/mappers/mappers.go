@@ -1,6 +1,7 @@
 package mappers
 
 import (
+	"identity-api/API/services"
 	get_all_users_contract "identity-api/Application.contract/get_all_users"
 	get_user_id_contract "identity-api/Application.contract/get_user_id"
 	get_user_info_contract "identity-api/Application.contract/get_user_info"
@@ -39,7 +40,6 @@ func MapToLoginCommand(req *login_contract.LoginRequest) login.LoginCommand {
 
 func MapToModifyUserCommand(req *modify_user_contract.ModifyUserRequest) modify_user.ModifyUserCommand {
 	return modify_user.ModifyUserCommand{
-		JwtToken:    req.JwtToken,
 		UserID:      req.UserID,
 		Name:        req.Name,
 		Surname:     req.Surname,
@@ -58,7 +58,9 @@ func MapToValidateTokenCommand(req *validate_token_contract.ValidateTokenRequest
 
 func MapToGetAllUsersQuery(req *get_all_users_contract.GetAllUsersRequest) get_all_users.GetAllUsersQuery {
 	return get_all_users.GetAllUsersQuery{
-		JwtToken: req.JwtToken,
+		JwtToken:   req.JwtToken,
+		Pagination: req.Pagination,
+		Sortable:   services.ExtractSorting(req.SortQuery),
 	}
 }
 

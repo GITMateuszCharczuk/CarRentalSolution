@@ -1,7 +1,6 @@
 package services
 
 import (
-	"log"
 	"net/http"
 	"reflect"
 
@@ -29,10 +28,8 @@ func (s *ResponseSender) Send(obj interface{}) {
 	if baseResponseField.IsValid() {
 		statusCodeField := baseResponseField.FieldByName("StatusCode")
 		if statusCodeField.IsValid() && statusCodeField.Kind() == reflect.Int {
-			log.Println("statusCodeField", statusCodeField)
 			statusCode = int(statusCodeField.Int())
 		} else {
-			log.Println("statusCodeField is not valid or not int")
 			statusCode = http.StatusInternalServerError
 		}
 	} else {
@@ -42,34 +39,40 @@ func (s *ResponseSender) Send(obj interface{}) {
 	response := make(map[string]interface{})
 
 	if baseResponseField.IsValid() {
+		response["status_code"] = statusCode
 		response["success"] = baseResponseField.FieldByName("Success").Bool()
 		response["message"] = baseResponseField.FieldByName("Message").String()
 	}
-	log.Println("value", value)
+
 	initFields(value)
-	log.Println("value", value)
+
 	for i := 0; i < value.NumField(); i++ {
 		field := value.Type().Field(i)
 		fieldValue := value.Field(i)
 		if field.Name != "BaseResponse" {
-			if fieldValue.Kind() == reflect.Struct && isZeroValue(fieldValue) {
-				response[field.Name] = struct{}{}
+			if fieldValue.Kind() == reflect.Struct {
+				structFields := extractStructFields(fieldValue)
+				for k, v := range structFields {
+					response[k] = v
+				}
 			} else {
 				response[field.Name] = fieldValue.Interface()
 			}
 		}
 	}
-	log.Println("value", value)
+
 	s.c.JSON(statusCode, response)
 }
 
 func initFields(value reflect.Value) {
 	for i := 0; i < value.NumField(); i++ {
 		field := value.Field(i)
-		if field.CanSet() && isZeroValue(field) {
+		if field.CanSet() && isEmptyValue(field) {
 			switch field.Kind() {
 			case reflect.Slice:
 				field.Set(reflect.MakeSlice(field.Type(), 0, 0))
+			case reflect.Struct:
+				initFields(field)
 			default:
 				field.Set(reflect.Zero(field.Type()))
 			}
@@ -77,9 +80,49 @@ func initFields(value reflect.Value) {
 	}
 }
 
-func isZeroValue(value reflect.Value) bool {
-	if value.Kind() == reflect.Slice {
-		return value.Len() == 0
+func extractStructFields(value reflect.Value) map[string]interface{} {
+	result := make(map[string]interface{})
+
+	for i := 0; i < value.NumField(); i++ {
+		field := value.Type().Field(i)
+		fieldValue := value.Field(i)
+
+		if field.Anonymous {
+			// Handle embedded struct
+			embedded := extractStructFields(fieldValue)
+			for k, v := range embedded {
+				result[k] = v
+			}
+		} else {
+			result[field.Name] = fieldValue.Interface()
+		}
 	}
-	return value.Interface() == reflect.Zero(value.Type()).Interface()
+
+	return result
+}
+
+func isEmptyValue(v reflect.Value) bool {
+	switch v.Kind() {
+	case reflect.Array, reflect.Map, reflect.Slice, reflect.String:
+		return v.Len() == 0
+	case reflect.Bool:
+		return !v.Bool()
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return v.Int() == 0
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return v.Uint() == 0
+	case reflect.Float32, reflect.Float64:
+		return v.Float() == 0
+	case reflect.Interface, reflect.Ptr:
+		return v.IsNil()
+	case reflect.Struct:
+		// For structs, check if all fields are empty
+		for i := 0; i < v.NumField(); i++ {
+			if !isEmptyValue(v.Field(i)) {
+				return false
+			}
+		}
+		return true
+	}
+	return false
 }
