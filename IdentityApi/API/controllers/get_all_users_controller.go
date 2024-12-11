@@ -29,10 +29,10 @@ func NewGetAllUsersController(validator *validator.Validate) *GetAllUsersControl
 // @Param current_page query int false "Current page" example:"1"
 // @Param sort_fields query []string false "Sort fields (format: field:direction)" example:"name:asc,email:desc"
 // @Success 200 {object} contract.GetAllUsersResponse200 "Users retrieved successfully"
-// @Failure 400 {object} responses.BaseResponse "Invalid request parameters"
-// @Failure 401 {object} responses.BaseResponse "Unauthorized"
-// @Failure 403 {object} responses.BaseResponse "Insufficient privileges"
-// @Failure 500 {object} responses.BaseResponse "Server error during retrieval"
+// @Failure 400 {object} contract.GetAllUsersResponse400 "Invalid request parameters"
+// @Failure 401 {object} contract.GetAllUsersResponse401 "Unauthorized"
+// @Failure 403 {object} contract.GetAllUsersResponse403 "Insufficient privileges"
+// @Failure 500 {object} contract.GetAllUsersResponse500 "Server error during retrieval"
 // @Router /identity-api/api/users [get]
 func (h *GetAllUsersController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)

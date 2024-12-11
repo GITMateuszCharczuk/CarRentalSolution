@@ -26,9 +26,9 @@ func NewRegisterController(validator *validator.Validate) *RegisterController {
 // @Accept json
 // @Produce json
 // @Param register body contract.RegisterUserRequest true "User registration details"
-// @Success 201 {object} contract.RegisterUserResponse "User registered successfully"
-// @Failure 400 {object} contract.RegisterUserResponse "Invalid request parameters"
-// @Failure 500 {object} contract.RegisterUserResponse "Server error during registration"
+// @Success 201 {object} contract.RegisterUserResponse201 "User registered successfully"
+// @Failure 400 {object} contract.RegisterUserResponse400 "Invalid request parameters"
+// @Failure 500 {object} contract.RegisterUserResponse500 "Server error during registration"
 // @Router /identity-api/api/register [post]
 func (h *RegisterController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)

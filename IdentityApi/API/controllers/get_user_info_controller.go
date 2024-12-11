@@ -26,10 +26,11 @@ func NewGetUserInfoController(validator *validator.Validate) *GetUserInfoControl
 // @Produce json
 // @Param token query string true "JWT token" example:"your.jwt.token.here"
 // @Param id query string false "User ID" example:"123e4567-e89b-12d3-a456-426614174000"
-// @Success 200 {object} contract.GetUserInfoResponse "User info retrieved successfully"
-// @Failure 400 {object} contract.GetUserInfoResponse "Invalid request parameters"
-// @Failure 404 {object} contract.GetUserInfoResponse "User not found"
-// @Failure 500 {object} contract.GetUserInfoResponse "Server error during retrieval"
+// @Success 200 {object} contract.GetUserInfoResponse200 "User info retrieved successfully"
+// @Failure 400 {object} contract.GetUserInfoResponse400 "Invalid request parameters"
+// @Failure 401 {object} contract.GetUserInfoResponse401 "Unauthorized"
+// @Failure 404 {object} contract.GetUserInfoResponse404 "User not found"
+// @Failure 500 {object} contract.GetUserInfoResponse500 "Server error during retrieval"
 // @Router /identity-api/api/user/info [get]
 func (h *GetUserInfoController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)

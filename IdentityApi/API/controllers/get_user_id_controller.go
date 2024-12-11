@@ -25,10 +25,11 @@ func NewGetUserIDController(validator *validator.Validate) *GetUserIDController 
 // @Accept json
 // @Produce json
 // @Param token query string true "JWT token" example:"your.jwt.token.here"
-// @Success 200 {object} contract.GetUserIDResponse "User ID retrieved successfully"
-// @Failure 400 {object} contract.GetUserIDResponse "Invalid request parameters"
-// @Failure 404 {object} contract.GetUserIDResponse "User not found"
-// @Failure 500 {object} contract.GetUserIDResponse "Server error during retrieval"
+// @Success 200 {object} contract.GetUserIDResponse200 "User ID retrieved successfully"
+// @Failure 400 {object} contract.GetUserIDResponse400 "Invalid request parameters"
+// @Failure 404 {object} contract.GetUserIDResponse404 "User not found"
+// @Failure 401 {object} contract.GetUserIDResponse401 "Unauthorized"
+// @Failure 500 {object} contract.GetUserIDResponse500 "Server error during retrieval"
 // @Router /identity-api/api/user/id [get]
 func (h *GetUserIDController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)

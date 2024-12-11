@@ -8,5 +8,5 @@ type RegisterUserRequest struct {
 	Address      string `json:"address" validate:"required" example:"123 Main St" swaggertype:"string"`
 	PostalCode   string `json:"postal_code" validate:"required" example:"12345" swaggertype:"string"`
 	City         string `json:"city" validate:"required" example:"New York" swaggertype:"string"`
-	Password     string `json:"password" validate:"required,min=8" example:"password123" swaggertype:"string"`
+	Password     string `json:"password" validate:"required,min=8,containsany=0123456789,containsany=!@#$%^&*(),containsany=ABCDEFGHIJKLMNOPQRSTUVWXYZ,containsany=abcdefghijklmnopqrstuvwxyz" example:"P@ssw0rd123" swaggertype:"string"`
 }

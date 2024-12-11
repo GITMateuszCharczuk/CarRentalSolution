@@ -29,9 +29,11 @@ func NewModifyUserController(validator *validator.Validate) *ModifyUserControlle
 // @Produce json
 // @Param token query string true "JWT token" example:"your.jwt.token.here"
 // @Param modify body contract.ModifyUserRequest true "User modification details"
-// @Success 200 {object} contract.ModifyUserResponse "User modified successfully"
-// @Failure 400 {object} contract.ModifyUserResponse "Invalid request parameters"
-// @Failure 401 {object} contract.ModifyUserResponse "Unauthorized"
+// @Success 200 {object} contract.ModifyUserResponse200 "User modified successfully"
+// @Failure 400 {object} contract.ModifyUserResponse400 "Invalid request parameters"
+// @Failure 401 {object} contract.ModifyUserResponse401 "Unauthorized"
+// @Failure 404 {object} contract.ModifyUserResponse404 "User not found"
+// @Failure 500 {object} contract.ModifyUserResponse500 "Server error during modification"
 // @Router /identity-api/api/user [put]
 func (h *ModifyUserController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)

@@ -3,6 +3,7 @@ package services
 import (
 	"net/http"
 	"reflect"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -39,7 +40,7 @@ func (s *ResponseSender) Send(obj interface{}) {
 	response := make(map[string]interface{})
 
 	if baseResponseField.IsValid() {
-		response["status_code"] = statusCode
+		// response["status_code"] = statusCode
 		response["success"] = baseResponseField.FieldByName("Success").Bool()
 		response["message"] = baseResponseField.FieldByName("Message").String()
 	}
@@ -51,6 +52,10 @@ func (s *ResponseSender) Send(obj interface{}) {
 		fieldValue := value.Field(i)
 		if field.Name != "BaseResponse" {
 			if fieldValue.Kind() == reflect.Struct {
+				if field.Name == "UserSecureInfo" {
+					response[getJSONFieldName(field)] = fieldValue.Interface()
+					continue
+				}
 				structFields := extractStructFields(fieldValue)
 				for k, v := range structFields {
 					response[k] = v
@@ -62,6 +67,15 @@ func (s *ResponseSender) Send(obj interface{}) {
 	}
 
 	s.c.JSON(statusCode, response)
+}
+
+func getJSONFieldName(field reflect.StructField) string {
+	jsonTag := field.Tag.Get("json")
+	if jsonTag == "" {
+		return field.Name
+	}
+	parts := strings.Split(jsonTag, ",")
+	return parts[0]
 }
 
 func initFields(value reflect.Value) {

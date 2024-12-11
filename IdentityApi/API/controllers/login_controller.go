@@ -26,9 +26,10 @@ func NewLoginController(validator *validator.Validate) *LoginController {
 // @Accept json
 // @Produce json
 // @Param login body contract.LoginRequest true "Login credentials"
-// @Success 200 {object} contract.LoginResponse "Login successful"
-// @Failure 400 {object} contract.LoginResponse "Invalid credentials"
-// @Failure 401 {object} contract.LoginResponse "Unauthorized"
+// @Success 200 {object} contract.LoginResponse200 "Login successful"
+// @Failure 400 {object} contract.LoginResponse400 "Invalid credentials"
+// @Failure 401 {object} contract.LoginResponse401 "Unauthorized"
+// @Failure 500 {object} contract.LoginResponse500 "Server error during login"
 // @Router /identity-api/api/login [post]
 func (h *LoginController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)

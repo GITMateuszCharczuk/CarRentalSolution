@@ -25,9 +25,11 @@ func NewDeleteUserController(validator *validator.Validate) *DeleteUserControlle
 // @Produce json
 // @Param token query string true "JWT token" example:"your.jwt.token.here"
 // @Param id path string true "User ID" example:"123e4567-e89b-12d3-a456-426614174000"
-// @Success 200 {object} contract.DeleteUserResponse "User deleted successfully"
-// @Failure 400 {object} contract.DeleteUserResponse "Invalid request parameters"
-// @Failure 401 {object} contract.DeleteUserResponse "Unauthorized"
+// @Success 200 {object} contract.DeleteUserResponse200 "User deleted successfully"
+// @Failure 400 {object} contract.DeleteUserResponse400 "Invalid request parameters"
+// @Failure 401 {object} contract.DeleteUserResponse401 "Unauthorized"
+// @Failure 404 {object} contract.DeleteUserResponse404 "User not found"
+// @Failure 500 {object} contract.DeleteUserResponse500 "Internal server error during deletion"
 // @Router /identity-api/api/user/{id} [delete]
 func (h *DeleteUserController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)

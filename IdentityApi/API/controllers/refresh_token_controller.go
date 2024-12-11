@@ -24,9 +24,10 @@ func NewRefreshTokenController(validator *validator.Validate) *RefreshTokenContr
 // @Accept json
 // @Produce json
 // @Param token query string true "Refresh token" example:"your.refresh.token.here"
-// @Success 200 {object} contract.RefreshTokenResponse "Token refreshed successfully"
-// @Failure 400 {object} contract.RefreshTokenResponse "Invalid request parameters"
-// @Failure 401 {object} contract.RefreshTokenResponse "Invalid refresh token"
+// @Success 200 {object} contract.RefreshTokenResponse200 "Token refreshed successfully"
+// @Failure 400 {object} contract.RefreshTokenResponse400 "Invalid request parameters"
+// @Failure 401 {object} contract.RefreshTokenResponse401 "Invalid refresh token"
+// @Failure 500 {object} contract.RefreshTokenResponse500 "Server error during token refresh"
 // @Router /identity-api/api/token/refresh [post]
 func (h *RefreshTokenController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)

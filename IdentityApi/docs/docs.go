@@ -43,19 +43,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Login successful",
                         "schema": {
-                            "$ref": "#/definitions/contract.LoginResponse"
+                            "$ref": "#/definitions/contract.LoginResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid credentials",
                         "schema": {
-                            "$ref": "#/definitions/contract.LoginResponse"
+                            "$ref": "#/definitions/contract.LoginResponse400"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/contract.LoginResponse"
+                            "$ref": "#/definitions/contract.LoginResponse401"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during login",
+                        "schema": {
+                            "$ref": "#/definitions/contract.LoginResponse500"
                         }
                     }
                 }
@@ -89,19 +95,19 @@ const docTemplate = `{
                     "201": {
                         "description": "User registered successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.RegisterUserResponse"
+                            "$ref": "#/definitions/contract.RegisterUserResponse201"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.RegisterUserResponse"
+                            "$ref": "#/definitions/contract.RegisterUserResponse400"
                         }
                     },
                     "500": {
                         "description": "Server error during registration",
                         "schema": {
-                            "$ref": "#/definitions/contract.RegisterUserResponse"
+                            "$ref": "#/definitions/contract.RegisterUserResponse500"
                         }
                     }
                 }
@@ -133,19 +139,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Token refreshed successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.RefreshTokenResponse"
+                            "$ref": "#/definitions/contract.RefreshTokenResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.RefreshTokenResponse"
+                            "$ref": "#/definitions/contract.RefreshTokenResponse400"
                         }
                     },
                     "401": {
                         "description": "Invalid refresh token",
                         "schema": {
-                            "$ref": "#/definitions/contract.RefreshTokenResponse"
+                            "$ref": "#/definitions/contract.RefreshTokenResponse401"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during token refresh",
+                        "schema": {
+                            "$ref": "#/definitions/contract.RefreshTokenResponse500"
                         }
                     }
                 }
@@ -177,25 +189,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Token is valid",
                         "schema": {
-                            "$ref": "#/definitions/contract.ValidateTokenResponse"
+                            "$ref": "#/definitions/contract.ValidateTokenResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.ValidateTokenResponse"
+                            "$ref": "#/definitions/contract.ValidateTokenResponse400"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/contract.ValidateTokenResponse"
+                            "$ref": "#/definitions/contract.ValidateTokenResponse401"
                         }
                     },
                     "500": {
                         "description": "Server error during validation",
                         "schema": {
-                            "$ref": "#/definitions/contract.ValidateTokenResponse"
+                            "$ref": "#/definitions/contract.ValidateTokenResponse500"
                         }
                     }
                 }
@@ -236,19 +248,31 @@ const docTemplate = `{
                     "200": {
                         "description": "User modified successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.ModifyUserResponse"
+                            "$ref": "#/definitions/contract.ModifyUserResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.ModifyUserResponse"
+                            "$ref": "#/definitions/contract.ModifyUserResponse400"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/contract.ModifyUserResponse"
+                            "$ref": "#/definitions/contract.ModifyUserResponse401"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ModifyUserResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during modification",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ModifyUserResponse500"
                         }
                     }
                 }
@@ -280,25 +304,31 @@ const docTemplate = `{
                     "200": {
                         "description": "User ID retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse"
+                            "$ref": "#/definitions/contract.GetUserIDResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse"
+                            "$ref": "#/definitions/contract.GetUserIDResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserIDResponse401"
                         }
                     },
                     "404": {
                         "description": "User not found",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse"
+                            "$ref": "#/definitions/contract.GetUserIDResponse404"
                         }
                     },
                     "500": {
                         "description": "Server error during retrieval",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse"
+                            "$ref": "#/definitions/contract.GetUserIDResponse500"
                         }
                     }
                 }
@@ -336,25 +366,31 @@ const docTemplate = `{
                     "200": {
                         "description": "User info retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetUserInfoResponse"
+                            "$ref": "#/definitions/contract.GetUserInfoResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetUserInfoResponse"
+                            "$ref": "#/definitions/contract.GetUserInfoResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInfoResponse401"
                         }
                     },
                     "404": {
                         "description": "User not found",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetUserInfoResponse"
+                            "$ref": "#/definitions/contract.GetUserInfoResponse404"
                         }
                     },
                     "500": {
                         "description": "Server error during retrieval",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetUserInfoResponse"
+                            "$ref": "#/definitions/contract.GetUserInfoResponse500"
                         }
                     }
                 }
@@ -393,19 +429,31 @@ const docTemplate = `{
                     "200": {
                         "description": "User deleted successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteUserResponse"
+                            "$ref": "#/definitions/contract.DeleteUserResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteUserResponse"
+                            "$ref": "#/definitions/contract.DeleteUserResponse400"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteUserResponse"
+                            "$ref": "#/definitions/contract.DeleteUserResponse401"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteUserResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error during deletion",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteUserResponse500"
                         }
                     }
                 }
@@ -465,25 +513,25 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/responses.BaseResponse"
+                            "$ref": "#/definitions/contract.GetAllUsersResponse400"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/responses.BaseResponse"
+                            "$ref": "#/definitions/contract.GetAllUsersResponse401"
                         }
                     },
                     "403": {
                         "description": "Insufficient privileges",
                         "schema": {
-                            "$ref": "#/definitions/responses.BaseResponse"
+                            "$ref": "#/definitions/contract.GetAllUsersResponse403"
                         }
                     },
                     "500": {
                         "description": "Server error during retrieval",
                         "schema": {
-                            "$ref": "#/definitions/responses.BaseResponse"
+                            "$ref": "#/definitions/contract.GetAllUsersResponse500"
                         }
                     }
                 }
@@ -491,36 +539,68 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "constants.StatusCode": {
-            "type": "integer",
-            "enum": [
-                200,
-                201,
-                400,
-                404,
-                500,
-                409
-            ],
-            "x-enum-varnames": [
-                "StatusOK",
-                "StatusCreated",
-                "StatusBadRequest",
-                "StatusNotFound",
-                "StatusInternalServerError",
-                "StatusConflict"
-            ]
-        },
-        "contract.DeleteUserResponse": {
+        "contract.DeleteUserResponse200": {
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string"
-                },
-                "status_code": {
-                    "$ref": "#/definitions/constants.StatusCode"
+                    "type": "string",
+                    "example": "User deleted successfully"
                 },
                 "success": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.DeleteUserResponse400": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.DeleteUserResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid or expired token"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.DeleteUserResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "User not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.DeleteUserResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error during user deletion"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
                 }
             }
         },
@@ -533,14 +613,6 @@ const docTemplate = `{
                         "current_page": {
                             "type": "integer",
                             "example": 1
-                        },
-                        "has_next": {
-                            "type": "boolean",
-                            "example": true
-                        },
-                        "has_previous": {
-                            "type": "boolean",
-                            "example": false
                         },
                         "items": {
                             "type": "array",
@@ -616,27 +688,92 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.GetUserIDResponse": {
+        "contract.GetAllUsersResponse400": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetAllUsersResponse401": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Invalid or expired token"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetAllUsersResponse403": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Insufficient privileges"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetAllUsersResponse500": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error during retrieval"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetUserIDResponse200": {
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[user",
-                        " admin]"
-                    ]
-                },
-                "status_code": {
-                    "$ref": "#/definitions/constants.StatusCode"
+                    "type": "string",
+                    "example": "User ID retrieved successfully"
                 },
                 "success": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 },
                 "user_id": {
                     "type": "string",
@@ -644,39 +781,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.GetUserInfoResponse": {
+        "contract.GetUserIDResponse400": {
             "type": "object",
             "properties": {
-                "address": {
-                    "type": "string",
-                    "example": "123 Main St"
-                },
-                "city": {
-                    "type": "string",
-                    "example": "New York"
-                },
-                "email_address": {
-                    "type": "string",
-                    "example": "user@example.com"
-                },
-                "id": {
-                    "type": "string",
-                    "example": "12345"
-                },
                 "message": {
-                    "type": "string"
-                },
-                "name": {
                     "type": "string",
-                    "example": "John"
-                },
-                "phone_number": {
-                    "type": "string",
-                    "example": "+1234567890"
-                },
-                "postal_code": {
-                    "type": "string",
-                    "example": "12345"
+                    "example": "Invalid request parameters"
                 },
                 "roles": {
                     "type": "array",
@@ -684,19 +794,174 @@ const docTemplate = `{
                         "type": "string"
                     },
                     "example": [
-                        "[user",
-                        " admin]"
+                        "[]"
                     ]
                 },
-                "status_code": {
-                    "$ref": "#/definitions/constants.StatusCode"
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": ""
+                }
+            }
+        },
+        "contract.GetUserIDResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid or expired token"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[]"
+                    ]
                 },
                 "success": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": false
                 },
-                "surname": {
+                "user_id": {
                     "type": "string",
-                    "example": "Doe"
+                    "example": ""
+                }
+            }
+        },
+        "contract.GetUserIDResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "User not found"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[]"
+                    ]
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": ""
+                }
+            }
+        },
+        "contract.GetUserIDResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error during user ID retrieval"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[]"
+                    ]
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": ""
+                }
+            }
+        },
+        "contract.GetUserInfoResponse200": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "User info retrieved successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "user_info": {
+                    "type": "object"
+                }
+            }
+        },
+        "contract.GetUserInfoResponse400": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "user_info": {
+                    "type": "object"
+                }
+            }
+        },
+        "contract.GetUserInfoResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid or expired token"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "user_info": {
+                    "type": "object"
+                }
+            }
+        },
+        "contract.GetUserInfoResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "User not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "user_info": {
+                    "type": "object"
+                }
+            }
+        },
+        "contract.GetUserInfoResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error during user info retrieval"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "user_info": {
+                    "type": "object"
                 }
             }
         },
@@ -718,11 +983,16 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.LoginResponse": {
+        "contract.LoginResponse200": {
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Login successful"
+                },
+                "refresh_token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                 },
                 "roles": {
                     "type": "array",
@@ -734,11 +1004,103 @@ const docTemplate = `{
                         " admin]"
                     ]
                 },
-                "status_code": {
-                    "$ref": "#/definitions/constants.StatusCode"
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                }
+            }
+        },
+        "contract.LoginResponse400": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "refresh_token": {
+                    "type": "string",
+                    "example": ""
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[]"
+                    ]
                 },
                 "success": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": false
+                },
+                "token": {
+                    "type": "string",
+                    "example": ""
+                }
+            }
+        },
+        "contract.LoginResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid credentials"
+                },
+                "refresh_token": {
+                    "type": "string",
+                    "example": ""
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[]"
+                    ]
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "token": {
+                    "type": "string",
+                    "example": ""
+                }
+            }
+        },
+        "contract.LoginResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error during login"
+                },
+                "refresh_token": {
+                    "type": "string",
+                    "example": ""
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[]"
+                    ]
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "token": {
+                    "type": "string",
+                    "example": ""
                 }
             }
         },
@@ -807,31 +1169,136 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.ModifyUserResponse": {
+        "contract.ModifyUserResponse200": {
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string"
-                },
-                "status_code": {
-                    "$ref": "#/definitions/constants.StatusCode"
+                    "type": "string",
+                    "example": "User modified successfully"
                 },
                 "success": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 }
             }
         },
-        "contract.RefreshTokenResponse": {
+        "contract.ModifyUserResponse400": {
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string"
-                },
-                "status_code": {
-                    "$ref": "#/definitions/constants.StatusCode"
+                    "type": "string",
+                    "example": "Invalid request parameters"
                 },
                 "success": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.ModifyUserResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid or expired token"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.ModifyUserResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "User not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.ModifyUserResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error during user modification"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.RefreshTokenResponse200": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Token refreshed successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                }
+            }
+        },
+        "contract.RefreshTokenResponse400": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "token": {
+                    "type": "string",
+                    "example": ""
+                }
+            }
+        },
+        "contract.RefreshTokenResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid refresh token"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "token": {
+                    "type": "string",
+                    "example": ""
+                }
+            }
+        },
+        "contract.RefreshTokenResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error during token refresh"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "token": {
+                    "type": "string",
+                    "example": ""
                 }
             }
         },
@@ -883,17 +1350,16 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.RegisterUserResponse": {
+        "contract.RegisterUserResponse201": {
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string"
-                },
-                "status_code": {
-                    "$ref": "#/definitions/constants.StatusCode"
+                    "type": "string",
+                    "example": "User registered successfully"
                 },
                 "success": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 },
                 "user_id": {
                     "type": "string",
@@ -901,11 +1367,38 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.ValidateTokenResponse": {
+        "contract.RegisterUserResponse400": {
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.RegisterUserResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error during registration"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.ValidateTokenResponse200": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Token validated successfully"
                 },
                 "roles": {
                     "type": "array",
@@ -917,11 +1410,9 @@ const docTemplate = `{
                         " admin]"
                     ]
                 },
-                "status_code": {
-                    "$ref": "#/definitions/constants.StatusCode"
-                },
                 "success": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 },
                 "valid": {
                     "type": "boolean",
@@ -929,17 +1420,81 @@ const docTemplate = `{
                 }
             }
         },
-        "responses.BaseResponse": {
+        "contract.ValidateTokenResponse400": {
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Invalid request parameters"
                 },
-                "status_code": {
-                    "$ref": "#/definitions/constants.StatusCode"
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[]"
+                    ]
                 },
                 "success": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": false
+                },
+                "valid": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.ValidateTokenResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid or expired token"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[]"
+                    ]
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "valid": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.ValidateTokenResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error during token validation"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[]"
+                    ]
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "valid": {
+                    "type": "boolean",
+                    "example": false
                 }
             }
         }

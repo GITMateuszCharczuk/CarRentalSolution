@@ -32,3 +32,29 @@ type GetAllUsersResponse200 struct {
 		TotalPages  int `json:"total_pages" example:"10"`
 	} `json:"data"`
 }
+
+type GetAllUsersResponse400 struct {
+	Success bool               `json:"success" example:"false" swaggertype:"boolean"`
+	Message string             `json:"message" example:"Invalid request parameters" swaggertype:"string"`
+	Data    []dummyArrayObject `json:"data" swaggertype:"array,object"`
+}
+
+type GetAllUsersResponse401 struct {
+	Success bool               `json:"success" example:"false" swaggertype:"boolean"`
+	Message string             `json:"message" example:"Invalid or expired token" swaggertype:"string"`
+	Data    []dummyArrayObject `json:"data" swaggertype:"array,object"`
+}
+
+type GetAllUsersResponse403 struct {
+	Success bool               `json:"success" example:"false" swaggertype:"boolean"`
+	Message string             `json:"message" example:"Insufficient privileges" swaggertype:"string"`
+	Data    []dummyArrayObject `json:"data" swaggertype:"array,object"`
+}
+
+type GetAllUsersResponse500 struct {
+	Success bool               `json:"success" example:"false" swaggertype:"boolean"`
+	Message string             `json:"message" example:"Internal server error during retrieval" swaggertype:"string"`
+	Data    []dummyArrayObject `json:"data" swaggertype:"array,object"`
+}
+
+type dummyArrayObject struct{}
