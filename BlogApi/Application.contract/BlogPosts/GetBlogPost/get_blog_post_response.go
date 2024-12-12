@@ -1,7 +1,7 @@
 package contract
 
 import (
-	"identity-api/Domain/models"
+	models "identity-api/Domain/models/domestic"
 	responses "identity-api/Domain/responses"
 )
 

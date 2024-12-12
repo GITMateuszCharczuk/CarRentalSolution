@@ -26,6 +26,7 @@ type Config struct {
 	PostgresHost         string
 	PostgresPort         string
 	RunPostgresMigration bool
+	IdentityApiUrl       string
 }
 
 var (
@@ -61,6 +62,7 @@ func NewConfig(path string) (*Config, error) {
 			PostgresHost:         getEnv("POSTGRES_HOST", "localhost"),
 			PostgresPort:         getEnv("POSTGRES_PORT", "5432"),
 			RunPostgresMigration: getEnvBool("RUN_POSTGRES_MIGRATION", false),
+			IdentityApiUrl:       getEnv("IDENTITY_API_URL", "http://localhost:8080"),
 		}
 	})
 	return instance, err

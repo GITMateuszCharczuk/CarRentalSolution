@@ -1,6 +1,6 @@
 package contract
 
-import models "identity-api/Domain/models/token"
+import models "identity-api/Domain/models/external"
 
 type GetBlogPostRequest struct {
 	BlogPostId      string `json:"blogPostId" validate:"required"`

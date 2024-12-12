@@ -6,7 +6,7 @@ import (
 	"log"
 	"sync"
 
-	_ "github.com/lib/pq" // PostgreSQL driver
+	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -45,7 +45,12 @@ func (dc *PostgresDatabase) connect(user, password, name, host, port string) {
 
 func (dc *PostgresDatabase) runMigration(shouldMigrate bool) {
 	if shouldMigrate {
-		err := dc.DB.AutoMigrate(&entities.UserEntity{})
+		err := dc.DB.AutoMigrate(
+			&entities.BlogPostEntity{},
+			&entities.BlogPostTagEntity{},
+			&entities.BlogPostLikeEntity{},
+			&entities.BlogPostCommentEntity{},
+		)
 		if err != nil {
 			log.Fatalf("Error migrating database: %v", err)
 		}

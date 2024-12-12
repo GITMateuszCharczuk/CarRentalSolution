@@ -3,8 +3,8 @@ package mappers
 import (
 	"identity-api/API/services"
 	get_all_users_contract "identity-api/Application.contract/get_all_users"
-	get_user_id_contract "identity-api/Application.contract/get_user_id"
 	get_user_info_contract "identity-api/Application.contract/get_user_info"
+	get_user_internal_contract "identity-api/Application.contract/get_user_internal"
 	login_contract "identity-api/Application.contract/login"
 	modify_user_contract "identity-api/Application.contract/modify_user"
 	register_contract "identity-api/Application.contract/register"
@@ -14,8 +14,8 @@ import (
 	register "identity-api/Application/command_handlers/register"
 	validate_token "identity-api/Application/command_handlers/validate_token"
 	get_all_users "identity-api/Application/query_handlers/get_all_users"
-	get_user_id "identity-api/Application/query_handlers/get_user_id"
 	get_user_info "identity-api/Application/query_handlers/get_user_info"
+	get_user_internal "identity-api/Application/query_handlers/get_user_internal"
 )
 
 func MapToRegisterCommand(req *register_contract.RegisterUserRequest) register.RegisterUserCommand {
@@ -64,8 +64,8 @@ func MapToGetAllUsersQuery(req *get_all_users_contract.GetAllUsersRequest) get_a
 	}
 }
 
-func MapToGetUserIDQuery(req *get_user_id_contract.GetUserIDRequest) get_user_id.GetUserIDQuery {
-	return get_user_id.GetUserIDQuery{
+func MapToGetUserInternalQuery(req *get_user_internal_contract.GetUserInternalRequest) get_user_internal.GetUserInternalQuery {
+	return get_user_internal.GetUserInternalQuery{
 		JwtToken: req.JwtToken,
 	}
 }

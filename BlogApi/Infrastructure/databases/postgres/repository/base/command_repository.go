@@ -9,17 +9,17 @@ import (
 )
 
 type CommandRepository[TEntity any, TId comparable, TModel any] struct {
-	dbContext *gorm.DB
+	DbContext *gorm.DB
 	mapper    mappers.PersistenceMapper[TEntity, TModel]
 }
 
 func NewCommandRepository[TEntity any, TId comparable, TModel any](dbContext *gorm.DB, mapper mappers.PersistenceMapper[TEntity, TModel]) *CommandRepository[TEntity, TId, TModel] {
-	return &CommandRepository[TEntity, TId, TModel]{dbContext: dbContext, mapper: mapper}
+	return &CommandRepository[TEntity, TId, TModel]{DbContext: dbContext, mapper: mapper}
 }
 
 func (r *CommandRepository[TEntity, TId, TModel]) Add(model TModel) (TModel, error) {
 	entity := r.mapper.MapToEntity(model)
-	result := r.dbContext.Create(&entity)
+	result := r.DbContext.Create(&entity)
 	if result.Error != nil {
 		log.Println(entity)
 		return model, result.Error
@@ -29,7 +29,7 @@ func (r *CommandRepository[TEntity, TId, TModel]) Add(model TModel) (TModel, err
 
 func (r *CommandRepository[TEntity, TId, TModel]) Update(model TModel) (TModel, error) {
 	entity := r.mapper.MapToEntity(model)
-	result := r.dbContext.Save(&entity)
+	result := r.DbContext.Save(&entity)
 	if result.Error != nil {
 		return model, result.Error
 	}
@@ -38,8 +38,8 @@ func (r *CommandRepository[TEntity, TId, TModel]) Update(model TModel) (TModel, 
 
 func (r *CommandRepository[TEntity, TId, TModel]) Delete(id TId) error {
 	var entity TEntity
-	if err := r.dbContext.First(&entity, "id = ?", id).Error; err != nil {
+	if err := r.DbContext.First(&entity, "id = ?", id).Error; err != nil {
 		return errors.New("cannot delete entity that does not exist")
 	}
-	return r.dbContext.Delete(&entity).Error
+	return r.DbContext.Delete(&entity).Error
 }

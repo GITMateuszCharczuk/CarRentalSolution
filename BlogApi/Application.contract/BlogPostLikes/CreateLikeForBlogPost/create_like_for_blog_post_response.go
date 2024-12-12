@@ -21,6 +21,12 @@ type CreateLikeForBlogPostResponse400 struct {
 	Id      string `json:"id" example:"" swaggertype:"string"`
 }
 
+type CreateLikeForBlogPostResponse401 struct {
+	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
+	Message string `json:"message" example:"Unauthorized" swaggertype:"string"`
+	Id      string `json:"id" example:"" swaggertype:"string"`
+}
+
 type CreateLikeForBlogPostResponse404 struct {
 	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
 	Message string `json:"message" example:"Blog post not found" swaggertype:"string"`

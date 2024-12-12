@@ -267,62 +267,6 @@
                 }
             }
         },
-        "/identity-api/api/user/id": {
-            "get": {
-                "description": "Retrieves user ID based on the provided token.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Get user ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JWT token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User ID retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse401"
-                        }
-                    },
-                    "404": {
-                        "description": "User not found",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse404"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during retrieval",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse500"
-                        }
-                    }
-                }
-            }
-        },
         "/identity-api/api/user/info": {
             "get": {
                 "description": "Retrieves user information based on the provided token and user ID.",
@@ -380,6 +324,62 @@
                         "description": "Server error during retrieval",
                         "schema": {
                             "$ref": "#/definitions/contract.GetUserInfoResponse500"
+                        }
+                    }
+                }
+            }
+        },
+        "/identity-api/api/user/internal": {
+            "get": {
+                "description": "Retrieves user internal info based on the provided token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get user internal info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User internal info retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInternalResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInternalResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInternalResponse401"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInternalResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetUserInternalResponse500"
                         }
                     }
                 }
@@ -753,127 +753,6 @@
                 }
             }
         },
-        "contract.GetUserIDResponse200": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "User ID retrieved successfully"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": true
-                },
-                "user_id": {
-                    "type": "string",
-                    "example": "12345"
-                }
-            }
-        },
-        "contract.GetUserIDResponse400": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Invalid request parameters"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "user_id": {
-                    "type": "string",
-                    "example": ""
-                }
-            }
-        },
-        "contract.GetUserIDResponse401": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Invalid or expired token"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "user_id": {
-                    "type": "string",
-                    "example": ""
-                }
-            }
-        },
-        "contract.GetUserIDResponse404": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "User not found"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "user_id": {
-                    "type": "string",
-                    "example": ""
-                }
-            }
-        },
-        "contract.GetUserIDResponse500": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Internal server error during user ID retrieval"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "user_id": {
-                    "type": "string",
-                    "example": ""
-                }
-            }
-        },
         "contract.GetUserInfoResponse200": {
             "type": "object",
             "properties": {
@@ -886,7 +765,51 @@
                     "example": true
                 },
                 "user_info": {
-                    "type": "object"
+                    "type": "object",
+                    "properties": {
+                        "address": {
+                            "type": "string",
+                            "example": "123 Main St"
+                        },
+                        "city": {
+                            "type": "string",
+                            "example": "New York"
+                        },
+                        "email_address": {
+                            "type": "string",
+                            "example": "user@example.com"
+                        },
+                        "id": {
+                            "type": "string",
+                            "example": "12345"
+                        },
+                        "name": {
+                            "type": "string",
+                            "example": "John"
+                        },
+                        "phone_number": {
+                            "type": "string",
+                            "example": "+1234567890"
+                        },
+                        "postal_code": {
+                            "type": "string",
+                            "example": "12345"
+                        },
+                        "roles": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "example": [
+                                "user",
+                                "admin"
+                            ]
+                        },
+                        "surname": {
+                            "type": "string",
+                            "example": "Doe"
+                        }
+                    }
                 }
             }
         },
@@ -944,6 +867,130 @@
                 "message": {
                     "type": "string",
                     "example": "Internal server error during user info retrieval"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "user_info": {
+                    "type": "object"
+                }
+            }
+        },
+        "contract.GetUserInternalResponse200": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "User ID retrieved successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "user_info": {
+                    "type": "object",
+                    "properties": {
+                        "address": {
+                            "type": "string",
+                            "example": "123 Main St"
+                        },
+                        "city": {
+                            "type": "string",
+                            "example": "New York"
+                        },
+                        "email_address": {
+                            "type": "string",
+                            "example": "user@example.com"
+                        },
+                        "id": {
+                            "type": "string",
+                            "example": "12345"
+                        },
+                        "name": {
+                            "type": "string",
+                            "example": "John"
+                        },
+                        "phone_number": {
+                            "type": "string",
+                            "example": "+1234567890"
+                        },
+                        "postal_code": {
+                            "type": "string",
+                            "example": "12345"
+                        },
+                        "roles": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "example": [
+                                "user",
+                                "admin"
+                            ]
+                        },
+                        "surname": {
+                            "type": "string",
+                            "example": "Doe"
+                        }
+                    }
+                }
+            }
+        },
+        "contract.GetUserInternalResponse400": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "user_info": {
+                    "type": "object"
+                }
+            }
+        },
+        "contract.GetUserInternalResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid or expired token"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "user_info": {
+                    "type": "object"
+                }
+            }
+        },
+        "contract.GetUserInternalResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "User not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "user_info": {
+                    "type": "object"
+                }
+            }
+        },
+        "contract.GetUserInternalResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error during user ID retrieval"
                 },
                 "success": {
                     "type": "boolean",
@@ -1323,7 +1370,7 @@
                 "password": {
                     "type": "string",
                     "minLength": 8,
-                    "example": "password123"
+                    "example": "P@ssw0rd123"
                 },
                 "phone_number": {
                     "type": "string",

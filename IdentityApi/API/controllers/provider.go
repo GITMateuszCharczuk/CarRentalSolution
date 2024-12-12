@@ -16,7 +16,7 @@ func NewControllers(all []base.Controller) *Controllers {
 
 func ProvideControllers(
 	getAllUsersController *GetAllUsersController,
-	getUserIDController *GetUserIDController,
+	getUserInternalController *GetUserInternalController,
 	getUserInfoController *GetUserInfoController,
 	registerController *RegisterController,
 	loginController *LoginController,
@@ -27,7 +27,7 @@ func ProvideControllers(
 ) []base.Controller {
 	return []base.Controller{
 		getAllUsersController,
-		getUserIDController,
+		getUserInternalController,
 		getUserInfoController,
 		registerController,
 		loginController,
@@ -40,7 +40,7 @@ func ProvideControllers(
 
 var WireSet = wire.NewSet(
 	NewGetAllUsersController,
-	NewGetUserIDController,
+	NewGetUserInternalController,
 	NewGetUserInfoController,
 	NewRegisterController,
 	NewLoginController,

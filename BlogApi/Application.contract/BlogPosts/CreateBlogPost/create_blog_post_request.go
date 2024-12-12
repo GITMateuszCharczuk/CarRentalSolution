@@ -1,6 +1,6 @@
 package contract
 
-import models "identity-api/Domain/models/token"
+import models "identity-api/Domain/models/external"
 
 type CreateBlogPostRequest struct {
 	Heading          string   `json:"heading" binding:"required" example:"Blog Post Title" swaggertype:"string" validate:"required"`

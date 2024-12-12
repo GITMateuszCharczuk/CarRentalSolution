@@ -51,7 +51,7 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 func InitializeApi(userQueryRepo repository_interfaces.UserQueryRepository, userCommandRepo repository_interfaces.UserCommandRepository, tokenService service_interfaces.JWTTokenService, passwordHasher service_interfaces.PasswordHasher, config3 *config.Config) (*server.Server, error) {
 	validate := validators.ProvideValidator()
 	getAllUsersController := controllers.NewGetAllUsersController(validate)
-	getUserIDController := controllers.NewGetUserIDController(validate)
+	getUserInternalController := controllers.NewGetUserInternalController(validate)
 	getUserInfoController := controllers.NewGetUserInfoController(validate)
 	registerController := controllers.NewRegisterController(validate)
 	loginController := controllers.NewLoginController(validate)
@@ -59,7 +59,7 @@ func InitializeApi(userQueryRepo repository_interfaces.UserQueryRepository, user
 	deleteUserController := controllers.NewDeleteUserController(validate)
 	validateTokenController := controllers.NewValidateTokenController(validate)
 	refreshTokenController := controllers.NewRefreshTokenController(validate)
-	v := controllers.ProvideControllers(getAllUsersController, getUserIDController, getUserInfoController, registerController, loginController, modifyUserController, deleteUserController, validateTokenController, refreshTokenController)
+	v := controllers.ProvideControllers(getAllUsersController, getUserInternalController, getUserInfoController, registerController, loginController, modifyUserController, deleteUserController, validateTokenController, refreshTokenController)
 	controllersControllers := controllers.NewControllers(v)
 	serverServer := server.ProvideServer(controllersControllers, config3)
 	return serverServer, nil

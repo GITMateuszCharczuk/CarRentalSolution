@@ -2,17 +2,17 @@ package cqrs
 
 import (
 	p "identity-api/Domain/pagination"
-	selector "identity-api/Domain/property_selector"
 	s "identity-api/Domain/sorting"
 	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
 	helpers "identity-api/Infrastructure/databases/postgres/repository/base/helpers"
+	"reflect"
 
 	"github.com/lib/pq"
 	"gorm.io/gorm"
 )
 
 type QueryRepository[TEntity any, TId comparable, TModel any] struct {
-	dbContext *gorm.DB
+	DbContext *gorm.DB
 	mapper    mappers.PersistenceMapper[TEntity, TModel]
 	helper    *helpers.QueryHelper[TEntity, TModel]
 }
@@ -22,85 +22,76 @@ func NewQueryRepository[TEntity any, TId comparable, TModel any](
 	mapper mappers.PersistenceMapper[TEntity, TModel],
 ) *QueryRepository[TEntity, TId, TModel] {
 	return &QueryRepository[TEntity, TId, TModel]{
-		dbContext: dbContext,
+		DbContext: dbContext,
 		mapper:    mapper,
 		helper:    helpers.NewQueryHelper[TEntity, TModel](),
 	}
 }
 
-func (r *QueryRepository[TEntity, TId, TModel]) GetById(id TId) (*TModel, error) {
-	var entity TEntity
-	if err := r.dbContext.First(&entity, "id = ?", id).Error; err != nil {
-		return nil, err
-	}
-	model := r.mapper.MapToModel(entity)
-	return &model, nil
+func (r *QueryRepository[TEntity, TId, TModel]) ConstructBaseQuery() *gorm.DB {
+	query := r.DbContext.Model(new(TEntity))
+	return query
 }
 
-func (r *QueryRepository[TEntity, TId, TModel]) GetByIds(ids []TId) ([]TModel, error) {
-	var entities []TEntity
-	if err := r.dbContext.Find(&entities, "id IN ?", ids).Error; err != nil {
-		return nil, err
-	}
-	return r.mapEntitiesToModels(entities), nil
-}
-
-func (r *QueryRepository[TEntity, TId, TModel]) GetFirstByProp(
-	selector selector.PropertySelector[TEntity],
-	value interface{},
+func (r *QueryRepository[TEntity, TId, TModel]) GetFirstByQueryRecord(
+	queryRecord helpers.QueryRecord[TEntity],
 ) (*TModel, error) {
-	if err := r.helper.ValidateProperty(selector.FieldName); err != nil {
-		return nil, err
-	}
-
 	var entity TEntity
-	columnName := r.helper.GetColumnName(selector.FieldName)
-	if err := r.dbContext.Where(columnName+" = ?", value).First(&entity).Error; err != nil {
+
+	if err := r.DbContext.Where(queryRecord.Selector.FieldName+" = ?", queryRecord.Value).First(&entity).Error; err != nil {
 		return nil, err
 	}
 	model := r.mapper.MapToModel(entity)
 	return &model, nil
 }
 
-func (r *QueryRepository[TEntity, TId, TModel]) GetTotalCount() (int64, error) {
+func (r *QueryRepository[TEntity, TId, TModel]) GetTotalCount(query ...*gorm.DB) (int64, error) {
 	var count int64
-	if err := r.dbContext.Model(new(TEntity)).Count(&count).Error; err != nil {
+	if len(query) == 0 || query[0] == nil {
+		query = append(query, r.DbContext.Model(new(TEntity)))
+	}
+	if err := query[0].Count(&count).Error; err != nil {
 		return 0, err
 	}
 	return count, nil
 }
 
-func (r *QueryRepository[TEntity, TId, TModel]) GetAllByPropValues(
-	selector selector.PropertySelector[TEntity],
-	values interface{},
+func (r *QueryRepository[TEntity, TId, TModel]) GetAllByQueryRecords(
+	pagination *p.Pagination,
+	sorting *s.Sortable,
+	queryRecords ...helpers.QueryRecord[TEntity],
+) (*p.PaginatedResult[TModel], error) {
+	query := r.ConstructBaseQuery()
+	query = r.EnrichQuery(query, queryRecords...)
+	return r.ExecutePaginatedQuery(query, pagination, sorting)
+}
+
+func (r *QueryRepository[TEntity, TId, TModel]) GetAllSortedAndPaginated(
 	pagination *p.Pagination,
 	sorting *s.Sortable,
 ) (*p.PaginatedResult[TModel], error) {
-	if err := r.helper.ValidateProperty(selector.FieldName); err != nil {
-		return nil, err
-	}
-
-	columnName := r.helper.GetColumnName(selector.FieldName)
-	query := r.dbContext.Model(new(TEntity))
-
-	if columnName == "roles" {
-		query = query.Where(columnName+" && ?", pq.Array(values))
-	} else {
-		query = query.Where(columnName+" IN ?", values)
-	}
-
-	return r.executePaginatedQuery(query, pagination, sorting)
+	query := r.DbContext.Model(new(TEntity))
+	return r.ExecutePaginatedQuery(query, pagination, sorting)
 }
 
-func (r *QueryRepository[TEntity, TId, TModel]) GetAll(
-	pagination *p.Pagination,
-	sorting *s.Sortable,
-) (*p.PaginatedResult[TModel], error) {
-	query := r.dbContext.Model(new(TEntity))
-	return r.executePaginatedQuery(query, pagination, sorting)
+func (r *QueryRepository[TEntity, TId, TModel]) EnrichQuery(query *gorm.DB, queryRecords ...helpers.QueryRecord[TEntity]) *gorm.DB {
+	for _, record := range queryRecords {
+		if reflect.TypeOf(record.Value).Kind() == reflect.Slice {
+			if len(record.Value.([]string)) == 0 {
+				continue
+			}
+			query = query.Where(record.Selector.FieldName+" && ?", pq.Array(record.Value.([]string)))
+		} else {
+			if record.Value.(string) == "" {
+				continue
+			}
+			query = query.Where(record.Selector.FieldName+" = ?", record.Value)
+		}
+	}
+	return query
 }
 
-func (r *QueryRepository[TEntity, TId, TModel]) executePaginatedQuery(
+func (r *QueryRepository[TEntity, TId, TModel]) ExecutePaginatedQuery(
 	query *gorm.DB,
 	pagination *p.Pagination,
 	sorting *s.Sortable,

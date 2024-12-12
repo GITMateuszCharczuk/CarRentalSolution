@@ -1,7 +1,7 @@
 package contract
 
 import (
-	models "identity-api/Domain/models/token"
+	"identity-api/Domain/models/external"
 	"identity-api/Domain/pagination"
 )
 

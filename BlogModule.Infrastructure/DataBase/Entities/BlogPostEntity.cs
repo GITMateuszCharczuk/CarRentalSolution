@@ -15,6 +15,8 @@ public record BlogPostEntity : IEntity<BlogPostId>
     public string UrlHandle { get; set; }
     public DateTime PublishedDate { get; set; }
     public string Author { get; set; }
+
+    public string AuthorId { get; set; }
     public bool Visible { get; set; }
 
     // Navigation Properties

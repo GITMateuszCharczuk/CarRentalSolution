@@ -2,7 +2,7 @@ package constants
 
 type JWTRole string
 
-const ( //TODO pozmieniac w innych miejscach
+const (
 	User       JWTRole = "user"
 	Admin      JWTRole = "admin"
 	SuperAdmin JWTRole = "superadmin"

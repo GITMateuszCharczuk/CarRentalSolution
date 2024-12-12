@@ -1,7 +1,7 @@
 package contract
 
 import (
-	"identity-api/Domain/models"
+	models "identity-api/Domain/models/domestic"
 	"identity-api/Domain/pagination"
 	responses "identity-api/Domain/responses"
 )
@@ -12,14 +12,13 @@ type GetBlogPostCommentsResponse struct {
 }
 
 type GetBlogPostCommentsResponse200 struct {
-	Success        bool                       `json:"success" example:"true" swaggertype:"boolean"`
-	Message        string                     `json:"message" example:"Comments retrieved successfully" swaggertype:"string"`
-	Page           *int                       `json:"page" example:"1" swaggertype:"integer"`
-	PageSize       *int                       `json:"pageSize" example:"10" swaggertype:"integer"`
-	TotalCount     int                        `json:"totalCount" example:"100" swaggertype:"integer"`
-	OrderBy        *BlogPostCommentSortColumn `json:"orderBy" example:"dateAdded" swaggertype:"string"`
-	OrderDirection *SortOrder                 `json:"orderDirection" example:"desc" swaggertype:"string"`
-	Items          []BlogPostCommentModel     `json:"items" swaggertype:"array,object"`
+	Success     bool                          `json:"success" example:"true" swaggertype:"boolean"`
+	Message     string                        `json:"message" example:"Comments retrieved successfully" swaggertype:"string"`
+	TotalItems  int                           `json:"total_items" example:"100"`
+	CurrentPage int                           `json:"current_page" example:"1"`
+	PageSize    int                           `json:"page_size" example:"10"`
+	TotalPages  int                           `json:"total_pages" example:"10"`
+	Items       []models.BlogPostCommentModel `json:"items" swaggertype:"array,object"` //todo
 }
 
 type GetBlogPostCommentsResponse400 struct {

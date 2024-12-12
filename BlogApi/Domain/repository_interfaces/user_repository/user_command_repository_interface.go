@@ -1,6 +1,6 @@
 package repository_interfaces
 
-import models "identity-api/Domain/models/user"
+import models "identity-api/Domain/models/external"
 
 type UserCommandRepository interface {
 	CreateUser(user *models.UserModel) error
