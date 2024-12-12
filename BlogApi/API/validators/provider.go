@@ -12,6 +12,7 @@ func ProvideValidator() *validator.Validate {
 	v.RegisterValidation("validRoles", ValidateRoles)
 	v.RegisterValidation("validRole", ValidateRole)
 	RegisterSortQueryValidator[models.UserSecureInfo](v, "validUserSortable")
+	RegisterSortQueryValidator[models.BlogPostComment](v, "validCommentSortable")
 	return v
 }
 
