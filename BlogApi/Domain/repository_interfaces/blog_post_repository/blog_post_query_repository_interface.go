@@ -7,9 +7,13 @@ import (
 )
 
 type BlogPostQueryRepository interface {
-	GetBlogPostByID(id string) (*models.BlogPostModel, error)
-	GetBlogPostByUrlHandle(urlHandle string) (*models.BlogPostModel, error)
-	GetBlogPosts(pagination *pagination.Pagination, sorting *sorting.Sortable) (*pagination.PaginatedResult[models.BlogPostModel], error)
-	GetBlogPostsByAuthorID(authorID string, pagination *pagination.Pagination, sorting *sorting.Sortable) (*pagination.PaginatedResult[models.BlogPostModel], error)
-	GetVisibleBlogPosts(pagination *pagination.Pagination, sorting *sorting.Sortable) (*pagination.PaginatedResult[models.BlogPostModel], error)
+	GetBlogPostByID(id string) (*models.BlogPostResponseModel, error)
+	GetBlogPosts(pagination *pagination.Pagination, sorting *sorting.Sortable,
+		ids []string,
+		dateTimeFrom string,
+		dateTimeTo string,
+		authorIds []string,
+		tagsNames []string,
+		visible bool,
+	) (*pagination.PaginatedResult[models.BlogPostResponseModel], error)
 }

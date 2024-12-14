@@ -32,6 +32,6 @@ func (r *BlogPostLikeQueryRepositoryImpl) GetLikesCount(
 	query := r.ConstructBaseQuery()
 	queryRecord := helpers.NewQueryRecord[entities.BlogPostLikeEntity]("blog_post_id", blogPostID)
 	queryRecord2 := helpers.NewQueryRecord[entities.BlogPostLikeEntity]("user_id", userID)
-	query = r.EnrichQuery(query, queryRecord, queryRecord2)
+	query = r.ApplyWhereConditions(query, queryRecord, queryRecord2)
 	return r.GetTotalCount(query)
 }

@@ -46,7 +46,7 @@ func (r *BlogPostCommentQueryRepositoryImpl) GetComments(
 	}
 
 	query := r.ConstructBaseQuery()
-	query = r.EnrichQuery(query, queryRecords...)
+	query = r.ApplyWhereConditions(query, queryRecords...)
 
 	if dateTimeFrom != "" && dateTimeTo != "" {
 		query = query.Where("created_at BETWEEN ? AND ?", dateTimeFrom, dateTimeTo)

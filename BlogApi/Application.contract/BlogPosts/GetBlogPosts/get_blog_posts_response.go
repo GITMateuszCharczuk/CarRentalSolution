@@ -8,7 +8,7 @@ import (
 
 type GetBlogPostsResponse struct {
 	responses.BaseResponse
-	pagination.PaginatedResult[models.BlogPostModel] `json:",inline"`
+	pagination.PaginatedResult[models.BlogPostResponseModel] `json:",inline"`
 }
 
 type GetBlogPostsResponse200 struct {

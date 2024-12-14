@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	models "identity-api/Domain/models/external"
-	interfaces "identity-api/Infrastructure/data_fetcher/interfaces"
+	interfaces "identity-api/Domain/service_interfaces"
 	mappers "identity-api/Infrastructure/data_fetcher/mappers"
 	responses "identity-api/Infrastructure/data_fetcher/responses"
 	"net/http"

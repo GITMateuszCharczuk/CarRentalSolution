@@ -1,45 +1,67 @@
 package cqrs
 
 import (
-	"errors"
 	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
-	"log"
+
+	"context"
+	"errors"
 
 	"gorm.io/gorm"
 )
 
 type CommandRepository[TEntity any, TId comparable, TModel any] struct {
-	DbContext *gorm.DB
+	dbContext *gorm.DB
 	mapper    mappers.PersistenceMapper[TEntity, TModel]
+	uow       UnitOfWork
 }
 
-func NewCommandRepository[TEntity any, TId comparable, TModel any](dbContext *gorm.DB, mapper mappers.PersistenceMapper[TEntity, TModel]) *CommandRepository[TEntity, TId, TModel] {
-	return &CommandRepository[TEntity, TId, TModel]{DbContext: dbContext, mapper: mapper}
+func NewCommandRepository[TEntity any, TId comparable, TModel any](
+	dbContext *gorm.DB,
+	mapper mappers.PersistenceMapper[TEntity, TModel],
+) *CommandRepository[TEntity, TId, TModel] {
+	return &CommandRepository[TEntity, TId, TModel]{
+		dbContext: dbContext,
+		mapper:    mapper,
+		uow:       NewUnitOfWork(dbContext),
+	}
 }
 
-func (r *CommandRepository[TEntity, TId, TModel]) Add(model TModel) (TModel, error) {
+func (r *CommandRepository[TEntity, TId, TModel]) ExecuteInTransaction(ctx context.Context, fn func(tx *gorm.DB) error) error {
+	return r.uow.WithTransaction(ctx, fn)
+}
+
+func (r *CommandRepository[TEntity, TId, TModel]) Add(ctx context.Context, model TModel) (TModel, error) {
 	entity := r.mapper.MapToEntity(model)
-	result := r.DbContext.Create(&entity)
-	if result.Error != nil {
-		log.Println(entity)
-		return model, result.Error
+	err := r.ExecuteInTransaction(ctx, func(tx *gorm.DB) error {
+		return tx.Create(&entity).Error
+	})
+	if err != nil {
+		return model, err
 	}
 	return r.mapper.MapToModel(entity), nil
 }
 
-func (r *CommandRepository[TEntity, TId, TModel]) Update(model TModel) (TModel, error) {
+func (r *CommandRepository[TEntity, TId, TModel]) Update(ctx context.Context, model TModel) (TModel, error) {
 	entity := r.mapper.MapToEntity(model)
-	result := r.DbContext.Save(&entity)
-	if result.Error != nil {
-		return model, result.Error
+	err := r.ExecuteInTransaction(ctx, func(tx *gorm.DB) error {
+		return tx.Save(&entity).Error
+	})
+	if err != nil {
+		return model, err
 	}
 	return r.mapper.MapToModel(entity), nil
 }
 
-func (r *CommandRepository[TEntity, TId, TModel]) Delete(id TId) error {
-	var entity TEntity
-	if err := r.DbContext.First(&entity, "id = ?", id).Error; err != nil {
-		return errors.New("cannot delete entity that does not exist")
-	}
-	return r.DbContext.Delete(&entity).Error
+func (r *CommandRepository[TEntity, TId, TModel]) Delete(ctx context.Context, id TId) error {
+	return r.ExecuteInTransaction(ctx, func(tx *gorm.DB) error {
+		var entity TEntity
+		if err := tx.First(&entity, "id = ?", id).Error; err != nil {
+			return errors.New("cannot delete entity that does not exist")
+		}
+		return tx.Delete(&entity).Error
+	})
+}
+
+func (r *CommandRepository[TEntity, TId, TModel]) GetUnitOfWork() UnitOfWork {
+	return r.uow
 }

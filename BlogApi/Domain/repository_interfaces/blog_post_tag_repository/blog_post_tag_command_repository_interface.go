@@ -1,13 +1,14 @@
 package repository_interfaces
 
 import (
+	"context"
 	models "identity-api/Domain/models/domestic"
+	"identity-api/Infrastructure/databases/postgres/entities"
 )
 
 type BlogPostTagCommandRepository interface {
-	CreateTag(tag *models.TagModel) (*models.TagModel, error)
-	UpdateTag(tag *models.TagModel) (*models.TagModel, error)
-	DeleteTag(id string) error
-	AddTagToBlogPost(blogPostID string, tagID string) error
-	RemoveTagFromBlogPost(blogPostID string, tagID string) error
+	AddTagToBlogPost(ctx context.Context, tag *models.TagModel, blogPostEntity entities.BlogPostEntity) (*models.TagModel, error)
+	AddTagsToBlogPost(ctx context.Context, blogPostEntity entities.BlogPostEntity, tagNames []string) error
+	ModifyTagsForBlogPost(ctx context.Context, blogPostEntity entities.BlogPostEntity, newTagNames []string) error
+	CleanupUnusedTags(ctx context.Context) error
 }

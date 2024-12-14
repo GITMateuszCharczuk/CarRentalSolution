@@ -8,8 +8,12 @@ import (
 	"github.com/google/wire"
 )
 
-func ProvideBlogPostPersistenceMapper() base.PersistenceMapper[entities.BlogPostEntity, models.BlogPostModel] {
-	return NewBlogPostPersistenceMapper()
+func ProvideBlogPostRequestPersistenceMapper() base.PersistenceMapper[entities.BlogPostEntity, models.BlogPostRequestModel] {
+	return NewBlogPostRequestPersistenceMapper()
+}
+
+func ProvideBlogPostResponsePersistenceMapper() base.PersistenceMapper[entities.BlogPostEntity, models.BlogPostResponseModel] {
+	return NewBlogPostResponsePersistenceMapper()
 }
 
 func ProvideBlogPostTagPersistenceMapper() base.PersistenceMapper[entities.BlogPostTagEntity, models.TagModel] {
@@ -25,7 +29,8 @@ func ProvideBlogPostCommentPersistenceMapper() base.PersistenceMapper[entities.B
 }
 
 var WireSet = wire.NewSet(
-	ProvideBlogPostPersistenceMapper,
+	ProvideBlogPostRequestPersistenceMapper,
+	ProvideBlogPostResponsePersistenceMapper,
 	ProvideBlogPostTagPersistenceMapper,
 	ProvideBlogPostLikePersistenceMapper,
 	ProvideBlogPostCommentPersistenceMapper,

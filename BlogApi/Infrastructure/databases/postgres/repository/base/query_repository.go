@@ -62,7 +62,7 @@ func (r *QueryRepository[TEntity, TId, TModel]) GetAllByQueryRecords(
 	queryRecords ...helpers.QueryRecord[TEntity],
 ) (*p.PaginatedResult[TModel], error) {
 	query := r.ConstructBaseQuery()
-	query = r.EnrichQuery(query, queryRecords...)
+	query = r.ApplyWhereConditions(query, queryRecords...)
 	return r.ExecutePaginatedQuery(query, pagination, sorting)
 }
 
@@ -74,18 +74,28 @@ func (r *QueryRepository[TEntity, TId, TModel]) GetAllSortedAndPaginated(
 	return r.ExecutePaginatedQuery(query, pagination, sorting)
 }
 
-func (r *QueryRepository[TEntity, TId, TModel]) EnrichQuery(query *gorm.DB, queryRecords ...helpers.QueryRecord[TEntity]) *gorm.DB {
+// TODO change name of method
+func (r *QueryRepository[TEntity, TId, TModel]) ApplyWhereConditions(query *gorm.DB, queryRecords ...helpers.QueryRecord[TEntity]) *gorm.DB {
+	tableName := query.Statement.Table
+
 	for _, record := range queryRecords {
+		prefix := tableName
+		if record.TableAlias != "" {
+			prefix = record.TableAlias
+		}
+
+		fieldName := prefix + "." + record.Selector.FieldName
+
 		if reflect.TypeOf(record.Value).Kind() == reflect.Slice {
 			if len(record.Value.([]string)) == 0 {
 				continue
 			}
-			query = query.Where(record.Selector.FieldName+" && ?", pq.Array(record.Value.([]string)))
+			query = query.Where(fieldName+" && ?", pq.Array(record.Value.([]string)))
 		} else {
 			if record.Value.(string) == "" {
 				continue
 			}
-			query = query.Where(record.Selector.FieldName+" = ?", record.Value)
+			query = query.Where(fieldName+" = ?", record.Value)
 		}
 	}
 	return query
