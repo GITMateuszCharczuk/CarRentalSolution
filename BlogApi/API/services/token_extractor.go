@@ -1,17 +1,12 @@
 package services
 
 import (
-	token "identity-api/Domain/models/token"
+	models "identity-api/Domain/models/external"
 
 	"github.com/gin-gonic/gin"
 )
 
-func GetJwtTokenFromQuery(c *gin.Context) token.JwtToken {
+func GetJwtTokenFromQuery(c *gin.Context) models.JwtToken {
 	query := c.Query("token")
-	return token.NewJwtToken(query)
-}
-
-func GetJwtRefreshTokenFromQuery(c *gin.Context) token.JwtRefreshToken {
-	query := c.Query("token")
-	return token.NewRefreshToken(query)
+	return models.NewJwtToken(query)
 }

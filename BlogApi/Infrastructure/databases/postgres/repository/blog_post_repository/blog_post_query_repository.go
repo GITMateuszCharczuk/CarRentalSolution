@@ -10,6 +10,8 @@ import (
 	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
 	base "identity-api/Infrastructure/databases/postgres/repository/base"
 	"identity-api/Infrastructure/databases/postgres/repository/base/helpers"
+
+	"github.com/google/uuid"
 )
 
 type BlogPostQueryRepositoryImpl struct {
@@ -30,6 +32,17 @@ func NewBlogPostQueryRepositoryImpl(
 func (r *BlogPostQueryRepositoryImpl) GetBlogPostByID(id string) (*models.BlogPostResponseModel, error) {
 	queryRecord := helpers.NewQueryRecord[entities.BlogPostEntity]("id", id)
 	return r.GetFirstByQueryRecord(queryRecord)
+}
+
+func (r *BlogPostQueryRepositoryImpl) GetBlogPostAuthorId(id string) (*string, error) {
+	query := r.ConstructBaseQuery()
+	query = query.Where("id = ?", id).Select("user_id")
+	var userId uuid.UUID
+	if err := query.First(&userId).Error; err != nil {
+		return nil, err
+	}
+	res := userId.String()
+	return &res, nil
 }
 
 func (r *BlogPostQueryRepositoryImpl) GetBlogPosts(

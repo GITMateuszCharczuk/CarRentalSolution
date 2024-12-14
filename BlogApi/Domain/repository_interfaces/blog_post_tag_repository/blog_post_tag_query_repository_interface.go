@@ -2,14 +2,14 @@ package repository_interfaces
 
 import (
 	models "identity-api/Domain/models/domestic"
-	"identity-api/Domain/pagination"
+	"identity-api/Domain/sorting"
 )
 
 type BlogPostTagQueryRepository interface {
-	GetTagByID(id string) (*models.TagModel, error)
-	GetTagByName(name string) (*models.TagModel, error)
+	GetTagByID(id string) (*models.BlogPostTagModel, error)
+	GetTagByName(name string) (*models.BlogPostTagModel, error)
 	GetTagsByBlogPostID(
 		blogPostID string,
-		pagination *pagination.Pagination,
-	) (*pagination.PaginatedResult[models.TagModel], error)
+		sorting sorting.Sortable,
+	) (*[]models.BlogPostTagModel, error)
 }

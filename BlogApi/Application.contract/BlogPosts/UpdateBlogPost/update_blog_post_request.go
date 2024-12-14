@@ -1,5 +1,7 @@
 package contract
 
+import models "identity-api/Domain/models/external"
+
 type UpdateBlogPostRequest struct {
 	Id               string   `json:"id" binding:"required" example:"123e4567-e89b-12d3-a456-426614174000" swaggertype:"string" validate:"required"`
 	Heading          string   `json:"heading" binding:"required" example:"Updated Blog Post Title" swaggertype:"string" validate:"required"`
@@ -12,4 +14,5 @@ type UpdateBlogPostRequest struct {
 	Author           string   `json:"author" binding:"required" example:"John Doe" swaggertype:"string" validate:"required"`
 	Visible          bool     `json:"visible" example:"true" swaggertype:"boolean"`
 	Tags             []string `json:"tags" example:"[\"tech\",\"programming\"]" swaggertype:"array,string"`
+	models.JwtToken  `json:"jwtToken" validate:"required"`
 }

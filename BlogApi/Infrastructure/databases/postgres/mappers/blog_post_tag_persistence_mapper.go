@@ -14,14 +14,14 @@ func NewBlogPostTagPersistenceMapper() *BlogPostTagMapper {
 	return &BlogPostTagMapper{}
 }
 
-func (m *BlogPostTagMapper) MapToModel(entity entities.BlogPostTagEntity) models.TagModel {
-	return models.TagModel{
+func (m *BlogPostTagMapper) MapToModel(entity entities.BlogPostTagEntity) models.BlogPostTagModel {
+	return models.BlogPostTagModel{
 		Id:   entity.ID.String(),
 		Name: entity.Name,
 	}
 }
 
-func (m *BlogPostTagMapper) MapToEntity(model models.TagModel) entities.BlogPostTagEntity {
+func (m *BlogPostTagMapper) MapToEntity(model models.BlogPostTagModel) entities.BlogPostTagEntity {
 	var id uuid.UUID
 	if model.Id == "" {
 		id = uuid.New()

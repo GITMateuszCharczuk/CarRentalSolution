@@ -7,7 +7,7 @@ import (
 )
 
 type BlogPostTagCommandRepository interface {
-	AddTagToBlogPost(ctx context.Context, tag *models.TagModel, blogPostEntity entities.BlogPostEntity) (*models.TagModel, error)
+	AddTagToBlogPost(ctx context.Context, tag *models.BlogPostTagModel, blogPostEntity entities.BlogPostEntity) (*models.BlogPostTagModel, error)
 	AddTagsToBlogPost(ctx context.Context, blogPostEntity entities.BlogPostEntity, tagNames []string) error
 	ModifyTagsForBlogPost(ctx context.Context, blogPostEntity entities.BlogPostEntity, newTagNames []string) error
 	CleanupUnusedTags(ctx context.Context) error

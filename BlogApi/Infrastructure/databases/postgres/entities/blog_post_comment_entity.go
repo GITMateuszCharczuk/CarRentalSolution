@@ -11,7 +11,6 @@ type BlogPostCommentEntity struct {
 	BlogPostID  uuid.UUID `gorm:"type:uuid;index" json:"blog_post_id"`
 	UserID      uuid.UUID `gorm:"type:uuid;index" json:"user_id"`
 	Description string    `json:"description"`
-	DateAdded   time.Time `json:"date_added"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 

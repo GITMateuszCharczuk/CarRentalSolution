@@ -16,7 +16,7 @@ type BlogPostEntity struct {
 	UrlHandle        string    `json:"url_handle"`
 	PublishedDate    time.Time `json:"published_date"`
 	Author           string    `json:"author"`
-	UserID           uuid.UUID `gorm:"type:uuid;index" json:"user_id"`
+	UserId           uuid.UUID `gorm:"type:uuid;index" json:"user_id"`
 	Visible          bool      `json:"visible"`
 	CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at"`

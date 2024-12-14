@@ -32,6 +32,16 @@ func (r *BlogPostCommentQueryRepositoryImpl) GetCommentByID(id string) (*models.
 	return r.GetFirstByQueryRecord(queryRecord)
 }
 
+func (r *BlogPostCommentQueryRepositoryImpl) GetCommentAuthorId(id string) (*string, error) {
+	query := r.ConstructBaseQuery()
+	query = query.Where("id = ?", id).Select("user_id")
+	var userId string
+	if err := query.First(&userId).Error; err != nil {
+		return nil, err
+	}
+	return &userId, nil
+}
+
 func (r *BlogPostCommentQueryRepositoryImpl) GetComments(
 	blogPostIDs []string,
 	userIDs []string,

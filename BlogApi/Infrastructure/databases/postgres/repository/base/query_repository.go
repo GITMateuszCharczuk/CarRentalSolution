@@ -132,6 +132,22 @@ func (r *QueryRepository[TEntity, TId, TModel]) ExecutePaginatedQuery(
 	}, nil
 }
 
+func (r *QueryRepository[TEntity, TId, TModel]) ExecuteSortedQuery(
+	query *gorm.DB,
+	sorting *s.Sortable,
+) (*[]TModel, error) {
+	query = r.helper.ApplySorting(query, sorting)
+
+	var entities []TEntity
+	if err := query.Find(&entities).Error; err != nil {
+		return nil, err
+	}
+
+	models := r.mapEntitiesToModels(entities)
+
+	return &models, nil
+}
+
 func (r *QueryRepository[TEntity, TId, TModel]) mapEntitiesToModels(entities []TEntity) []TModel {
 	models := make([]TModel, len(entities))
 	for i, entity := range entities {

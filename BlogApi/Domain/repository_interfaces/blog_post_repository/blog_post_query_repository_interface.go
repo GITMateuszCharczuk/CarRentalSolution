@@ -16,4 +16,5 @@ type BlogPostQueryRepository interface {
 		tagsNames []string,
 		visible bool,
 	) (*pagination.PaginatedResult[models.BlogPostResponseModel], error)
+	GetBlogPostAuthorId(id string) (*string, error)
 }

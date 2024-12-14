@@ -12,14 +12,14 @@ import (
 
 func ProvideBlogPostTagQueryRepository(
 	postgresDatabase *postgres_db.PostgresDatabase,
-	mapper mappers.PersistenceMapper[entities.BlogPostTagEntity, models.TagModel],
+	mapper mappers.PersistenceMapper[entities.BlogPostTagEntity, models.BlogPostTagModel],
 ) repository_interfaces.BlogPostTagQueryRepository {
 	return NewBlogPostTagQueryRepositoryImpl(postgresDatabase, mapper)
 }
 
 func ProvideBlogPostTagCommandRepository(
 	postgresDatabase *postgres_db.PostgresDatabase,
-	mapper mappers.PersistenceMapper[entities.BlogPostTagEntity, models.TagModel],
+	mapper mappers.PersistenceMapper[entities.BlogPostTagEntity, models.BlogPostTagModel],
 ) repository_interfaces.BlogPostTagCommandRepository {
 	return NewBlogPostTagCommandRepositoryImpl(postgresDatabase, mapper)
 }

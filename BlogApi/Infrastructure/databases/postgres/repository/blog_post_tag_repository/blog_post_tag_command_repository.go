@@ -16,20 +16,20 @@ import (
 )
 
 type BlogPostTagCommandRepositoryImpl struct {
-	*base.CommandRepository[entities.BlogPostTagEntity, string, models.TagModel]
+	*base.CommandRepository[entities.BlogPostTagEntity, string, models.BlogPostTagModel]
 }
 
 func NewBlogPostTagCommandRepositoryImpl(
 	postgresDatabase *postgres_db.PostgresDatabase,
-	mapper mappers.PersistenceMapper[entities.BlogPostTagEntity, models.TagModel],
+	mapper mappers.PersistenceMapper[entities.BlogPostTagEntity, models.BlogPostTagModel],
 ) tag_repository_interfaces.BlogPostTagCommandRepository {
 	return &BlogPostTagCommandRepositoryImpl{
-		CommandRepository: base.NewCommandRepository[entities.BlogPostTagEntity, string, models.TagModel](postgresDatabase.DB, mapper),
+		CommandRepository: base.NewCommandRepository[entities.BlogPostTagEntity, string, models.BlogPostTagModel](postgresDatabase.DB, mapper),
 	}
 }
 
-func (r *BlogPostTagCommandRepositoryImpl) AddTagToBlogPost(ctx context.Context, tag *models.TagModel, blogPostEntity entities.BlogPostEntity) (*models.TagModel, error) {
-	var resultTag *models.TagModel
+func (r *BlogPostTagCommandRepositoryImpl) AddTagToBlogPost(ctx context.Context, tag *models.BlogPostTagModel, blogPostEntity entities.BlogPostEntity) (*models.BlogPostTagModel, error) {
+	var resultTag *models.BlogPostTagModel
 
 	err := r.ExecuteInTransaction(ctx, func(tx *gorm.DB) error {
 		tagEntity := entities.BlogPostTagEntity{
@@ -52,7 +52,7 @@ func (r *BlogPostTagCommandRepositoryImpl) AddTagToBlogPost(ctx context.Context,
 			return err
 		}
 
-		resultTag = &models.TagModel{
+		resultTag = &models.BlogPostTagModel{
 			Id:   tagEntity.ID.String(),
 			Name: tagEntity.Name,
 		}
@@ -69,7 +69,7 @@ func (r *BlogPostTagCommandRepositoryImpl) AddTagToBlogPost(ctx context.Context,
 func (r *BlogPostTagCommandRepositoryImpl) AddTagsToBlogPost(ctx context.Context, blogPostEntity entities.BlogPostEntity, tagNames []string) error {
 	return r.ExecuteInTransaction(ctx, func(tx *gorm.DB) error {
 		for _, tagName := range tagNames {
-			_, err := r.AddTagToBlogPost(ctx, &models.TagModel{Name: tagName}, blogPostEntity)
+			_, err := r.AddTagToBlogPost(ctx, &models.BlogPostTagModel{Name: tagName}, blogPostEntity)
 			if err != nil {
 				return err
 			}

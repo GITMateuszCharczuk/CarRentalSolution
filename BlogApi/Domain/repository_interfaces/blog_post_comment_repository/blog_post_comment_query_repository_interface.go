@@ -8,6 +8,7 @@ import (
 
 type BlogPostCommentQueryRepository interface {
 	GetCommentByID(id string) (*models.BlogPostCommentModel, error)
+	GetCommentAuthorId(id string) (*string, error)
 	GetComments(
 		blogPostIDs []string,
 		userIDs []string,

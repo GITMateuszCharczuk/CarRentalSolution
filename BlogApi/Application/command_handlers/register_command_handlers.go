@@ -1,81 +1,99 @@
 package commands
 
 import (
-	delete "identity-api/Application/command_handlers/delete_user"
-	login "identity-api/Application/command_handlers/login"
-	modify "identity-api/Application/command_handlers/modify_user"
-	refresh_token "identity-api/Application/command_handlers/refresh_token"
-	register "identity-api/Application/command_handlers/register"
-	validate_token "identity-api/Application/command_handlers/validate_token"
-	repository_interfaces "identity-api/Domain/repository_interfaces/user_repository"
-	service_interfaces "identity-api/Domain/service_interfaces"
+	create_blog_post "identity-api/Application/command_handlers/blog_post/create_blog_post"
+	delete_blog_post "identity-api/Application/command_handlers/blog_post/delete_blog_post"
+	update_blog_post "identity-api/Application/command_handlers/blog_post/update_blog_post"
+	create_blog_post_comment "identity-api/Application/command_handlers/blog_post_comment/create_blog_post_comment"
+	delete_blog_post_comment "identity-api/Application/command_handlers/blog_post_comment/delete_blog_post_comment"
+	create_like_for_blog_post "identity-api/Application/command_handlers/blog_post_like/create_like_for_blog_post"
+	delete_like_for_blog_post "identity-api/Application/command_handlers/blog_post_like/delete_like_for_blog_post"
+	blog_post_comment_repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_comment_repository"
+	blog_post_like_repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_like_repository"
+	blog_post_repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_repository"
+	data_fetcher "identity-api/Domain/service_interfaces"
 	"log"
 
 	"github.com/mehdihadeli/go-mediatr"
 )
 
-func registerRegisterCommandHandler(
-	hasher service_interfaces.PasswordHasher,
-	userQueryRepository repository_interfaces.UserQueryRepository,
-	userCommandRepository repository_interfaces.UserCommandRepository,
+func registerCreateBlogPostCommandHandler(
+	blogCommandRepository blog_post_repository_interfaces.BlogPostCommandRepository,
+	dataFetcher data_fetcher.DataFetcher,
 ) {
-	handler := register.NewRegisterCommandHandler(hasher, userQueryRepository, userCommandRepository)
+	handler := create_blog_post.NewCreateBlogPostCommandHandler(blogCommandRepository, dataFetcher)
 	err := mediatr.RegisterRequestHandler(handler)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func registerModifyUserCommandHandler(
-	userQueryRepository repository_interfaces.UserQueryRepository,
-	userCommandRepository repository_interfaces.UserCommandRepository,
-	tokenService service_interfaces.JWTTokenService,
+func registerUpdateBlogPostCommandHandler(
+	blogCommandRepository blog_post_repository_interfaces.BlogPostCommandRepository,
+	blogPostQueryRepository blog_post_repository_interfaces.BlogPostQueryRepository,
+	dataFetcher data_fetcher.DataFetcher,
 ) {
-	handler := modify.NewModifyUserCommandHandler(userQueryRepository, userCommandRepository, tokenService)
+	handler := update_blog_post.NewUpdateBlogPostCommandHandler(blogCommandRepository, blogPostQueryRepository, dataFetcher)
 	err := mediatr.RegisterRequestHandler(handler)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func registerDeleteUserCommandHandler(
-	userQueryRepository repository_interfaces.UserQueryRepository,
-	userCommandRepository repository_interfaces.UserCommandRepository,
-	tokenService service_interfaces.JWTTokenService,
+func registerDeleteBlogPostCommandHandler(
+	blogCommandRepository blog_post_repository_interfaces.BlogPostCommandRepository,
+	blogPostQueryRepository blog_post_repository_interfaces.BlogPostQueryRepository,
+	dataFetcher data_fetcher.DataFetcher,
 ) {
-	handler := delete.NewDeleteUserCommandHandler(userQueryRepository, userCommandRepository, tokenService)
+	handler := delete_blog_post.NewDeleteBlogPostCommandHandler(blogCommandRepository, blogPostQueryRepository, dataFetcher)
 	err := mediatr.RegisterRequestHandler(handler)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func registerValidateTokenCommandHandler(
-	tokenService service_interfaces.JWTTokenService,
+func registerCreateBlogPostCommentCommandHandler(
+	blogCommandRepository blog_post_comment_repository_interfaces.BlogPostCommentCommandRepository,
+	blogPostQueryRepository blog_post_repository_interfaces.BlogPostQueryRepository,
+	dataFetcher data_fetcher.DataFetcher,
 ) {
-	handler := validate_token.NewValidateTokenCommandHandler(tokenService)
+	handler := create_blog_post_comment.NewCreateBlogPostCommentCommandHandler(blogCommandRepository, blogPostQueryRepository, dataFetcher)
 	err := mediatr.RegisterRequestHandler(handler)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func registerLoginCommandHandler(
-	hasher service_interfaces.PasswordHasher,
-	userQueryRepository repository_interfaces.UserQueryRepository,
-	tokenService service_interfaces.JWTTokenService,
+func registerDeleteBlogPostCommentCommandHandler(
+	blogCommandRepository blog_post_comment_repository_interfaces.BlogPostCommentCommandRepository,
+	blogPostQueryRepository blog_post_comment_repository_interfaces.BlogPostCommentQueryRepository,
+	dataFetcher data_fetcher.DataFetcher,
 ) {
-	handler := login.NewLoginCommandHandler(hasher, tokenService, userQueryRepository)
+	handler := delete_blog_post_comment.NewDeleteBlogPostCommentCommandHandler(blogCommandRepository, blogPostQueryRepository, dataFetcher)
 	err := mediatr.RegisterRequestHandler(handler)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func registerRefreshTokenCommandHandler(
-	tokenService service_interfaces.JWTTokenService,
+func registerCreateLikeForBlogPostCommandHandler(
+	blogCommandRepository blog_post_like_repository_interfaces.BlogPostLikeCommandRepository,
+	blogPostQueryRepository blog_post_repository_interfaces.BlogPostQueryRepository,
+	dataFetcher data_fetcher.DataFetcher,
 ) {
-	handler := refresh_token.NewRefreshTokenCommandHandler(tokenService)
+	handler := create_like_for_blog_post.NewCreateLikeForBlogPostCommandHandler(blogCommandRepository, blogPostQueryRepository, dataFetcher)
+	err := mediatr.RegisterRequestHandler(handler)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func registerDeleteLikeForBlogPostCommandHandler(
+	blogCommandRepository blog_post_like_repository_interfaces.BlogPostLikeCommandRepository,
+	blogPostQueryRepository blog_post_repository_interfaces.BlogPostQueryRepository,
+	dataFetcher data_fetcher.DataFetcher,
+) {
+	handler := delete_like_for_blog_post.NewDeleteLikeForBlogPostCommandHandler(blogCommandRepository, blogPostQueryRepository, dataFetcher)
 	err := mediatr.RegisterRequestHandler(handler)
 	if err != nil {
 		log.Fatal(err)
@@ -83,15 +101,18 @@ func registerRefreshTokenCommandHandler(
 }
 
 func RegisterCommandHandlers(
-	hasher service_interfaces.PasswordHasher,
-	userQueryRepository repository_interfaces.UserQueryRepository,
-	userCommandRepository repository_interfaces.UserCommandRepository,
-	tokenService service_interfaces.JWTTokenService,
+	blogCommandRepository blog_post_repository_interfaces.BlogPostCommandRepository,
+	blogPostQueryRepository blog_post_repository_interfaces.BlogPostQueryRepository,
+	blogPostCommentCommandRepository blog_post_comment_repository_interfaces.BlogPostCommentCommandRepository,
+	blogPostCommentQueryRepository blog_post_comment_repository_interfaces.BlogPostCommentQueryRepository,
+	blogPostLikeCommandRepository blog_post_like_repository_interfaces.BlogPostLikeCommandRepository,
+	dataFetcher data_fetcher.DataFetcher,
 ) {
-	registerRegisterCommandHandler(hasher, userQueryRepository, userCommandRepository)
-	registerModifyUserCommandHandler(userQueryRepository, userCommandRepository, tokenService)
-	registerDeleteUserCommandHandler(userQueryRepository, userCommandRepository, tokenService)
-	registerValidateTokenCommandHandler(tokenService)
-	registerLoginCommandHandler(hasher, userQueryRepository, tokenService)
-	registerRefreshTokenCommandHandler(tokenService)
+	registerCreateBlogPostCommandHandler(blogCommandRepository, dataFetcher)
+	registerUpdateBlogPostCommandHandler(blogCommandRepository, blogPostQueryRepository, dataFetcher)
+	registerDeleteBlogPostCommandHandler(blogCommandRepository, blogPostQueryRepository, dataFetcher)
+	registerCreateBlogPostCommentCommandHandler(blogPostCommentCommandRepository, blogPostQueryRepository, dataFetcher)
+	registerDeleteBlogPostCommentCommandHandler(blogPostCommentCommandRepository, blogPostCommentQueryRepository, dataFetcher)
+	registerCreateLikeForBlogPostCommandHandler(blogPostLikeCommandRepository, blogPostQueryRepository, dataFetcher)
+	registerDeleteLikeForBlogPostCommandHandler(blogPostLikeCommandRepository, blogPostQueryRepository, dataFetcher)
 }

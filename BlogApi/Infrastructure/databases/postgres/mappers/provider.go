@@ -16,7 +16,7 @@ func ProvideBlogPostResponsePersistenceMapper() base.PersistenceMapper[entities.
 	return NewBlogPostResponsePersistenceMapper()
 }
 
-func ProvideBlogPostTagPersistenceMapper() base.PersistenceMapper[entities.BlogPostTagEntity, models.TagModel] {
+func ProvideBlogPostTagPersistenceMapper() base.PersistenceMapper[entities.BlogPostTagEntity, models.BlogPostTagModel] {
 	return NewBlogPostTagPersistenceMapper()
 }
 

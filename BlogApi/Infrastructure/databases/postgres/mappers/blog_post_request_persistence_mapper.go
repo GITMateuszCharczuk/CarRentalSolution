@@ -19,28 +19,24 @@ func (m *BlogPostRequestMapper) MapToModel(entity entities.BlogPostEntity) model
 }
 
 func (m *BlogPostRequestMapper) MapToEntity(model models.BlogPostRequestModel) entities.BlogPostEntity {
-	var id uuid.UUID
-	if model.Id == "" {
-		id = uuid.New()
-	} else {
-		id, _ = uuid.Parse(model.Id)
-	}
 	var createdAt time.Time
-	if model.CreatedAt == "" {
+	if model.PublishedAt == "" {
 		createdAt = time.Now()
 	} else {
-		createdAt, _ = time.Parse(time.RFC3339, model.CreatedAt)
+		createdAt, _ = time.Parse(time.RFC3339, model.PublishedAt)
 	}
 	return entities.BlogPostEntity{
-		ID:               id,
+		ID:               uuid.New(),
 		Heading:          model.Heading,
 		PageTitle:        model.PageTitle,
 		Content:          model.Content,
 		ShortDescription: model.ShortDescription,
 		FeaturedImageUrl: model.FeaturedImageUrl,
 		UrlHandle:        model.UrlHandle,
+		UserId:           uuid.MustParse(model.AuthorId),
 		Author:           model.AuthorName,
 		Visible:          model.Visible,
+		PublishedDate:    createdAt,
 		CreatedAt:        createdAt,
 		UpdatedAt:        time.Now(),
 	}
