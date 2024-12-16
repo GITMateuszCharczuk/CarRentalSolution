@@ -22,7 +22,7 @@ type BlogPostEntity struct {
 	UpdatedAt        time.Time `json:"updated_at"`
 
 	// Navigation Properties
-	Tags     []BlogPostTagEntity     `gorm:"many2many:blog_post_tags;constraint:OnDelete:CASCADE;" json:"tags"`
+	Tags     []BlogPostTagEntity     `gorm:"many2many:blog_post_tag_entity;constraint:OnDelete:CASCADE;" json:"tags"`
 	Likes    []BlogPostLikeEntity    `gorm:"foreignKey:BlogPostID;constraint:OnDelete:CASCADE;" json:"likes"`
 	Comments []BlogPostCommentEntity `gorm:"foreignKey:BlogPostID;constraint:OnDelete:CASCADE;" json:"comments"`
 }

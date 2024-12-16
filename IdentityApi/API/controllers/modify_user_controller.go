@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"identity-api/API/mappers"
 	"identity-api/API/services"
 	contract "identity-api/Application.contract/modify_user"
@@ -40,7 +39,6 @@ func (h *ModifyUserController) Handle(c *gin.Context) {
 	token := services.GetJwtTokenFromQuery(c)
 	var req contract.ModifyUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		fmt.Println(err)
 		response := responses.NewResponse[contract.ModifyUserResponse](400, "Invalid request parameters")
 		responseSender.Send(response)
 		return

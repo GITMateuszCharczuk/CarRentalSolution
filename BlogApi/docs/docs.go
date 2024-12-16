@@ -15,390 +15,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/identity-api/api/login": {
-            "post": {
-                "description": "Authenticates a user and returns JWT tokens",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "auth"
-                ],
-                "summary": "Login user",
-                "parameters": [
-                    {
-                        "description": "Login credentials",
-                        "name": "login",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/contract.LoginRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Login successful",
-                        "schema": {
-                            "$ref": "#/definitions/contract.LoginResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid credentials",
-                        "schema": {
-                            "$ref": "#/definitions/contract.LoginResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.LoginResponse401"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during login",
-                        "schema": {
-                            "$ref": "#/definitions/contract.LoginResponse500"
-                        }
-                    }
-                }
-            }
-        },
-        "/identity-api/api/register": {
-            "post": {
-                "description": "Registers a new user with the provided details.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Register a new user",
-                "parameters": [
-                    {
-                        "description": "User registration details",
-                        "name": "register",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/contract.RegisterUserRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "User registered successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.RegisterUserResponse201"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.RegisterUserResponse400"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during registration",
-                        "schema": {
-                            "$ref": "#/definitions/contract.RegisterUserResponse500"
-                        }
-                    }
-                }
-            }
-        },
-        "/identity-api/api/token/refresh": {
-            "post": {
-                "description": "Refreshes the JWT token using a refresh token",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "auth"
-                ],
-                "summary": "Refresh token",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Refresh token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Token refreshed successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.RefreshTokenResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.RefreshTokenResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Invalid refresh token",
-                        "schema": {
-                            "$ref": "#/definitions/contract.RefreshTokenResponse401"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during token refresh",
-                        "schema": {
-                            "$ref": "#/definitions/contract.RefreshTokenResponse500"
-                        }
-                    }
-                }
-            }
-        },
-        "/identity-api/api/token/validate": {
-            "get": {
-                "description": "Validates the provided JWT token and returns user roles.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Validate token",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JWT token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Token is valid",
-                        "schema": {
-                            "$ref": "#/definitions/contract.ValidateTokenResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.ValidateTokenResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.ValidateTokenResponse401"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during validation",
-                        "schema": {
-                            "$ref": "#/definitions/contract.ValidateTokenResponse500"
-                        }
-                    }
-                }
-            }
-        },
-        "/identity-api/api/user": {
-            "put": {
-                "description": "Modifies user information",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Modify user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JWT token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "description": "User modification details",
-                        "name": "modify",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/contract.ModifyUserRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User modified successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.ModifyUserResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.ModifyUserResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.ModifyUserResponse401"
-                        }
-                    },
-                    "404": {
-                        "description": "User not found",
-                        "schema": {
-                            "$ref": "#/definitions/contract.ModifyUserResponse404"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during modification",
-                        "schema": {
-                            "$ref": "#/definitions/contract.ModifyUserResponse500"
-                        }
-                    }
-                }
-            }
-        },
-        "/identity-api/api/user/id": {
-            "get": {
-                "description": "Retrieves user ID based on the provided token.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Get user ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JWT token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User ID retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse401"
-                        }
-                    },
-                    "404": {
-                        "description": "User not found",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse404"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during retrieval",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserIDResponse500"
-                        }
-                    }
-                }
-            }
-        },
-        "/identity-api/api/user/info": {
-            "get": {
-                "description": "Retrieves user information based on the provided token and user ID.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Get user info",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JWT token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "id",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User info retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserInfoResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserInfoResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserInfoResponse401"
-                        }
-                    },
-                    "404": {
-                        "description": "User not found",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserInfoResponse404"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during retrieval",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetUserInfoResponse500"
-                        }
-                    }
-                }
-            }
-        },
-        "/identity-api/api/user/{id}": {
+        "/blog-api/api/comments/{id}": {
             "delete": {
-                "description": "Deletes a user from the system",
+                "description": "Deletes a specific comment from a blog post",
                 "consumes": [
                     "application/json"
                 ],
@@ -406,9 +25,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "comments"
                 ],
-                "summary": "Delete user",
+                "summary": "Delete a comment from a blog post",
                 "parameters": [
                     {
                         "type": "string",
@@ -419,7 +38,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "User ID",
+                        "description": "Comment ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -427,41 +46,47 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "User deleted successfully",
+                        "description": "Comment deleted successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteUserResponse200"
+                            "$ref": "#/definitions/contract.DeleteBlogPostCommentResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteUserResponse400"
+                            "$ref": "#/definitions/contract.DeleteBlogPostCommentResponse400"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteUserResponse401"
+                            "$ref": "#/definitions/contract.DeleteBlogPostCommentResponse401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Not the comment owner",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteBlogPostCommentResponse403"
                         }
                     },
                     "404": {
-                        "description": "User not found",
+                        "description": "Comment not found",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteUserResponse404"
+                            "$ref": "#/definitions/contract.DeleteBlogPostCommentResponse404"
                         }
                     },
                     "500": {
-                        "description": "Internal server error during deletion",
+                        "description": "Server error during deletion",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteUserResponse500"
+                            "$ref": "#/definitions/contract.DeleteBlogPostCommentResponse500"
                         }
                     }
                 }
             }
         },
-        "/identity-api/api/users": {
+        "/blog-api/api/posts": {
             "get": {
-                "description": "Retrieves a list of all users with optional pagination and sorting.",
+                "description": "Retrieves a list of blog posts with optional filtering, pagination and sorting.",
                 "consumes": [
                     "application/json"
                 ],
@@ -469,9 +94,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "blog"
                 ],
-                "summary": "Get all users",
+                "summary": "Get blog posts",
                 "parameters": [
                     {
                         "type": "string",
@@ -498,40 +123,701 @@ const docTemplate = `{
                             "type": "string"
                         },
                         "collectionFormat": "csv",
-                        "description": "Sort fields (format: field:direction)",
+                        "description": "Sort fields",
+                        "name": "sort_query",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Blog post IDs",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start date",
+                        "name": "dateTimeFrom",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "End date",
+                        "name": "dateTimeTo",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Author IDs",
+                        "name": "authorIds",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Tags",
+                        "name": "tags",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Visibility status",
+                        "name": "visible",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Blog posts retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetBlogPostsResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetBlogPostsResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetBlogPostsResponse401"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetBlogPostsResponse500"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new blog post with the provided details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "blog"
+                ],
+                "summary": "Create a new blog post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Blog post details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateBlogPostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Blog post created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateBlogPostResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateBlogPostResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateBlogPostResponse401"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during creation",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateBlogPostResponse500"
+                        }
+                    }
+                }
+            }
+        },
+        "/blog-api/api/posts/{id}": {
+            "get": {
+                "description": "Retrieves a specific blog post by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "blog"
+                ],
+                "summary": "Get a blog post by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Blog Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Blog post retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetBlogPostResponse200"
+                        }
+                    },
+                    "404": {
+                        "description": "Blog post not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetBlogPostResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetBlogPostResponse500"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an existing blog post with the provided details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "blog"
+                ],
+                "summary": "Update a blog post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Blog Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated blog post details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateBlogPostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Blog post updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateBlogPostResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateBlogPostResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateBlogPostResponse401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Not the post owner",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateBlogPostResponse403"
+                        }
+                    },
+                    "404": {
+                        "description": "Blog post not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateBlogPostResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during update",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateBlogPostResponse500"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes an existing blog post",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "blog"
+                ],
+                "summary": "Delete a blog post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Blog Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Blog post deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteBlogPostResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteBlogPostResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteBlogPostResponse401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Not authorized to delete",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteBlogPostResponse403"
+                        }
+                    },
+                    "404": {
+                        "description": "Blog post not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteBlogPostResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during deletion",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteBlogPostResponse500"
+                        }
+                    }
+                }
+            }
+        },
+        "/blog-api/api/posts/{id}/comments": {
+            "get": {
+                "description": "Retrieves all comments for a specific blog post with pagination",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comments"
+                ],
+                "summary": "Get comments for a blog post",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Filter by blog post IDs",
+                        "name": "ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Filter by user IDs",
+                        "name": "user_ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter from date",
+                        "name": "date_time_from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter to date",
+                        "name": "date_time_to",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Sort fields (field:asc|desc)",
+                        "name": "sort_fields",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Current page",
+                        "name": "current_page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comments retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetBlogPostCommentsResponse200"
+                        }
+                    },
+                    "404": {
+                        "description": "Blog post not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetBlogPostCommentsResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetBlogPostCommentsResponse500"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new comment on a specific blog post",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comments"
+                ],
+                "summary": "Create a comment on a blog post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Blog Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Comment details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateBlogPostCommentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comment created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateBlogPostCommentResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateBlogPostCommentResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateBlogPostCommentResponse401"
+                        }
+                    },
+                    "404": {
+                        "description": "Blog post not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateBlogPostCommentResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during creation",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateBlogPostCommentResponse500"
+                        }
+                    }
+                }
+            }
+        },
+        "/blog-api/api/posts/{id}/likes": {
+            "get": {
+                "description": "Retrieves the total number of likes for a specific blog post",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "likes"
+                ],
+                "summary": "Get likes count for a blog post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Blog Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Likes count retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetLikesForBlogPostResponse200"
+                        }
+                    },
+                    "404": {
+                        "description": "Blog post not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetLikesForBlogPostResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetLikesForBlogPostResponse500"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Adds a like to a specific blog post",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "likes"
+                ],
+                "summary": "Like a blog post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Blog Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Like added successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateLikeForBlogPostResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateLikeForBlogPostResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateLikeForBlogPostResponse401"
+                        }
+                    },
+                    "404": {
+                        "description": "Blog post not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateLikeForBlogPostResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during creation",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateLikeForBlogPostResponse500"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Removes a like from a specific blog post",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "likes"
+                ],
+                "summary": "Unlike a blog post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Blog Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Like removed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteLikeForBlogPostResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteLikeForBlogPostResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteLikeForBlogPostResponse401"
+                        }
+                    },
+                    "404": {
+                        "description": "Blog post not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteLikeForBlogPostResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during deletion",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteLikeForBlogPostResponse500"
+                        }
+                    }
+                }
+            }
+        },
+        "/blog-api/api/tags/{id}": {
+            "get": {
+                "description": "Retrieves a list of all unique tags used in blog posts",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tags"
+                ],
+                "summary": "Get all unique tags",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Blog Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Sort fields (field:asc|desc)",
                         "name": "sort_fields",
                         "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Users retrieved successfully",
+                        "description": "Tags retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetAllUsersResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetAllUsersResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetAllUsersResponse401"
-                        }
-                    },
-                    "403": {
-                        "description": "Insufficient privileges",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetAllUsersResponse403"
+                            "$ref": "#/definitions/contract.GetTagsResponse200"
                         }
                     },
                     "500": {
                         "description": "Server error during retrieval",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetAllUsersResponse500"
+                            "$ref": "#/definitions/contract.GetTagsResponse500"
                         }
                     }
                 }
@@ -539,12 +825,33 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "contract.DeleteUserResponse200": {
+        "contract.CreateBlogPostCommentRequest": {
+            "type": "object",
+            "required": [
+                "blogPostId",
+                "description"
+            ],
+            "properties": {
+                "blogPostId": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "This is a great blog post!"
+                }
+            }
+        },
+        "contract.CreateBlogPostCommentResponse200": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
                 "message": {
                     "type": "string",
-                    "example": "User deleted successfully"
+                    "example": "Comment added successfully"
                 },
                 "success": {
                     "type": "boolean",
@@ -552,7 +859,291 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteUserResponse400": {
+        "contract.CreateBlogPostCommentResponse400": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.CreateBlogPostCommentResponse401": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Unauthorized"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.CreateBlogPostCommentResponse404": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Blog post not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.CreateBlogPostCommentResponse500": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error while adding comment"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.CreateBlogPostRequest": {
+            "type": "object",
+            "required": [
+                "content",
+                "heading",
+                "pageTitle",
+                "shortDescription",
+                "urlHandle"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string",
+                    "example": "Blog post content..."
+                },
+                "featuredImageUrl": {
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
+                },
+                "heading": {
+                    "type": "string",
+                    "example": "Blog Post Title"
+                },
+                "pageTitle": {
+                    "type": "string",
+                    "example": "Page Title"
+                },
+                "shortDescription": {
+                    "type": "string",
+                    "example": "Short description"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[\"tech\"",
+                        "\"programming\"]"
+                    ]
+                },
+                "urlHandle": {
+                    "type": "string",
+                    "example": "blog-post-title"
+                },
+                "visible": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.CreateBlogPostResponse200": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Blog post created successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.CreateBlogPostResponse400": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.CreateBlogPostResponse401": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Unauthorized"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.CreateBlogPostResponse500": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error while creating blog post"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.CreateLikeForBlogPostResponse200": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Like added successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.CreateLikeForBlogPostResponse400": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.CreateLikeForBlogPostResponse401": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Unauthorized"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.CreateLikeForBlogPostResponse404": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Blog post not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.CreateLikeForBlogPostResponse500": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error while adding like"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.DeleteBlogPostCommentResponse200": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Comment deleted successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.DeleteBlogPostCommentResponse400": {
             "type": "object",
             "properties": {
                 "message": {
@@ -565,12 +1156,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteUserResponse401": {
+        "contract.DeleteBlogPostCommentResponse401": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Invalid or expired token"
+                    "example": "Unauthorized"
                 },
                 "success": {
                     "type": "boolean",
@@ -578,12 +1169,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteUserResponse404": {
+        "contract.DeleteBlogPostCommentResponse403": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "User not found"
+                    "example": "Forbidden"
                 },
                 "success": {
                     "type": "boolean",
@@ -591,12 +1182,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteUserResponse500": {
+        "contract.DeleteBlogPostCommentResponse404": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Internal server error during user deletion"
+                    "example": "Comment not found"
                 },
                 "success": {
                     "type": "boolean",
@@ -604,7 +1195,304 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.GetAllUsersResponse200": {
+        "contract.DeleteBlogPostCommentResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error while deleting comment"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.DeleteBlogPostResponse200": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Blog post deleted successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.DeleteBlogPostResponse400": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.DeleteBlogPostResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Unauthorized"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.DeleteBlogPostResponse403": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Forbidden"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.DeleteBlogPostResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Blog post not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.DeleteBlogPostResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error while deleting blog post"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.DeleteLikeForBlogPostResponse200": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Like removed successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.DeleteLikeForBlogPostResponse400": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.DeleteLikeForBlogPostResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Unauthorized"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.DeleteLikeForBlogPostResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Like not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.DeleteLikeForBlogPostResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error while removing like"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetBlogPostCommentsResponse200": {
+            "type": "object",
+            "properties": {
+                "current_page": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "items": {
+                    "description": "todo",
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Comments retrieved successfully"
+                },
+                "page_size": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "total_items": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "total_pages": {
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
+        "contract.GetBlogPostCommentsResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Blog post not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetBlogPostCommentsResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error while retrieving comments"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetBlogPostResponse200": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "content": {
+                    "type": "string",
+                    "example": "Blog post content..."
+                },
+                "featuredImageUrl": {
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
+                },
+                "heading": {
+                    "type": "string",
+                    "example": "Blog Post Title"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Blog post retrieved successfully"
+                },
+                "pageTitle": {
+                    "type": "string",
+                    "example": "Page Title"
+                },
+                "publishedDate": {
+                    "type": "string",
+                    "example": "2023-12-12"
+                },
+                "shortDescription": {
+                    "type": "string",
+                    "example": "Short description"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "urlHandle": {
+                    "type": "string",
+                    "example": "blog-post-title"
+                },
+                "visible": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.GetBlogPostResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Blog post not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetBlogPostResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error while retrieving blog post"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetBlogPostsResponse200": {
             "type": "object",
             "properties": {
                 "data": {
@@ -619,47 +1507,55 @@ const docTemplate = `{
                             "items": {
                                 "type": "object",
                                 "properties": {
-                                    "address": {
+                                    "author": {
                                         "type": "string",
-                                        "example": "123 Main St"
+                                        "example": "John Doe"
                                     },
-                                    "city": {
+                                    "content": {
                                         "type": "string",
-                                        "example": "New York"
+                                        "example": "Blog post content..."
                                     },
-                                    "email_address": {
+                                    "featuredImageUrl": {
                                         "type": "string",
-                                        "example": "user@example.com"
+                                        "example": "https://example.com/image.jpg"
+                                    },
+                                    "heading": {
+                                        "type": "string",
+                                        "example": "Blog Post Title"
                                     },
                                     "id": {
                                         "type": "string",
-                                        "example": "12345"
+                                        "example": "123e4567-e89b-12d3-a456-426614174000"
                                     },
-                                    "name": {
+                                    "pageTitle": {
                                         "type": "string",
-                                        "example": "John"
+                                        "example": "Page Title"
                                     },
-                                    "phone_number": {
+                                    "publishedDate": {
                                         "type": "string",
-                                        "example": "+1234567890"
+                                        "example": "2023-12-12"
                                     },
-                                    "postal_code": {
+                                    "shortDescription": {
                                         "type": "string",
-                                        "example": "12345"
+                                        "example": "Short description"
                                     },
-                                    "roles": {
+                                    "tags": {
                                         "type": "array",
                                         "items": {
                                             "type": "string"
                                         },
                                         "example": [
-                                            "user",
-                                            "admin"
+                                            "[\"tech\"",
+                                            "\"programming\"]"
                                         ]
                                     },
-                                    "surname": {
+                                    "urlHandle": {
                                         "type": "string",
-                                        "example": "Doe"
+                                        "example": "blog-post-title"
+                                    },
+                                    "visible": {
+                                        "type": "boolean",
+                                        "example": true
                                     }
                                 }
                             }
@@ -688,7 +1584,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.GetAllUsersResponse400": {
+        "contract.GetBlogPostsResponse400": {
             "type": "object",
             "properties": {
                 "data": {
@@ -707,7 +1603,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.GetAllUsersResponse401": {
+        "contract.GetBlogPostsResponse401": {
             "type": "object",
             "properties": {
                 "data": {
@@ -718,7 +1614,7 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "Invalid or expired token"
+                    "example": "Unauthorized"
                 },
                 "success": {
                     "type": "boolean",
@@ -726,7 +1622,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.GetAllUsersResponse403": {
+        "contract.GetBlogPostsResponse500": {
             "type": "object",
             "properties": {
                 "data": {
@@ -737,7 +1633,7 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "Insufficient privileges"
+                    "example": "Internal server error while retrieving blog posts"
                 },
                 "success": {
                     "type": "boolean",
@@ -745,436 +1641,170 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.GetAllUsersResponse500": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "type": "object"
-                    }
-                },
-                "message": {
-                    "type": "string",
-                    "example": "Internal server error during retrieval"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.GetUserIDResponse200": {
+        "contract.GetLikesForBlogPostResponse200": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "User ID retrieved successfully"
+                    "example": "Likes retrieved successfully"
                 },
                 "success": {
                     "type": "boolean",
                     "example": true
                 },
-                "user_id": {
-                    "type": "string",
-                    "example": "12345"
+                "totalCount": {
+                    "type": "integer",
+                    "example": 42
                 }
             }
         },
-        "contract.GetUserIDResponse400": {
+        "contract.GetLikesForBlogPostResponse404": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Invalid request parameters"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
+                    "example": "Blog post not found"
                 },
                 "success": {
                     "type": "boolean",
                     "example": false
                 },
-                "user_id": {
-                    "type": "string",
-                    "example": ""
+                "totalCount": {
+                    "type": "integer",
+                    "example": 0
                 }
             }
         },
-        "contract.GetUserIDResponse401": {
+        "contract.GetLikesForBlogPostResponse500": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Invalid or expired token"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
+                    "example": "Internal server error while retrieving likes"
                 },
                 "success": {
                     "type": "boolean",
                     "example": false
                 },
-                "user_id": {
-                    "type": "string",
-                    "example": ""
+                "totalCount": {
+                    "type": "integer",
+                    "example": 0
                 }
             }
         },
-        "contract.GetUserIDResponse404": {
+        "contract.GetTagsResponse200": {
             "type": "object",
             "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "User not found"
-                },
-                "roles": {
+                "items": {
                     "type": "array",
                     "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
+                        "type": "object"
+                    }
                 },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "user_id": {
-                    "type": "string",
-                    "example": ""
-                }
-            }
-        },
-        "contract.GetUserIDResponse500": {
-            "type": "object",
-            "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Internal server error during user ID retrieval"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "user_id": {
-                    "type": "string",
-                    "example": ""
-                }
-            }
-        },
-        "contract.GetUserInfoResponse200": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "User info retrieved successfully"
+                    "example": "Tags retrieved successfully"
                 },
                 "success": {
                     "type": "boolean",
                     "example": true
-                },
-                "user_info": {
-                    "type": "object"
                 }
             }
         },
-        "contract.GetUserInfoResponse400": {
+        "contract.GetTagsResponse500": {
             "type": "object",
             "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
                 "message": {
                     "type": "string",
-                    "example": "Invalid request parameters"
+                    "example": "Internal server error while retrieving tags"
                 },
                 "success": {
                     "type": "boolean",
                     "example": false
-                },
-                "user_info": {
-                    "type": "object"
                 }
             }
         },
-        "contract.GetUserInfoResponse401": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Invalid or expired token"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "user_info": {
-                    "type": "object"
-                }
-            }
-        },
-        "contract.GetUserInfoResponse404": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "User not found"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "user_info": {
-                    "type": "object"
-                }
-            }
-        },
-        "contract.GetUserInfoResponse500": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Internal server error during user info retrieval"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "user_info": {
-                    "type": "object"
-                }
-            }
-        },
-        "contract.LoginRequest": {
+        "contract.UpdateBlogPostRequest": {
             "type": "object",
             "required": [
-                "email",
-                "password"
+                "author",
+                "content",
+                "heading",
+                "id",
+                "jwtToken",
+                "pageTitle",
+                "publishedDate",
+                "shortDescription",
+                "urlHandle"
             ],
             "properties": {
-                "email": {
+                "author": {
                     "type": "string",
-                    "example": "user@example.com"
+                    "example": "John Doe"
                 },
-                "password": {
+                "content": {
                     "type": "string",
-                    "minLength": 8,
-                    "example": "password123"
-                }
-            }
-        },
-        "contract.LoginResponse200": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Login successful"
+                    "example": "Updated blog post content..."
                 },
-                "refresh_token": {
+                "featuredImageUrl": {
                     "type": "string",
-                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    "example": "https://example.com/updated-image.jpg"
                 },
-                "roles": {
+                "heading": {
+                    "type": "string",
+                    "example": "Updated Blog Post Title"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "jwtToken": {
+                    "$ref": "#/definitions/models.JwtToken"
+                },
+                "pageTitle": {
+                    "type": "string",
+                    "example": "Updated Page Title"
+                },
+                "publishedDate": {
+                    "type": "string",
+                    "example": "2023-12-12"
+                },
+                "shortDescription": {
+                    "type": "string",
+                    "example": "Updated short description"
+                },
+                "tags": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     },
                     "example": [
-                        "[user",
-                        " admin]"
+                        "[\"tech\"",
+                        "\"programming\"]"
                     ]
                 },
-                "success": {
+                "urlHandle": {
+                    "type": "string",
+                    "example": "updated-blog-post-title"
+                },
+                "visible": {
                     "type": "boolean",
                     "example": true
-                },
-                "token": {
-                    "type": "string",
-                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                 }
             }
         },
-        "contract.LoginResponse400": {
+        "contract.UpdateBlogPostResponse200": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Invalid request parameters"
-                },
-                "refresh_token": {
-                    "type": "string",
-                    "example": ""
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "token": {
-                    "type": "string",
-                    "example": ""
-                }
-            }
-        },
-        "contract.LoginResponse401": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Invalid credentials"
-                },
-                "refresh_token": {
-                    "type": "string",
-                    "example": ""
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "token": {
-                    "type": "string",
-                    "example": ""
-                }
-            }
-        },
-        "contract.LoginResponse500": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Internal server error during login"
-                },
-                "refresh_token": {
-                    "type": "string",
-                    "example": ""
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "token": {
-                    "type": "string",
-                    "example": ""
-                }
-            }
-        },
-        "contract.ModifyUserRequest": {
-            "type": "object",
-            "required": [
-                "address",
-                "city",
-                "name",
-                "phone_number",
-                "postal_code",
-                "surname"
-            ],
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 5,
-                    "example": "123 Main St"
-                },
-                "city": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 2,
-                    "example": "New York"
-                },
-                "email_address": {
-                    "type": "string",
-                    "example": "user@example.com"
-                },
-                "name": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 2,
-                    "example": "John"
-                },
-                "phone_number": {
-                    "type": "string",
-                    "example": "+1234567890"
-                },
-                "postal_code": {
-                    "type": "string",
-                    "maxLength": 10,
-                    "minLength": 5,
-                    "example": "12345"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "user",
-                        "admin"
-                    ]
-                },
-                "surname": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 2,
-                    "example": "Doe"
-                },
-                "user_id": {
-                    "type": "string",
-                    "example": "1234567890"
-                }
-            }
-        },
-        "contract.ModifyUserResponse200": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "User modified successfully"
+                    "example": "Blog post updated successfully"
                 },
                 "success": {
                     "type": "boolean",
@@ -1182,7 +1812,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.ModifyUserResponse400": {
+        "contract.UpdateBlogPostResponse400": {
             "type": "object",
             "properties": {
                 "message": {
@@ -1195,12 +1825,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.ModifyUserResponse401": {
+        "contract.UpdateBlogPostResponse401": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Invalid or expired token"
+                    "example": "Unauthorized"
                 },
                 "success": {
                     "type": "boolean",
@@ -1208,12 +1838,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.ModifyUserResponse404": {
+        "contract.UpdateBlogPostResponse403": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "User not found"
+                    "example": "Forbidden"
                 },
                 "success": {
                     "type": "boolean",
@@ -1221,12 +1851,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.ModifyUserResponse500": {
+        "contract.UpdateBlogPostResponse404": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Internal server error during user modification"
+                    "example": "Blog post not found"
                 },
                 "success": {
                     "type": "boolean",
@@ -1234,145 +1864,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.RefreshTokenResponse200": {
+        "contract.UpdateBlogPostResponse500": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Token refreshed successfully"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": true
-                },
-                "token": {
-                    "type": "string",
-                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                }
-            }
-        },
-        "contract.RefreshTokenResponse400": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Invalid request parameters"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "token": {
-                    "type": "string",
-                    "example": ""
-                }
-            }
-        },
-        "contract.RefreshTokenResponse401": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Invalid refresh token"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "token": {
-                    "type": "string",
-                    "example": ""
-                }
-            }
-        },
-        "contract.RefreshTokenResponse500": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Internal server error during token refresh"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "token": {
-                    "type": "string",
-                    "example": ""
-                }
-            }
-        },
-        "contract.RegisterUserRequest": {
-            "type": "object",
-            "required": [
-                "address",
-                "city",
-                "email_address",
-                "name",
-                "password",
-                "phone_number",
-                "postal_code",
-                "surname"
-            ],
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "example": "123 Main St"
-                },
-                "city": {
-                    "type": "string",
-                    "example": "New York"
-                },
-                "email_address": {
-                    "type": "string",
-                    "example": "user@example.com"
-                },
-                "name": {
-                    "type": "string",
-                    "example": "John"
-                },
-                "password": {
-                    "type": "string",
-                    "minLength": 8,
-                    "example": "password123"
-                },
-                "phone_number": {
-                    "type": "string",
-                    "example": "+1234567890"
-                },
-                "postal_code": {
-                    "type": "string",
-                    "example": "12345"
-                },
-                "surname": {
-                    "type": "string",
-                    "example": "Doe"
-                }
-            }
-        },
-        "contract.RegisterUserResponse201": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "User registered successfully"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": true
-                },
-                "user_id": {
-                    "type": "string",
-                    "example": "12345"
-                }
-            }
-        },
-        "contract.RegisterUserResponse400": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Invalid request parameters"
+                    "example": "Internal server error while updating blog post"
                 },
                 "success": {
                     "type": "boolean",
@@ -1380,123 +1877,8 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.RegisterUserResponse500": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Internal server error during registration"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.ValidateTokenResponse200": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Token validated successfully"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[user",
-                        " admin]"
-                    ]
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": true
-                },
-                "valid": {
-                    "type": "boolean",
-                    "example": true
-                }
-            }
-        },
-        "contract.ValidateTokenResponse400": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Invalid request parameters"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "valid": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.ValidateTokenResponse401": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Invalid or expired token"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "valid": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.ValidateTokenResponse500": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Internal server error during token validation"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "[]"
-                    ]
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "valid": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
+        "models.JwtToken": {
+            "type": "object"
         }
     }
 }`

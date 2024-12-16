@@ -1,33 +1,24 @@
 services:
-  api:
+  blog-api:
     build:
       context: ..
       dockerfile: ./docker/Dockerfile.API
     ports:
-      - "8085:8085"
+      - "8087:8087"
     environment:
       # Environment
       ENV: prod
-      
       # Service Configuration
-      SERVICE_ADDRESS: /identity-api/api
-      SERVICE_PORT: :8085
-      # Redis Configuration
-      REDIS_HOST: redis_container
-      REDIS_PORT: 6379
-      REDIS_PASSWORD: redis
-      # JWT Configuration
-      ACCESS_TOKEN_TTL: 15
-      REFRESH_TOKEN_TTL: 30
-      SECRET_KEY: your_secret_key_here
+      SERVICE_ADDRESS: /blog-api/api
+      SERVICE_PORT: :8087
       # PostgreSQL Configuration
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: Identity_db
-      POSTGRES_HOST: Identity_postgres
+      POSTGRES_DB: blog_db
+      POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       RUN_POSTGRES_MIGRATION: "true"
-      
+      IDENTITY_API_URL: http://identity-api:8085
     networks:
       - docker-network
 

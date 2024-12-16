@@ -13,5 +13,5 @@ type BlogPostTagEntity struct {
 	UpdatedAt time.Time `json:"updated_at"`
 
 	// Navigation Properties
-	BlogPosts []BlogPostEntity `gorm:"many2many:blog_post_tags;" json:"blog_posts"`
+	BlogPosts []BlogPostEntity `gorm:"many2many:blog_post_tag_entity;" json:"blog_posts"`
 }

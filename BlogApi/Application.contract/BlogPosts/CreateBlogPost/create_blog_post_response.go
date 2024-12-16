@@ -21,6 +21,12 @@ type CreateBlogPostResponse400 struct {
 	Id      string `json:"id" example:"" swaggertype:"string"`
 }
 
+type CreateBlogPostResponse401 struct {
+	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
+	Message string `json:"message" example:"Unauthorized" swaggertype:"string"`
+	Id      string `json:"id" example:"" swaggertype:"string"`
+}
+
 type CreateBlogPostResponse500 struct {
 	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
 	Message string `json:"message" example:"Internal server error while creating blog post" swaggertype:"string"`

@@ -1,5 +1,5 @@
 services:
-  api:
+  identity-api:
     build:
       context: ..
       dockerfile: ./docker/Dockerfile.API
@@ -8,12 +8,11 @@ services:
     environment:
       # Environment
       ENV: prod
-      
       # Service Configuration
       SERVICE_ADDRESS: /identity-api/api
       SERVICE_PORT: :8085
       # Redis Configuration
-      REDIS_HOST: redis_container
+      REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: redis
       # JWT Configuration
@@ -23,14 +22,13 @@ services:
       # PostgreSQL Configuration
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: Identity_db
-      POSTGRES_HOST: Identity_postgres
+      POSTGRES_DB: identity_db
+      POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       RUN_POSTGRES_MIGRATION: "true"
       
     networks:
       - docker-network
-
 networks:
   docker-network:
     driver: bridge

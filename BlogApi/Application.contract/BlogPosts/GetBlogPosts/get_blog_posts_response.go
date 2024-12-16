@@ -41,6 +41,12 @@ type GetBlogPostsResponse400 struct {
 	Data    []dummyArrayObject `json:"data" swaggertype:"array,object"`
 }
 
+type GetBlogPostsResponse401 struct {
+	Success bool               `json:"success" example:"false" swaggertype:"boolean"`
+	Message string             `json:"message" example:"Unauthorized" swaggertype:"string"`
+	Data    []dummyArrayObject `json:"data" swaggertype:"array,object"`
+}
+
 type GetBlogPostsResponse500 struct {
 	Success bool               `json:"success" example:"false" swaggertype:"boolean"`
 	Message string             `json:"message" example:"Internal server error while retrieving blog posts" swaggertype:"string"`

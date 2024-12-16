@@ -7,19 +7,26 @@
 package main
 
 import (
-	"identity-api/API/controllers"
+	controllers5 "identity-api/API/controllers"
+	"identity-api/API/controllers/blog_post"
+	controllers2 "identity-api/API/controllers/blog_post_comment"
+	controllers3 "identity-api/API/controllers/blog_post_like"
+	controllers4 "identity-api/API/controllers/blog_post_tag"
 	"identity-api/API/server"
 	"identity-api/API/validators"
-	"identity-api/Domain/repository_interfaces/user_repository"
-	"identity-api/Domain/service_interfaces"
+	repository_interfaces2 "identity-api/Domain/repository_interfaces/blog_post_comment_repository"
+	repository_interfaces3 "identity-api/Domain/repository_interfaces/blog_post_like_repository"
+	"identity-api/Domain/repository_interfaces/blog_post_repository"
+	repository_interfaces4 "identity-api/Domain/repository_interfaces/blog_post_tag_repository"
+	datafetcher2 "identity-api/Domain/service_interfaces"
 	"identity-api/Infrastructure/config"
+	"identity-api/Infrastructure/data_fetcher"
 	config2 "identity-api/Infrastructure/databases/postgres/config"
 	"identity-api/Infrastructure/databases/postgres/mappers"
-	"identity-api/Infrastructure/databases/postgres/repository/user_repository"
-	"identity-api/Infrastructure/databases/redis/config"
-	repository2 "identity-api/Infrastructure/databases/redis/repository/refresh_token_repository"
-	"identity-api/Infrastructure/jwt_tocken_service"
-	"identity-api/Infrastructure/password_hasher"
+	repository3 "identity-api/Infrastructure/databases/postgres/repository/blog_post_comment_repository"
+	repository4 "identity-api/Infrastructure/databases/postgres/repository/blog_post_like_repository"
+	"identity-api/Infrastructure/databases/postgres/repository/blog_post_repository"
+	repository2 "identity-api/Infrastructure/databases/postgres/repository/blog_post_tag_repository"
 )
 
 // Injectors from wire.go:
@@ -27,40 +34,50 @@ import (
 func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	configConfig := config.ProvideConfig()
 	postgresDatabase := config2.NewPostgresConfigProvider(configConfig)
-	persistenceMapper := mappers.ProvideUserPersistenceMapper()
-	userQueryRepository := repository.ProvideUserQueryRepository(postgresDatabase, persistenceMapper)
-	userCommandRepository := repository.ProvideUserCommandRepository(postgresDatabase, persistenceMapper)
-	redisDatabase, err := redis_config.NewRedisConfigProvider(configConfig)
-	if err != nil {
-		return nil, err
-	}
-	refreshTokenCommandRepository := repository2.ProvideRefreshTokenCommandRepository(redisDatabase)
-	refreshTokenQueryRepository := repository2.ProvideRefreshTokenQueryRepository(redisDatabase)
-	jwtTokenService := jwt_token_service.ProvideJWTTokenService(configConfig, refreshTokenCommandRepository, refreshTokenQueryRepository, userQueryRepository)
-	passwordHasher := password_hasher.ProvidePasswordHasher()
+	persistenceMapper := mappers.ProvideBlogPostResponsePersistenceMapper()
+	blogPostQueryRepository := repository.ProvideBlogPostQueryRepository(postgresDatabase, persistenceMapper)
+	mappersPersistenceMapper := mappers.ProvideBlogPostRequestPersistenceMapper()
+	persistenceMapper2 := mappers.ProvideBlogPostTagPersistenceMapper()
+	blogPostTagCommandRepository := repository2.ProvideBlogPostTagCommandRepository(postgresDatabase, persistenceMapper2)
+	blogPostCommandRepository := repository.ProvideBlogPostCommandRepository(postgresDatabase, mappersPersistenceMapper, blogPostTagCommandRepository)
+	persistenceMapper3 := mappers.ProvideBlogPostCommentPersistenceMapper()
+	blogPostCommentQueryRepository := repository3.ProvideBlogPostCommentQueryRepository(postgresDatabase, persistenceMapper3)
+	blogPostCommentCommandRepository := repository3.ProvideBlogPostCommentCommandRepository(postgresDatabase, persistenceMapper3)
+	persistenceMapper4 := mappers.ProvideBlogPostLikePersistenceMapper()
+	blogPostLikeQueryRepository := repository4.ProvideBlogPostLikeQueryRepository(postgresDatabase, persistenceMapper4)
+	blogPostLikeCommandRepository := repository4.ProvideBlogPostLikeCommandRepository(postgresDatabase, persistenceMapper4)
+	blogPostTagQueryRepository := repository2.ProvideBlogPostTagQueryRepository(postgresDatabase, persistenceMapper2)
+	dataFetcher := datafetcher.ProvideDataFetcherImpl(configConfig)
 	infrastructureComponents := &InfrastructureComponents{
-		Config:          configConfig,
-		UserQueryRepo:   userQueryRepository,
-		UserCommandRepo: userCommandRepository,
-		TokenService:    jwtTokenService,
-		PasswordHasher:  passwordHasher,
+		Config:             configConfig,
+		BlogQueryRepo:      blogPostQueryRepository,
+		BlogCommandRepo:    blogPostCommandRepository,
+		CommentQueryRepo:   blogPostCommentQueryRepository,
+		CommentCommandRepo: blogPostCommentCommandRepository,
+		LikeQueryRepo:      blogPostLikeQueryRepository,
+		LikeCommandRepo:    blogPostLikeCommandRepository,
+		TagQueryRepo:       blogPostTagQueryRepository,
+		DataFetcher:        dataFetcher,
 	}
 	return infrastructureComponents, nil
 }
 
-func InitializeApi(userQueryRepo repository_interfaces.UserQueryRepository, userCommandRepo repository_interfaces.UserCommandRepository, tokenService service_interfaces.JWTTokenService, passwordHasher service_interfaces.PasswordHasher, config3 *config.Config) (*server.Server, error) {
+func InitializeApi(blogQueryRepo repository_interfaces.BlogPostQueryRepository, blogCommandRepo repository_interfaces.BlogPostCommandRepository, commentQueryRepo repository_interfaces2.BlogPostCommentQueryRepository, commentCommandRepo repository_interfaces2.BlogPostCommentCommandRepository, likeQueryRepo repository_interfaces3.BlogPostLikeQueryRepository, likeCommandRepo repository_interfaces3.BlogPostLikeCommandRepository, tagQueryRepo repository_interfaces4.BlogPostTagQueryRepository, dataFetcher datafetcher2.DataFetcher, config3 *config.Config) (*server.Server, error) {
 	validate := validators.ProvideValidator()
-	getAllUsersController := controllers.NewGetAllUsersController(validate)
-	getUserIDController := controllers.NewGetUserIDController(validate)
-	getUserInfoController := controllers.NewGetUserInfoController(validate)
-	registerController := controllers.NewRegisterController(validate)
-	loginController := controllers.NewLoginController(validate)
-	modifyUserController := controllers.NewModifyUserController(validate)
-	deleteUserController := controllers.NewDeleteUserController(validate)
-	validateTokenController := controllers.NewValidateTokenController(validate)
-	refreshTokenController := controllers.NewRefreshTokenController(validate)
-	v := controllers.ProvideControllers(getAllUsersController, getUserIDController, getUserInfoController, registerController, loginController, modifyUserController, deleteUserController, validateTokenController, refreshTokenController)
-	controllersControllers := controllers.NewControllers(v)
+	createBlogPostController := controllers.NewCreateBlogPostController(validate)
+	getBlogPostController := controllers.NewGetBlogPostController(validate)
+	getBlogPostsController := controllers.NewGetBlogPostsController(validate)
+	updateBlogPostController := controllers.NewUpdateBlogPostController(validate)
+	deleteBlogPostController := controllers.NewDeleteBlogPostController(validate)
+	createBlogPostCommentController := controllers2.NewCreateBlogPostCommentController(validate)
+	deleteBlogPostCommentController := controllers2.NewDeleteBlogPostCommentController(validate)
+	getBlogPostCommentsController := controllers2.NewGetBlogPostCommentsController(validate)
+	createLikeForBlogPostController := controllers3.NewCreateLikeForBlogPostController(validate)
+	deleteLikeForBlogPostController := controllers3.NewDeleteLikeForBlogPostController(validate)
+	getLikesForBlogPostController := controllers3.NewGetLikesForBlogPostController(validate)
+	getTagsController := controllers4.NewGetTagsController(validate)
+	v := controllers5.ProvideControllers(createBlogPostController, getBlogPostController, getBlogPostsController, updateBlogPostController, deleteBlogPostController, createBlogPostCommentController, deleteBlogPostCommentController, getBlogPostCommentsController, createLikeForBlogPostController, deleteLikeForBlogPostController, getLikesForBlogPostController, getTagsController)
+	controllersControllers := controllers5.NewControllers(v)
 	serverServer := server.ProvideServer(controllersControllers, config3)
 	return serverServer, nil
 }
@@ -68,9 +85,13 @@ func InitializeApi(userQueryRepo repository_interfaces.UserQueryRepository, user
 // wire.go:
 
 type InfrastructureComponents struct {
-	Config          *config.Config
-	UserQueryRepo   repository_interfaces.UserQueryRepository
-	UserCommandRepo repository_interfaces.UserCommandRepository
-	TokenService    service_interfaces.JWTTokenService
-	PasswordHasher  service_interfaces.PasswordHasher
+	Config             *config.Config
+	BlogQueryRepo      repository_interfaces.BlogPostQueryRepository
+	BlogCommandRepo    repository_interfaces.BlogPostCommandRepository
+	CommentQueryRepo   repository_interfaces2.BlogPostCommentQueryRepository
+	CommentCommandRepo repository_interfaces2.BlogPostCommentCommandRepository
+	LikeQueryRepo      repository_interfaces3.BlogPostLikeQueryRepository
+	LikeCommandRepo    repository_interfaces3.BlogPostLikeCommandRepository
+	TagQueryRepo       repository_interfaces4.BlogPostTagQueryRepository
+	DataFetcher        datafetcher2.DataFetcher
 }

@@ -10,6 +10,7 @@ services:
       - SERVICE_PORT=:8000
       - FILE_SERVICE_URL=http://file-storage-api:8082
       - EMAIL_SERVICE_URL=http://email-service-api:8084
+      - IDENTITY_API_URL=http://identity-api:8085
       - REQUEST_SENT_LIMIT=100
       - REQUEST_SENT_TIME_WINDOW=60
       - REQUEST_SIZE_LIMIT=10
@@ -17,6 +18,36 @@ services:
     depends_on:
       - file-storage-api
       - email-service-api
+    networks:
+      - docker-network
+  identity-api:
+    build:
+      context: ../IdentityApi
+      dockerfile: ./docker/Dockerfile.API
+    ports:
+      - "8085:8085"
+    environment:
+      # Environment
+      ENV: prod
+      # Service Configuration
+      SERVICE_ADDRESS: /identity-api/api
+      SERVICE_PORT: :8085
+      # Redis Configuration
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: redis
+      # JWT Configuration
+      ACCESS_TOKEN_TTL: 15
+      REFRESH_TOKEN_TTL: 30
+      SECRET_KEY: your_secret_key_here
+      # PostgreSQL Configuration
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: Identity_db
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      RUN_POSTGRES_MIGRATION: "true"
+      
     networks:
       - docker-network
   email-service-api:
@@ -39,7 +70,6 @@ services:
       ENV: prod
     networks:
       - docker-network
-      
   file-storage-api:
     build:
       context: ../FileStorage
@@ -57,7 +87,6 @@ services:
       SERVICE_ADDRESS: /file-storage/api
     networks:
       - docker-network
-
 networks:
   docker-network:
     driver: bridge

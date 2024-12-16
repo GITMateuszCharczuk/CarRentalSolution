@@ -1,25 +1,11 @@
 services:
-  redis:
-    image: redis:latest
-    container_name: redis
-    command: redis-server /usr/local/etc/redis/redis.conf
-    ports:
-      - "6379:6379"
-    environment:
-      - REDIS_PASSWORD=redis
-    volumes:
-      - redis_data:/data
-      - ../Infrastructure/databases/redis/config/redis.conf:/usr/local/etc/redis/redis.conf:ro
-    networks:
-      - docker-network
-
   postgres:
     image: postgres:latest
-    container_name: Identity_postgres
+    container_name: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: Identity_db
+      POSTGRES_DB: Blog_db
     ports:
       - "5432:5432"
     volumes:

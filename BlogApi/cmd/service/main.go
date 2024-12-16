@@ -19,21 +19,31 @@ func main() {
 	}
 
 	command_handlers.RegisterCommandHandlers(
-		components.PasswordHasher,
-		components.UserQueryRepo,
-		components.UserCommandRepo,
-		components.TokenService,
+		components.BlogCommandRepo,
+		components.BlogQueryRepo,
+		components.CommentCommandRepo,
+		components.CommentQueryRepo,
+		components.LikeCommandRepo,
+		components.DataFetcher,
 	)
+
 	query_handlers.RegisterQueryHandlers(
-		components.UserQueryRepo,
-		components.TokenService,
+		components.BlogQueryRepo,
+		components.CommentQueryRepo,
+		components.LikeQueryRepo,
+		components.TagQueryRepo,
+		components.DataFetcher,
 	)
 
 	server, err := InitializeApi(
-		components.UserQueryRepo,
-		components.UserCommandRepo,
-		components.TokenService,
-		components.PasswordHasher,
+		components.BlogQueryRepo,
+		components.BlogCommandRepo,
+		components.CommentQueryRepo,
+		components.CommentCommandRepo,
+		components.LikeQueryRepo,
+		components.LikeCommandRepo,
+		components.TagQueryRepo,
+		components.DataFetcher,
 		components.Config,
 	)
 	if err != nil {

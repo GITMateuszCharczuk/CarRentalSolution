@@ -23,6 +23,11 @@ type DeleteBlogPostCommentResponse401 struct {
 	Message string `json:"message" example:"Unauthorized" swaggertype:"string"`
 }
 
+type DeleteBlogPostCommentResponse403 struct {
+	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
+	Message string `json:"message" example:"Forbidden" swaggertype:"string"`
+}
+
 type DeleteBlogPostCommentResponse404 struct {
 	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
 	Message string `json:"message" example:"Comment not found" swaggertype:"string"`

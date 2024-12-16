@@ -1,14 +1,231 @@
 definitions:
-  contract.DeleteUserResponse200:
+  contract.CreateBlogPostCommentRequest:
     properties:
+      blogPostId:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      description:
+        example: This is a great blog post!
+        type: string
+    required:
+    - blogPostId
+    - description
+    type: object
+  contract.CreateBlogPostCommentResponse200:
+    properties:
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
       message:
-        example: User deleted successfully
+        example: Comment added successfully
         type: string
       success:
         example: true
         type: boolean
     type: object
-  contract.DeleteUserResponse400:
+  contract.CreateBlogPostCommentResponse400:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateBlogPostCommentResponse401:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateBlogPostCommentResponse404:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Blog post not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateBlogPostCommentResponse500:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Internal server error while adding comment
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateBlogPostRequest:
+    properties:
+      content:
+        example: Blog post content...
+        type: string
+      featuredImageUrl:
+        example: https://example.com/image.jpg
+        type: string
+      heading:
+        example: Blog Post Title
+        type: string
+      pageTitle:
+        example: Page Title
+        type: string
+      shortDescription:
+        example: Short description
+        type: string
+      tags:
+        example:
+        - '["tech"'
+        - '"programming"]'
+        items:
+          type: string
+        type: array
+      urlHandle:
+        example: blog-post-title
+        type: string
+      visible:
+        example: true
+        type: boolean
+    required:
+    - content
+    - heading
+    - pageTitle
+    - shortDescription
+    - urlHandle
+    type: object
+  contract.CreateBlogPostResponse200:
+    properties:
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      message:
+        example: Blog post created successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.CreateBlogPostResponse400:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateBlogPostResponse401:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateBlogPostResponse500:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Internal server error while creating blog post
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateLikeForBlogPostResponse200:
+    properties:
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      message:
+        example: Like added successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.CreateLikeForBlogPostResponse400:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateLikeForBlogPostResponse401:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateLikeForBlogPostResponse404:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Blog post not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateLikeForBlogPostResponse500:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Internal server error while adding like
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostCommentResponse200:
+    properties:
+      message:
+        example: Comment deleted successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.DeleteBlogPostCommentResponse400:
     properties:
       message:
         example: Invalid request parameters
@@ -17,34 +234,243 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.DeleteUserResponse401:
+  contract.DeleteBlogPostCommentResponse401:
     properties:
       message:
-        example: Invalid or expired token
+        example: Unauthorized
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.DeleteUserResponse404:
+  contract.DeleteBlogPostCommentResponse403:
     properties:
       message:
-        example: User not found
+        example: Forbidden
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.DeleteUserResponse500:
+  contract.DeleteBlogPostCommentResponse404:
     properties:
       message:
-        example: Internal server error during user deletion
+        example: Comment not found
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.GetAllUsersResponse200:
+  contract.DeleteBlogPostCommentResponse500:
+    properties:
+      message:
+        example: Internal server error while deleting comment
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostResponse200:
+    properties:
+      message:
+        example: Blog post deleted successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.DeleteBlogPostResponse400:
+    properties:
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostResponse401:
+    properties:
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostResponse403:
+    properties:
+      message:
+        example: Forbidden
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostResponse404:
+    properties:
+      message:
+        example: Blog post not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostResponse500:
+    properties:
+      message:
+        example: Internal server error while deleting blog post
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteLikeForBlogPostResponse200:
+    properties:
+      message:
+        example: Like removed successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.DeleteLikeForBlogPostResponse400:
+    properties:
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteLikeForBlogPostResponse401:
+    properties:
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteLikeForBlogPostResponse404:
+    properties:
+      message:
+        example: Like not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteLikeForBlogPostResponse500:
+    properties:
+      message:
+        example: Internal server error while removing like
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetBlogPostCommentsResponse200:
+    properties:
+      current_page:
+        example: 1
+        type: integer
+      items:
+        description: todo
+        items:
+          type: object
+        type: array
+      message:
+        example: Comments retrieved successfully
+        type: string
+      page_size:
+        example: 10
+        type: integer
+      success:
+        example: true
+        type: boolean
+      total_items:
+        example: 100
+        type: integer
+      total_pages:
+        example: 10
+        type: integer
+    type: object
+  contract.GetBlogPostCommentsResponse404:
+    properties:
+      message:
+        example: Blog post not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetBlogPostCommentsResponse500:
+    properties:
+      message:
+        example: Internal server error while retrieving comments
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetBlogPostResponse200:
+    properties:
+      author:
+        example: John Doe
+        type: string
+      content:
+        example: Blog post content...
+        type: string
+      featuredImageUrl:
+        example: https://example.com/image.jpg
+        type: string
+      heading:
+        example: Blog Post Title
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      message:
+        example: Blog post retrieved successfully
+        type: string
+      pageTitle:
+        example: Page Title
+        type: string
+      publishedDate:
+        example: "2023-12-12"
+        type: string
+      shortDescription:
+        example: Short description
+        type: string
+      success:
+        example: true
+        type: boolean
+      urlHandle:
+        example: blog-post-title
+        type: string
+      visible:
+        example: true
+        type: boolean
+    type: object
+  contract.GetBlogPostResponse404:
+    properties:
+      message:
+        example: Blog post not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetBlogPostResponse500:
+    properties:
+      message:
+        example: Internal server error while retrieving blog post
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetBlogPostsResponse200:
     properties:
       data:
         properties:
@@ -54,37 +480,43 @@ definitions:
           items:
             items:
               properties:
-                address:
-                  example: 123 Main St
+                author:
+                  example: John Doe
                   type: string
-                city:
-                  example: New York
+                content:
+                  example: Blog post content...
                   type: string
-                email_address:
-                  example: user@example.com
+                featuredImageUrl:
+                  example: https://example.com/image.jpg
+                  type: string
+                heading:
+                  example: Blog Post Title
                   type: string
                 id:
-                  example: "12345"
+                  example: 123e4567-e89b-12d3-a456-426614174000
                   type: string
-                name:
-                  example: John
+                pageTitle:
+                  example: Page Title
                   type: string
-                phone_number:
-                  example: "+1234567890"
+                publishedDate:
+                  example: "2023-12-12"
                   type: string
-                postal_code:
-                  example: "12345"
+                shortDescription:
+                  example: Short description
                   type: string
-                roles:
+                tags:
                   example:
-                  - user
-                  - admin
+                  - '["tech"'
+                  - '"programming"]'
                   items:
                     type: string
                   type: array
-                surname:
-                  example: Doe
+                urlHandle:
+                  example: blog-post-title
                   type: string
+                visible:
+                  example: true
+                  type: boolean
               type: object
             type: array
           page_size:
@@ -104,7 +536,7 @@ definitions:
         example: 200
         type: integer
     type: object
-  contract.GetAllUsersResponse400:
+  contract.GetBlogPostsResponse400:
     properties:
       data:
         items:
@@ -117,343 +549,156 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.GetAllUsersResponse401:
+  contract.GetBlogPostsResponse401:
     properties:
       data:
         items:
           type: object
         type: array
       message:
-        example: Invalid or expired token
+        example: Unauthorized
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.GetAllUsersResponse403:
+  contract.GetBlogPostsResponse500:
     properties:
       data:
         items:
           type: object
         type: array
       message:
-        example: Insufficient privileges
+        example: Internal server error while retrieving blog posts
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.GetAllUsersResponse500:
-    properties:
-      data:
-        items:
-          type: object
-        type: array
-      message:
-        example: Internal server error during retrieval
-        type: string
-      success:
-        example: false
-        type: boolean
-    type: object
-  contract.GetUserIDResponse200:
+  contract.GetLikesForBlogPostResponse200:
     properties:
       message:
-        example: User ID retrieved successfully
+        example: Likes retrieved successfully
         type: string
       success:
         example: true
         type: boolean
-      user_id:
-        example: "12345"
-        type: string
+      totalCount:
+        example: 42
+        type: integer
     type: object
-  contract.GetUserIDResponse400:
+  contract.GetLikesForBlogPostResponse404:
     properties:
       message:
-        example: Invalid request parameters
+        example: Blog post not found
         type: string
-      roles:
-        example:
-        - '[]'
-        items:
-          type: string
-        type: array
       success:
         example: false
         type: boolean
-      user_id:
-        example: ""
-        type: string
+      totalCount:
+        example: 0
+        type: integer
     type: object
-  contract.GetUserIDResponse401:
+  contract.GetLikesForBlogPostResponse500:
     properties:
       message:
-        example: Invalid or expired token
+        example: Internal server error while retrieving likes
         type: string
-      roles:
-        example:
-        - '[]'
-        items:
-          type: string
-        type: array
       success:
         example: false
         type: boolean
-      user_id:
-        example: ""
-        type: string
+      totalCount:
+        example: 0
+        type: integer
     type: object
-  contract.GetUserIDResponse404:
+  contract.GetTagsResponse200:
     properties:
-      message:
-        example: User not found
-        type: string
-      roles:
-        example:
-        - '[]'
+      items:
         items:
-          type: string
+          type: object
         type: array
-      success:
-        example: false
-        type: boolean
-      user_id:
-        example: ""
-        type: string
-    type: object
-  contract.GetUserIDResponse500:
-    properties:
       message:
-        example: Internal server error during user ID retrieval
-        type: string
-      roles:
-        example:
-        - '[]'
-        items:
-          type: string
-        type: array
-      success:
-        example: false
-        type: boolean
-      user_id:
-        example: ""
-        type: string
-    type: object
-  contract.GetUserInfoResponse200:
-    properties:
-      message:
-        example: User info retrieved successfully
+        example: Tags retrieved successfully
         type: string
       success:
         example: true
         type: boolean
-      user_info:
-        type: object
     type: object
-  contract.GetUserInfoResponse400:
+  contract.GetTagsResponse500:
     properties:
+      items:
+        items:
+          type: object
+        type: array
       message:
-        example: Invalid request parameters
+        example: Internal server error while retrieving tags
         type: string
       success:
         example: false
         type: boolean
-      user_info:
-        type: object
     type: object
-  contract.GetUserInfoResponse401:
+  contract.UpdateBlogPostRequest:
     properties:
-      message:
-        example: Invalid or expired token
+      author:
+        example: John Doe
         type: string
-      success:
-        example: false
+      content:
+        example: Updated blog post content...
+        type: string
+      featuredImageUrl:
+        example: https://example.com/updated-image.jpg
+        type: string
+      heading:
+        example: Updated Blog Post Title
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      jwtToken:
+        $ref: '#/definitions/models.JwtToken'
+      pageTitle:
+        example: Updated Page Title
+        type: string
+      publishedDate:
+        example: "2023-12-12"
+        type: string
+      shortDescription:
+        example: Updated short description
+        type: string
+      tags:
+        example:
+        - '["tech"'
+        - '"programming"]'
+        items:
+          type: string
+        type: array
+      urlHandle:
+        example: updated-blog-post-title
+        type: string
+      visible:
+        example: true
         type: boolean
-      user_info:
-        type: object
-    type: object
-  contract.GetUserInfoResponse404:
-    properties:
-      message:
-        example: User not found
-        type: string
-      success:
-        example: false
-        type: boolean
-      user_info:
-        type: object
-    type: object
-  contract.GetUserInfoResponse500:
-    properties:
-      message:
-        example: Internal server error during user info retrieval
-        type: string
-      success:
-        example: false
-        type: boolean
-      user_info:
-        type: object
-    type: object
-  contract.LoginRequest:
-    properties:
-      email:
-        example: user@example.com
-        type: string
-      password:
-        example: password123
-        minLength: 8
-        type: string
     required:
-    - email
-    - password
+    - author
+    - content
+    - heading
+    - id
+    - jwtToken
+    - pageTitle
+    - publishedDate
+    - shortDescription
+    - urlHandle
     type: object
-  contract.LoginResponse200:
+  contract.UpdateBlogPostResponse200:
     properties:
       message:
-        example: Login successful
-        type: string
-      refresh_token:
-        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        type: string
-      roles:
-        example:
-        - '[user'
-        - ' admin]'
-        items:
-          type: string
-        type: array
-      success:
-        example: true
-        type: boolean
-      token:
-        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        type: string
-    type: object
-  contract.LoginResponse400:
-    properties:
-      message:
-        example: Invalid request parameters
-        type: string
-      refresh_token:
-        example: ""
-        type: string
-      roles:
-        example:
-        - '[]'
-        items:
-          type: string
-        type: array
-      success:
-        example: false
-        type: boolean
-      token:
-        example: ""
-        type: string
-    type: object
-  contract.LoginResponse401:
-    properties:
-      message:
-        example: Invalid credentials
-        type: string
-      refresh_token:
-        example: ""
-        type: string
-      roles:
-        example:
-        - '[]'
-        items:
-          type: string
-        type: array
-      success:
-        example: false
-        type: boolean
-      token:
-        example: ""
-        type: string
-    type: object
-  contract.LoginResponse500:
-    properties:
-      message:
-        example: Internal server error during login
-        type: string
-      refresh_token:
-        example: ""
-        type: string
-      roles:
-        example:
-        - '[]'
-        items:
-          type: string
-        type: array
-      success:
-        example: false
-        type: boolean
-      token:
-        example: ""
-        type: string
-    type: object
-  contract.ModifyUserRequest:
-    properties:
-      address:
-        example: 123 Main St
-        maxLength: 100
-        minLength: 5
-        type: string
-      city:
-        example: New York
-        maxLength: 50
-        minLength: 2
-        type: string
-      email_address:
-        example: user@example.com
-        type: string
-      name:
-        example: John
-        maxLength: 50
-        minLength: 2
-        type: string
-      phone_number:
-        example: "+1234567890"
-        type: string
-      postal_code:
-        example: "12345"
-        maxLength: 10
-        minLength: 5
-        type: string
-      roles:
-        example:
-        - user
-        - admin
-        items:
-          type: string
-        type: array
-      surname:
-        example: Doe
-        maxLength: 50
-        minLength: 2
-        type: string
-      user_id:
-        example: "1234567890"
-        type: string
-    required:
-    - address
-    - city
-    - name
-    - phone_number
-    - postal_code
-    - surname
-    type: object
-  contract.ModifyUserResponse200:
-    properties:
-      message:
-        example: User modified successfully
+        example: Blog post updated successfully
         type: string
       success:
         example: true
         type: boolean
     type: object
-  contract.ModifyUserResponse400:
+  contract.UpdateBlogPostResponse400:
     properties:
       message:
         example: Invalid request parameters
@@ -462,409 +707,59 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.ModifyUserResponse401:
+  contract.UpdateBlogPostResponse401:
     properties:
       message:
-        example: Invalid or expired token
+        example: Unauthorized
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.ModifyUserResponse404:
+  contract.UpdateBlogPostResponse403:
     properties:
       message:
-        example: User not found
+        example: Forbidden
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.ModifyUserResponse500:
+  contract.UpdateBlogPostResponse404:
     properties:
       message:
-        example: Internal server error during user modification
+        example: Blog post not found
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.RefreshTokenResponse200:
+  contract.UpdateBlogPostResponse500:
     properties:
       message:
-        example: Token refreshed successfully
-        type: string
-      success:
-        example: true
-        type: boolean
-      token:
-        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        type: string
-    type: object
-  contract.RefreshTokenResponse400:
-    properties:
-      message:
-        example: Invalid request parameters
-        type: string
-      success:
-        example: false
-        type: boolean
-      token:
-        example: ""
-        type: string
-    type: object
-  contract.RefreshTokenResponse401:
-    properties:
-      message:
-        example: Invalid refresh token
-        type: string
-      success:
-        example: false
-        type: boolean
-      token:
-        example: ""
-        type: string
-    type: object
-  contract.RefreshTokenResponse500:
-    properties:
-      message:
-        example: Internal server error during token refresh
-        type: string
-      success:
-        example: false
-        type: boolean
-      token:
-        example: ""
-        type: string
-    type: object
-  contract.RegisterUserRequest:
-    properties:
-      address:
-        example: 123 Main St
-        type: string
-      city:
-        example: New York
-        type: string
-      email_address:
-        example: user@example.com
-        type: string
-      name:
-        example: John
-        type: string
-      password:
-        example: password123
-        minLength: 8
-        type: string
-      phone_number:
-        example: "+1234567890"
-        type: string
-      postal_code:
-        example: "12345"
-        type: string
-      surname:
-        example: Doe
-        type: string
-    required:
-    - address
-    - city
-    - email_address
-    - name
-    - password
-    - phone_number
-    - postal_code
-    - surname
-    type: object
-  contract.RegisterUserResponse201:
-    properties:
-      message:
-        example: User registered successfully
-        type: string
-      success:
-        example: true
-        type: boolean
-      user_id:
-        example: "12345"
-        type: string
-    type: object
-  contract.RegisterUserResponse400:
-    properties:
-      message:
-        example: Invalid request parameters
+        example: Internal server error while updating blog post
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.RegisterUserResponse500:
-    properties:
-      message:
-        example: Internal server error during registration
-        type: string
-      success:
-        example: false
-        type: boolean
-    type: object
-  contract.ValidateTokenResponse200:
-    properties:
-      message:
-        example: Token validated successfully
-        type: string
-      roles:
-        example:
-        - '[user'
-        - ' admin]'
-        items:
-          type: string
-        type: array
-      success:
-        example: true
-        type: boolean
-      valid:
-        example: true
-        type: boolean
-    type: object
-  contract.ValidateTokenResponse400:
-    properties:
-      message:
-        example: Invalid request parameters
-        type: string
-      roles:
-        example:
-        - '[]'
-        items:
-          type: string
-        type: array
-      success:
-        example: false
-        type: boolean
-      valid:
-        example: false
-        type: boolean
-    type: object
-  contract.ValidateTokenResponse401:
-    properties:
-      message:
-        example: Invalid or expired token
-        type: string
-      roles:
-        example:
-        - '[]'
-        items:
-          type: string
-        type: array
-      success:
-        example: false
-        type: boolean
-      valid:
-        example: false
-        type: boolean
-    type: object
-  contract.ValidateTokenResponse500:
-    properties:
-      message:
-        example: Internal server error during token validation
-        type: string
-      roles:
-        example:
-        - '[]'
-        items:
-          type: string
-        type: array
-      success:
-        example: false
-        type: boolean
-      valid:
-        example: false
-        type: boolean
+  models.JwtToken:
     type: object
 info:
   contact: {}
 paths:
-  /identity-api/api/login:
-    post:
-      consumes:
-      - application/json
-      description: Authenticates a user and returns JWT tokens
-      parameters:
-      - description: Login credentials
-        in: body
-        name: login
-        required: true
-        schema:
-          $ref: '#/definitions/contract.LoginRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Login successful
-          schema:
-            $ref: '#/definitions/contract.LoginResponse200'
-        "400":
-          description: Invalid credentials
-          schema:
-            $ref: '#/definitions/contract.LoginResponse400'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/contract.LoginResponse401'
-        "500":
-          description: Server error during login
-          schema:
-            $ref: '#/definitions/contract.LoginResponse500'
-      summary: Login user
-      tags:
-      - auth
-  /identity-api/api/register:
-    post:
-      consumes:
-      - application/json
-      description: Registers a new user with the provided details.
-      parameters:
-      - description: User registration details
-        in: body
-        name: register
-        required: true
-        schema:
-          $ref: '#/definitions/contract.RegisterUserRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: User registered successfully
-          schema:
-            $ref: '#/definitions/contract.RegisterUserResponse201'
-        "400":
-          description: Invalid request parameters
-          schema:
-            $ref: '#/definitions/contract.RegisterUserResponse400'
-        "500":
-          description: Server error during registration
-          schema:
-            $ref: '#/definitions/contract.RegisterUserResponse500'
-      summary: Register a new user
-      tags:
-      - users
-  /identity-api/api/token/refresh:
-    post:
-      consumes:
-      - application/json
-      description: Refreshes the JWT token using a refresh token
-      parameters:
-      - description: Refresh token
-        in: query
-        name: token
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Token refreshed successfully
-          schema:
-            $ref: '#/definitions/contract.RefreshTokenResponse200'
-        "400":
-          description: Invalid request parameters
-          schema:
-            $ref: '#/definitions/contract.RefreshTokenResponse400'
-        "401":
-          description: Invalid refresh token
-          schema:
-            $ref: '#/definitions/contract.RefreshTokenResponse401'
-        "500":
-          description: Server error during token refresh
-          schema:
-            $ref: '#/definitions/contract.RefreshTokenResponse500'
-      summary: Refresh token
-      tags:
-      - auth
-  /identity-api/api/token/validate:
-    get:
-      consumes:
-      - application/json
-      description: Validates the provided JWT token and returns user roles.
-      parameters:
-      - description: JWT token
-        in: query
-        name: token
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Token is valid
-          schema:
-            $ref: '#/definitions/contract.ValidateTokenResponse200'
-        "400":
-          description: Invalid request parameters
-          schema:
-            $ref: '#/definitions/contract.ValidateTokenResponse400'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/contract.ValidateTokenResponse401'
-        "500":
-          description: Server error during validation
-          schema:
-            $ref: '#/definitions/contract.ValidateTokenResponse500'
-      summary: Validate token
-      tags:
-      - users
-  /identity-api/api/user:
-    put:
-      consumes:
-      - application/json
-      description: Modifies user information
-      parameters:
-      - description: JWT token
-        in: query
-        name: token
-        required: true
-        type: string
-      - description: User modification details
-        in: body
-        name: modify
-        required: true
-        schema:
-          $ref: '#/definitions/contract.ModifyUserRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: User modified successfully
-          schema:
-            $ref: '#/definitions/contract.ModifyUserResponse200'
-        "400":
-          description: Invalid request parameters
-          schema:
-            $ref: '#/definitions/contract.ModifyUserResponse400'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/contract.ModifyUserResponse401'
-        "404":
-          description: User not found
-          schema:
-            $ref: '#/definitions/contract.ModifyUserResponse404'
-        "500":
-          description: Server error during modification
-          schema:
-            $ref: '#/definitions/contract.ModifyUserResponse500'
-      summary: Modify user
-      tags:
-      - users
-  /identity-api/api/user/{id}:
+  /blog-api/api/comments/{id}:
     delete:
       consumes:
       - application/json
-      description: Deletes a user from the system
+      description: Deletes a specific comment from a blog post
       parameters:
       - description: JWT token
         in: query
         name: token
         required: true
         type: string
-      - description: User ID
+      - description: Comment ID
         in: path
         name: id
         required: true
@@ -873,112 +768,38 @@ paths:
       - application/json
       responses:
         "200":
-          description: User deleted successfully
+          description: Comment deleted successfully
           schema:
-            $ref: '#/definitions/contract.DeleteUserResponse200'
+            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse200'
         "400":
           description: Invalid request parameters
           schema:
-            $ref: '#/definitions/contract.DeleteUserResponse400'
+            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse400'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/contract.DeleteUserResponse401'
+            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse401'
+        "403":
+          description: Forbidden - Not the comment owner
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse403'
         "404":
-          description: User not found
+          description: Comment not found
           schema:
-            $ref: '#/definitions/contract.DeleteUserResponse404'
+            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse404'
         "500":
-          description: Internal server error during deletion
+          description: Server error during deletion
           schema:
-            $ref: '#/definitions/contract.DeleteUserResponse500'
-      summary: Delete user
+            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse500'
+      summary: Delete a comment from a blog post
       tags:
-      - users
-  /identity-api/api/user/id:
+      - comments
+  /blog-api/api/posts:
     get:
       consumes:
       - application/json
-      description: Retrieves user ID based on the provided token.
-      parameters:
-      - description: JWT token
-        in: query
-        name: token
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: User ID retrieved successfully
-          schema:
-            $ref: '#/definitions/contract.GetUserIDResponse200'
-        "400":
-          description: Invalid request parameters
-          schema:
-            $ref: '#/definitions/contract.GetUserIDResponse400'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/contract.GetUserIDResponse401'
-        "404":
-          description: User not found
-          schema:
-            $ref: '#/definitions/contract.GetUserIDResponse404'
-        "500":
-          description: Server error during retrieval
-          schema:
-            $ref: '#/definitions/contract.GetUserIDResponse500'
-      summary: Get user ID
-      tags:
-      - users
-  /identity-api/api/user/info:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves user information based on the provided token and user
-        ID.
-      parameters:
-      - description: JWT token
-        in: query
-        name: token
-        required: true
-        type: string
-      - description: User ID
-        in: query
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: User info retrieved successfully
-          schema:
-            $ref: '#/definitions/contract.GetUserInfoResponse200'
-        "400":
-          description: Invalid request parameters
-          schema:
-            $ref: '#/definitions/contract.GetUserInfoResponse400'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/contract.GetUserInfoResponse401'
-        "404":
-          description: User not found
-          schema:
-            $ref: '#/definitions/contract.GetUserInfoResponse404'
-        "500":
-          description: Server error during retrieval
-          schema:
-            $ref: '#/definitions/contract.GetUserInfoResponse500'
-      summary: Get user info
-      tags:
-      - users
-  /identity-api/api/users:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves a list of all users with optional pagination and sorting.
+      description: Retrieves a list of blog posts with optional filtering, pagination
+        and sorting.
       parameters:
       - description: JWT token
         in: query
@@ -994,7 +815,462 @@ paths:
         name: current_page
         type: integer
       - collectionFormat: csv
-        description: 'Sort fields (format: field:direction)'
+        description: Sort fields
+        in: query
+        items:
+          type: string
+        name: sort_query
+        type: array
+      - collectionFormat: csv
+        description: Blog post IDs
+        in: query
+        items:
+          type: string
+        name: ids
+        type: array
+      - description: Start date
+        in: query
+        name: dateTimeFrom
+        type: string
+      - description: End date
+        in: query
+        name: dateTimeTo
+        type: string
+      - collectionFormat: csv
+        description: Author IDs
+        in: query
+        items:
+          type: string
+        name: authorIds
+        type: array
+      - collectionFormat: csv
+        description: Tags
+        in: query
+        items:
+          type: string
+        name: tags
+        type: array
+      - description: Visibility status
+        in: query
+        name: visible
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Blog posts retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostsResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostsResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostsResponse401'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostsResponse500'
+      summary: Get blog posts
+      tags:
+      - blog
+    post:
+      consumes:
+      - application/json
+      description: Creates a new blog post with the provided details
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Blog post details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.CreateBlogPostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Blog post created successfully
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostResponse401'
+        "500":
+          description: Server error during creation
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostResponse500'
+      summary: Create a new blog post
+      tags:
+      - blog
+  /blog-api/api/posts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an existing blog post
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Blog post deleted successfully
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostResponse401'
+        "403":
+          description: Forbidden - Not authorized to delete
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostResponse403'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostResponse404'
+        "500":
+          description: Server error during deletion
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostResponse500'
+      summary: Delete a blog post
+      tags:
+      - blog
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a specific blog post by its ID
+      parameters:
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Blog post retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostResponse200'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostResponse404'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostResponse500'
+      summary: Get a blog post by ID
+      tags:
+      - blog
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing blog post with the provided details
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated blog post details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.UpdateBlogPostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Blog post updated successfully
+          schema:
+            $ref: '#/definitions/contract.UpdateBlogPostResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.UpdateBlogPostResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.UpdateBlogPostResponse401'
+        "403":
+          description: Forbidden - Not the post owner
+          schema:
+            $ref: '#/definitions/contract.UpdateBlogPostResponse403'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.UpdateBlogPostResponse404'
+        "500":
+          description: Server error during update
+          schema:
+            $ref: '#/definitions/contract.UpdateBlogPostResponse500'
+      summary: Update a blog post
+      tags:
+      - blog
+  /blog-api/api/posts/{id}/comments:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all comments for a specific blog post with pagination
+      parameters:
+      - collectionFormat: csv
+        description: Filter by blog post IDs
+        in: query
+        items:
+          type: string
+        name: ids
+        type: array
+      - collectionFormat: csv
+        description: Filter by user IDs
+        in: query
+        items:
+          type: string
+        name: user_ids
+        type: array
+      - description: Filter from date
+        in: query
+        name: date_time_from
+        type: string
+      - description: Filter to date
+        in: query
+        name: date_time_to
+        type: string
+      - collectionFormat: csv
+        description: Sort fields (field:asc|desc)
+        in: query
+        items:
+          type: string
+        name: sort_fields
+        type: array
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Current page
+        in: query
+        name: current_page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Comments retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostCommentsResponse200'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostCommentsResponse404'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostCommentsResponse500'
+      summary: Get comments for a blog post
+      tags:
+      - comments
+    post:
+      consumes:
+      - application/json
+      description: Creates a new comment on a specific blog post
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Comment details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.CreateBlogPostCommentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Comment created successfully
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostCommentResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostCommentResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostCommentResponse401'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostCommentResponse404'
+        "500":
+          description: Server error during creation
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostCommentResponse500'
+      summary: Create a comment on a blog post
+      tags:
+      - comments
+  /blog-api/api/posts/{id}/likes:
+    delete:
+      consumes:
+      - application/json
+      description: Removes a like from a specific blog post
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Like removed successfully
+          schema:
+            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse401'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse404'
+        "500":
+          description: Server error during deletion
+          schema:
+            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse500'
+      summary: Unlike a blog post
+      tags:
+      - likes
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the total number of likes for a specific blog post
+      parameters:
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Likes count retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetLikesForBlogPostResponse200'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.GetLikesForBlogPostResponse404'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetLikesForBlogPostResponse500'
+      summary: Get likes count for a blog post
+      tags:
+      - likes
+    post:
+      consumes:
+      - application/json
+      description: Adds a like to a specific blog post
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Like added successfully
+          schema:
+            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse401'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse404'
+        "500":
+          description: Server error during creation
+          schema:
+            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse500'
+      summary: Like a blog post
+      tags:
+      - likes
+  /blog-api/api/tags/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all unique tags used in blog posts
+      parameters:
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: Sort fields (field:asc|desc)
         in: query
         items:
           type: string
@@ -1004,26 +1280,14 @@ paths:
       - application/json
       responses:
         "200":
-          description: Users retrieved successfully
+          description: Tags retrieved successfully
           schema:
-            $ref: '#/definitions/contract.GetAllUsersResponse200'
-        "400":
-          description: Invalid request parameters
-          schema:
-            $ref: '#/definitions/contract.GetAllUsersResponse400'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/contract.GetAllUsersResponse401'
-        "403":
-          description: Insufficient privileges
-          schema:
-            $ref: '#/definitions/contract.GetAllUsersResponse403'
+            $ref: '#/definitions/contract.GetTagsResponse200'
         "500":
           description: Server error during retrieval
           schema:
-            $ref: '#/definitions/contract.GetAllUsersResponse500'
-      summary: Get all users
+            $ref: '#/definitions/contract.GetTagsResponse500'
+      summary: Get all unique tags
       tags:
-      - users
+      - tags
 swagger: "2.0"

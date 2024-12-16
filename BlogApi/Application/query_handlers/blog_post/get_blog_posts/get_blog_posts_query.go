@@ -1,7 +1,6 @@
 package queries
 
 import (
-	models "identity-api/Domain/models/external"
 	"identity-api/Domain/pagination"
 	"identity-api/Domain/sorting"
 )
@@ -15,5 +14,4 @@ type GetBlogPostsQuery struct {
 	AuthorIds             []string `json:"authorIds"`
 	Tags                  []string `json:"tags"`
 	Visible               bool     `json:"visible"`
-	models.JwtToken       `json:",inline"`
 }

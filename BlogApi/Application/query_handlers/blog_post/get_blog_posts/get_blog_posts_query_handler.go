@@ -3,7 +3,6 @@ package queries
 import (
 	"context"
 	contract "identity-api/Application.contract/BlogPosts/GetBlogPosts"
-	services "identity-api/Application/services"
 	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_repository"
 	"identity-api/Domain/responses"
 	data_fetcher "identity-api/Domain/service_interfaces"
@@ -25,10 +24,10 @@ func NewGetBlogPostsQueryHandler(
 }
 
 func (h *GetBlogPostsQueryHandler) Handle(ctx context.Context, query *GetBlogPostsQuery) (*contract.GetBlogPostsResponse, error) {
-	tokenInfo, err := h.dataFetcher.ValidateToken(query.JwtToken)
-	if err != nil || !services.IsAdminOrSuperAdmin(tokenInfo.Roles) {
-		query.Visible = true
-	} // TODO
+	// tokenInfo, err := h.dataFetcher.ValidateToken(query.JwtToken)
+	// if err != nil || !services.IsAdminOrSuperAdmin(tokenInfo.Roles) {
+	// 	query.Visible = true
+	// } // TODO
 
 	result, err := h.blogPostQueryRepository.GetBlogPosts(
 		&query.Pagination,

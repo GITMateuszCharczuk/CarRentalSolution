@@ -20,10 +20,10 @@ func (m *BlogPostRequestMapper) MapToModel(entity entities.BlogPostEntity) model
 
 func (m *BlogPostRequestMapper) MapToEntity(model models.BlogPostRequestModel) entities.BlogPostEntity {
 	var createdAt time.Time
-	if model.PublishedAt == "" {
+	if model.CreatedAt == "" {
 		createdAt = time.Now()
 	} else {
-		createdAt, _ = time.Parse(time.RFC3339, model.PublishedAt)
+		createdAt, _ = time.Parse(time.RFC3339, model.CreatedAt)
 	}
 	return entities.BlogPostEntity{
 		ID:               uuid.New(),

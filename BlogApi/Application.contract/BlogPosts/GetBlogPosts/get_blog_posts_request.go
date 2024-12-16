@@ -1,7 +1,6 @@
 package contract
 
 import (
-	models "identity-api/Domain/models/external"
 	"identity-api/Domain/pagination"
 )
 
@@ -14,5 +13,4 @@ type GetBlogPostsRequest struct {
 	AuthorIds             []string `json:"authorIds" example:"[\"John Doe\"]" swaggertype:"array,string"`
 	Tags                  []string `json:"tags" example:"[\"Technology\"]" swaggertype:"array,string"`
 	Visible               bool     `json:"visible" example:"true" swaggertype:"boolean"`
-	models.JwtToken       `json:",inline"`
 }
