@@ -8,6 +8,7 @@ import (
 	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_repository"
 	"identity-api/Domain/responses"
 	data_fetcher "identity-api/Domain/service_interfaces"
+	"log"
 )
 
 type UpdateBlogPostCommandHandler struct {
@@ -46,12 +47,13 @@ func (h *UpdateBlogPostCommandHandler) Handle(ctx context.Context, command *Upda
 		return &response, nil
 	}
 
-	if *authorId != userInfo.ID && !services.IsAdminOrSuperAdmin(userInfo.Roles) {
+	if *authorId != userInfo.ID || !services.IsAdminOrSuperAdmin(userInfo.Roles) {
 		response := responses.NewResponse[contract.UpdateBlogPostResponse](403, "Not authorized to update this blog post")
 		return &response, nil
 	}
 
 	blogPost := &models.BlogPostRequestModel{
+		Id:               command.Id,
 		Heading:          command.Heading,
 		PageTitle:        command.PageTitle,
 		Content:          command.Content,
@@ -61,9 +63,12 @@ func (h *UpdateBlogPostCommandHandler) Handle(ctx context.Context, command *Upda
 		Visible:          command.Visible,
 		Tags:             command.Tags,
 		CreatedAt:        existingPost.CreatedAt,
+		AuthorId:         *authorId,
+		AuthorName:       existingPost.AuthorName,
 	}
 
 	err = h.blogPostCommandRepository.UpdateBlogPost(ctx, blogPost)
+	log.Println(err)
 	if err != nil {
 		response := responses.NewResponse[contract.UpdateBlogPostResponse](500, "Failed to update blog post")
 		return &response, nil

@@ -8,6 +8,7 @@ import (
 	"identity-api/Infrastructure/databases/postgres/entities"
 	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
 	base "identity-api/Infrastructure/databases/postgres/repository/base"
+	unit_of_work "identity-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
 
 	"gorm.io/gorm"
 )
@@ -19,9 +20,10 @@ type BlogPostCommentCommandRepositoryImpl struct {
 func NewBlogPostCommentCommandRepositoryImpl(
 	postgresDatabase *postgres_db.PostgresDatabase,
 	mapper mappers.PersistenceMapper[entities.BlogPostCommentEntity, models.BlogPostCommentModel],
+	uow unit_of_work.UnitOfWork,
 ) repository_interfaces.BlogPostCommentCommandRepository {
 	return &BlogPostCommentCommandRepositoryImpl{
-		CommandRepository: base.NewCommandRepository[entities.BlogPostCommentEntity, string, models.BlogPostCommentModel](postgresDatabase.DB, mapper),
+		CommandRepository: base.NewCommandRepository[entities.BlogPostCommentEntity, string, models.BlogPostCommentModel](postgresDatabase.DB, mapper, uow),
 	}
 }
 

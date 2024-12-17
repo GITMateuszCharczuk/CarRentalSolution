@@ -2,6 +2,8 @@ package cqrs
 
 import (
 	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
+	base "identity-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
+	"log"
 
 	"context"
 	"errors"
@@ -12,21 +14,28 @@ import (
 type CommandRepository[TEntity any, TId comparable, TModel any] struct {
 	dbContext *gorm.DB
 	mapper    mappers.PersistenceMapper[TEntity, TModel]
-	uow       UnitOfWork
+	uow       base.UnitOfWork
 }
 
 func NewCommandRepository[TEntity any, TId comparable, TModel any](
 	dbContext *gorm.DB,
 	mapper mappers.PersistenceMapper[TEntity, TModel],
+	uow base.UnitOfWork,
 ) *CommandRepository[TEntity, TId, TModel] {
 	return &CommandRepository[TEntity, TId, TModel]{
 		dbContext: dbContext,
 		mapper:    mapper,
-		uow:       NewUnitOfWork(dbContext),
+		uow:       uow,
 	}
 }
 
 func (r *CommandRepository[TEntity, TId, TModel]) ExecuteInTransaction(ctx context.Context, fn func(tx *gorm.DB) error) error {
+	log.Printf("IsInTransaction: %v", r.uow.IsInTransaction())
+	if r.uow.IsInTransaction() {
+		log.Println("Reusing existing transaction")
+		return fn(r.uow.GetTransaction())
+	}
+	log.Println("Creating new transaction")
 	return r.uow.WithTransaction(ctx, fn)
 }
 
@@ -62,6 +71,6 @@ func (r *CommandRepository[TEntity, TId, TModel]) Delete(ctx context.Context, id
 	})
 }
 
-func (r *CommandRepository[TEntity, TId, TModel]) GetUnitOfWork() UnitOfWork {
+func (r *CommandRepository[TEntity, TId, TModel]) GetUnitOfWork() base.UnitOfWork {
 	return r.uow
 }

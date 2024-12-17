@@ -6,6 +6,7 @@ import (
 	contract "identity-api/Application.contract/BlogPosts/CreateBlogPost"
 	commands "identity-api/Application/command_handlers/blog_post/create_blog_post"
 	"identity-api/Domain/responses"
+	"log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -37,6 +38,7 @@ func (h *CreateBlogPostController) Handle(c *gin.Context) {
 	token := services.GetJwtTokenFromQuery(c)
 	var req contract.CreateBlogPostRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
+		log.Println(err)
 		response := responses.NewResponse[contract.CreateBlogPostResponse](400, "Invalid request format")
 		responseSender.Send(response)
 		return

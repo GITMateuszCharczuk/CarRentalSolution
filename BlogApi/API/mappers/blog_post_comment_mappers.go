@@ -8,6 +8,7 @@ import (
 	commands "identity-api/Application/command_handlers/blog_post_comment/create_blog_post_comment"
 	delete_commands "identity-api/Application/command_handlers/blog_post_comment/delete_blog_post_comment"
 	get_queries "identity-api/Application/query_handlers/blog_post_comment/get_blog_post_comments"
+	"log"
 )
 
 func MapToCreateBlogPostCommentCommand(request *contract.CreateBlogPostCommentRequest) commands.CreateBlogPostCommentCommand {
@@ -26,6 +27,7 @@ func MapToDeleteBlogPostCommentCommand(request *delete_contract.DeleteBlogPostCo
 }
 
 func MapToGetBlogPostCommentsQuery(request *get_contract.GetBlogPostCommentsRequest) get_queries.GetBlogPostCommentsQuery {
+	log.Println(len(request.BlogPostIds))
 	return get_queries.GetBlogPostCommentsQuery{
 		Pagination:   request.Pagination,
 		BlogPostIds:  request.BlogPostIds,

@@ -11,5 +11,5 @@ type CreateBlogPostRequest struct {
 	UrlHandle        string   `json:"urlHandle" binding:"required" example:"blog-post-title" swaggertype:"string" validate:"required"`
 	Visible          bool     `json:"visible" example:"true" swaggertype:"boolean"`
 	Tags             []string `json:"tags" example:"[\"tech\",\"programming\"]" swaggertype:"array,string"`
-	models.JwtToken  `json:",inline"`
+	models.JwtToken  `json:"-" swaggerignore:"true"`
 }

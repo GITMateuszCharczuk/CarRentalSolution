@@ -38,14 +38,14 @@ func NewGetBlogPostCommentsController(validator *validator.Validate) *GetBlogPos
 func (h *GetBlogPostCommentsController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 	req := contract.GetBlogPostCommentsRequest{
-		BlogPostIds:  c.QueryArray("ids"),
+		BlogPostIds:  services.ExtractQueryArray(c, "ids"),
 		DateTimeFrom: c.Query("date_time_from"),
 		DateTimeTo:   c.Query("date_time_to"),
-		UserIds:      c.QueryArray("user_ids"),
+		UserIds:      services.ExtractQueryArray(c, "user_ids"),
 		SortQuery:    services.ExtractSortQuery(c),
 		Pagination:   services.ExtractPagination(c),
 	}
-	if validateResponse := services.ValidateRequest[contract.GetBlogPostCommentsRequest](&req, h.validator); validateResponse != nil {
+	if validateResponse := services.ValidateRequest[contract.GetBlogPostCommentsResponse](&req, h.validator); validateResponse != nil {
 		responseSender.Send(validateResponse)
 		return
 	}

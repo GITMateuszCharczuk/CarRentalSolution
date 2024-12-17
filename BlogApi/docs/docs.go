@@ -828,14 +828,9 @@ const docTemplate = `{
         "contract.CreateBlogPostCommentRequest": {
             "type": "object",
             "required": [
-                "blogPostId",
                 "description"
             ],
             "properties": {
-                "blogPostId": {
-                    "type": "string",
-                    "example": "123e4567-e89b-12d3-a456-426614174000"
-                },
                 "description": {
                     "type": "string",
                     "example": "This is a great blog post!"

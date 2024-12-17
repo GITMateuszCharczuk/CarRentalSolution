@@ -25,8 +25,12 @@ func (m *BlogPostRequestMapper) MapToEntity(model models.BlogPostRequestModel) e
 	} else {
 		createdAt, _ = time.Parse(time.RFC3339, model.CreatedAt)
 	}
+
+	if model.Id == "" {
+		model.Id = uuid.New().String()
+	}
 	return entities.BlogPostEntity{
-		ID:               uuid.New(),
+		ID:               uuid.MustParse(model.Id),
 		Heading:          model.Heading,
 		PageTitle:        model.PageTitle,
 		Content:          model.Content,

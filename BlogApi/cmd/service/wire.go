@@ -1,5 +1,6 @@
 // main/wire.go
 
+// go:build wireinject
 //go:build wireinject
 // +build wireinject
 
@@ -18,6 +19,7 @@ import (
 	data_fetcher "identity-api/Infrastructure/data_fetcher"
 	postgres_db "identity-api/Infrastructure/databases/postgres/config"
 	blog_mappers "identity-api/Infrastructure/databases/postgres/mappers"
+	unit_of_work "identity-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
 	comment_repository "identity-api/Infrastructure/databases/postgres/repository/blog_post_comment_repository"
 	like_repository "identity-api/Infrastructure/databases/postgres/repository/blog_post_like_repository"
 	blog_repository "identity-api/Infrastructure/databases/postgres/repository/blog_post_repository"
@@ -43,6 +45,7 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 		// Config
 		config.WireSet,
 		// Database
+		unit_of_work.ProvideUnitOfWork,
 		postgres_db.WireSet,
 		// Repositories
 		blog_repository.WireSet,

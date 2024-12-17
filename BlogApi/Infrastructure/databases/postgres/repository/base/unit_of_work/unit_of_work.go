@@ -2,6 +2,7 @@ package cqrs
 
 import (
 	"context"
+	"sync"
 
 	"gorm.io/gorm"
 )
@@ -12,6 +13,7 @@ type UnitOfWork interface {
 	Rollback() error
 	GetTransaction() *gorm.DB
 	WithTransaction(ctx context.Context, fn func(tx *gorm.DB) error) error
+	IsInTransaction() bool
 }
 
 type unitOfWork struct {
@@ -19,10 +21,22 @@ type unitOfWork struct {
 	tx *gorm.DB
 }
 
+var (
+	instance UnitOfWork
+	once     sync.Once
+)
+
+func GetUnitOfWork(db *gorm.DB) UnitOfWork {
+	once.Do(func() {
+		instance = &unitOfWork{
+			db: db,
+		}
+	})
+	return instance
+}
+
 func NewUnitOfWork(db *gorm.DB) UnitOfWork {
-	return &unitOfWork{
-		db: db,
-	}
+	return GetUnitOfWork(db)
 }
 
 func (uow *unitOfWork) Begin() error {
@@ -70,4 +84,8 @@ func (uow *unitOfWork) WithTransaction(ctx context.Context, fn func(tx *gorm.DB)
 		}()
 		return fn(tx)
 	})
+}
+
+func (uow *unitOfWork) IsInTransaction() bool {
+	return uow.tx != nil
 }

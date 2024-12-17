@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"identity-api/Domain/responses"
+	"log"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
@@ -21,6 +22,7 @@ func ValidateRequest[TResponse any](req interface{}, validatorInstance *validato
 			errorMessage = "Invalid request parameters"
 		}
 		response := responses.NewResponse[TResponse](400, errorMessage)
+		log.Println(response)
 		return &response
 	}
 	return nil

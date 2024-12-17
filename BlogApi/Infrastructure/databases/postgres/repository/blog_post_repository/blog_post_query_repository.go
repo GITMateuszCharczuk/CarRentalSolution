@@ -10,8 +10,7 @@ import (
 	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
 	base "identity-api/Infrastructure/databases/postgres/repository/base"
 	"identity-api/Infrastructure/databases/postgres/repository/base/helpers"
-
-	"github.com/google/uuid"
+	unit_of_work "identity-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
 )
 
 type BlogPostQueryRepositoryImpl struct {
@@ -22,26 +21,24 @@ type BlogPostQueryRepositoryImpl struct {
 func NewBlogPostQueryRepositoryImpl(
 	postgresDatabase *postgres_db.PostgresDatabase,
 	mapper mappers.PersistenceMapper[entities.BlogPostEntity, models.BlogPostResponseModel],
+	uow unit_of_work.UnitOfWork,
 ) repository_interfaces.BlogPostQueryRepository {
 	return &BlogPostQueryRepositoryImpl{
-		QueryRepository: base.NewQueryRepository[entities.BlogPostEntity, string, models.BlogPostResponseModel](postgresDatabase.DB, mapper),
+		QueryRepository: base.NewQueryRepository[entities.BlogPostEntity, string, models.BlogPostResponseModel](postgresDatabase.DB, mapper, uow),
 		mapper:          mapper,
 	}
 }
 
 func (r *BlogPostQueryRepositoryImpl) GetBlogPostByID(id string) (*models.BlogPostResponseModel, error) {
-	queryRecord := helpers.NewQueryRecord[entities.BlogPostEntity]("id", id)
-	return r.GetFirstByQueryRecord(queryRecord)
+	return r.GetById(id)
 }
 
 func (r *BlogPostQueryRepositoryImpl) GetBlogPostAuthorId(id string) (*string, error) {
-	query := r.ConstructBaseQuery()
-	query = query.Where("id = ?", id).Select("user_id")
-	var userId uuid.UUID
-	if err := query.First(&userId).Error; err != nil {
+	var blogPost entities.BlogPostEntity
+	if err := r.ConstructBaseQuery().Where("id = ?", id).First(&blogPost).Error; err != nil {
 		return nil, err
 	}
-	res := userId.String()
+	res := blogPost.UserId.String()
 	return &res, nil
 }
 
@@ -62,7 +59,7 @@ func (r *BlogPostQueryRepositoryImpl) GetBlogPosts(
 
 	queryRecords := []helpers.QueryRecord[entities.BlogPostEntity]{
 		helpers.NewQueryRecord[entities.BlogPostEntity]("id", ids),
-		helpers.NewQueryRecord[entities.BlogPostEntity]("authorID", authorIds),
+		helpers.NewQueryRecord[entities.BlogPostEntity]("user_id", authorIds),
 		helpers.NewQueryRecord[entities.BlogPostEntity]("visible", visible),
 	}
 	query = r.ApplyWhereConditions(query, queryRecords...)

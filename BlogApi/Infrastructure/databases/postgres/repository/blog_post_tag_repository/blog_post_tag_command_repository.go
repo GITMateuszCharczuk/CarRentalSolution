@@ -2,14 +2,14 @@ package repository
 
 import (
 	"context"
-	"errors"
 	models "identity-api/Domain/models/domestic"
+	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_repository"
 	tag_repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_tag_repository"
 	postgres_db "identity-api/Infrastructure/databases/postgres/config"
 	"identity-api/Infrastructure/databases/postgres/entities"
 	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
 	base "identity-api/Infrastructure/databases/postgres/repository/base"
-	"time"
+	unit_of_work "identity-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -17,14 +17,18 @@ import (
 
 type BlogPostTagCommandRepositoryImpl struct {
 	*base.CommandRepository[entities.BlogPostTagEntity, string, models.BlogPostTagModel]
+	blogPostQueryRepository repository_interfaces.BlogPostQueryRepository
 }
 
 func NewBlogPostTagCommandRepositoryImpl(
 	postgresDatabase *postgres_db.PostgresDatabase,
+	blogPostQueryRepository repository_interfaces.BlogPostQueryRepository,
 	mapper mappers.PersistenceMapper[entities.BlogPostTagEntity, models.BlogPostTagModel],
+	uow unit_of_work.UnitOfWork,
 ) tag_repository_interfaces.BlogPostTagCommandRepository {
 	return &BlogPostTagCommandRepositoryImpl{
-		CommandRepository: base.NewCommandRepository[entities.BlogPostTagEntity, string, models.BlogPostTagModel](postgresDatabase.DB, mapper),
+		CommandRepository:       base.NewCommandRepository[entities.BlogPostTagEntity, string, models.BlogPostTagModel](postgresDatabase.DB, mapper, uow),
+		blogPostQueryRepository: blogPostQueryRepository,
 	}
 }
 
@@ -33,22 +37,14 @@ func (r *BlogPostTagCommandRepositoryImpl) AddTagToBlogPost(ctx context.Context,
 
 	err := r.ExecuteInTransaction(ctx, func(tx *gorm.DB) error {
 		tagEntity := entities.BlogPostTagEntity{
-			ID:        uuid.New(),
-			Name:      tag.Name,
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
+			Name: tag.Name,
+		}
+		if err := tx.FirstOrCreate(&tagEntity, entities.BlogPostTagEntity{ID: uuid.New(), Name: tag.Name}).Error; err != nil {
+			dfgrfedgaserdgf
+			return err
 		}
 
-		if err := tx.Create(&tagEntity).Error; err != nil {
-			if !errors.Is(err, gorm.ErrDuplicatedKey) {
-				return err
-			}
-			if err := tx.Where("name = ?", tagEntity.Name).First(&tagEntity).Error; err != nil {
-				return err
-			}
-		}
-
-		if err := tx.Model(&blogPostEntity).Association("Tags").Append(&tagEntity); err != nil {
+		if err := tx.Model(&blogPostEntity).Select("Tags").Association("Tags").Append(&tagEntity); err != nil {
 			return err
 		}
 
@@ -66,8 +62,12 @@ func (r *BlogPostTagCommandRepositoryImpl) AddTagToBlogPost(ctx context.Context,
 	return resultTag, nil
 }
 
-func (r *BlogPostTagCommandRepositoryImpl) AddTagsToBlogPost(ctx context.Context, blogPostEntity entities.BlogPostEntity, tagNames []string) error {
+func (r *BlogPostTagCommandRepositoryImpl) AddTagsToBlogPost(ctx context.Context, blogPostId string, tagNames []string) error {
 	return r.ExecuteInTransaction(ctx, func(tx *gorm.DB) error {
+		var blogPostEntity entities.BlogPostEntity
+		if err := tx.First(&blogPostEntity, "id = ?", blogPostId).Error; err != nil {
+			return err
+		}
 		for _, tagName := range tagNames {
 			_, err := r.AddTagToBlogPost(ctx, &models.BlogPostTagModel{Name: tagName}, blogPostEntity)
 			if err != nil {
@@ -80,63 +80,36 @@ func (r *BlogPostTagCommandRepositoryImpl) AddTagsToBlogPost(ctx context.Context
 
 func (r *BlogPostTagCommandRepositoryImpl) CleanupUnusedTags(ctx context.Context) error {
 	return r.ExecuteInTransaction(ctx, func(tx *gorm.DB) error {
-		return tx.Exec(`
-            DELETE FROM blog_post_tag_entities 
-            WHERE id IN (
-                SELECT t.id 
-                FROM blog_post_tag_entities t 
-                LEFT JOIN blog_post_tags bt ON t.id = bt.tag_id 
-                WHERE bt.blog_post_id IS NULL
-            )
-        `).Error
-	})
-}
+		var unusedTags []entities.BlogPostTagEntity
 
-func (r *BlogPostTagCommandRepositoryImpl) ModifyTagsForBlogPost(ctx context.Context, blogPostEntity entities.BlogPostEntity, newTagNames []string) error {
-	return r.ExecuteInTransaction(ctx, func(tx *gorm.DB) error {
-		var existingTags []entities.BlogPostTagEntity
-		if err := tx.Model(&blogPostEntity).Association("Tags").Find(&existingTags); err != nil {
+		if err := tx.Model(&entities.BlogPostTagEntity{}).
+			Joins("LEFT JOIN blog_post_tags ON blog_post_tags.tag_id = blog_post_tag_entities.id").
+			Where("blog_post_tags.blog_post_id IS NULL").
+			Find(&unusedTags).Error; err != nil {
 			return err
 		}
 
-		existingTagNames := make(map[string]entities.BlogPostTagEntity)
-		for _, tag := range existingTags {
-			existingTagNames[tag.Name] = tag
-		}
-
-		newTagNamesMap := make(map[string]bool)
-		for _, name := range newTagNames {
-			newTagNamesMap[name] = true
-		}
-
-		for _, existingTag := range existingTags {
-			if !newTagNamesMap[existingTag.Name] {
-				if err := tx.Model(&blogPostEntity).Association("Tags").Delete(&existingTag); err != nil {
-					return err
-				}
-			}
-		}
-
-		for _, newTagName := range newTagNames {
-			if _, exists := existingTagNames[newTagName]; !exists {
-				var tag entities.BlogPostTagEntity
-
-				result := tx.Where("name = ?", newTagName).FirstOrCreate(&tag, entities.BlogPostTagEntity{
-					ID:        uuid.New(),
-					Name:      newTagName,
-					CreatedAt: time.Now(),
-					UpdatedAt: time.Now(),
-				})
-				if result.Error != nil {
-					return result.Error
-				}
-
-				if err := tx.Model(&blogPostEntity).Association("Tags").Append(&tag); err != nil {
-					return err
-				}
+		if len(unusedTags) > 0 {
+			if err := tx.Delete(&unusedTags).Error; err != nil {
+				return err
 			}
 		}
 
 		return nil
+	})
+}
+
+func (r *BlogPostTagCommandRepositoryImpl) ModifyTagsForBlogPost(ctx context.Context, blogPostId string, newTagNames []string) error {
+	return r.ExecuteInTransaction(ctx, func(tx *gorm.DB) error {
+		var blogPostEntity entities.BlogPostEntity
+		if err := tx.First(&blogPostEntity, "id = ?", blogPostId).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Model(&blogPostEntity).Association("Tags").Clear(); err != nil {
+			return err
+		}
+
+		return r.AddTagsToBlogPost(ctx, blogPostId, newTagNames)
 	})
 }

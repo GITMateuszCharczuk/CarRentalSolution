@@ -29,9 +29,9 @@ func NewGetBlogPostsController(validator *validator.Validate) *GetBlogPostsContr
 // @Param current_page query int false "Current page" example:"1"
 // @Param sort_query query []string false "Sort fields" example:"createdAt:desc"
 // @Param ids query []string false "Blog post IDs" example:"id1,id2"
-// @Param dateTimeFrom query string false "Start date" example:"2023-12-12T00:00:00Z"
-// @Param dateTimeTo query string false "End date" example:"2023-12-12T23:59:59Z"
-// @Param authorIds query []string false "Author IDs" example:"author1,author2"
+// @Param date-time-from query string false "Start date" example:"2023-12-12T00:00:00Z"
+// @Param date-time-to query string false "End date" example:"2023-12-12T23:59:59Z"
+// @Param author-ids query []string false "Author IDs" example:"author1,author2"
 // @Param tags query []string false "Tags" example:"tag1,tag2"
 // @Param visible query bool false "Visibility status" example:"true"
 // @Success 200 {object} contract.GetBlogPostsResponse200 "Blog posts retrieved successfully"
@@ -43,11 +43,11 @@ func (h *GetBlogPostsController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 
 	req := contract.GetBlogPostsRequest{
-		Ids:          c.QueryArray("ids"),
+		Ids:          services.ExtractQueryArray(c, "ids"), //TODO
 		DateTimeFrom: c.Query("dateTimeFrom"),
 		DateTimeTo:   c.Query("dateTimeTo"),
-		AuthorIds:    c.QueryArray("authorIds"),
-		Tags:         c.QueryArray("tags"),
+		AuthorIds:    services.ExtractQueryArray(c, "authorIds"),
+		Tags:         services.ExtractQueryArray(c, "tags"),
 		Visible:      c.Query("visible") == "true",
 		SortQuery:    services.ExtractSortQuery(c),
 		Pagination:   services.ExtractPagination(c),

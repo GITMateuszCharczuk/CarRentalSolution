@@ -1,14 +1,10 @@
 definitions:
   contract.CreateBlogPostCommentRequest:
     properties:
-      blogPostId:
-        example: 123e4567-e89b-12d3-a456-426614174000
-        type: string
       description:
         example: This is a great blog post!
         type: string
     required:
-    - blogPostId
     - description
     type: object
   contract.CreateBlogPostCommentResponse200:

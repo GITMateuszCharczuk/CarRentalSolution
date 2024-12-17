@@ -23,6 +23,7 @@ import (
 	"identity-api/Infrastructure/data_fetcher"
 	config2 "identity-api/Infrastructure/databases/postgres/config"
 	"identity-api/Infrastructure/databases/postgres/mappers"
+	"identity-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
 	repository3 "identity-api/Infrastructure/databases/postgres/repository/blog_post_comment_repository"
 	repository4 "identity-api/Infrastructure/databases/postgres/repository/blog_post_like_repository"
 	"identity-api/Infrastructure/databases/postgres/repository/blog_post_repository"
@@ -35,18 +36,19 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	configConfig := config.ProvideConfig()
 	postgresDatabase := config2.NewPostgresConfigProvider(configConfig)
 	persistenceMapper := mappers.ProvideBlogPostResponsePersistenceMapper()
-	blogPostQueryRepository := repository.ProvideBlogPostQueryRepository(postgresDatabase, persistenceMapper)
+	unitOfWork := cqrs.ProvideUnitOfWork(postgresDatabase)
+	blogPostQueryRepository := repository.ProvideBlogPostQueryRepository(postgresDatabase, persistenceMapper, unitOfWork)
 	mappersPersistenceMapper := mappers.ProvideBlogPostRequestPersistenceMapper()
 	persistenceMapper2 := mappers.ProvideBlogPostTagPersistenceMapper()
-	blogPostTagCommandRepository := repository2.ProvideBlogPostTagCommandRepository(postgresDatabase, persistenceMapper2)
-	blogPostCommandRepository := repository.ProvideBlogPostCommandRepository(postgresDatabase, mappersPersistenceMapper, blogPostTagCommandRepository)
+	blogPostTagCommandRepository := repository2.ProvideBlogPostTagCommandRepository(postgresDatabase, persistenceMapper2, blogPostQueryRepository, unitOfWork)
+	blogPostCommandRepository := repository.ProvideBlogPostCommandRepository(postgresDatabase, mappersPersistenceMapper, blogPostTagCommandRepository, unitOfWork)
 	persistenceMapper3 := mappers.ProvideBlogPostCommentPersistenceMapper()
-	blogPostCommentQueryRepository := repository3.ProvideBlogPostCommentQueryRepository(postgresDatabase, persistenceMapper3)
-	blogPostCommentCommandRepository := repository3.ProvideBlogPostCommentCommandRepository(postgresDatabase, persistenceMapper3)
+	blogPostCommentQueryRepository := repository3.ProvideBlogPostCommentQueryRepository(postgresDatabase, persistenceMapper3, unitOfWork)
+	blogPostCommentCommandRepository := repository3.ProvideBlogPostCommentCommandRepository(postgresDatabase, persistenceMapper3, unitOfWork)
 	persistenceMapper4 := mappers.ProvideBlogPostLikePersistenceMapper()
-	blogPostLikeQueryRepository := repository4.ProvideBlogPostLikeQueryRepository(postgresDatabase, persistenceMapper4)
-	blogPostLikeCommandRepository := repository4.ProvideBlogPostLikeCommandRepository(postgresDatabase, persistenceMapper4)
-	blogPostTagQueryRepository := repository2.ProvideBlogPostTagQueryRepository(postgresDatabase, persistenceMapper2)
+	blogPostLikeQueryRepository := repository4.ProvideBlogPostLikeQueryRepository(postgresDatabase, persistenceMapper4, unitOfWork)
+	blogPostLikeCommandRepository := repository4.ProvideBlogPostLikeCommandRepository(postgresDatabase, persistenceMapper4, unitOfWork)
+	blogPostTagQueryRepository := repository2.ProvideBlogPostTagQueryRepository(postgresDatabase, persistenceMapper2, unitOfWork)
 	dataFetcher := datafetcher.ProvideDataFetcherImpl(configConfig)
 	infrastructureComponents := &InfrastructureComponents{
 		Config:             configConfig,

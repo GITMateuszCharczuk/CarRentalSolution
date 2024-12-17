@@ -1,6 +1,7 @@
 package models
 
 type BlogPostRequestModel struct {
+	Id               string   `json:"id" example:"123e4567-e89b-12d3-a456-426614174000" swaggerignore:"true"`
 	Heading          string   `json:"heading" example:"Blog Post Title" swaggertype:"string"`
 	PageTitle        string   `json:"pageTitle" example:"Page Title" swaggertype:"string"`
 	Content          string   `json:"content" example:"Blog post content..." swaggertype:"string"`

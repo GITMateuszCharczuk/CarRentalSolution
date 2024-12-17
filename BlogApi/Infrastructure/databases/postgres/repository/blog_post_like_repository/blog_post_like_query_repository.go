@@ -8,6 +8,7 @@ import (
 	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
 	base "identity-api/Infrastructure/databases/postgres/repository/base"
 	"identity-api/Infrastructure/databases/postgres/repository/base/helpers"
+	unit_of_work "identity-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
 )
 
 type BlogPostLikeQueryRepositoryImpl struct {
@@ -18,9 +19,10 @@ type BlogPostLikeQueryRepositoryImpl struct {
 func NewBlogPostLikeQueryRepositoryImpl(
 	postgresDatabase *postgres_db.PostgresDatabase,
 	mapper mappers.PersistenceMapper[entities.BlogPostLikeEntity, models.BlogPostLikeModel],
+	uow unit_of_work.UnitOfWork,
 ) repository_interfaces.BlogPostLikeQueryRepository {
 	return &BlogPostLikeQueryRepositoryImpl{
-		QueryRepository: base.NewQueryRepository[entities.BlogPostLikeEntity, string, models.BlogPostLikeModel](postgresDatabase.DB, mapper),
+		QueryRepository: base.NewQueryRepository[entities.BlogPostLikeEntity, string, models.BlogPostLikeModel](postgresDatabase.DB, mapper, uow),
 		mapper:          mapper,
 	}
 }
