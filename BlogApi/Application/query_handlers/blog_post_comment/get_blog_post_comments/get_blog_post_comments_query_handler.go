@@ -1,11 +1,11 @@
 package queries
 
 import (
+	contract "blog-api/Application.contract/BlogPostComments/GetBlogPostComments"
+	repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_comment_repository"
+	blog_repository "blog-api/Domain/repository_interfaces/blog_post_repository"
+	"blog-api/Domain/responses"
 	"context"
-	contract "identity-api/Application.contract/BlogPostComments/GetBlogPostComments"
-	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_comment_repository"
-	blog_repository "identity-api/Domain/repository_interfaces/blog_post_repository"
-	"identity-api/Domain/responses"
 )
 
 type GetBlogPostCommentsQueryHandler struct {

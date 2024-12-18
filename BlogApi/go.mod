@@ -1,4 +1,4 @@
-module identity-api
+module blog-api
 
 go 1.23.2
 

@@ -1,8 +1,8 @@
 package queries
 
 import (
-	"identity-api/Domain/pagination"
-	"identity-api/Domain/sorting"
+	"blog-api/Domain/pagination"
+	"blog-api/Domain/sorting"
 )
 
 type GetBlogPostCommentsQuery struct {

@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"identity-api/API/mappers"
-	"identity-api/API/services"
-	contract "identity-api/Application.contract/BlogPosts/CreateBlogPost"
-	commands "identity-api/Application/command_handlers/blog_post/create_blog_post"
-	"identity-api/Domain/responses"
+	"blog-api/API/mappers"
+	"blog-api/API/services"
+	contract "blog-api/Application.contract/BlogPosts/CreateBlogPost"
+	commands "blog-api/Application/command_handlers/blog_post/create_blog_post"
+	"blog-api/Domain/responses"
 	"log"
 
 	"github.com/gin-gonic/gin"

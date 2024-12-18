@@ -1,6 +1,6 @@
 package queries
 
-import "identity-api/Domain/sorting"
+import "blog-api/Domain/sorting"
 
 type GetTagsQuery struct {
 	sorting.Sortable `json:",inline"`

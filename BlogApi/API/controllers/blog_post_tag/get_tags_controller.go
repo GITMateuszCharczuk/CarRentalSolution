@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"identity-api/API/mappers"
-	"identity-api/API/services"
-	contract "identity-api/Application.contract/Tags/GetTags"
-	queries "identity-api/Application/query_handlers/blog_post_tag/get_tags"
+	"blog-api/API/mappers"
+	"blog-api/API/services"
+	contract "blog-api/Application.contract/Tags/GetTags"
+	queries "blog-api/Application/query_handlers/blog_post_tag/get_tags"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -24,7 +24,7 @@ func NewGetTagsController(validator *validator.Validate) *GetTagsController {
 // @Tags tags
 // @Accept json
 // @Produce json
-// @Param id path string true "Blog Post ID" example:"123e4567-e89b-12d3-a456-426614174000"
+// @Param id path string false "Blog Post ID" example:"123e4567-e89b-12d3-a456-426614174000"
 // @Param sort_fields query []string false "Sort fields (field:asc|desc)" example:"created_at:desc"
 // @Success 200 {object} contract.GetTagsResponse200 "Tags retrieved successfully"
 // @Failure 500 {object} contract.GetTagsResponse500 "Server error during retrieval"
@@ -32,10 +32,10 @@ func NewGetTagsController(validator *validator.Validate) *GetTagsController {
 func (h *GetTagsController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 	req := contract.GetTagsRequest{
-		BlogPostId: c.Param("id"),
+		BlogPostId: services.ExtractFromPath(c, "id"),
 		SortQuery:  services.ExtractSortQuery(c),
 	}
-	if validateResponse := services.ValidateRequest[contract.GetTagsRequest](&req, h.validator); validateResponse != nil {
+	if validateResponse := services.ValidateRequest[contract.GetTagsResponse](&req, h.validator); validateResponse != nil {
 		responseSender.Send(validateResponse)
 		return
 	}

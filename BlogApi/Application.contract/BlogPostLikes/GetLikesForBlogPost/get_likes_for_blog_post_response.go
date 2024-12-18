@@ -1,7 +1,7 @@
 package contract
 
 import (
-	responses "identity-api/Domain/responses"
+	responses "blog-api/Domain/responses"
 )
 
 type GetLikesForBlogPostResponse struct {

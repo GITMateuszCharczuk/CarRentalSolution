@@ -1,10 +1,10 @@
 package queries
 
 import (
+	contract "blog-api/Application.contract/BlogPosts/GetBlogPost"
+	repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_repository"
+	"blog-api/Domain/responses"
 	"context"
-	contract "identity-api/Application.contract/BlogPosts/GetBlogPost"
-	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_repository"
-	"identity-api/Domain/responses"
 )
 
 type GetBlogPostQueryHandler struct {
@@ -32,15 +32,7 @@ func (h *GetBlogPostQueryHandler) Handle(ctx context.Context, query *GetBlogPost
 	}
 
 	return &contract.GetBlogPostResponse{
-		BaseResponse:     responses.NewBaseResponse(200, "Blog post retrieved successfully"),
-		Id:               blogPost.Id,
-		Heading:          blogPost.Heading,
-		PageTitle:        blogPost.PageTitle,
-		Content:          blogPost.Content,
-		ShortDescription: blogPost.ShortDescription,
-		FeaturedImageUrl: blogPost.FeaturedImageUrl,
-		UrlHandle:        blogPost.UrlHandle,
-		PublishedDate:    blogPost.PublishedDate,
-		Author:           blogPost.AuthorName,
+		BaseResponse: responses.NewBaseResponse(200, "Blog post retrieved successfully"),
+		BlogPost:     *blogPost,
 	}, nil
 }

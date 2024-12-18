@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	base "identity-api/API/controllers/base"
-	blog "identity-api/API/controllers/blog_post"
-	comment "identity-api/API/controllers/blog_post_comment"
-	like "identity-api/API/controllers/blog_post_like"
-	tag "identity-api/API/controllers/blog_post_tag"
+	base "blog-api/API/controllers/base"
+	blog "blog-api/API/controllers/blog_post"
+	comment "blog-api/API/controllers/blog_post_comment"
+	like "blog-api/API/controllers/blog_post_like"
+	tag "blog-api/API/controllers/blog_post_tag"
 
 	"github.com/google/wire"
 )

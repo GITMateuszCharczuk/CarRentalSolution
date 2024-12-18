@@ -1,12 +1,12 @@
 package commands
 
 import (
+	contract "blog-api/Application.contract/BlogPostComments/DeketeBlogPostComment"
+	"blog-api/Application/services"
+	repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_comment_repository"
+	"blog-api/Domain/responses"
+	data_fetcher "blog-api/Domain/service_interfaces"
 	"context"
-	contract "identity-api/Application.contract/BlogPostComments/DeketeBlogPostComment"
-	"identity-api/Application/services"
-	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_comment_repository"
-	"identity-api/Domain/responses"
-	data_fetcher "identity-api/Domain/service_interfaces"
 )
 
 type DeleteBlogPostCommentCommandHandler struct {

@@ -1,9 +1,9 @@
 package repository_interfaces
 
 import (
+	models "blog-api/Domain/models/domestic"
+	"blog-api/Infrastructure/databases/postgres/entities"
 	"context"
-	models "identity-api/Domain/models/domestic"
-	"identity-api/Infrastructure/databases/postgres/entities"
 )
 
 type BlogPostTagCommandRepository interface {

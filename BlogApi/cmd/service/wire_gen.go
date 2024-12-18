@@ -7,27 +7,27 @@
 package main
 
 import (
-	controllers5 "identity-api/API/controllers"
-	"identity-api/API/controllers/blog_post"
-	controllers2 "identity-api/API/controllers/blog_post_comment"
-	controllers3 "identity-api/API/controllers/blog_post_like"
-	controllers4 "identity-api/API/controllers/blog_post_tag"
-	"identity-api/API/server"
-	"identity-api/API/validators"
-	repository_interfaces2 "identity-api/Domain/repository_interfaces/blog_post_comment_repository"
-	repository_interfaces3 "identity-api/Domain/repository_interfaces/blog_post_like_repository"
-	"identity-api/Domain/repository_interfaces/blog_post_repository"
-	repository_interfaces4 "identity-api/Domain/repository_interfaces/blog_post_tag_repository"
-	datafetcher2 "identity-api/Domain/service_interfaces"
-	"identity-api/Infrastructure/config"
-	"identity-api/Infrastructure/data_fetcher"
-	config2 "identity-api/Infrastructure/databases/postgres/config"
-	"identity-api/Infrastructure/databases/postgres/mappers"
-	"identity-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
-	repository3 "identity-api/Infrastructure/databases/postgres/repository/blog_post_comment_repository"
-	repository4 "identity-api/Infrastructure/databases/postgres/repository/blog_post_like_repository"
-	"identity-api/Infrastructure/databases/postgres/repository/blog_post_repository"
-	repository2 "identity-api/Infrastructure/databases/postgres/repository/blog_post_tag_repository"
+	controllers5 "blog-api/API/controllers"
+	"blog-api/API/controllers/blog_post"
+	controllers2 "blog-api/API/controllers/blog_post_comment"
+	controllers3 "blog-api/API/controllers/blog_post_like"
+	controllers4 "blog-api/API/controllers/blog_post_tag"
+	"blog-api/API/server"
+	"blog-api/API/validators"
+	repository_interfaces2 "blog-api/Domain/repository_interfaces/blog_post_comment_repository"
+	repository_interfaces3 "blog-api/Domain/repository_interfaces/blog_post_like_repository"
+	"blog-api/Domain/repository_interfaces/blog_post_repository"
+	repository_interfaces4 "blog-api/Domain/repository_interfaces/blog_post_tag_repository"
+	datafetcher2 "blog-api/Domain/service_interfaces"
+	"blog-api/Infrastructure/config"
+	"blog-api/Infrastructure/data_fetcher"
+	config2 "blog-api/Infrastructure/databases/postgres/config"
+	"blog-api/Infrastructure/databases/postgres/mappers"
+	"blog-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
+	repository3 "blog-api/Infrastructure/databases/postgres/repository/blog_post_comment_repository"
+	repository4 "blog-api/Infrastructure/databases/postgres/repository/blog_post_like_repository"
+	"blog-api/Infrastructure/databases/postgres/repository/blog_post_repository"
+	repository2 "blog-api/Infrastructure/databases/postgres/repository/blog_post_tag_repository"
 )
 
 // Injectors from wire.go:
@@ -47,7 +47,7 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	blogPostCommentCommandRepository := repository3.ProvideBlogPostCommentCommandRepository(postgresDatabase, persistenceMapper3, unitOfWork)
 	persistenceMapper4 := mappers.ProvideBlogPostLikePersistenceMapper()
 	blogPostLikeQueryRepository := repository4.ProvideBlogPostLikeQueryRepository(postgresDatabase, persistenceMapper4, unitOfWork)
-	blogPostLikeCommandRepository := repository4.ProvideBlogPostLikeCommandRepository(postgresDatabase, persistenceMapper4, unitOfWork)
+	blogPostLikeCommandRepository := repository4.ProvideBlogPostLikeCommandRepository(postgresDatabase, persistenceMapper4, unitOfWork, blogPostLikeQueryRepository)
 	blogPostTagQueryRepository := repository2.ProvideBlogPostTagQueryRepository(postgresDatabase, persistenceMapper2, unitOfWork)
 	dataFetcher := datafetcher.ProvideDataFetcherImpl(configConfig)
 	infrastructureComponents := &InfrastructureComponents{

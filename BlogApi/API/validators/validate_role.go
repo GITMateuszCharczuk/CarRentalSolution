@@ -1,7 +1,7 @@
 package validators
 
 import (
-	"identity-api/Domain/constants"
+	"blog-api/Domain/constants"
 	"log"
 	"reflect"
 

@@ -123,8 +123,8 @@ const docTemplate = `{
                             "type": "string"
                         },
                         "collectionFormat": "csv",
-                        "description": "Sort fields",
-                        "name": "sort_query",
+                        "description": "Sort fields (field:asc|desc)",
+                        "name": "sort_fields",
                         "in": "query"
                     },
                     {
@@ -140,13 +140,13 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Start date",
-                        "name": "dateTimeFrom",
+                        "name": "date-time-from",
                         "in": "query"
                     },
                     {
                         "type": "string",
                         "description": "End date",
-                        "name": "dateTimeTo",
+                        "name": "date-time-to",
                         "in": "query"
                     },
                     {
@@ -156,7 +156,7 @@ const docTemplate = `{
                         },
                         "collectionFormat": "csv",
                         "description": "Author IDs",
-                        "name": "authorIds",
+                        "name": "author-ids",
                         "in": "query"
                     },
                     {
@@ -793,8 +793,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Blog Post ID",
                         "name": "id",
-                        "in": "path",
-                        "required": true
+                        "in": "path"
                     },
                     {
                         "type": "array",
@@ -1411,51 +1410,56 @@ const docTemplate = `{
         "contract.GetBlogPostResponse200": {
             "type": "object",
             "properties": {
-                "author": {
-                    "type": "string",
-                    "example": "John Doe"
-                },
-                "content": {
-                    "type": "string",
-                    "example": "Blog post content..."
-                },
-                "featuredImageUrl": {
-                    "type": "string",
-                    "example": "https://example.com/image.jpg"
-                },
-                "heading": {
-                    "type": "string",
-                    "example": "Blog Post Title"
-                },
-                "id": {
-                    "type": "string",
-                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                "blog_post": {
+                    "type": "object",
+                    "properties": {
+                        "author": {
+                            "type": "string",
+                            "example": "John Doe"
+                        },
+                        "content": {
+                            "type": "string",
+                            "example": "Blog post content..."
+                        },
+                        "createdAt": {
+                            "type": "string",
+                            "example": "2023-12-12T10:00:00Z"
+                        },
+                        "featuredImageUrl": {
+                            "type": "string",
+                            "example": "https://example.com/image.jpg"
+                        },
+                        "heading": {
+                            "type": "string",
+                            "example": "Blog Post Title"
+                        },
+                        "id": {
+                            "type": "string",
+                            "example": "123e4567-e89b-12d3-a456-426614174000"
+                        },
+                        "pageTitle": {
+                            "type": "string",
+                            "example": "Page Title"
+                        },
+                        "publishedDate": {
+                            "type": "string",
+                            "example": "2023-12-12"
+                        },
+                        "shortDescription": {
+                            "type": "string",
+                            "example": "Short description"
+                        },
+                        "urlHandle": {
+                            "type": "string",
+                            "example": "blog-post-title"
+                        }
+                    }
                 },
                 "message": {
                     "type": "string",
                     "example": "Blog post retrieved successfully"
                 },
-                "pageTitle": {
-                    "type": "string",
-                    "example": "Page Title"
-                },
-                "publishedDate": {
-                    "type": "string",
-                    "example": "2023-12-12"
-                },
-                "shortDescription": {
-                    "type": "string",
-                    "example": "Short description"
-                },
                 "success": {
-                    "type": "boolean",
-                    "example": true
-                },
-                "urlHandle": {
-                    "type": "string",
-                    "example": "blog-post-title"
-                },
-                "visible": {
                     "type": "boolean",
                     "example": true
                 }
@@ -1464,6 +1468,9 @@ const docTemplate = `{
         "contract.GetBlogPostResponse404": {
             "type": "object",
             "properties": {
+                "blog_post": {
+                    "type": "object"
+                },
                 "message": {
                     "type": "string",
                     "example": "Blog post not found"
@@ -1477,6 +1484,9 @@ const docTemplate = `{
         "contract.GetBlogPostResponse500": {
             "type": "object",
             "properties": {
+                "blog_post": {
+                    "type": "object"
+                },
                 "message": {
                     "type": "string",
                     "example": "Internal server error while retrieving blog post"
@@ -1728,10 +1738,8 @@ const docTemplate = `{
         "contract.UpdateBlogPostRequest": {
             "type": "object",
             "required": [
-                "author",
                 "content",
                 "heading",
-                "id",
                 "jwtToken",
                 "pageTitle",
                 "publishedDate",
@@ -1739,10 +1747,6 @@ const docTemplate = `{
                 "urlHandle"
             ],
             "properties": {
-                "author": {
-                    "type": "string",
-                    "example": "John Doe"
-                },
                 "content": {
                     "type": "string",
                     "example": "Updated blog post content..."
@@ -1754,10 +1758,6 @@ const docTemplate = `{
                 "heading": {
                     "type": "string",
                     "example": "Updated Blog Post Title"
-                },
-                "id": {
-                    "type": "string",
-                    "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "jwtToken": {
                     "$ref": "#/definitions/models.JwtToken"

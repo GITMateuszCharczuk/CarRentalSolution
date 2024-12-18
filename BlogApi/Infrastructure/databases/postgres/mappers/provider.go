@@ -1,9 +1,9 @@
 package mappers
 
 import (
-	models "identity-api/Domain/models/domestic"
-	"identity-api/Infrastructure/databases/postgres/entities"
-	base "identity-api/Infrastructure/databases/postgres/mappers/base"
+	models "blog-api/Domain/models/domestic"
+	"blog-api/Infrastructure/databases/postgres/entities"
+	base "blog-api/Infrastructure/databases/postgres/mappers/base"
 
 	"github.com/google/wire"
 )

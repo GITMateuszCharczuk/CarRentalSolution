@@ -1,6 +1,6 @@
 package models
 
-import "identity-api/Domain/constants"
+import "blog-api/Domain/constants"
 
 type TokenInfo struct {
 	Valid bool                `json:"valid"`

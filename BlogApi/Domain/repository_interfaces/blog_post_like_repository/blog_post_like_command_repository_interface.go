@@ -3,6 +3,6 @@ package repository_interfaces
 import "context"
 
 type BlogPostLikeCommandRepository interface {
-	AddLike(ctx context.Context, blogPostID string, userID string) error
+	AddLike(ctx context.Context, blogPostID string, userID string) (*string, error)
 	RemoveLike(ctx context.Context, blogPostID string, userID string) error
 }

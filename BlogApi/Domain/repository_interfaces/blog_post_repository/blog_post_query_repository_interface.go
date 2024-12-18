@@ -1,9 +1,9 @@
 package repository_interfaces
 
 import (
-	models "identity-api/Domain/models/domestic"
-	"identity-api/Domain/pagination"
-	"identity-api/Domain/sorting"
+	models "blog-api/Domain/models/domestic"
+	"blog-api/Domain/pagination"
+	"blog-api/Domain/sorting"
 )
 
 type BlogPostQueryRepository interface {
@@ -14,7 +14,7 @@ type BlogPostQueryRepository interface {
 		dateTimeTo string,
 		authorIds []string,
 		tagsNames []string,
-		visible bool,
+		visible string,
 	) (*pagination.PaginatedResult[models.BlogPostResponseModel], error)
 	GetBlogPostAuthorId(id string) (*string, error)
 }

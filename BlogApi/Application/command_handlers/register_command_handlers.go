@@ -1,17 +1,17 @@
 package commands
 
 import (
-	create_blog_post "identity-api/Application/command_handlers/blog_post/create_blog_post"
-	delete_blog_post "identity-api/Application/command_handlers/blog_post/delete_blog_post"
-	update_blog_post "identity-api/Application/command_handlers/blog_post/update_blog_post"
-	create_blog_post_comment "identity-api/Application/command_handlers/blog_post_comment/create_blog_post_comment"
-	delete_blog_post_comment "identity-api/Application/command_handlers/blog_post_comment/delete_blog_post_comment"
-	create_like_for_blog_post "identity-api/Application/command_handlers/blog_post_like/create_like_for_blog_post"
-	delete_like_for_blog_post "identity-api/Application/command_handlers/blog_post_like/delete_like_for_blog_post"
-	blog_post_comment_repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_comment_repository"
-	blog_post_like_repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_like_repository"
-	blog_post_repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_repository"
-	data_fetcher "identity-api/Domain/service_interfaces"
+	create_blog_post "blog-api/Application/command_handlers/blog_post/create_blog_post"
+	delete_blog_post "blog-api/Application/command_handlers/blog_post/delete_blog_post"
+	update_blog_post "blog-api/Application/command_handlers/blog_post/update_blog_post"
+	create_blog_post_comment "blog-api/Application/command_handlers/blog_post_comment/create_blog_post_comment"
+	delete_blog_post_comment "blog-api/Application/command_handlers/blog_post_comment/delete_blog_post_comment"
+	create_like_for_blog_post "blog-api/Application/command_handlers/blog_post_like/create_like_for_blog_post"
+	delete_like_for_blog_post "blog-api/Application/command_handlers/blog_post_like/delete_like_for_blog_post"
+	blog_post_comment_repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_comment_repository"
+	blog_post_like_repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_like_repository"
+	blog_post_repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_repository"
+	data_fetcher "blog-api/Domain/service_interfaces"
 	"log"
 
 	"github.com/mehdihadeli/go-mediatr"

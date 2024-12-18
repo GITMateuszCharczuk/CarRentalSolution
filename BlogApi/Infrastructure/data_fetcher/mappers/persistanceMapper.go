@@ -1,9 +1,9 @@
 package datafetcher
 
 import (
-	models "identity-api/Domain/models/external"
-	responses "identity-api/Infrastructure/data_fetcher/responses"
-	utils "identity-api/Infrastructure/data_fetcher/utils"
+	models "blog-api/Domain/models/external"
+	responses "blog-api/Infrastructure/data_fetcher/responses"
+	utils "blog-api/Infrastructure/data_fetcher/utils"
 )
 
 func MapToTokenInfo(tokenInfo responses.ValidateTokenResponse) models.TokenInfo {

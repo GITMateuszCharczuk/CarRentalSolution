@@ -1,9 +1,9 @@
 package contract
 
 import (
-	models "identity-api/Domain/models/domestic"
-	"identity-api/Domain/pagination"
-	responses "identity-api/Domain/responses"
+	models "blog-api/Domain/models/domestic"
+	"blog-api/Domain/pagination"
+	responses "blog-api/Domain/responses"
 )
 
 type GetBlogPostCommentsResponse struct {

@@ -1,7 +1,7 @@
 package commands
 
 import (
-	models "identity-api/Domain/models/external"
+	models "blog-api/Domain/models/external"
 )
 
 type DeleteBlogPostCommand struct {

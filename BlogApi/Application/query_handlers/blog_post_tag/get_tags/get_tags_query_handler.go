@@ -1,10 +1,10 @@
 package queries
 
 import (
+	contract "blog-api/Application.contract/Tags/GetTags"
+	repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_tag_repository"
+	"blog-api/Domain/responses"
 	"context"
-	contract "identity-api/Application.contract/Tags/GetTags"
-	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_tag_repository"
-	"identity-api/Domain/responses"
 )
 
 type GetTagsQueryHandler struct {

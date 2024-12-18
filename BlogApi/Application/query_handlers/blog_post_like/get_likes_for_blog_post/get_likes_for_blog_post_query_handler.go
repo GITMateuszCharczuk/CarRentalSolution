@@ -1,10 +1,10 @@
 package queries
 
 import (
+	contract "blog-api/Application.contract/BlogPostLikes/GetLikesForBlogPost"
+	repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_like_repository"
+	"blog-api/Domain/responses"
 	"context"
-	contract "identity-api/Application.contract/BlogPostLikes/GetLikesForBlogPost"
-	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_like_repository"
-	"identity-api/Domain/responses"
 )
 
 type GetLikesForBlogPostQueryHandler struct {

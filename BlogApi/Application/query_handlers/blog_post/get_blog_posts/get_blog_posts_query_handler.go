@@ -1,11 +1,11 @@
 package queries
 
 import (
+	contract "blog-api/Application.contract/BlogPosts/GetBlogPosts"
+	repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_repository"
+	"blog-api/Domain/responses"
+	data_fetcher "blog-api/Domain/service_interfaces"
 	"context"
-	contract "identity-api/Application.contract/BlogPosts/GetBlogPosts"
-	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_repository"
-	"identity-api/Domain/responses"
-	data_fetcher "identity-api/Domain/service_interfaces"
 )
 
 type GetBlogPostsQueryHandler struct {

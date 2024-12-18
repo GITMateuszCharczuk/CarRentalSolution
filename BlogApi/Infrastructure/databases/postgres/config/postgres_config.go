@@ -1,8 +1,8 @@
 package config
 
 import (
+	"blog-api/Infrastructure/databases/postgres/entities"
 	"fmt"
-	"identity-api/Infrastructure/databases/postgres/entities"
 	"log"
 	"sync"
 

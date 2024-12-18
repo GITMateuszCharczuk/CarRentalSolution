@@ -411,45 +411,50 @@ definitions:
     type: object
   contract.GetBlogPostResponse200:
     properties:
-      author:
-        example: John Doe
-        type: string
-      content:
-        example: Blog post content...
-        type: string
-      featuredImageUrl:
-        example: https://example.com/image.jpg
-        type: string
-      heading:
-        example: Blog Post Title
-        type: string
-      id:
-        example: 123e4567-e89b-12d3-a456-426614174000
-        type: string
+      blog_post:
+        properties:
+          author:
+            example: John Doe
+            type: string
+          content:
+            example: Blog post content...
+            type: string
+          createdAt:
+            example: "2023-12-12T10:00:00Z"
+            type: string
+          featuredImageUrl:
+            example: https://example.com/image.jpg
+            type: string
+          heading:
+            example: Blog Post Title
+            type: string
+          id:
+            example: 123e4567-e89b-12d3-a456-426614174000
+            type: string
+          pageTitle:
+            example: Page Title
+            type: string
+          publishedDate:
+            example: "2023-12-12"
+            type: string
+          shortDescription:
+            example: Short description
+            type: string
+          urlHandle:
+            example: blog-post-title
+            type: string
+        type: object
       message:
         example: Blog post retrieved successfully
         type: string
-      pageTitle:
-        example: Page Title
-        type: string
-      publishedDate:
-        example: "2023-12-12"
-        type: string
-      shortDescription:
-        example: Short description
-        type: string
       success:
-        example: true
-        type: boolean
-      urlHandle:
-        example: blog-post-title
-        type: string
-      visible:
         example: true
         type: boolean
     type: object
   contract.GetBlogPostResponse404:
     properties:
+      blog_post:
+        type: object
       message:
         example: Blog post not found
         type: string
@@ -459,6 +464,8 @@ definitions:
     type: object
   contract.GetBlogPostResponse500:
     properties:
+      blog_post:
+        type: object
       message:
         example: Internal server error while retrieving blog post
         type: string
@@ -635,9 +642,6 @@ definitions:
     type: object
   contract.UpdateBlogPostRequest:
     properties:
-      author:
-        example: John Doe
-        type: string
       content:
         example: Updated blog post content...
         type: string
@@ -646,9 +650,6 @@ definitions:
         type: string
       heading:
         example: Updated Blog Post Title
-        type: string
-      id:
-        example: 123e4567-e89b-12d3-a456-426614174000
         type: string
       jwtToken:
         $ref: '#/definitions/models.JwtToken'
@@ -675,10 +676,8 @@ definitions:
         example: true
         type: boolean
     required:
-    - author
     - content
     - heading
-    - id
     - jwtToken
     - pageTitle
     - publishedDate
@@ -811,11 +810,11 @@ paths:
         name: current_page
         type: integer
       - collectionFormat: csv
-        description: Sort fields
+        description: Sort fields (field:asc|desc)
         in: query
         items:
           type: string
-        name: sort_query
+        name: sort_fields
         type: array
       - collectionFormat: csv
         description: Blog post IDs
@@ -826,18 +825,18 @@ paths:
         type: array
       - description: Start date
         in: query
-        name: dateTimeFrom
+        name: date-time-from
         type: string
       - description: End date
         in: query
-        name: dateTimeTo
+        name: date-time-to
         type: string
       - collectionFormat: csv
         description: Author IDs
         in: query
         items:
           type: string
-        name: authorIds
+        name: author-ids
         type: array
       - collectionFormat: csv
         description: Tags
@@ -1263,7 +1262,6 @@ paths:
       - description: Blog Post ID
         in: path
         name: id
-        required: true
         type: string
       - collectionFormat: csv
         description: Sort fields (field:asc|desc)

@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"identity-api/API/mappers"
-	"identity-api/API/services"
-	contract "identity-api/Application.contract/BlogPostComments/DeketeBlogPostComment"
-	commands "identity-api/Application/command_handlers/blog_post_comment/delete_blog_post_comment"
+	"blog-api/API/mappers"
+	"blog-api/API/services"
+	contract "blog-api/Application.contract/BlogPostComments/DeketeBlogPostComment"
+	commands "blog-api/Application/command_handlers/blog_post_comment/delete_blog_post_comment"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

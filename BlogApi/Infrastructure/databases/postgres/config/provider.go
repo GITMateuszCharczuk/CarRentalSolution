@@ -1,7 +1,7 @@
 package config
 
 import (
-	"identity-api/Infrastructure/config"
+	"blog-api/Infrastructure/config"
 
 	"github.com/google/wire"
 )

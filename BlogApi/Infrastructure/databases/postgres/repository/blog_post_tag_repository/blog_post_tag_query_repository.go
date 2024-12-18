@@ -1,15 +1,15 @@
 package repository
 
 import (
-	models "identity-api/Domain/models/domestic"
-	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_tag_repository"
-	"identity-api/Domain/sorting"
-	postgres_db "identity-api/Infrastructure/databases/postgres/config"
-	"identity-api/Infrastructure/databases/postgres/entities"
-	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
-	base "identity-api/Infrastructure/databases/postgres/repository/base"
-	"identity-api/Infrastructure/databases/postgres/repository/base/helpers"
-	unit_of_work "identity-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
+	models "blog-api/Domain/models/domestic"
+	repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_tag_repository"
+	"blog-api/Domain/sorting"
+	postgres_db "blog-api/Infrastructure/databases/postgres/config"
+	"blog-api/Infrastructure/databases/postgres/entities"
+	mappers "blog-api/Infrastructure/databases/postgres/mappers/base"
+	base "blog-api/Infrastructure/databases/postgres/repository/base"
+	"blog-api/Infrastructure/databases/postgres/repository/base/helpers"
+	unit_of_work "blog-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
 )
 
 type BlogPostTagQueryRepositoryImpl struct {
@@ -42,8 +42,10 @@ func (r *BlogPostTagQueryRepositoryImpl) GetTagsByBlogPostID(
 	blogPostID string,
 	sorting sorting.Sortable,
 ) (*[]models.BlogPostTagModel, error) {
-	db := r.GetUnitOfWork().GetTransaction()
-	query := db.Joins("JOIN blog_post_tags ON blog_post_tags.tag_id = blog_post_tag_entities.id").
-		Where("blog_post_tags.blog_post_id = ?", blogPostID)
-	return r.ExecuteSortedQuery(query, &sorting)
+	db := r.GetUnitOfWork().GetTransaction().Model(&entities.BlogPostTagEntity{})
+	if blogPostID != "" {
+		db = db.Joins("JOIN blog_post_tags ON blog_post_tags.tag_id = blog_post_tag_entities.id").
+			Where("blog_post_tags.blog_post_id = ?", blogPostID)
+	}
+	return r.ExecuteSortedQuery(db, &sorting)
 }

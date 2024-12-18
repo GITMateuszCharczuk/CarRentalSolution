@@ -11,7 +11,7 @@ type BlogPostRequestModel struct {
 	AuthorId         string   `json:"authorId" example:"123e4567-e89b-12d3-a456-426614174000" swaggertype:"string"`
 	AuthorName       string   `json:"author" example:"John Doe" swaggertype:"string"`
 	Visible          bool     `json:"visible" example:"true" swaggertype:"boolean"`
-	CreatedAt        string   `json:"createdAt" example:"2023-12-12T10:00:00Z" swaggertype:"string"`
+	CreatedAt        string   `json:"created_at" example:"2023-12-12T10:00:00Z" swaggertype:"string"`
 	Tags             []string `json:"tags" example:"[\"tech\",\"programming\"]" swaggertype:"array,string"`
 }
 

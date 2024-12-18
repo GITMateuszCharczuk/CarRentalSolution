@@ -1,8 +1,8 @@
 package mappers
 
 import (
-	models "identity-api/Domain/models/domestic"
-	"identity-api/Infrastructure/databases/postgres/entities"
+	models "blog-api/Domain/models/domestic"
+	"blog-api/Infrastructure/databases/postgres/entities"
 	"time"
 
 	"github.com/google/uuid"

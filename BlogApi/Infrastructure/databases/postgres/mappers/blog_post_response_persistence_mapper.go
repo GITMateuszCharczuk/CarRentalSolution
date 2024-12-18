@@ -1,8 +1,8 @@
 package mappers
 
 import (
-	models "identity-api/Domain/models/domestic"
-	"identity-api/Infrastructure/databases/postgres/entities"
+	models "blog-api/Domain/models/domestic"
+	"blog-api/Infrastructure/databases/postgres/entities"
 	"time"
 )
 
@@ -22,6 +22,7 @@ func (m *BlogPostResponseMapper) MapToModel(entity entities.BlogPostEntity) mode
 		FeaturedImageUrl: entity.FeaturedImageUrl,
 		UrlHandle:        entity.UrlHandle,
 		AuthorName:       entity.Author,
+		PublishedDate:    entity.PublishedDate.Format(time.RFC3339),
 		CreatedAt:        entity.CreatedAt.Format(time.RFC3339),
 	}
 }

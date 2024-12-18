@@ -1,8 +1,8 @@
 package datafetcher
 
 import (
-	interfaces "identity-api/Domain/service_interfaces"
-	"identity-api/Infrastructure/config"
+	interfaces "blog-api/Domain/service_interfaces"
+	"blog-api/Infrastructure/config"
 
 	"github.com/google/wire"
 )

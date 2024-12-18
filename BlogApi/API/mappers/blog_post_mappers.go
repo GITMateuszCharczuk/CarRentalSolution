@@ -1,17 +1,18 @@
 package mappers
 
 import (
-	"identity-api/API/services"
-	create_contract "identity-api/Application.contract/BlogPosts/CreateBlogPost"
-	delete_contract "identity-api/Application.contract/BlogPosts/DeleteBlogPost"
-	get_blog_post_contract "identity-api/Application.contract/BlogPosts/GetBlogPost"
-	get_blog_posts_contract "identity-api/Application.contract/BlogPosts/GetBlogPosts"
-	update_contract "identity-api/Application.contract/BlogPosts/UpdateBlogPost"
-	commands "identity-api/Application/command_handlers/blog_post/create_blog_post"
-	delete_commands "identity-api/Application/command_handlers/blog_post/delete_blog_post"
-	update_commands "identity-api/Application/command_handlers/blog_post/update_blog_post"
-	get_blog_post_queries "identity-api/Application/query_handlers/blog_post/get_blog_post"
-	get_blog_posts_queries "identity-api/Application/query_handlers/blog_post/get_blog_posts"
+	"blog-api/API/services"
+	create_contract "blog-api/Application.contract/BlogPosts/CreateBlogPost"
+	delete_contract "blog-api/Application.contract/BlogPosts/DeleteBlogPost"
+	get_blog_post_contract "blog-api/Application.contract/BlogPosts/GetBlogPost"
+	get_blog_posts_contract "blog-api/Application.contract/BlogPosts/GetBlogPosts"
+	update_contract "blog-api/Application.contract/BlogPosts/UpdateBlogPost"
+	commands "blog-api/Application/command_handlers/blog_post/create_blog_post"
+	delete_commands "blog-api/Application/command_handlers/blog_post/delete_blog_post"
+	update_commands "blog-api/Application/command_handlers/blog_post/update_blog_post"
+	get_blog_post_queries "blog-api/Application/query_handlers/blog_post/get_blog_post"
+	get_blog_posts_queries "blog-api/Application/query_handlers/blog_post/get_blog_posts"
+	"log"
 )
 
 func MapToCreateBlogPostCommand(request *create_contract.CreateBlogPostRequest) commands.CreateBlogPostCommand {
@@ -38,7 +39,6 @@ func MapToUpdateBlogPostCommand(request *update_contract.UpdateBlogPostRequest) 
 		FeaturedImageUrl: request.FeaturedImageUrl,
 		UrlHandle:        request.UrlHandle,
 		PublishedDate:    request.PublishedDate,
-		Author:           request.Author,
 		Visible:          request.Visible,
 		Tags:             request.Tags,
 		JwtToken:         request.JwtToken,
@@ -53,6 +53,7 @@ func MapToDeleteBlogPostCommand(request *delete_contract.DeleteBlogPostRequest) 
 }
 
 func MapToGetBlogPostsQuery(request *get_blog_posts_contract.GetBlogPostsRequest) get_blog_posts_queries.GetBlogPostsQuery {
+	log.Println(request.SortQuery)
 	return get_blog_posts_queries.GetBlogPostsQuery{
 		Ids:          request.Ids,
 		DateTimeFrom: request.DateTimeFrom,

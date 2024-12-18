@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"identity-api/API/mappers"
-	"identity-api/API/services"
-	contract "identity-api/Application.contract/BlogPosts/GetBlogPosts"
-	queries "identity-api/Application/query_handlers/blog_post/get_blog_posts"
+	"blog-api/API/mappers"
+	"blog-api/API/services"
+	contract "blog-api/Application.contract/BlogPosts/GetBlogPosts"
+	queries "blog-api/Application/query_handlers/blog_post/get_blog_posts"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -27,7 +27,7 @@ func NewGetBlogPostsController(validator *validator.Validate) *GetBlogPostsContr
 // @Param token query string true "JWT token" example:"your.jwt.token.here"
 // @Param page_size query int false "Page size" example:"10"
 // @Param current_page query int false "Current page" example:"1"
-// @Param sort_query query []string false "Sort fields" example:"createdAt:desc"
+// @Param sort_fields query []string false "Sort fields (field:asc|desc)" example:"created_at:desc"
 // @Param ids query []string false "Blog post IDs" example:"id1,id2"
 // @Param date-time-from query string false "Start date" example:"2023-12-12T00:00:00Z"
 // @Param date-time-to query string false "End date" example:"2023-12-12T23:59:59Z"
@@ -44,11 +44,11 @@ func (h *GetBlogPostsController) Handle(c *gin.Context) {
 
 	req := contract.GetBlogPostsRequest{
 		Ids:          services.ExtractQueryArray(c, "ids"), //TODO
-		DateTimeFrom: c.Query("dateTimeFrom"),
-		DateTimeTo:   c.Query("dateTimeTo"),
-		AuthorIds:    services.ExtractQueryArray(c, "authorIds"),
+		DateTimeFrom: c.Query("date-time-from"),
+		DateTimeTo:   c.Query("date-time-to"),
+		AuthorIds:    services.ExtractQueryArray(c, "author-ids"),
 		Tags:         services.ExtractQueryArray(c, "tags"),
-		Visible:      c.Query("visible") == "true",
+		Visible:      c.Query("visible"),
 		SortQuery:    services.ExtractSortQuery(c),
 		Pagination:   services.ExtractPagination(c),
 	}

@@ -1,6 +1,6 @@
 package datafetcher
 
-import models "identity-api/Domain/models/external"
+import models "blog-api/Domain/models/external"
 
 type DataFetcher interface {
 	ValidateToken(token models.JwtToken) (*models.TokenInfo, error)

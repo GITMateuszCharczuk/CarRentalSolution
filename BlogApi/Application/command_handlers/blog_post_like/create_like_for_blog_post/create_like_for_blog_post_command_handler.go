@@ -1,12 +1,12 @@
 package commands
 
 import (
+	contract "blog-api/Application.contract/BlogPostLikes/CreateLikeForBlogPost"
+	repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_like_repository"
+	blog_repository "blog-api/Domain/repository_interfaces/blog_post_repository"
+	"blog-api/Domain/responses"
+	data_fetcher "blog-api/Domain/service_interfaces"
 	"context"
-	contract "identity-api/Application.contract/BlogPostLikes/CreateLikeForBlogPost"
-	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_like_repository"
-	blog_repository "identity-api/Domain/repository_interfaces/blog_post_repository"
-	"identity-api/Domain/responses"
-	data_fetcher "identity-api/Domain/service_interfaces"
 )
 
 type CreateLikeForBlogPostCommandHandler struct {
@@ -40,13 +40,19 @@ func (h *CreateLikeForBlogPostCommandHandler) Handle(ctx context.Context, comman
 		return &response, nil
 	}
 
-	err = h.blogPostLikeCommandRepository.AddLike(ctx, command.BlogPostId, userInfo.ID)
+	likeID, err := h.blogPostLikeCommandRepository.AddLike(ctx, command.BlogPostId, userInfo.ID)
 	if err != nil {
 		response := responses.NewResponse[contract.CreateLikeForBlogPostResponse](500, "Failed to add like")
 		return &response, nil
 	}
 
+	if *likeID == "" {
+		response := responses.NewResponse[contract.CreateLikeForBlogPostResponse](409, "Like already exists")
+		return &response, nil
+	}
+
 	return &contract.CreateLikeForBlogPostResponse{
 		BaseResponse: responses.NewBaseResponse(200, "Like added successfully"),
+		Id:           *likeID,
 	}, nil
 }

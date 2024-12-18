@@ -1,8 +1,8 @@
 package server
 
 import (
-	"identity-api/API/controllers"
-	"identity-api/Infrastructure/config"
+	"blog-api/API/controllers"
+	"blog-api/Infrastructure/config"
 
 	"github.com/google/wire"
 )

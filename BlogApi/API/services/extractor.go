@@ -1,7 +1,7 @@
 package services
 
 import (
-	models "identity-api/Domain/models/external"
+	models "blog-api/Domain/models/external"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -24,4 +24,14 @@ func ExtractQueryArray(c *gin.Context, key string) []string {
 	}
 
 	return values
+}
+
+func ExtractFromPath(c *gin.Context, key string) string {
+	value := c.Param(key)
+
+	if value == "undefined" {
+		return ""
+	}
+
+	return value
 }

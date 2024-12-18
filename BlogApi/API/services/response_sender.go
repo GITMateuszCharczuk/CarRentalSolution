@@ -52,8 +52,8 @@ func (s *ResponseSender) Send(obj interface{}) {
 		fieldValue := value.Field(i)
 		if field.Name != "BaseResponse" {
 			if fieldValue.Kind() == reflect.Struct {
-				if field.Name == "UserSecureInfo" {
-					response[getJSONFieldName(field)] = fieldValue.Interface()
+				if field.Name == "BlogPost" {
+					response[getJSONFieldName(field)] = interface{}(fieldValue.Interface())
 					continue
 				}
 				structFields := extractStructFields(fieldValue)

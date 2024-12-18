@@ -1,12 +1,12 @@
 package datafetcher
 
 import (
+	models "blog-api/Domain/models/external"
+	interfaces "blog-api/Domain/service_interfaces"
+	mappers "blog-api/Infrastructure/data_fetcher/mappers"
+	responses "blog-api/Infrastructure/data_fetcher/responses"
 	"encoding/json"
 	"fmt"
-	models "identity-api/Domain/models/external"
-	interfaces "identity-api/Domain/service_interfaces"
-	mappers "identity-api/Infrastructure/data_fetcher/mappers"
-	responses "identity-api/Infrastructure/data_fetcher/responses"
 	"net/http"
 	"net/url"
 )
@@ -24,7 +24,7 @@ func NewDataFetcherImpl(baseURL string) interfaces.DataFetcher {
 }
 
 func (df *DataFetcherImpl) ValidateToken(token models.JwtToken) (*models.TokenInfo, error) {
-	endpoint := fmt.Sprintf("%s/identity-api/api/token/validate", df.baseURL)
+	endpoint := fmt.Sprintf("%s/blog-api/api/token/validate", df.baseURL)
 
 	u, err := url.Parse(endpoint)
 	if err != nil {
@@ -58,7 +58,7 @@ func (df *DataFetcherImpl) ValidateToken(token models.JwtToken) (*models.TokenIn
 }
 
 func (df *DataFetcherImpl) GetUserInternalInfo(token models.JwtToken) (*models.UserInfo, error) {
-	endpoint := fmt.Sprintf("%s/identity-api/api/user/internal", df.baseURL)
+	endpoint := fmt.Sprintf("%s/blog-api/api/user/internal", df.baseURL)
 
 	u, err := url.Parse(endpoint)
 	if err != nil {

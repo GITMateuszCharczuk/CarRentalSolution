@@ -1,11 +1,11 @@
 package cqrs
 
 import (
-	p "identity-api/Domain/pagination"
-	s "identity-api/Domain/sorting"
-	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
-	helpers "identity-api/Infrastructure/databases/postgres/repository/base/helpers"
-	unit_of_work "identity-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
+	p "blog-api/Domain/pagination"
+	s "blog-api/Domain/sorting"
+	mappers "blog-api/Infrastructure/databases/postgres/mappers/base"
+	helpers "blog-api/Infrastructure/databases/postgres/repository/base/helpers"
+	unit_of_work "blog-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
 	"reflect"
 	"strings"
 
@@ -95,7 +95,12 @@ func (r *QueryRepository[TEntity, TId, TModel]) GetAllSortedAndPaginated(
 
 func (r *QueryRepository[TEntity, TId, TModel]) ApplyWhereConditions(query *gorm.DB, queryRecords ...helpers.QueryRecord[TEntity]) *gorm.DB {
 	for _, record := range queryRecords {
-		fieldName := record.Selector.FieldName
+		var columnField string
+		if record.TableAlias != "" {
+			columnField = record.TableAlias + "." + record.Selector.FieldName
+		} else {
+			columnField = record.Selector.FieldName
+		}
 		valueType := reflect.TypeOf(record.Value).Kind()
 
 		if valueType == reflect.Slice {
@@ -110,12 +115,12 @@ func (r *QueryRepository[TEntity, TId, TModel]) ApplyWhereConditions(query *gorm
 					values = append(values, value)
 				}
 			}
-			query = query.Where(fieldName+" IN ?", values)
+			query = query.Where(columnField+" IN ?", values)
 		} else {
 			if record.Value.(string) == "" {
 				continue
 			}
-			query = query.Where(fieldName+" = ?", record.Value)
+			query = query.Where(columnField+" = ?", record.Value)
 		}
 	}
 	return query

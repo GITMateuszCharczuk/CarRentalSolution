@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"identity-api/API/mappers"
-	"identity-api/API/services"
-	contract "identity-api/Application.contract/BlogPostComments/GetBlogPostComments"
-	queries "identity-api/Application/query_handlers/blog_post_comment/get_blog_post_comments"
+	"blog-api/API/mappers"
+	"blog-api/API/services"
+	contract "blog-api/Application.contract/BlogPostComments/GetBlogPostComments"
+	queries "blog-api/Application/query_handlers/blog_post_comment/get_blog_post_comments"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

@@ -18,7 +18,7 @@ services:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       RUN_POSTGRES_MIGRATION: "true"
-      IDENTITY_API_URL: http://identity-api:8085
+      IDENTITY_API_URL: http://blog-api:8085
     networks:
       - docker-network
 

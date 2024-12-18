@@ -1,8 +1,8 @@
 package helpers
 
 import (
-	p "identity-api/Domain/pagination"
-	s "identity-api/Domain/sorting"
+	p "blog-api/Domain/pagination"
+	s "blog-api/Domain/sorting"
 	"log"
 	"math"
 	"reflect"

@@ -1,8 +1,8 @@
 package repository_interfaces
 
 import (
+	models "blog-api/Domain/models/domestic"
 	"context"
-	models "identity-api/Domain/models/domestic"
 )
 
 type BlogPostCommentCommandRepository interface {

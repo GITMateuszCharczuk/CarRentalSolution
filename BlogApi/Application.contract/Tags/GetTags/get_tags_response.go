@@ -1,8 +1,8 @@
 package contract
 
 import (
-	models "identity-api/Domain/models/domestic"
-	responses "identity-api/Domain/responses"
+	models "blog-api/Domain/models/domestic"
+	responses "blog-api/Domain/responses"
 )
 
 type GetTagsResponse struct {

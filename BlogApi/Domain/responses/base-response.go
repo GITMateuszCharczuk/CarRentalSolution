@@ -1,7 +1,7 @@
 package responses
 
 import (
-	"identity-api/Domain/constants"
+	"blog-api/Domain/constants"
 	"reflect"
 )
 

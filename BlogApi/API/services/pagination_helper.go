@@ -1,7 +1,7 @@
 package services
 
 import (
-	"identity-api/Domain/pagination"
+	"blog-api/Domain/pagination"
 	"strconv"
 
 	"github.com/gin-gonic/gin"

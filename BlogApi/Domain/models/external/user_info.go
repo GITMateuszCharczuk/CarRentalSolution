@@ -1,6 +1,6 @@
 package models
 
-import "identity-api/Domain/constants"
+import "blog-api/Domain/constants"
 
 type UserInfo struct {
 	ID           string              `json:"id" example:"123" swaggertype:"string"`

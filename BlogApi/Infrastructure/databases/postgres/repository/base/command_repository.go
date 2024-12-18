@@ -1,8 +1,8 @@
 package cqrs
 
 import (
-	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
-	base "identity-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
+	mappers "blog-api/Infrastructure/databases/postgres/mappers/base"
+	base "blog-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
 	"log"
 
 	"context"

@@ -1,8 +1,8 @@
 package services
 
 import (
+	"blog-api/Domain/responses"
 	"fmt"
-	"identity-api/Domain/responses"
 	"log"
 	"strings"
 

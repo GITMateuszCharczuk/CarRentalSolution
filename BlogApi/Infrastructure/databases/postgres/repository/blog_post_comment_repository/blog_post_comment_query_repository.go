@@ -1,16 +1,16 @@
 package repository
 
 import (
-	models "identity-api/Domain/models/domestic"
-	"identity-api/Domain/pagination"
-	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_comment_repository"
-	"identity-api/Domain/sorting"
-	postgres_db "identity-api/Infrastructure/databases/postgres/config"
-	"identity-api/Infrastructure/databases/postgres/entities"
-	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
-	base "identity-api/Infrastructure/databases/postgres/repository/base"
-	"identity-api/Infrastructure/databases/postgres/repository/base/helpers"
-	unit_of_work "identity-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
+	models "blog-api/Domain/models/domestic"
+	"blog-api/Domain/pagination"
+	repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_comment_repository"
+	"blog-api/Domain/sorting"
+	postgres_db "blog-api/Infrastructure/databases/postgres/config"
+	"blog-api/Infrastructure/databases/postgres/entities"
+	mappers "blog-api/Infrastructure/databases/postgres/mappers/base"
+	base "blog-api/Infrastructure/databases/postgres/repository/base"
+	"blog-api/Infrastructure/databases/postgres/repository/base/helpers"
+	unit_of_work "blog-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
 	"log"
 )
 

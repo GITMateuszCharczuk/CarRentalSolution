@@ -1,7 +1,7 @@
 package validators
 
 import (
-	models "identity-api/Domain/models/domestic"
+	models "blog-api/Domain/models/domestic"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/wire"
@@ -14,6 +14,7 @@ func ProvideValidator() *validator.Validate {
 	RegisterSortQueryValidator[models.BlogPostCommentModel](v, "validCommentSortable")
 	RegisterSortQueryValidator[models.BlogPostTagModel](v, "validTagSortable")
 	RegisterSortQueryValidator[models.BlogPostRequestModel](v, "validBlogPostSortable")
+	RegisterSortQueryValidator[models.BlogPostTagModel](v, "validBlogPostTagSortable")
 	return v
 }
 

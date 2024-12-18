@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"identity-api/API/mappers"
-	"identity-api/API/services"
-	contract "identity-api/Application.contract/BlogPostLikes/GetLikesForBlogPost"
-	queries "identity-api/Application/query_handlers/blog_post_like/get_likes_for_blog_post"
+	"blog-api/API/mappers"
+	"blog-api/API/services"
+	contract "blog-api/Application.contract/BlogPostLikes/GetLikesForBlogPost"
+	queries "blog-api/Application/query_handlers/blog_post_like/get_likes_for_blog_post"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -35,7 +35,7 @@ func (h *GetLikesForBlogPostController) Handle(c *gin.Context) {
 	req := contract.GetLikesForBlogPostRequest{
 		BlogPostId: blogPostId,
 	}
-	if validateResponse := services.ValidateRequest[contract.GetLikesForBlogPostRequest](&req, h.validator); validateResponse != nil {
+	if validateResponse := services.ValidateRequest[contract.GetLikesForBlogPostResponse](&req, h.validator); validateResponse != nil {
 		responseSender.Send(validateResponse)
 		return
 	}

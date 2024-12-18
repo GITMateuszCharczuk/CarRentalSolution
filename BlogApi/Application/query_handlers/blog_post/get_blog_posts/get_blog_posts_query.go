@@ -1,8 +1,8 @@
 package queries
 
 import (
-	"identity-api/Domain/pagination"
-	"identity-api/Domain/sorting"
+	"blog-api/Domain/pagination"
+	"blog-api/Domain/sorting"
 )
 
 type GetBlogPostsQuery struct {
@@ -13,5 +13,5 @@ type GetBlogPostsQuery struct {
 	DateTimeTo            string   `json:"dateTimeTo"`
 	AuthorIds             []string `json:"authorIds"`
 	Tags                  []string `json:"tags"`
-	Visible               bool     `json:"visible"`
+	Visible               string   `json:"visible"`
 }

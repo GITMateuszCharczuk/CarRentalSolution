@@ -2,12 +2,12 @@
 package mappers
 
 import (
-	contract "identity-api/Application.contract/BlogPostLikes/CreateLikeForBlogPost"
-	delete_contract "identity-api/Application.contract/BlogPostLikes/DeleteLikeForBlogPost"
-	get_contract "identity-api/Application.contract/BlogPostLikes/GetLikesForBlogPost"
-	commands "identity-api/Application/command_handlers/blog_post_like/create_like_for_blog_post"
-	delete_commands "identity-api/Application/command_handlers/blog_post_like/delete_like_for_blog_post"
-	get_queries "identity-api/Application/query_handlers/blog_post_like/get_likes_for_blog_post"
+	contract "blog-api/Application.contract/BlogPostLikes/CreateLikeForBlogPost"
+	delete_contract "blog-api/Application.contract/BlogPostLikes/DeleteLikeForBlogPost"
+	get_contract "blog-api/Application.contract/BlogPostLikes/GetLikesForBlogPost"
+	commands "blog-api/Application/command_handlers/blog_post_like/create_like_for_blog_post"
+	delete_commands "blog-api/Application/command_handlers/blog_post_like/delete_like_for_blog_post"
+	get_queries "blog-api/Application/query_handlers/blog_post_like/get_likes_for_blog_post"
 )
 
 func MapToCreateLikeForBlogPostCommand(request *contract.CreateLikeForBlogPostRequest) commands.CreateLikeForBlogPostCommand {

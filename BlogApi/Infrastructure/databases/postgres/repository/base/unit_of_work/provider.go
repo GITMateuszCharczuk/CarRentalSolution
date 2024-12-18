@@ -1,7 +1,7 @@
 package cqrs
 
 import (
-	postgres_db "identity-api/Infrastructure/databases/postgres/config"
+	postgres_db "blog-api/Infrastructure/databases/postgres/config"
 
 	"github.com/google/wire"
 )

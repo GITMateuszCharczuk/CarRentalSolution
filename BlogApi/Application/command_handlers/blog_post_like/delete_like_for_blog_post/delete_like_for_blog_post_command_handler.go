@@ -1,12 +1,12 @@
 package commands
 
 import (
+	contract "blog-api/Application.contract/BlogPostLikes/DeleteLikeForBlogPost"
+	repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_like_repository"
+	blog_repository "blog-api/Domain/repository_interfaces/blog_post_repository"
+	"blog-api/Domain/responses"
+	data_fetcher "blog-api/Domain/service_interfaces"
 	"context"
-	contract "identity-api/Application.contract/BlogPostLikes/DeleteLikeForBlogPost"
-	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_like_repository"
-	blog_repository "identity-api/Domain/repository_interfaces/blog_post_repository"
-	"identity-api/Domain/responses"
-	data_fetcher "identity-api/Domain/service_interfaces"
 )
 
 type DeleteLikeForBlogPostCommandHandler struct {
@@ -42,6 +42,10 @@ func (h *DeleteLikeForBlogPostCommandHandler) Handle(ctx context.Context, comman
 
 	err = h.blogPostLikeCommandRepository.RemoveLike(ctx, command.BlogPostId, userInfo.ID)
 	if err != nil {
+		if err.Error() == "record not found" {
+			response := responses.NewResponse[contract.DeleteLikeForBlogPostResponse](404, "Like not found")
+			return &response, nil
+		}
 		response := responses.NewResponse[contract.DeleteLikeForBlogPostResponse](500, "Failed to remove like")
 		return &response, nil
 	}

@@ -1,6 +1,6 @@
 package contract
 
-import "identity-api/Domain/pagination"
+import "blog-api/Domain/pagination"
 
 type GetBlogPostCommentsRequest struct {
 	pagination.Pagination `json:",inline"`

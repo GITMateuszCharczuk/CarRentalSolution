@@ -1,6 +1,6 @@
 package services
 
-import "identity-api/Domain/constants"
+import "blog-api/Domain/constants"
 
 func IsAdminOrSuperAdmin(roles []constants.JWTRole) bool {
 	for _, role := range roles {

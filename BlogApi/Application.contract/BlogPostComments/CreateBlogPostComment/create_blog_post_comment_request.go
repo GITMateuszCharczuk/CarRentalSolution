@@ -1,6 +1,6 @@
 package contract
 
-import models "identity-api/Domain/models/external"
+import models "blog-api/Domain/models/external"
 
 type CreateBlogPostCommentRequest struct {
 	Description string `json:"description" example:"This is a great blog post!" swaggertype:"string" validate:"required"`

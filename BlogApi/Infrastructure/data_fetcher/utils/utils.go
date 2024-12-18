@@ -1,6 +1,6 @@
 package datafetcher
 
-import "identity-api/Domain/constants"
+import "blog-api/Domain/constants"
 
 func ConvertRolesToJWTRole(roles []string) []constants.JWTRole {
 	roleJWTRoles := make([]constants.JWTRole, len(roles))

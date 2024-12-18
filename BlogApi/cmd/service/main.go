@@ -1,15 +1,16 @@
 package main
 
 import (
+	"blog-api/API/server"
 	"context"
-	"identity-api/API/server"
-	command_handlers "identity-api/Application/command_handlers"
-	query_handlers "identity-api/Application/query_handlers"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	command_handlers "blog-api/Application/command_handlers"
+	query_handlers "blog-api/Application/query_handlers"
 )
 
 func main() {

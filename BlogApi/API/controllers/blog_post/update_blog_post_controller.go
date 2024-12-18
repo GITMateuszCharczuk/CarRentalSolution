@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"identity-api/API/mappers"
-	"identity-api/API/services"
-	contract "identity-api/Application.contract/BlogPosts/UpdateBlogPost"
-	commands "identity-api/Application/command_handlers/blog_post/update_blog_post"
-	"identity-api/Domain/responses"
+	"blog-api/API/mappers"
+	"blog-api/API/services"
+	contract "blog-api/Application.contract/BlogPosts/UpdateBlogPost"
+	commands "blog-api/Application/command_handlers/blog_post/update_blog_post"
+	"blog-api/Domain/responses"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -38,7 +38,7 @@ func NewUpdateBlogPostController(validator *validator.Validate) *UpdateBlogPostC
 func (h *UpdateBlogPostController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 	token := services.GetJwtTokenFromQuery(c)
-	id := c.Param("id")
+	id := services.ExtractFromPath(c, "id")
 	var req contract.UpdateBlogPostRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response := responses.NewResponse[contract.UpdateBlogPostResponse](400, "Invalid request format")

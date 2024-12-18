@@ -1,15 +1,15 @@
 package server
 
 import (
+	"blog-api/API/controllers"
+	"blog-api/API/middleware"
+	"blog-api/Infrastructure/config"
 	"context"
-	"identity-api/API/controllers"
-	"identity-api/API/middleware"
-	"identity-api/Infrastructure/config"
 	"log"
 	"net/http"
 	"time"
 
-	_ "identity-api/docs"
+	_ "blog-api/docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

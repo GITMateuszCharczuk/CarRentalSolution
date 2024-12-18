@@ -1,15 +1,15 @@
 package repository
 
 import (
+	models "blog-api/Domain/models/domestic"
+	repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_repository"
+	tag_repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_tag_repository"
+	postgres_db "blog-api/Infrastructure/databases/postgres/config"
+	"blog-api/Infrastructure/databases/postgres/entities"
+	mappers "blog-api/Infrastructure/databases/postgres/mappers/base"
+	base "blog-api/Infrastructure/databases/postgres/repository/base"
+	unit_of_work "blog-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
 	"context"
-	models "identity-api/Domain/models/domestic"
-	repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_repository"
-	tag_repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_tag_repository"
-	postgres_db "identity-api/Infrastructure/databases/postgres/config"
-	"identity-api/Infrastructure/databases/postgres/entities"
-	mappers "identity-api/Infrastructure/databases/postgres/mappers/base"
-	base "identity-api/Infrastructure/databases/postgres/repository/base"
-	unit_of_work "identity-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -36,15 +36,20 @@ func (r *BlogPostTagCommandRepositoryImpl) AddTagToBlogPost(ctx context.Context,
 	var resultTag *models.BlogPostTagModel
 
 	err := r.ExecuteInTransaction(ctx, func(tx *gorm.DB) error {
-		tagEntity := entities.BlogPostTagEntity{
+		var tagEntity entities.BlogPostTagEntity
+
+		condition := entities.BlogPostTagEntity{Name: tag.Name}
+
+		defaults := entities.BlogPostTagEntity{
+			ID:   uuid.New(),
 			Name: tag.Name,
 		}
-		if err := tx.FirstOrCreate(&tagEntity, entities.BlogPostTagEntity{ID: uuid.New(), Name: tag.Name}).Error; err != nil {
-			dfgrfedgaserdgf
+
+		if err := tx.Where(condition).Attrs(defaults).FirstOrCreate(&tagEntity).Error; err != nil {
 			return err
 		}
 
-		if err := tx.Model(&blogPostEntity).Select("Tags").Association("Tags").Append(&tagEntity); err != nil {
+		if err := tx.Model(&blogPostEntity).Association("Tags").Append(&tagEntity); err != nil {
 			return err
 		}
 

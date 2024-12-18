@@ -42,7 +42,7 @@ func NewConfig(path string) (*Config, error) {
 
 		instance = &Config{
 			Env:                  getEnv("ENV", "test"),
-			ServiceAddress:       getEnv("SERVICE_ADDRESS", "identity-api:8080"),
+			ServiceAddress:       getEnv("SERVICE_ADDRESS", "blog-api:8080"),
 			ServicePort:          getEnv("SERVICE_PORT", "8080"),
 			PostgresUser:         getEnv("POSTGRES_USER", "postgres"),
 			PostgresPassword:     getEnv("POSTGRES_PASSWORD", "postgres"),

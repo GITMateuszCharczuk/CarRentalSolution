@@ -1,16 +1,16 @@
 package queries
 
 import (
-	get_blog_post "identity-api/Application/query_handlers/blog_post/get_blog_post"
-	get_blog_posts "identity-api/Application/query_handlers/blog_post/get_blog_posts"
-	get_blog_post_comments "identity-api/Application/query_handlers/blog_post_comment/get_blog_post_comments"
-	get_likes_for_blog_post "identity-api/Application/query_handlers/blog_post_like/get_likes_for_blog_post"
-	get_tags "identity-api/Application/query_handlers/blog_post_tag/get_tags"
-	blog_post_comment_repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_comment_repository"
-	blog_post_like_repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_like_repository"
-	blog_post_repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_repository"
-	blog_post_tag_repository_interfaces "identity-api/Domain/repository_interfaces/blog_post_tag_repository"
-	data_fetcher "identity-api/Domain/service_interfaces"
+	get_blog_post "blog-api/Application/query_handlers/blog_post/get_blog_post"
+	get_blog_posts "blog-api/Application/query_handlers/blog_post/get_blog_posts"
+	get_blog_post_comments "blog-api/Application/query_handlers/blog_post_comment/get_blog_post_comments"
+	get_likes_for_blog_post "blog-api/Application/query_handlers/blog_post_like/get_likes_for_blog_post"
+	get_tags "blog-api/Application/query_handlers/blog_post_tag/get_tags"
+	blog_post_comment_repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_comment_repository"
+	blog_post_like_repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_like_repository"
+	blog_post_repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_repository"
+	blog_post_tag_repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_tag_repository"
+	data_fetcher "blog-api/Domain/service_interfaces"
 	"log"
 
 	"github.com/mehdihadeli/go-mediatr"

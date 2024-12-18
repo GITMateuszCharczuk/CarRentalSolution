@@ -1,8 +1,8 @@
 package repository_interfaces
 
 import (
-	models "identity-api/Domain/models/domestic"
-	"identity-api/Domain/sorting"
+	models "blog-api/Domain/models/domestic"
+	"blog-api/Domain/sorting"
 )
 
 type BlogPostTagQueryRepository interface {

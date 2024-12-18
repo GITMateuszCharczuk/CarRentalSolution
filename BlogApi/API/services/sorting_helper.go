@@ -1,7 +1,7 @@
 package services
 
 import (
-	"identity-api/Domain/sorting"
+	"blog-api/Domain/sorting"
 	"strings"
 
 	"github.com/gin-gonic/gin"
