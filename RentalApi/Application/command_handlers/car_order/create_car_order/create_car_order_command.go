@@ -1,0 +1,16 @@
+package commands
+
+import (
+	models "rental-api/Domain/models/external"
+)
+
+type CreateCarOrderCommand struct {
+	CarOfferId       string  `json:"carOfferId" binding:"required" example:"123e4567-e89b-12d3-a456-426614174000" swaggertype:"string" validate:"required"`
+	StartDate        string  `json:"startDate" binding:"required" example:"2023-12-12" swaggertype:"string" validate:"required"`
+	EndDate          string  `json:"endDate" binding:"required" example:"2023-12-19" swaggertype:"string" validate:"required"`
+	DeliveryLocation string  `json:"deliveryLocation" example:"City Center" swaggertype:"string"`
+	ReturnLocation   string  `json:"returnLocation" example:"City Center" swaggertype:"string"`
+	NumOfDrivers     int     `json:"numOfDrivers" example:"2" swaggertype:"integer"`
+	TotalCost        float64 `json:"totalCost" example:"750.00" swaggertype:"number"`
+	models.JwtToken  `json:",inline"`
+}

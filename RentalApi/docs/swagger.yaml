@@ -1,0 +1,1287 @@
+definitions:
+  contract.CreateBlogPostCommentRequest:
+    properties:
+      description:
+        example: This is a great blog post!
+        type: string
+    required:
+    - description
+    type: object
+  contract.CreateBlogPostCommentResponse200:
+    properties:
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      message:
+        example: Comment added successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.CreateBlogPostCommentResponse400:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateBlogPostCommentResponse401:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateBlogPostCommentResponse404:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Blog post not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateBlogPostCommentResponse500:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Internal server error while adding comment
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateBlogPostRequest:
+    properties:
+      content:
+        example: Blog post content...
+        type: string
+      featuredImageUrl:
+        example: https://example.com/image.jpg
+        type: string
+      heading:
+        example: Blog Post Title
+        type: string
+      pageTitle:
+        example: Page Title
+        type: string
+      shortDescription:
+        example: Short description
+        type: string
+      tags:
+        example:
+        - '["tech"'
+        - '"programming"]'
+        items:
+          type: string
+        type: array
+      urlHandle:
+        example: blog-post-title
+        type: string
+      visible:
+        example: true
+        type: boolean
+    required:
+    - content
+    - heading
+    - pageTitle
+    - shortDescription
+    - urlHandle
+    type: object
+  contract.CreateBlogPostResponse200:
+    properties:
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      message:
+        example: Blog post created successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.CreateBlogPostResponse400:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateBlogPostResponse401:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateBlogPostResponse500:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Internal server error while creating blog post
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateLikeForBlogPostResponse200:
+    properties:
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      message:
+        example: Like added successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.CreateLikeForBlogPostResponse400:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateLikeForBlogPostResponse401:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateLikeForBlogPostResponse404:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Blog post not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateLikeForBlogPostResponse500:
+    properties:
+      id:
+        example: ""
+        type: string
+      message:
+        example: Internal server error while adding like
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostCommentResponse200:
+    properties:
+      message:
+        example: Comment deleted successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.DeleteBlogPostCommentResponse400:
+    properties:
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostCommentResponse401:
+    properties:
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostCommentResponse403:
+    properties:
+      message:
+        example: Forbidden
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostCommentResponse404:
+    properties:
+      message:
+        example: Comment not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostCommentResponse500:
+    properties:
+      message:
+        example: Internal server error while deleting comment
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostResponse200:
+    properties:
+      message:
+        example: Blog post deleted successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.DeleteBlogPostResponse400:
+    properties:
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostResponse401:
+    properties:
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostResponse403:
+    properties:
+      message:
+        example: Forbidden
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostResponse404:
+    properties:
+      message:
+        example: Blog post not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteBlogPostResponse500:
+    properties:
+      message:
+        example: Internal server error while deleting blog post
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteLikeForBlogPostResponse200:
+    properties:
+      message:
+        example: Like removed successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.DeleteLikeForBlogPostResponse400:
+    properties:
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteLikeForBlogPostResponse401:
+    properties:
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteLikeForBlogPostResponse404:
+    properties:
+      message:
+        example: Like not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.DeleteLikeForBlogPostResponse500:
+    properties:
+      message:
+        example: Internal server error while removing like
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetBlogPostCommentsResponse200:
+    properties:
+      current_page:
+        example: 1
+        type: integer
+      items:
+        description: todo
+        items:
+          type: object
+        type: array
+      message:
+        example: Comments retrieved successfully
+        type: string
+      page_size:
+        example: 10
+        type: integer
+      success:
+        example: true
+        type: boolean
+      total_items:
+        example: 100
+        type: integer
+      total_pages:
+        example: 10
+        type: integer
+    type: object
+  contract.GetBlogPostCommentsResponse404:
+    properties:
+      message:
+        example: Blog post not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetBlogPostCommentsResponse500:
+    properties:
+      message:
+        example: Internal server error while retrieving comments
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetBlogPostResponse200:
+    properties:
+      blog_post:
+        properties:
+          author:
+            example: John Doe
+            type: string
+          content:
+            example: Blog post content...
+            type: string
+          createdAt:
+            example: "2023-12-12T10:00:00Z"
+            type: string
+          featuredImageUrl:
+            example: https://example.com/image.jpg
+            type: string
+          heading:
+            example: Blog Post Title
+            type: string
+          id:
+            example: 123e4567-e89b-12d3-a456-426614174000
+            type: string
+          pageTitle:
+            example: Page Title
+            type: string
+          publishedDate:
+            example: "2023-12-12"
+            type: string
+          shortDescription:
+            example: Short description
+            type: string
+          urlHandle:
+            example: blog-post-title
+            type: string
+        type: object
+      message:
+        example: Blog post retrieved successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.GetBlogPostResponse404:
+    properties:
+      blog_post:
+        type: object
+      message:
+        example: Blog post not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetBlogPostResponse500:
+    properties:
+      blog_post:
+        type: object
+      message:
+        example: Internal server error while retrieving blog post
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetBlogPostsResponse200:
+    properties:
+      data:
+        properties:
+          current_page:
+            example: 1
+            type: integer
+          items:
+            items:
+              properties:
+                author:
+                  example: John Doe
+                  type: string
+                content:
+                  example: Blog post content...
+                  type: string
+                featuredImageUrl:
+                  example: https://example.com/image.jpg
+                  type: string
+                heading:
+                  example: Blog Post Title
+                  type: string
+                id:
+                  example: 123e4567-e89b-12d3-a456-426614174000
+                  type: string
+                pageTitle:
+                  example: Page Title
+                  type: string
+                publishedDate:
+                  example: "2023-12-12"
+                  type: string
+                shortDescription:
+                  example: Short description
+                  type: string
+                tags:
+                  example:
+                  - '["tech"'
+                  - '"programming"]'
+                  items:
+                    type: string
+                  type: array
+                urlHandle:
+                  example: blog-post-title
+                  type: string
+                visible:
+                  example: true
+                  type: boolean
+              type: object
+            type: array
+          page_size:
+            example: 10
+            type: integer
+          total_items:
+            example: 100
+            type: integer
+          total_pages:
+            example: 10
+            type: integer
+        type: object
+      message:
+        example: Users retrieved successfully
+        type: string
+      status_code:
+        example: 200
+        type: integer
+    type: object
+  contract.GetBlogPostsResponse400:
+    properties:
+      data:
+        items:
+          type: object
+        type: array
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetBlogPostsResponse401:
+    properties:
+      data:
+        items:
+          type: object
+        type: array
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetBlogPostsResponse500:
+    properties:
+      data:
+        items:
+          type: object
+        type: array
+      message:
+        example: Internal server error while retrieving blog posts
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetLikesForBlogPostResponse200:
+    properties:
+      message:
+        example: Likes retrieved successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      totalCount:
+        example: 42
+        type: integer
+    type: object
+  contract.GetLikesForBlogPostResponse404:
+    properties:
+      message:
+        example: Blog post not found
+        type: string
+      success:
+        example: false
+        type: boolean
+      totalCount:
+        example: 0
+        type: integer
+    type: object
+  contract.GetLikesForBlogPostResponse500:
+    properties:
+      message:
+        example: Internal server error while retrieving likes
+        type: string
+      success:
+        example: false
+        type: boolean
+      totalCount:
+        example: 0
+        type: integer
+    type: object
+  contract.GetTagsResponse200:
+    properties:
+      items:
+        items:
+          type: object
+        type: array
+      message:
+        example: Tags retrieved successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.GetTagsResponse500:
+    properties:
+      items:
+        items:
+          type: object
+        type: array
+      message:
+        example: Internal server error while retrieving tags
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.UpdateBlogPostRequest:
+    properties:
+      content:
+        example: Updated blog post content...
+        type: string
+      featuredImageUrl:
+        example: https://example.com/updated-image.jpg
+        type: string
+      heading:
+        example: Updated Blog Post Title
+        type: string
+      jwtToken:
+        $ref: '#/definitions/models.JwtToken'
+      pageTitle:
+        example: Updated Page Title
+        type: string
+      publishedDate:
+        example: "2023-12-12"
+        type: string
+      shortDescription:
+        example: Updated short description
+        type: string
+      tags:
+        example:
+        - '["tech"'
+        - '"programming"]'
+        items:
+          type: string
+        type: array
+      urlHandle:
+        example: updated-blog-post-title
+        type: string
+      visible:
+        example: true
+        type: boolean
+    required:
+    - content
+    - heading
+    - jwtToken
+    - pageTitle
+    - publishedDate
+    - shortDescription
+    - urlHandle
+    type: object
+  contract.UpdateBlogPostResponse200:
+    properties:
+      message:
+        example: Blog post updated successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.UpdateBlogPostResponse400:
+    properties:
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.UpdateBlogPostResponse401:
+    properties:
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.UpdateBlogPostResponse403:
+    properties:
+      message:
+        example: Forbidden
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.UpdateBlogPostResponse404:
+    properties:
+      message:
+        example: Blog post not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.UpdateBlogPostResponse500:
+    properties:
+      message:
+        example: Internal server error while updating blog post
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  models.JwtToken:
+    type: object
+info:
+  contact: {}
+paths:
+  /rental-api/api/comments/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a specific comment from a blog post
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Comment deleted successfully
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse401'
+        "403":
+          description: Forbidden - Not the comment owner
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse403'
+        "404":
+          description: Comment not found
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse404'
+        "500":
+          description: Server error during deletion
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse500'
+      summary: Delete a comment from a blog post
+      tags:
+      - comments
+  /rental-api/api/posts:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of blog posts with optional filtering, pagination
+        and sorting.
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Current page
+        in: query
+        name: current_page
+        type: integer
+      - collectionFormat: csv
+        description: Sort fields (field:asc|desc)
+        in: query
+        items:
+          type: string
+        name: sort_fields
+        type: array
+      - collectionFormat: csv
+        description: Blog post IDs
+        in: query
+        items:
+          type: string
+        name: ids
+        type: array
+      - description: Start date
+        in: query
+        name: date-time-from
+        type: string
+      - description: End date
+        in: query
+        name: date-time-to
+        type: string
+      - collectionFormat: csv
+        description: Author IDs
+        in: query
+        items:
+          type: string
+        name: author-ids
+        type: array
+      - collectionFormat: csv
+        description: Tags
+        in: query
+        items:
+          type: string
+        name: tags
+        type: array
+      - description: Visibility status
+        in: query
+        name: visible
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Blog posts retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostsResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostsResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostsResponse401'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostsResponse500'
+      summary: Get blog posts
+      tags:
+      - blog
+    post:
+      consumes:
+      - application/json
+      description: Creates a new blog post with the provided details
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Blog post details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.CreateBlogPostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Blog post created successfully
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostResponse401'
+        "500":
+          description: Server error during creation
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostResponse500'
+      summary: Create a new blog post
+      tags:
+      - blog
+  /rental-api/api/posts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an existing blog post
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Blog post deleted successfully
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostResponse401'
+        "403":
+          description: Forbidden - Not authorized to delete
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostResponse403'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostResponse404'
+        "500":
+          description: Server error during deletion
+          schema:
+            $ref: '#/definitions/contract.DeleteBlogPostResponse500'
+      summary: Delete a blog post
+      tags:
+      - blog
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a specific blog post by its ID
+      parameters:
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Blog post retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostResponse200'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostResponse404'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostResponse500'
+      summary: Get a blog post by ID
+      tags:
+      - blog
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing blog post with the provided details
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated blog post details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.UpdateBlogPostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Blog post updated successfully
+          schema:
+            $ref: '#/definitions/contract.UpdateBlogPostResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.UpdateBlogPostResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.UpdateBlogPostResponse401'
+        "403":
+          description: Forbidden - Not the post owner
+          schema:
+            $ref: '#/definitions/contract.UpdateBlogPostResponse403'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.UpdateBlogPostResponse404'
+        "500":
+          description: Server error during update
+          schema:
+            $ref: '#/definitions/contract.UpdateBlogPostResponse500'
+      summary: Update a blog post
+      tags:
+      - blog
+  /rental-api/api/posts/{id}/comments:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all comments for a specific blog post with pagination
+      parameters:
+      - collectionFormat: csv
+        description: Filter by blog post IDs
+        in: query
+        items:
+          type: string
+        name: ids
+        type: array
+      - collectionFormat: csv
+        description: Filter by user IDs
+        in: query
+        items:
+          type: string
+        name: user_ids
+        type: array
+      - description: Filter from date
+        in: query
+        name: date_time_from
+        type: string
+      - description: Filter to date
+        in: query
+        name: date_time_to
+        type: string
+      - collectionFormat: csv
+        description: Sort fields (field:asc|desc)
+        in: query
+        items:
+          type: string
+        name: sort_fields
+        type: array
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Current page
+        in: query
+        name: current_page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Comments retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostCommentsResponse200'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostCommentsResponse404'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostCommentsResponse500'
+      summary: Get comments for a blog post
+      tags:
+      - comments
+    post:
+      consumes:
+      - application/json
+      description: Creates a new comment on a specific blog post
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Comment details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.CreateBlogPostCommentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Comment created successfully
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostCommentResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostCommentResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostCommentResponse401'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostCommentResponse404'
+        "500":
+          description: Server error during creation
+          schema:
+            $ref: '#/definitions/contract.CreateBlogPostCommentResponse500'
+      summary: Create a comment on a blog post
+      tags:
+      - comments
+  /rental-api/api/posts/{id}/likes:
+    delete:
+      consumes:
+      - application/json
+      description: Removes a like from a specific blog post
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Like removed successfully
+          schema:
+            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse401'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse404'
+        "500":
+          description: Server error during deletion
+          schema:
+            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse500'
+      summary: Unlike a blog post
+      tags:
+      - likes
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the total number of likes for a specific blog post
+      parameters:
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Likes count retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetLikesForBlogPostResponse200'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.GetLikesForBlogPostResponse404'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetLikesForBlogPostResponse500'
+      summary: Get likes count for a blog post
+      tags:
+      - likes
+    post:
+      consumes:
+      - application/json
+      description: Adds a like to a specific blog post
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Like added successfully
+          schema:
+            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse401'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse404'
+        "500":
+          description: Server error during creation
+          schema:
+            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse500'
+      summary: Like a blog post
+      tags:
+      - likes
+  /rental-api/api/tags/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all unique tags used in blog posts
+      parameters:
+      - description: Blog Post ID
+        in: path
+        name: id
+        type: string
+      - collectionFormat: csv
+        description: Sort fields (field:asc|desc)
+        in: query
+        items:
+          type: string
+        name: sort_fields
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tags retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetTagsResponse200'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetTagsResponse500'
+      summary: Get all unique tags
+      tags:
+      - tags
+swagger: "2.0"

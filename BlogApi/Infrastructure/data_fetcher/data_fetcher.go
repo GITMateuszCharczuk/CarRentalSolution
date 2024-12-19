@@ -24,7 +24,7 @@ func NewDataFetcherImpl(baseURL string) interfaces.DataFetcher {
 }
 
 func (df *DataFetcherImpl) ValidateToken(token models.JwtToken) (*models.TokenInfo, error) {
-	endpoint := fmt.Sprintf("%s/blog-api/api/token/validate", df.baseURL)
+	endpoint := fmt.Sprintf("%s/identity-api/api/token/validate", df.baseURL)
 
 	u, err := url.Parse(endpoint)
 	if err != nil {
@@ -58,7 +58,7 @@ func (df *DataFetcherImpl) ValidateToken(token models.JwtToken) (*models.TokenIn
 }
 
 func (df *DataFetcherImpl) GetUserInternalInfo(token models.JwtToken) (*models.UserInfo, error) {
-	endpoint := fmt.Sprintf("%s/blog-api/api/user/internal", df.baseURL)
+	endpoint := fmt.Sprintf("%s/identity-api/api/user/internal", df.baseURL)
 
 	u, err := url.Parse(endpoint)
 	if err != nil {
