@@ -1,4 +1,4 @@
-package datafetcher
+package service_interfaces
 
 import models "rental-api/Domain/models/external"
 

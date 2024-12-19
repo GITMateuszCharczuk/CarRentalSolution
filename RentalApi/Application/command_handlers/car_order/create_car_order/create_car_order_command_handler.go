@@ -3,23 +3,24 @@ package commands
 import (
 	"context"
 	contract "rental-api/Application.contract/car_orders/CreateCarOrder"
+	"rental-api/Application/services"
 	models "rental-api/Domain/models/domestic"
 	car_offer_repository "rental-api/Domain/repository_interfaces/car_offer_repository"
 	repository_interfaces "rental-api/Domain/repository_interfaces/car_order_repository"
 	"rental-api/Domain/responses"
-	data_fetcher "rental-api/Domain/service_interfaces"
+	connector "rental-api/Domain/service_interfaces"
 )
 
 type CreateCarOrderCommandHandler struct {
 	carOrderCommandRepository repository_interfaces.CarOrderCommandRepository
 	carOfferQueryRepository   car_offer_repository.CarOfferQueryRepository
-	dataFetcher               data_fetcher.MicroserviceConnector
+	dataFetcher               connector.MicroserviceConnector
 }
 
 func NewCreateCarOrderCommandHandler(
 	carOrderCommandRepository repository_interfaces.CarOrderCommandRepository,
 	carOfferQueryRepository car_offer_repository.CarOfferQueryRepository,
-	dataFetcher data_fetcher.MicroserviceConnector,
+	dataFetcher connector.MicroserviceConnector,
 ) *CreateCarOrderCommandHandler {
 	return &CreateCarOrderCommandHandler{
 		carOrderCommandRepository: carOrderCommandRepository,
@@ -32,6 +33,11 @@ func (h *CreateCarOrderCommandHandler) Handle(ctx context.Context, command *Crea
 	userInfo, err := h.dataFetcher.GetUserInternalInfo(command.JwtToken)
 	if err != nil {
 		response := responses.NewResponse[contract.CreateCarOrderResponse](401, "Unauthorized")
+		return &response, nil
+	}
+
+	if !services.IsAdminOrSuperAdmin(userInfo.Roles) {
+		response := responses.NewResponse[contract.CreateCarOrderResponse](403, "Forbidden")
 		return &response, nil
 	}
 
@@ -50,6 +56,7 @@ func (h *CreateCarOrderCommandHandler) Handle(ctx context.Context, command *Crea
 		ReturnLocation:   command.ReturnLocation,
 		NumOfDrivers:     command.NumOfDrivers,
 		TotalCost:        command.TotalCost,
+		Status:           command.Status,
 	}
 
 	result, err := h.carOrderCommandRepository.CreateCarOrder(ctx, carOrder)

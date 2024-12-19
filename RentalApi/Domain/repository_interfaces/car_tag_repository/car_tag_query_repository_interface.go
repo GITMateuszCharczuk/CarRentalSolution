@@ -10,6 +10,6 @@ type CarTagQueryRepository interface {
 	GetTagByName(name string) (*models.CarOfferTagModel, error)
 	GetTagsByCarOfferId(
 		carOfferId string,
-		sorting sorting.Sortable,
+		sorting *sorting.Sortable,
 	) (*[]models.CarOfferTagModel, error)
 }

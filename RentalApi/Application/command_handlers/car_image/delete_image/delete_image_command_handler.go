@@ -4,6 +4,7 @@ import (
 	"context"
 	contract "rental-api/Application.contract/images/delete_image"
 	"rental-api/Application/services"
+	"rental-api/Domain/constants"
 	repository_interfaces "rental-api/Domain/repository_interfaces/car_image_repository"
 	car_offer_repository "rental-api/Domain/repository_interfaces/car_offer_repository"
 	"rental-api/Domain/responses"
@@ -41,9 +42,11 @@ func (h *DeleteImageCommandHandler) Handle(ctx context.Context, command *DeleteI
 		return &response, nil
 	}
 
-	if carOffer.CustodianId != userInfo.ID && !services.IsAdminOrSuperAdmin(userInfo.Roles) {
-		response := responses.NewResponse[contract.DeleteImageFromCarOfferResponse](403, "Not authorized to delete images from this car offer")
-		return &response, nil
+	if !services.IsRole(constants.SuperAdmin, userInfo.Roles) {
+		if carOffer.CustodianId != userInfo.ID && !services.IsRole(constants.Admin, userInfo.Roles) {
+			response := responses.NewResponse[contract.DeleteImageFromCarOfferResponse](403, "Not authorized to delete this car offer")
+			return &response, nil
+		}
 	}
 
 	err = h.carImageCommandRepository.DeleteImageFromCarOffer(ctx, command.CarOfferId, command.Id)

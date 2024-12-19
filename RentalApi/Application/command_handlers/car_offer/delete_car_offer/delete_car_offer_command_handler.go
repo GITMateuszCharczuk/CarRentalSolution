@@ -4,6 +4,7 @@ import (
 	"context"
 	contract "rental-api/Application.contract/car_offers/delete_car_offer"
 	"rental-api/Application/services"
+	"rental-api/Domain/constants"
 	repository_interfaces "rental-api/Domain/repository_interfaces/car_offer_repository"
 	"rental-api/Domain/responses"
 	data_fetcher "rental-api/Domain/service_interfaces"
@@ -40,9 +41,11 @@ func (h *DeleteCarOfferCommandHandler) Handle(ctx context.Context, command *Dele
 		return &response, nil
 	}
 
-	if existingOffer.CustodianId != userInfo.ID && !services.IsAdminOrSuperAdmin(userInfo.Roles) {
-		response := responses.NewResponse[contract.DeleteCarOfferResponse](403, "Not authorized to delete this car offer")
-		return &response, nil
+	if !services.IsRole(constants.SuperAdmin, userInfo.Roles) {
+		if existingOffer.CustodianId != userInfo.ID && !services.IsRole(constants.Admin, userInfo.Roles) {
+			response := responses.NewResponse[contract.DeleteCarOfferResponse](403, "Not authorized to delete this car offer")
+			return &response, nil
+		}
 	}
 
 	err = h.carOfferCommandRepository.DeleteCarOffer(ctx, command.ID)

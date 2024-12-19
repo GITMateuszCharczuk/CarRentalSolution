@@ -12,5 +12,6 @@ type CreateCarOrderCommand struct {
 	ReturnLocation   string  `json:"returnLocation" example:"City Center" swaggertype:"string"`
 	NumOfDrivers     int     `json:"numOfDrivers" example:"2" swaggertype:"integer"`
 	TotalCost        float64 `json:"totalCost" example:"750.00" swaggertype:"number"`
+	Status           string  `json:"status" example:"pending" swaggertype:"string"`
 	models.JwtToken  `json:",inline"`
 }

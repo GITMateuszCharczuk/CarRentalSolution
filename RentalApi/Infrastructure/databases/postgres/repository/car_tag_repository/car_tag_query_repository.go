@@ -40,12 +40,12 @@ func (r *CarTagQueryRepositoryImpl) GetTagByName(name string) (*models.CarOfferT
 
 func (r *CarTagQueryRepositoryImpl) GetTagsByCarOfferId(
 	carOfferId string,
-	sorting sorting.Sortable,
+	sorting *sorting.Sortable,
 ) (*[]models.CarOfferTagModel, error) {
 	db := r.GetUnitOfWork().GetTransaction().Model(&entities.CarTagEntity{})
 	if carOfferId != "" {
 		db = db.Joins("JOIN car_offer_tags ON car_offer_tags.tag_id = car_tag_entities.id").
 			Where("car_offer_tags.car_offer_id = ?", carOfferId)
 	}
-	return r.ExecuteSortedQuery(db, &sorting)
+	return r.ExecuteSortedQuery(db, sorting)
 }

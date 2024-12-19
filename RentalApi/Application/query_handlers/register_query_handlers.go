@@ -2,66 +2,78 @@ package queries
 
 import (
 	"log"
-	get_blog_post "rental-api/Application/query_handlers/blog_post/get_blog_post"
-	get_blog_posts "rental-api/Application/query_handlers/blog_post/get_blog_posts"
-	get_blog_post_comments "rental-api/Application/query_handlers/blog_post_comment/get_blog_post_comments"
-	get_likes_for_blog_post "rental-api/Application/query_handlers/blog_post_like/get_likes_for_blog_post"
-	get_tags "rental-api/Application/query_handlers/blog_post_tag/get_tags"
-	blog_post_comment_repository_interfaces "rental-api/Domain/repository_interfaces/blog_post_comment_repository"
-	blog_post_like_repository_interfaces "rental-api/Domain/repository_interfaces/blog_post_like_repository"
-	blog_post_repository_interfaces "rental-api/Domain/repository_interfaces/blog_post_repository"
-	blog_post_tag_repository_interfaces "rental-api/Domain/repository_interfaces/blog_post_tag_repository"
-	data_fetcher "rental-api/Domain/service_interfaces"
+	// Existing imports
+	get_car_images "rental-api/Application/query_handlers/car_image/get_images"
+	get_car_offer "rental-api/Application/query_handlers/car_offer/get_car_offer"
+	get_car_offers "rental-api/Application/query_handlers/car_offer/get_car_offers"
+	get_car_order "rental-api/Application/query_handlers/car_order/get_car_order"
+	get_car_orders "rental-api/Application/query_handlers/car_order/get_car_orders"
+	get_car_tags "rental-api/Application/query_handlers/car_tag/get_tags"
+	car_image_repository "rental-api/Domain/repository_interfaces/car_image_repository"
+	car_offer_repository "rental-api/Domain/repository_interfaces/car_offer_repository"
+	car_order_repository "rental-api/Domain/repository_interfaces/car_order_repository"
+	car_tag_repository "rental-api/Domain/repository_interfaces/car_tag_repository"
+	connector "rental-api/Domain/service_interfaces"
 
 	"github.com/mehdihadeli/go-mediatr"
 )
 
-func registerGetBlogPostsQueryHandler(
-	blogPostQueryRepository blog_post_repository_interfaces.BlogPostQueryRepository,
-	dataFetcher data_fetcher.MicroserviceConnector,
+func registerGetCarOrdersQueryHandler(
+	orderQueryRepository car_order_repository.CarOrderQueryRepository,
+	connector connector.MicroserviceConnector,
 ) {
-	handler := get_blog_posts.NewGetBlogPostsQueryHandler(blogPostQueryRepository, dataFetcher)
+	handler := get_car_orders.NewGetCarOrdersQueryHandler(orderQueryRepository, connector)
 	err := mediatr.RegisterRequestHandler(handler)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func registerGetBlogPostQueryHandler(
-	blogPostQueryRepository blog_post_repository_interfaces.BlogPostQueryRepository,
+func registerGetCarOrderQueryHandler(
+	orderQueryRepository car_order_repository.CarOrderQueryRepository,
+	connector connector.MicroserviceConnector,
 ) {
-	handler := get_blog_post.NewGetBlogPostQueryHandler(blogPostQueryRepository)
+	handler := get_car_order.NewGetCarOrderQueryHandler(orderQueryRepository, connector)
 	err := mediatr.RegisterRequestHandler(handler)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func registerGetBlogPostCommentsQueryHandler(
-	blogPostCommentQueryRepository blog_post_comment_repository_interfaces.BlogPostCommentQueryRepository,
-	blogPostQueryRepository blog_post_repository_interfaces.BlogPostQueryRepository,
+func registerGetCarOffersQueryHandler(
+	offerQueryRepository car_offer_repository.CarOfferQueryRepository,
+	connector connector.MicroserviceConnector,
 ) {
-	handler := get_blog_post_comments.NewGetBlogPostCommentsQueryHandler(blogPostCommentQueryRepository, blogPostQueryRepository)
+	handler := get_car_offers.NewGetCarOffersQueryHandler(offerQueryRepository, connector)
 	err := mediatr.RegisterRequestHandler(handler)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func registerGetLikesForBlogPostQueryHandler(
-	blogPostLikeQueryRepository blog_post_like_repository_interfaces.BlogPostLikeQueryRepository,
+func registerGetCarOfferQueryHandler(
+	offerQueryRepository car_offer_repository.CarOfferQueryRepository,
 ) {
-	handler := get_likes_for_blog_post.NewGetLikesForBlogPostQueryHandler(blogPostLikeQueryRepository)
+	handler := get_car_offer.NewGetCarOfferQueryHandler(offerQueryRepository)
 	err := mediatr.RegisterRequestHandler(handler)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func registerGetTagsQueryHandler(
-	blogPostTagQueryRepository blog_post_tag_repository_interfaces.BlogPostTagQueryRepository,
+func registerGetCarTagsQueryHandler(
+	tagQueryRepository car_tag_repository.CarTagQueryRepository,
 ) {
-	handler := get_tags.NewGetTagsQueryHandler(blogPostTagQueryRepository)
+	handler := get_car_tags.NewGetTagsQueryHandler(tagQueryRepository)
+	err := mediatr.RegisterRequestHandler(handler)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+func registerGetCarImagesQueryHandler(
+	imageQueryRepository car_image_repository.CarImageQueryRepository,
+) {
+	handler := get_car_images.NewGetImagesQueryHandler(imageQueryRepository)
 	err := mediatr.RegisterRequestHandler(handler)
 	if err != nil {
 		log.Fatal(err)
@@ -69,15 +81,16 @@ func registerGetTagsQueryHandler(
 }
 
 func RegisterQueryHandlers(
-	blogPostQueryRepository blog_post_repository_interfaces.BlogPostQueryRepository,
-	blogPostCommentQueryRepository blog_post_comment_repository_interfaces.BlogPostCommentQueryRepository,
-	blogPostLikeQueryRepository blog_post_like_repository_interfaces.BlogPostLikeQueryRepository,
-	blogPostTagQueryRepository blog_post_tag_repository_interfaces.BlogPostTagQueryRepository,
-	dataFetcher data_fetcher.MicroserviceConnector,
+	carOrderQueryRepository car_order_repository.CarOrderQueryRepository,
+	carOfferQueryRepository car_offer_repository.CarOfferQueryRepository,
+	connector connector.MicroserviceConnector,
+	carTagQueryRepository car_tag_repository.CarTagQueryRepository,
+	carImageQueryRepository car_image_repository.CarImageQueryRepository,
 ) {
-	registerGetBlogPostsQueryHandler(blogPostQueryRepository, dataFetcher)
-	registerGetBlogPostQueryHandler(blogPostQueryRepository)
-	registerGetBlogPostCommentsQueryHandler(blogPostCommentQueryRepository, blogPostQueryRepository)
-	registerGetLikesForBlogPostQueryHandler(blogPostLikeQueryRepository)
-	registerGetTagsQueryHandler(blogPostTagQueryRepository)
+	registerGetCarOrdersQueryHandler(carOrderQueryRepository, connector)
+	registerGetCarOrderQueryHandler(carOrderQueryRepository, connector)
+	registerGetCarOffersQueryHandler(carOfferQueryRepository, connector)
+	registerGetCarOfferQueryHandler(carOfferQueryRepository)
+	registerGetCarTagsQueryHandler(carTagQueryRepository)
+	registerGetCarImagesQueryHandler(carImageQueryRepository)
 }

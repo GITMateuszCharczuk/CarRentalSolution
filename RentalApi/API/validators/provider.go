@@ -11,10 +11,9 @@ func ProvideValidator() *validator.Validate {
 	v := validator.New()
 	v.RegisterValidation("validRoles", ValidateRoles)
 	v.RegisterValidation("validRole", ValidateRole)
-	RegisterSortQueryValidator[models.BlogPostCommentModel](v, "validCommentSortable")
-	RegisterSortQueryValidator[models.BlogPostTagModel](v, "validTagSortable")
-	RegisterSortQueryValidator[models.BlogPostRequestModel](v, "validBlogPostSortable")
-	RegisterSortQueryValidator[models.BlogPostTagModel](v, "validBlogPostTagSortable")
+	RegisterSortQueryValidator[models.CarOfferModel](v, "validCarOfferSortable")
+	RegisterSortQueryValidator[models.CarOrderModel](v, "validCarOrderSortable")
+	RegisterSortQueryValidator[models.CarOfferTagModel](v, "validCarOfferTagSortable")
 	return v
 }
 

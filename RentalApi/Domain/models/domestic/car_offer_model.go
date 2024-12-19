@@ -20,4 +20,5 @@ type CarOfferModel struct {
 	CustodianEmail     string  `json:"custodianEmail" example:"custodian@example.com" swaggertype:"string"`
 	CreatedAt          string  `json:"createdAt" example:"2023-12-12T00:00:00Z" swaggertype:"string"`
 	UpdatedAt          string  `json:"updatedAt" example:"2023-12-12T00:00:00Z" swaggertype:"string"`
+	FeaturedImageUrl   string  `json:"featuredImageUrl" example:"https://example.com/image.jpg" swaggertype:"string"`
 }

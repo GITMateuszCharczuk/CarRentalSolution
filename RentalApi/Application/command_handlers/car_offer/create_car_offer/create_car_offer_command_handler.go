@@ -3,11 +3,11 @@ package commands
 import (
 	"context"
 	contract "rental-api/Application.contract/car_offers/create_car_offer"
+	"rental-api/Application/services"
 	models "rental-api/Domain/models/domestic"
 	repository_interfaces "rental-api/Domain/repository_interfaces/car_offer_repository"
 	"rental-api/Domain/responses"
 	data_fetcher "rental-api/Domain/service_interfaces"
-	"time"
 )
 
 type CreateCarOfferCommandHandler struct {
@@ -31,8 +31,10 @@ func (h *CreateCarOfferCommandHandler) Handle(ctx context.Context, command *Crea
 		response := responses.NewResponse[contract.CreateCarOfferResponse](401, "Unauthorized")
 		return &response, nil
 	}
-
-	now := time.Now()
+	if !services.IsAdminOrSuperAdmin(userInfo.Roles) {
+		response := responses.NewResponse[contract.CreateCarOfferResponse](403, "Not authorized to create a car offer")
+		return &response, nil
+	}
 	carOffer := &models.CarOfferModel{
 		Heading:            command.Heading,
 		ShortDescription:   command.ShortDescription,
@@ -49,8 +51,7 @@ func (h *CreateCarOfferCommandHandler) Handle(ctx context.Context, command *Crea
 		OneWeekPrice:       command.OneWeekPrice,
 		OneMonthPrice:      command.OneMonthPrice,
 		CustodianId:        userInfo.ID,
-		CustodianEmail:     userInfo.Email,
-		CreatedAt:          now.Format(time.RFC3339),
+		CustodianEmail:     userInfo.EmailAddress,
 	}
 
 	result, err := h.carOfferCommandRepository.CreateCarOffer(ctx, carOffer, command.Tags, command.ImageUrls)

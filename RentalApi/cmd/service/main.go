@@ -6,11 +6,10 @@ import (
 	"os"
 	"os/signal"
 	"rental-api/API/server"
-	"syscall"
-	"time"
-
 	command_handlers "rental-api/Application/command_handlers"
 	query_handlers "rental-api/Application/query_handlers"
+	"syscall"
+	"time"
 )
 
 func main() {
@@ -18,45 +17,45 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to initialize Infrastructure: %v", err)
 	}
-
 	command_handlers.RegisterCommandHandlers(
-		components.BlogCommandRepo,
-		components.BlogQueryRepo,
-		components.CommentCommandRepo,
-		components.CommentQueryRepo,
-		components.LikeCommandRepo,
-		components.DataFetcher,
+		components.CarOrderCommandRepo,
+		components.CarOrderQueryRepo,
+		components.CarOfferCommandRepo,
+		components.CarOfferQueryRepo,
+		components.CarImageCommandRepo,
+		components.connector,
 	)
-
 	query_handlers.RegisterQueryHandlers(
-		components.BlogQueryRepo,
-		components.CommentQueryRepo,
-		components.LikeQueryRepo,
-		components.TagQueryRepo,
-		components.DataFetcher,
+		components.CarOrderQueryRepo,
+		components.CarOfferQueryRepo,
+		components.connector,
+		components.CarTagQueryRepo,
+		components.CarImageQueryRepo,
 	)
-
 	server, err := InitializeApi(
-		components.BlogQueryRepo,
-		components.BlogCommandRepo,
-		components.CommentQueryRepo,
-		components.CommentCommandRepo,
-		components.LikeQueryRepo,
-		components.LikeCommandRepo,
-		components.TagQueryRepo,
-		components.DataFetcher,
+		components.CarOfferQueryRepo,
+		components.CarOfferCommandRepo,
+		components.CarOrderQueryRepo,
+		components.CarOrderCommandRepo,
+		components.CarImageQueryRepo,
+		components.CarImageCommandRepo,
+		components.CarTagQueryRepo,
+		components.CarTagCommandRepo,
+		components.connector,
+		components.orderManagementSystem,
 		components.Config,
 	)
 	if err != nil {
 		log.Fatalf("Failed to initialize API: %v", err)
 	}
-
 	server.RegisterRoutes()
-
 	go func() {
 		if err := server.StartServer(); err != nil {
 			log.Fatalf("Failed to start API server: %v", err)
 		}
+	}()
+	go func() {
+		components.orderManagementSystem.StartPeriodicCheck(context.Background())
 	}()
 
 	waitForShutdown(server)
@@ -65,15 +64,12 @@ func main() {
 func waitForShutdown(server *server.Server) {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
-
 	<-sigChan
 	log.Println("Shutting down application...")
-
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := server.StopServer(ctx); err != nil {
 		log.Printf("Error stopping API server: %v", err)
 	}
-
 	log.Println("Api gracefully stopped.")
 }

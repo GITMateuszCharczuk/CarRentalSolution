@@ -21,12 +21,16 @@ func NewGetTagsQueryHandler(
 }
 
 func (h *GetTagsQueryHandler) Handle(ctx context.Context, query *GetTagsQuery) (*contract.GetTagsResponse, error) {
-	tags, err := h.carTagQueryRepository.GetTags(
-		&query.Sortable,
+	tags, err := h.carTagQueryRepository.GetTagsByCarOfferId(
 		query.CarOfferId,
+		&query.Sortable,
 	)
 
 	if err != nil {
+		if err.Error() == "sql: no rows in result set" {
+			response := responses.NewResponse[contract.GetTagsResponse](200, "No tags found")
+			return &response, nil
+		}
 		response := responses.NewResponse[contract.GetTagsResponse](500, "Failed to retrieve tags")
 		return &response, nil
 	}

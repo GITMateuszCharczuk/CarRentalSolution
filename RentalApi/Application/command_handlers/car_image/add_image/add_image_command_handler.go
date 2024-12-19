@@ -4,6 +4,7 @@ import (
 	"context"
 	contract "rental-api/Application.contract/images/add_image"
 	"rental-api/Application/services"
+	"rental-api/Domain/constants"
 	repository_interfaces "rental-api/Domain/repository_interfaces/car_image_repository"
 	car_offer_repository "rental-api/Domain/repository_interfaces/car_offer_repository"
 	"rental-api/Domain/responses"
@@ -41,12 +42,14 @@ func (h *AddImageCommandHandler) Handle(ctx context.Context, command *AddImageCo
 		return &response, nil
 	}
 
-	if carOffer.CustodianId != userInfo.ID && !services.IsAdminOrSuperAdmin(userInfo.Roles) {
-		response := responses.NewResponse[contract.AddUrlToCarOfferResponse](403, "Not authorized to add images to this car offer")
-		return &response, nil
+	if !services.IsRole(constants.SuperAdmin, userInfo.Roles) {
+		if carOffer.CustodianId != userInfo.ID && !services.IsRole(constants.Admin, userInfo.Roles) {
+			response := responses.NewResponse[contract.AddUrlToCarOfferResponse](403, "Not authorized to delete this car offer")
+			return &response, nil
+		}
 	}
 
-	result, err := h.carImageCommandRepository.AddImageToCarOffer(ctx, command.CarOfferId, command.Url)
+	result, err := h.carImageCommandRepository.AddImageToCarOffer(ctx, command.CarOfferId, command.ImageId)
 	if err != nil {
 		response := responses.NewResponse[contract.AddUrlToCarOfferResponse](500, "Failed to add image")
 		return &response, nil

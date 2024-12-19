@@ -8,26 +8,27 @@ package main
 
 import (
 	controllers5 "rental-api/API/controllers"
-	"rental-api/API/controllers/blog_post"
-	controllers2 "rental-api/API/controllers/blog_post_comment"
-	controllers3 "rental-api/API/controllers/blog_post_like"
-	controllers4 "rental-api/API/controllers/blog_post_tag"
+	controllers3 "rental-api/API/controllers/car_image"
+	"rental-api/API/controllers/car_offer"
+	controllers2 "rental-api/API/controllers/car_order"
+	controllers4 "rental-api/API/controllers/car_tag"
 	"rental-api/API/server"
 	"rental-api/API/validators"
-	repository_interfaces2 "rental-api/Domain/repository_interfaces/blog_post_comment_repository"
-	repository_interfaces3 "rental-api/Domain/repository_interfaces/blog_post_like_repository"
-	"rental-api/Domain/repository_interfaces/blog_post_repository"
-	repository_interfaces4 "rental-api/Domain/repository_interfaces/blog_post_tag_repository"
-	datafetcher2 "rental-api/Domain/service_interfaces"
+	repository_interfaces3 "rental-api/Domain/repository_interfaces/car_image_repository"
+	"rental-api/Domain/repository_interfaces/car_offer_repository"
+	repository_interfaces2 "rental-api/Domain/repository_interfaces/car_order_repository"
+	repository_interfaces4 "rental-api/Domain/repository_interfaces/car_tag_repository"
+	"rental-api/Domain/service_interfaces"
 	"rental-api/Infrastructure/config"
-	"rental-api/Infrastructure/data_fetcher"
 	config2 "rental-api/Infrastructure/databases/postgres/config"
 	"rental-api/Infrastructure/databases/postgres/mappers"
 	"rental-api/Infrastructure/databases/postgres/repository/base/unit_of_work"
-	repository3 "rental-api/Infrastructure/databases/postgres/repository/blog_post_comment_repository"
-	repository4 "rental-api/Infrastructure/databases/postgres/repository/blog_post_like_repository"
-	"rental-api/Infrastructure/databases/postgres/repository/blog_post_repository"
-	repository2 "rental-api/Infrastructure/databases/postgres/repository/blog_post_tag_repository"
+	repository3 "rental-api/Infrastructure/databases/postgres/repository/car_image_repository"
+	"rental-api/Infrastructure/databases/postgres/repository/car_offer_repository"
+	repository4 "rental-api/Infrastructure/databases/postgres/repository/car_order_repository"
+	repository2 "rental-api/Infrastructure/databases/postgres/repository/car_tag_repository"
+	"rental-api/Infrastructure/microservice_connector"
+	"rental-api/Infrastructure/order_management"
 )
 
 // Injectors from wire.go:
@@ -35,50 +36,53 @@ import (
 func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	configConfig := config.ProvideConfig()
 	postgresDatabase := config2.NewPostgresConfigProvider(configConfig)
-	persistenceMapper := mappers.ProvideBlogPostResponsePersistenceMapper()
+	persistenceMapper := mappers.ProvideCarOfferPersistenceMapper()
 	unitOfWork := cqrs.ProvideUnitOfWork(postgresDatabase)
-	blogPostQueryRepository := repository.ProvideBlogPostQueryRepository(postgresDatabase, persistenceMapper, unitOfWork)
-	mappersPersistenceMapper := mappers.ProvideBlogPostRequestPersistenceMapper()
-	persistenceMapper2 := mappers.ProvideBlogPostTagPersistenceMapper()
-	blogPostTagCommandRepository := repository2.ProvideBlogPostTagCommandRepository(postgresDatabase, persistenceMapper2, blogPostQueryRepository, unitOfWork)
-	blogPostCommandRepository := repository.ProvideBlogPostCommandRepository(postgresDatabase, mappersPersistenceMapper, blogPostTagCommandRepository, unitOfWork)
-	persistenceMapper3 := mappers.ProvideBlogPostCommentPersistenceMapper()
-	blogPostCommentQueryRepository := repository3.ProvideBlogPostCommentQueryRepository(postgresDatabase, persistenceMapper3, unitOfWork)
-	blogPostCommentCommandRepository := repository3.ProvideBlogPostCommentCommandRepository(postgresDatabase, persistenceMapper3, unitOfWork)
-	persistenceMapper4 := mappers.ProvideBlogPostLikePersistenceMapper()
-	blogPostLikeQueryRepository := repository4.ProvideBlogPostLikeQueryRepository(postgresDatabase, persistenceMapper4, unitOfWork)
-	blogPostLikeCommandRepository := repository4.ProvideBlogPostLikeCommandRepository(postgresDatabase, persistenceMapper4, unitOfWork, blogPostLikeQueryRepository)
-	blogPostTagQueryRepository := repository2.ProvideBlogPostTagQueryRepository(postgresDatabase, persistenceMapper2, unitOfWork)
-	dataFetcher := datafetcher.ProvideDataFetcherImpl(configConfig)
+	carOfferQueryRepository := repository.ProvideCarOfferQueryRepository(postgresDatabase, persistenceMapper, unitOfWork)
+	mappersPersistenceMapper := mappers.ProvideCarTagPersistenceMapper()
+	carTagCommandRepository := repository2.ProvideCarTagCommandRepository(postgresDatabase, mappersPersistenceMapper, unitOfWork, carOfferQueryRepository)
+	persistenceMapper2 := mappers.ProvideCarImagePersistenceMapper()
+	carImageCommandRepository := repository3.ProvideCarImageCommandRepository(postgresDatabase, persistenceMapper2, unitOfWork)
+	carOfferCommandRepository := repository.ProvideCarOfferCommandRepository(postgresDatabase, persistenceMapper, unitOfWork, carTagCommandRepository, carImageCommandRepository)
+	persistenceMapper3 := mappers.ProvideCarOrderPersistenceMapper()
+	carOrderQueryRepository := repository4.ProvideCarOrderQueryRepository(postgresDatabase, persistenceMapper3, unitOfWork)
+	carOrderCommandRepository := repository4.ProvideCarOrderCommandRepository(postgresDatabase, persistenceMapper3, unitOfWork)
+	carImageQueryRepository := repository3.ProvideCarImageQueryRepository(postgresDatabase, persistenceMapper2, unitOfWork)
+	carTagQueryRepository := repository2.ProvideCarTagQueryRepository(postgresDatabase, mappersPersistenceMapper, unitOfWork)
+	microserviceConnector := microservice_connector.ProvideMicroserviceConnectorImpl(configConfig)
+	orderManagementSystem := order_management.ProvideOrderStatusChecker(carOrderQueryRepository, carOrderCommandRepository, carOfferQueryRepository, microserviceConnector)
 	infrastructureComponents := &InfrastructureComponents{
-		Config:             configConfig,
-		BlogQueryRepo:      blogPostQueryRepository,
-		BlogCommandRepo:    blogPostCommandRepository,
-		CommentQueryRepo:   blogPostCommentQueryRepository,
-		CommentCommandRepo: blogPostCommentCommandRepository,
-		LikeQueryRepo:      blogPostLikeQueryRepository,
-		LikeCommandRepo:    blogPostLikeCommandRepository,
-		TagQueryRepo:       blogPostTagQueryRepository,
-		DataFetcher:        dataFetcher,
+		Config:                configConfig,
+		CarOfferQueryRepo:     carOfferQueryRepository,
+		CarOfferCommandRepo:   carOfferCommandRepository,
+		CarOrderQueryRepo:     carOrderQueryRepository,
+		CarOrderCommandRepo:   carOrderCommandRepository,
+		CarImageQueryRepo:     carImageQueryRepository,
+		CarImageCommandRepo:   carImageCommandRepository,
+		CarTagQueryRepo:       carTagQueryRepository,
+		CarTagCommandRepo:     carTagCommandRepository,
+		connector:             microserviceConnector,
+		orderManagementSystem: orderManagementSystem,
 	}
 	return infrastructureComponents, nil
 }
 
-func InitializeApi(blogQueryRepo repository_interfaces.BlogPostQueryRepository, blogCommandRepo repository_interfaces.BlogPostCommandRepository, commentQueryRepo repository_interfaces2.BlogPostCommentQueryRepository, commentCommandRepo repository_interfaces2.BlogPostCommentCommandRepository, likeQueryRepo repository_interfaces3.BlogPostLikeQueryRepository, likeCommandRepo repository_interfaces3.BlogPostLikeCommandRepository, tagQueryRepo repository_interfaces4.BlogPostTagQueryRepository, dataFetcher datafetcher2.MicroserviceConnector, config3 *config.Config) (*server.Server, error) {
+func InitializeApi(carOfferQueryRepo repository_interfaces.CarOfferQueryRepository, carOfferCommandRepo repository_interfaces.CarOfferCommandRepository, carOrderQueryRepo repository_interfaces2.CarOrderQueryRepository, carOrderCommandRepo repository_interfaces2.CarOrderCommandRepository, carImageQueryRepo repository_interfaces3.CarImageQueryRepository, carImageCommandRepo repository_interfaces3.CarImageCommandRepository, carTagQueryRepo repository_interfaces4.CarTagQueryRepository, carTagCommandRepo repository_interfaces4.CarTagCommandRepository, connector service_interfaces.MicroserviceConnector, orderManagementSystem service_interfaces.OrderManagementSystem, config3 *config.Config) (*server.Server, error) {
 	validate := validators.ProvideValidator()
-	createBlogPostController := controllers.NewCreateBlogPostController(validate)
-	getBlogPostController := controllers.NewGetBlogPostController(validate)
-	getBlogPostsController := controllers.NewGetBlogPostsController(validate)
-	updateBlogPostController := controllers.NewUpdateBlogPostController(validate)
-	deleteBlogPostController := controllers.NewDeleteBlogPostController(validate)
-	createBlogPostCommentController := controllers2.NewCreateBlogPostCommentController(validate)
-	deleteBlogPostCommentController := controllers2.NewDeleteBlogPostCommentController(validate)
-	getBlogPostCommentsController := controllers2.NewGetBlogPostCommentsController(validate)
-	createLikeForBlogPostController := controllers3.NewCreateLikeForBlogPostController(validate)
-	deleteLikeForBlogPostController := controllers3.NewDeleteLikeForBlogPostController(validate)
-	getLikesForBlogPostController := controllers3.NewGetLikesForBlogPostController(validate)
+	createCarOfferController := controllers.NewCreateCarOfferController(validate)
+	updateCarOfferController := controllers.NewUpdateCarOfferController(validate)
+	deleteCarOfferController := controllers.NewDeleteCarOfferController(validate)
+	getCarOfferController := controllers.NewGetCarOfferController(validate)
+	getCarOffersController := controllers.NewGetCarOffersController(validate)
+	createCarOrderController := controllers2.NewCreateCarOrderController(validate)
+	updateCarOrderController := controllers2.NewUpdateCarOrderController(validate)
+	deleteCarOrderController := controllers2.NewDeleteCarOrderController(validate)
+	getCarOrderController := controllers2.NewGetCarOrderController(validate)
+	getCarOrdersController := controllers2.NewGetCarOrdersController(validate)
+	addImageController := controllers3.NewAddImageController(validate)
+	deleteImageController := controllers3.NewDeleteImageController(validate)
 	getTagsController := controllers4.NewGetTagsController(validate)
-	v := controllers5.ProvideControllers(createBlogPostController, getBlogPostController, getBlogPostsController, updateBlogPostController, deleteBlogPostController, createBlogPostCommentController, deleteBlogPostCommentController, getBlogPostCommentsController, createLikeForBlogPostController, deleteLikeForBlogPostController, getLikesForBlogPostController, getTagsController)
+	v := controllers5.ProvideControllers(createCarOfferController, updateCarOfferController, deleteCarOfferController, getCarOfferController, getCarOffersController, createCarOrderController, updateCarOrderController, deleteCarOrderController, getCarOrderController, getCarOrdersController, addImageController, deleteImageController, getTagsController)
 	controllersControllers := controllers5.NewControllers(v)
 	serverServer := server.ProvideServer(controllersControllers, config3)
 	return serverServer, nil
@@ -87,13 +91,15 @@ func InitializeApi(blogQueryRepo repository_interfaces.BlogPostQueryRepository, 
 // wire.go:
 
 type InfrastructureComponents struct {
-	Config             *config.Config
-	BlogQueryRepo      repository_interfaces.BlogPostQueryRepository
-	BlogCommandRepo    repository_interfaces.BlogPostCommandRepository
-	CommentQueryRepo   repository_interfaces2.BlogPostCommentQueryRepository
-	CommentCommandRepo repository_interfaces2.BlogPostCommentCommandRepository
-	LikeQueryRepo      repository_interfaces3.BlogPostLikeQueryRepository
-	LikeCommandRepo    repository_interfaces3.BlogPostLikeCommandRepository
-	TagQueryRepo       repository_interfaces4.BlogPostTagQueryRepository
-	DataFetcher        datafetcher2.MicroserviceConnector
+	Config                *config.Config
+	CarOfferQueryRepo     repository_interfaces.CarOfferQueryRepository
+	CarOfferCommandRepo   repository_interfaces.CarOfferCommandRepository
+	CarOrderQueryRepo     repository_interfaces2.CarOrderQueryRepository
+	CarOrderCommandRepo   repository_interfaces2.CarOrderCommandRepository
+	CarImageQueryRepo     repository_interfaces3.CarImageQueryRepository
+	CarImageCommandRepo   repository_interfaces3.CarImageCommandRepository
+	CarTagQueryRepo       repository_interfaces4.CarTagQueryRepository
+	CarTagCommandRepo     repository_interfaces4.CarTagCommandRepository
+	connector             service_interfaces.MicroserviceConnector
+	orderManagementSystem service_interfaces.OrderManagementSystem
 }

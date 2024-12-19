@@ -57,15 +57,16 @@ func (h *UpdateCarOrderCommandHandler) Handle(ctx context.Context, command *Upda
 	}
 
 	carOrder := &models.CarOrderModel{
-		Id:               command.Id,
+		Id:               existingOrder.Id,
 		UserId:           existingOrder.UserId,
-		CarOfferId:       command.CarOfferId,
+		CarOfferId:       existingOrder.CarOfferId,
 		StartDate:        command.StartDate,
 		EndDate:          command.EndDate,
 		DeliveryLocation: command.DeliveryLocation,
 		ReturnLocation:   command.ReturnLocation,
 		NumOfDrivers:     command.NumOfDrivers,
-		TotalCost:        command.TotalCost,
+		TotalCost:        command.TotalCost, //todo: check if this is correct
+		Status:           command.Status,
 	}
 
 	err = h.carOrderCommandRepository.UpdateCarOrder(ctx, carOrder)

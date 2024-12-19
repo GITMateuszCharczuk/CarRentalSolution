@@ -13,7 +13,7 @@ func ProvideOrderStatusChecker(
 	orderCommandRepo order_repository.CarOrderCommandRepository,
 	offerQueryRepo offer_repository.CarOfferQueryRepository,
 	microserviceConnector services.MicroserviceConnector,
-) *OrderStatusChecker {
+) services.OrderManagementSystem {
 	return NewOrderStatusChecker(orderQueryRepo, orderCommandRepo, offerQueryRepo, microserviceConnector)
 }
 

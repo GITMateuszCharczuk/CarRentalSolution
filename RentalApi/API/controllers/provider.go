@@ -2,10 +2,10 @@ package controllers
 
 import (
 	base "rental-api/API/controllers/base"
-	blog "rental-api/API/controllers/blog_post"
-	comment "rental-api/API/controllers/blog_post_comment"
-	like "rental-api/API/controllers/blog_post_like"
-	tag "rental-api/API/controllers/blog_post_tag"
+	car_image "rental-api/API/controllers/car_image"
+	car_offer "rental-api/API/controllers/car_offer"
+	car_order "rental-api/API/controllers/car_order"
+	car_tag "rental-api/API/controllers/car_tag"
 
 	"github.com/google/wire"
 )
@@ -13,18 +13,23 @@ import (
 var ControllerSet = wire.NewSet(
 	NewControllers,
 	ProvideControllers,
-	blog.NewCreateBlogPostController,
-	blog.NewGetBlogPostController,
-	blog.NewGetBlogPostsController,
-	blog.NewUpdateBlogPostController,
-	blog.NewDeleteBlogPostController,
-	comment.NewCreateBlogPostCommentController,
-	comment.NewDeleteBlogPostCommentController,
-	comment.NewGetBlogPostCommentsController,
-	like.NewCreateLikeForBlogPostController,
-	like.NewDeleteLikeForBlogPostController,
-	like.NewGetLikesForBlogPostController,
-	tag.NewGetTagsController,
+	// Car Offer Controllers
+	car_offer.NewCreateCarOfferController,
+	car_offer.NewUpdateCarOfferController,
+	car_offer.NewDeleteCarOfferController,
+	car_offer.NewGetCarOfferController,
+	car_offer.NewGetCarOffersController,
+	// Car Order Controllers
+	car_order.NewCreateCarOrderController,
+	car_order.NewUpdateCarOrderController,
+	car_order.NewDeleteCarOrderController,
+	car_order.NewGetCarOrderController,
+	car_order.NewGetCarOrdersController,
+	// Car Image Controllers
+	car_image.NewAddImageController,
+	car_image.NewDeleteImageController,
+	// Car Tag Controllers
+	car_tag.NewGetTagsController,
 )
 
 type Controllers struct {
@@ -36,45 +41,41 @@ func NewControllers(all []base.Controller) *Controllers {
 }
 
 func ProvideControllers(
-	// Blog Post Controllers
-	createBlogPostController *blog.CreateBlogPostController,
-	getBlogPostController *blog.GetBlogPostController,
-	getBlogPostsController *blog.GetBlogPostsController,
-	updateBlogPostController *blog.UpdateBlogPostController,
-	deleteBlogPostController *blog.DeleteBlogPostController,
-
-	// Blog Post Comment Controllers
-	createBlogPostCommentController *comment.CreateBlogPostCommentController,
-	deleteBlogPostCommentController *comment.DeleteBlogPostCommentController,
-	getBlogPostCommentsController *comment.GetBlogPostCommentsController,
-
-	// Blog Post Like Controllers
-	createLikeForBlogPostController *like.CreateLikeForBlogPostController,
-	deleteLikeForBlogPostController *like.DeleteLikeForBlogPostController,
-	getLikesForBlogPostController *like.GetLikesForBlogPostController,
-
-	// Blog Post Tag Controllers
-	getTagsController *tag.GetTagsController,
+	// Car Offer Controllers
+	createCarOfferController *car_offer.CreateCarOfferController,
+	updateCarOfferController *car_offer.UpdateCarOfferController,
+	deleteCarOfferController *car_offer.DeleteCarOfferController,
+	getCarOfferController *car_offer.GetCarOfferController,
+	getCarOffersController *car_offer.GetCarOffersController,
+	// Car Order Controllers
+	createCarOrderController *car_order.CreateCarOrderController,
+	updateCarOrderController *car_order.UpdateCarOrderController,
+	deleteCarOrderController *car_order.DeleteCarOrderController,
+	getCarOrderController *car_order.GetCarOrderController,
+	getCarOrdersController *car_order.GetCarOrdersController,
+	// Car Image Controllers
+	addImageController *car_image.AddImageController,
+	deleteImageController *car_image.DeleteImageController,
+	// Car Tag Controllers
+	getTagsController *car_tag.GetTagsController,
 ) []base.Controller {
 	return []base.Controller{
-		// Blog Post Controllers
-		createBlogPostController,
-		getBlogPostController,
-		getBlogPostsController,
-		updateBlogPostController,
-		deleteBlogPostController,
-
-		// Blog Post Comment Controllers
-		createBlogPostCommentController,
-		deleteBlogPostCommentController,
-		getBlogPostCommentsController,
-
-		// Blog Post Like Controllers
-		createLikeForBlogPostController,
-		deleteLikeForBlogPostController,
-		getLikesForBlogPostController,
-
-		// Blog Post Tag Controllers
+		// Car Offer Controllers
+		createCarOfferController,
+		updateCarOfferController,
+		deleteCarOfferController,
+		getCarOfferController,
+		getCarOffersController,
+		// Car Order Controllers
+		createCarOrderController,
+		updateCarOrderController,
+		deleteCarOrderController,
+		getCarOrderController,
+		getCarOrdersController,
+		// Car Image Controllers
+		addImageController,
+		deleteImageController,
+		// Car Tag Controllers
 		getTagsController,
 	}
 }
@@ -82,16 +83,21 @@ func ProvideControllers(
 var WireSet = wire.NewSet(
 	ProvideControllers,
 	NewControllers,
-	blog.NewCreateBlogPostController,
-	blog.NewGetBlogPostController,
-	blog.NewGetBlogPostsController,
-	blog.NewUpdateBlogPostController,
-	blog.NewDeleteBlogPostController,
-	comment.NewCreateBlogPostCommentController,
-	comment.NewDeleteBlogPostCommentController,
-	comment.NewGetBlogPostCommentsController,
-	like.NewCreateLikeForBlogPostController,
-	like.NewDeleteLikeForBlogPostController,
-	like.NewGetLikesForBlogPostController,
-	tag.NewGetTagsController,
+	// Car Offer Controllers
+	car_offer.NewCreateCarOfferController,
+	car_offer.NewUpdateCarOfferController,
+	car_offer.NewDeleteCarOfferController,
+	car_offer.NewGetCarOfferController,
+	car_offer.NewGetCarOffersController,
+	// Car Order Controllers
+	car_order.NewCreateCarOrderController,
+	car_order.NewUpdateCarOrderController,
+	car_order.NewDeleteCarOrderController,
+	car_order.NewGetCarOrderController,
+	car_order.NewGetCarOrdersController,
+	// Car Image Controllers
+	car_image.NewAddImageController,
+	car_image.NewDeleteImageController,
+	// Car Tag Controllers
+	car_tag.NewGetTagsController,
 )
