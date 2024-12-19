@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\RentalModule.Infrastructure.FakeSeed.props" />
-</Project>
