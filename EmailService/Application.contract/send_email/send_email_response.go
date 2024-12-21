@@ -16,6 +16,16 @@ type SendEmailResponse400 struct {
 	Message string `json:"message" example:"Invalid request for sending email." swaggertype:"string"`
 }
 
+type SendEmailResponse401 struct {
+	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
+	Message string `json:"message" example:"Unauthorized." swaggertype:"string"`
+}
+
+type SendEmailResponse403 struct {
+	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
+	Message string `json:"message" example:"Forbidden." swaggertype:"string"`
+}
+
 type SendEmailResponse500 struct {
 	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
 	Message string `json:"message" example:"An unexpected error occurred while sending email." swaggertype:"string"`

@@ -20,10 +20,10 @@ func NewGetFileQueryHandler(fileRepo repository_interfaces.FileRepository) *GetF
 }
 
 func (cmd *GetFileQueryHandler) Handle(ctx context.Context, query *GetFileQuery) (*contract.GetFileResponse, error) {
-	if query.FileID == "" || query.OwnerID == "" {
+	if query.FileID == "" {
 		return &contract.GetFileResponse{
 			Title:   "StatusBadRequest",
-			Message: "Missing required query parameters: file_id or owner_id",
+			Message: "Missing required query parameters: file_id",
 		}, nil
 	}
 

@@ -31,7 +31,7 @@ func NewGetCarOrdersController(validator *validator.Validate) *GetCarOrdersContr
 // @Param end_date query string false "Filter by end date" example:"2024-01-01T00:00:00Z"
 // @Param user_id query string false "Filter by user ID" example:"123e4567-e89b-12d3-a456-426614174000"
 // @Param car_offer_id query string false "Filter by car offer ID" example:"123e4567-e89b-12d3-a456-426614174000"
-// @Param status query string false "Filter by status" example:"pending"
+// @Param statuses query []string false "Filter by statuses" example:"pending,active,overdue"
 // @Param date_filter_type query string false "Type of date filter" example:"created"
 // @Param sort_fields query []string false "Sort fields (field:asc|desc)" example:"created_at:desc"
 // @Success 200 {object} contract.GetCarOrdersResponse200 "Car orders retrieved successfully"
@@ -46,7 +46,7 @@ func (h *GetCarOrdersController) Handle(c *gin.Context) {
 		EndDate:        c.Query("end_date"),
 		UserId:         c.Query("user_id"),
 		CarOfferId:     c.Query("car_offer_id"),
-		Status:         c.Query("status"),
+		Statuses:       services.ExtractQueryArray(c, "statuses"),
 		DateFilterType: c.Query("date_filter_type"),
 		SortQuery:      services.ExtractSortQuery(c),
 		Pagination:     services.ExtractPagination(c),

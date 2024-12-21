@@ -18,6 +18,7 @@ type Config struct {
 	StreamSubjects  string
 	ServerAddress   string
 	ServiceAddress  string
+	IdentityApiUrl  string
 }
 
 var (
@@ -46,6 +47,7 @@ func NewConfig(path string) (*Config, error) {
 			StreamSubjects:  getEnv("STREAM_SUBJECTS", "file-events.*"),
 			ServerAddress:   getEnv("SERVER_ADDRESS", ":8081"),
 			ServiceAddress:  getEnv("SERVICE_ADDRESS", "/file-storage/api"),
+			IdentityApiUrl:  getEnv("IDENTITY_API_URL", "http://localhost:8080"),
 		}
 	})
 	return instance, err

@@ -23,7 +23,7 @@ func NewSaveFileController() *SaveFileController {
 // @Tags files
 // @Accept multipart/form-data
 // @Produce json
-// @Param owner_id formData string true "Owner ID associated with the file"
+// @Param token query string true "JWT token"
 // @Param file formData file true "Binary file content (JPEG, PNG, etc.) to be saved"
 // @Success 201 {object} contract.SaveFileResponse201 "File saved successfully with unique ID and details"
 // @Failure 400 {object} contract.SaveFileResponse400 "Invalid request format or missing parameters"
@@ -31,21 +31,18 @@ func NewSaveFileController() *SaveFileController {
 // @Router /file-storage/api/files [post]
 func (h *SaveFileController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
-
-	ownerID := c.PostForm("owner_id")
 	file, err := c.FormFile("file")
-
-	if err != nil || ownerID == "" {
+	if err != nil {
 		responseSender.Send(contract.SaveFileResponse{
 			Title:   "StatusBadRequest",
-			Message: "Missing file or owner_id",
+			Message: "Missing file",
 		})
 		return
 	}
 
 	req := &contract.SaveFileRequest{
-		OwnerID: ownerID,
-		File:    file,
+		JwtToken: services.GetJwtTokenFromQuery(c),
+		File:     file,
 	}
 
 	command := mappers.MapToSaveFileCommand(req)

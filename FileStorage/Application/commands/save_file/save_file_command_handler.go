@@ -4,27 +4,47 @@ package commands
 import (
 	"context"
 	contract "file-storage/Application.contract/SaveFile"
+	"file-storage/Application/utils"
 	"file-storage/Domain/constants"
 	"file-storage/Domain/event"
 	"file-storage/Domain/models"
+	interfaces "file-storage/Domain/service_interfaces"
 	"fmt"
 	"io"
+	"log"
 	"path/filepath"
 
 	"github.com/google/uuid"
 )
 
 type SaveFileCommandHandler struct {
-	eventPublisher event.EventPublisher
+	eventPublisher        event.EventPublisher
+	microserviceConnector interfaces.MicroserviceConnector
 }
 
-func NewSaveFileCommandHandler(eventPublisher event.EventPublisher) *SaveFileCommandHandler {
+func NewSaveFileCommandHandler(eventPublisher event.EventPublisher, microserviceConnector interfaces.MicroserviceConnector) *SaveFileCommandHandler {
 	return &SaveFileCommandHandler{
-		eventPublisher: eventPublisher,
+		eventPublisher:        eventPublisher,
+		microserviceConnector: microserviceConnector,
 	}
 }
 
 func (cmd *SaveFileCommandHandler) Handle(ctx context.Context, command *SaveFileCommand) (*contract.SaveFileResponse, error) {
+	user, err := cmd.microserviceConnector.GetUserInternalInfo(command.JwtToken)
+	if err != nil {
+		return &contract.SaveFileResponse{
+			Title:   "StatusUnauthorized",
+			Message: "Invalid JWT token",
+		}, nil
+	}
+	log.Println(user)
+	if !utils.IsAdminOrSuperAdmin(user.Roles) {
+		return &contract.SaveFileResponse{
+			Title:   "StatusForbidden",
+			Message: "You are not authorized to upload files",
+		}, nil
+	}
+
 	fileExtension := filepath.Ext(command.File.Filename)
 	if fileExtension == "" {
 		return &contract.SaveFileResponse{
@@ -69,7 +89,7 @@ func (cmd *SaveFileCommandHandler) Handle(ctx context.Context, command *SaveFile
 
 	fileData := models.File{
 		ID:       fileId,
-		OwnerID:  command.OwnerID,
+		OwnerID:  user.ID,
 		FileName: command.File.Filename,
 		Content:  content,
 	}

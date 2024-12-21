@@ -7,7 +7,7 @@ import (
 	external_models "rental-api/Domain/models/external"
 )
 
-func (c *OrderStatusChecker) prepareNotification(order domestic_models.CarOrderModel, carOffer domestic_models.CarOfferModel, status constants.CarOrderStatus) external_models.Email {
+func (c *OrderStatusChecker) prepareNotification(order domestic_models.CarOrderModel, carOffer domestic_models.CarOfferModel, status constants.CarOrderStatus) external_models.InternalEmail {
 	var subject, body string
 	switch status {
 	case constants.OrderStatusPreparing:
@@ -21,7 +21,7 @@ func (c *OrderStatusChecker) prepareNotification(order domestic_models.CarOrderM
 		body = c.prepareDefaultNotificationMessage(order, carOffer, status)
 	}
 
-	return external_models.Email{
+	return external_models.InternalEmail{
 		To:      carOffer.CustodianEmail,
 		Subject: subject,
 		Body:    body,

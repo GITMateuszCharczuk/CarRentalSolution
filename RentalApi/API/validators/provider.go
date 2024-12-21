@@ -14,6 +14,8 @@ func ProvideValidator() *validator.Validate {
 	v.RegisterValidation("datetime", validateDateTime)
 	v.RegisterValidation("futuredate", validateFutureDate)
 	v.RegisterValidation("gtdate", validateGreaterThanDate)
+	v.RegisterValidation("validCarOrderStatus", validateCarOrderStatus)
+	v.RegisterValidation("validCarOrderStatusArray", validateCarOrderStatusArray)
 	RegisterSortQueryValidator[models.CarOfferModel](v, "validCarOfferSortable")
 	RegisterSortQueryValidator[models.CarOrderModel](v, "validCarOrderSortable")
 	RegisterSortQueryValidator[models.CarOfferTagModel](v, "validCarOfferTagSortable")

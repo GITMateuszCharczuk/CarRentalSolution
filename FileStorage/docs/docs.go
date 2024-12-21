@@ -31,9 +31,9 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Owner ID associated with the file",
-                        "name": "owner_id",
-                        "in": "formData",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -66,7 +66,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/file-storage/api/files/delete": {
+        "/file-storage/api/files/delete/{file_id}": {
             "delete": {
                 "description": "Deletes a file from storage by its unique ID. The file ID should be a valid identifier for an existing file.",
                 "consumes": [
@@ -81,13 +81,18 @@ const docTemplate = `{
                 "summary": "Delete a file",
                 "parameters": [
                     {
-                        "description": "Delete file request object",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteFileRequest"
-                        }
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "File ID",
+                        "name": "file_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -141,13 +146,6 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Owner ID associated with the file",
-                        "name": "owner_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
                         "description": "File binary content or file to download",
                         "name": "download",
                         "in": "query"
@@ -183,17 +181,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "contract.DeleteFileRequest": {
-            "type": "object",
-            "properties": {
-                "file_id": {
-                    "type": "string"
-                },
-                "owner_id": {
-                    "type": "string"
-                }
-            }
-        },
         "contract.DeleteFileResponse200": {
             "type": "object",
             "properties": {

@@ -8,7 +8,7 @@ import (
 )
 
 func ProvideMicroserviceConnectorImpl(cfg *config.Config) interfaces.MicroserviceConnector {
-	return NewMicroserviceConnectorImpl(cfg.IdentityApiUrl, cfg.EmailServiceBaseUrl, cfg.CompanyEmail)
+	return NewMicroserviceConnectorImpl(cfg.IdentityApiUrl, cfg.EmailServiceBaseUrl)
 }
 
 var WireSet = wire.NewSet(ProvideMicroserviceConnectorImpl)

@@ -11,12 +11,14 @@ import (
 	"email-service/API/server"
 	"email-service/Domain/event"
 	"email-service/Domain/fetcher"
+	"email-service/Domain/service_interfaces"
 	"email-service/Infrastructure/config"
 	"email-service/Infrastructure/data_fetcher"
 	"email-service/Infrastructure/email_sender"
 	"email-service/Infrastructure/event_processor"
 	"email-service/Infrastructure/event_publisher"
 	"email-service/Infrastructure/event_receiver"
+	"email-service/Infrastructure/microservice_connector"
 	"email-service/Infrastructure/queue"
 )
 
@@ -42,21 +44,24 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 		return nil, err
 	}
 	dataFetcher := datafetcher.ProvideDataFetcherImpl(configConfig)
+	microserviceConnector := microservice_connector.ProvideMicroserviceConnectorImpl(configConfig)
 	infrastructureComponents := &InfrastructureComponents{
-		EventPublisher: eventPublisher,
-		EventReceiver:  eventReceiver,
-		DataFetcher:    dataFetcher,
-		Config:         configConfig,
+		EventPublisher:        eventPublisher,
+		EventReceiver:         eventReceiver,
+		DataFetcher:           dataFetcher,
+		MicroserviceConnector: microserviceConnector,
+		Config:                configConfig,
 	}
 	return infrastructureComponents, nil
 }
 
-func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher, cfg *config.Config) (*server.Server, error) {
+func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPublisher, cfg *config.Config, MicroserviceConnector service_interfaces.MicroserviceConnector) (*server.Server, error) {
 	validate := controllers.ProvideValidator()
 	getEmailController := controllers.NewGetEmailController(validate)
 	getEmailsController := controllers.NewGetEmailsController(validate)
 	sendEmailController := controllers.NewSendEmailController(validate)
-	v := controllers.ProvideControllers(getEmailController, getEmailsController, sendEmailController)
+	sendInternalEmailController := controllers.NewSendInternalEmailController(validate)
+	v := controllers.ProvideControllers(getEmailController, getEmailsController, sendEmailController, sendInternalEmailController)
 	controllersControllers := controllers.NewControllers(v)
 	serverServer := server.ProvideServer(controllersControllers, cfg)
 	return serverServer, nil
@@ -65,8 +70,9 @@ func InitializeApi(DataFetcher fetcher.DataFetcher, EventPublisher event.EventPu
 // wire.go:
 
 type InfrastructureComponents struct {
-	EventPublisher event.EventPublisher
-	EventReceiver  event.EventReceiver
-	DataFetcher    fetcher.DataFetcher
-	Config         *config.Config
+	EventPublisher        event.EventPublisher
+	EventReceiver         event.EventReceiver
+	DataFetcher           fetcher.DataFetcher
+	MicroserviceConnector service_interfaces.MicroserviceConnector
+	Config                *config.Config
 }

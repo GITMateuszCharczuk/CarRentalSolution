@@ -17,8 +17,9 @@ func ProvideControllers(
 	getEmailController *GetEmailController,
 	getEmailsController *GetEmailsController,
 	SendEmailController *SendEmailController,
+	SendInternalEmailController *SendInternalEmailController,
 ) []Controller {
-	return []Controller{getEmailController, getEmailsController, SendEmailController}
+	return []Controller{getEmailController, getEmailsController, SendEmailController, SendInternalEmailController}
 }
 
 func ProvideValidator() *validator.Validate {
@@ -29,6 +30,7 @@ var WireSet = wire.NewSet(
 	NewGetEmailController,
 	NewGetEmailsController,
 	NewSendEmailController,
+	NewSendInternalEmailController,
 	ProvideControllers,
 	NewControllers,
 	ProvideValidator,

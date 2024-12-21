@@ -13,7 +13,7 @@ type GetCarOrdersRequest struct {
 	StartDate             string   `json:"startDate" example:"2023-12-12T00:00:00Z" swaggertype:"string"`
 	EndDate               string   `json:"endDate" example:"2023-12-12T00:00:00Z" swaggertype:"string"`
 	CarOfferId            string   `json:"carOfferId" example:"123e4567-e89b-12d3-a456-426614174000" swaggertype:"string"`
-	Status                string   `json:"status" example:"pending" swaggertype:"string"`
-	DateFilterType        string   `json:"dateFilterType" example:"startDate" swaggertype:"string"`
+	Statuses              []string `json:"statuses" example:"PENDING,ACTIVE,OVERDUE" swaggertype:"array,string" validate:"validCarOrderStatusArray"`
+	DateFilterType        string   `json:"dateFilterType" example:"created" swaggertype:"string"`
 	models.JwtToken       `json:",inline"`
 }

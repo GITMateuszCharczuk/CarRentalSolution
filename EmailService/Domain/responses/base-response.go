@@ -22,6 +22,10 @@ func NewBaseResponse(statusCode int, customMessage ...string) BaseResponse {
 		message = "Resource not found"
 	case constants.StatusConflict:
 		message = "Resource already exists"
+	case constants.StatusUnauthorized:
+		message = "Unauthorized"
+	case constants.StatusForbidden:
+		message = "Forbidden"
 	case constants.StatusInternalServerError:
 		message = "Internal server error"
 	default:

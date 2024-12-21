@@ -117,6 +117,7 @@ services:
       SERVICE_ADDRESS: /email-service/api
       SERVICE_PORT: :8084
       DEFAULT_EMAIL_SENDER: test@test.com
+      IDENTITY_API_URL: http://identity-api:8085
       ENV: prod
     networks:
       - docker-network
@@ -135,6 +136,7 @@ services:
       ENV: prod
       SERVER_ADDRESS: :8082
       SERVICE_ADDRESS: /file-storage/api
+      IDENTITY_API_URL: http://identity-api:8085
     networks:
       - docker-network
 networks:

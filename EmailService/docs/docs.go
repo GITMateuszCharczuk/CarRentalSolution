@@ -30,6 +30,13 @@ const docTemplate = `{
                 "summary": "Get all emails",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "JWT Token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "default": 1,
                         "description": "Page number",
@@ -55,6 +62,18 @@ const docTemplate = `{
                         "description": "Invalid request parameters",
                         "schema": {
                             "$ref": "#/definitions/contract.GetEmailsResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetEmailsResponse401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetEmailsResponse403"
                         }
                     },
                     "500": {
@@ -86,6 +105,13 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "JWT Token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -99,6 +125,18 @@ const docTemplate = `{
                         "description": "Invalid request parameters",
                         "schema": {
                             "$ref": "#/definitions/contract.GetEmailResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetEmailResponse401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetEmailResponse403"
                         }
                     },
                     "404": {
@@ -131,6 +169,13 @@ const docTemplate = `{
                 "summary": "Send an email",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "description": "Email data",
                         "name": "email",
                         "in": "body",
@@ -153,10 +198,68 @@ const docTemplate = `{
                             "$ref": "#/definitions/contract.SendEmailResponse400"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.SendEmailResponse401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/contract.SendEmailResponse403"
+                        }
+                    },
                     "500": {
                         "description": "Server error during email sending",
                         "schema": {
                             "$ref": "#/definitions/contract.SendEmailResponse500"
+                        }
+                    }
+                }
+            }
+        },
+        "/email-service/api/send-internal-email": {
+            "post": {
+                "description": "Sends an email using the provided data.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "emails"
+                ],
+                "summary": "Send an email",
+                "parameters": [
+                    {
+                        "description": "Email data",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.SendInternalEmailRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Email sent successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.SendInternalEmailResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format or data",
+                        "schema": {
+                            "$ref": "#/definitions/contract.SendInternalEmailResponse400"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during email sending",
+                        "schema": {
+                            "$ref": "#/definitions/contract.SendInternalEmailResponse500"
                         }
                     }
                 }
@@ -189,6 +292,38 @@ const docTemplate = `{
                 "message": {
                     "type": "string",
                     "example": "Invalid email request."
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetEmailResponse401": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Unauthorized."
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetEmailResponse403": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Forbidden."
                 },
                 "success": {
                     "type": "boolean",
@@ -266,6 +401,44 @@ const docTemplate = `{
                 }
             }
         },
+        "contract.GetEmailsResponse401": {
+            "type": "object",
+            "properties": {
+                "emails": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Unauthorized."
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetEmailsResponse403": {
+            "type": "object",
+            "properties": {
+                "emails": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Forbidden."
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
         "contract.GetEmailsResponse500": {
             "type": "object",
             "properties": {
@@ -290,8 +463,7 @@ const docTemplate = `{
             "required": [
                 "body",
                 "from",
-                "subject",
-                "to"
+                "subject"
             ],
             "properties": {
                 "body": {
@@ -309,10 +481,6 @@ const docTemplate = `{
                     "maxLength": 100,
                     "minLength": 5,
                     "example": "Hello"
-                },
-                "to": {
-                    "type": "string",
-                    "example": "recipient@example.com"
                 }
             }
         },
@@ -342,7 +510,98 @@ const docTemplate = `{
                 }
             }
         },
+        "contract.SendEmailResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Unauthorized."
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.SendEmailResponse403": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Forbidden."
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
         "contract.SendEmailResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "An unexpected error occurred while sending email."
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.SendInternalEmailRequest": {
+            "type": "object",
+            "required": [
+                "body",
+                "subject",
+                "to"
+            ],
+            "properties": {
+                "body": {
+                    "type": "string",
+                    "maxLength": 1000,
+                    "minLength": 5,
+                    "example": "This is the body of the email."
+                },
+                "subject": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 5,
+                    "example": "Hello"
+                },
+                "to": {
+                    "type": "string",
+                    "example": "recipient@example.com"
+                }
+            }
+        },
+        "contract.SendInternalEmailResponse200": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Email sent successfully."
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.SendInternalEmailResponse400": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request for sending email."
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.SendInternalEmailResponse500": {
             "type": "object",
             "properties": {
                 "message": {

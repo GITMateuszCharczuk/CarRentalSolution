@@ -9,7 +9,6 @@ import (
 func RegisterIdentityApiRoutes(router *gin.Engine, serviceURL string, mainApiRoute string) {
 	// User management routes
 	router.GET(mainApiRoute+"/users", services.ReverseProxy(serviceURL, "/identity-api/api", mainApiRoute))
-	router.GET(mainApiRoute+"/user/internal", services.ReverseProxy(serviceURL, "/identity-api/api", mainApiRoute))
 	router.GET(mainApiRoute+"/user/info", services.ReverseProxy(serviceURL, "/identity-api/api", mainApiRoute))
 	router.PUT(mainApiRoute+"/user", services.ReverseProxy(serviceURL, "/identity-api/api", mainApiRoute))
 	router.DELETE(mainApiRoute+"/user/:id", services.ReverseProxy(serviceURL, "/identity-api/api", mainApiRoute))

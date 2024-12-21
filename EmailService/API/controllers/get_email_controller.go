@@ -25,15 +25,20 @@ func NewGetEmailController(validator *validator.Validate) *GetEmailController {
 // @Accept json
 // @Produce json
 // @Param id path string true "Unique Email ID"
+// @Param token query string true "JWT Token"
 // @Success 200 {object} contract.GetEmailResponse200 "Email details retrieved successfully"
 // @Failure 400 {object} contract.GetEmailResponse400 "Invalid request parameters"
+// @Failure 401 {object} contract.GetEmailResponse401 "Unauthorized"
+// @Failure 403 {object} contract.GetEmailResponse403 "Forbidden"
 // @Failure 404 {object} contract.GetEmailResponse404 "Email not found"
 // @Failure 500 {object} contract.GetEmailResponse500 "Server error during email retrieval"
 // @Router /email-service/api/emails/{id} [get]
 func (h *GetEmailController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
-	emailID := c.Param("id")
-	req := contract.GetEmailRequest{ID: emailID}
+	req := contract.GetEmailRequest{
+		ID:       services.ExtractFromPath(c, "id"),
+		JwtToken: services.GetJwtTokenFromQuery(c),
+	}
 	if validateResponse := services.ValidateRequest[contract.GetEmailResponse](&req, h.validator); validateResponse != nil {
 		responseSender.Send(validateResponse)
 		return

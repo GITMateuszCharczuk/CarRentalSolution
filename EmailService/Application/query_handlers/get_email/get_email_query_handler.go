@@ -3,21 +3,33 @@ package queries
 import (
 	"context"
 	contract "email-service/Application.contract/get_email"
+	"email-service/Application/utils"
 	fetcher "email-service/Domain/fetcher"
 	"email-service/Domain/models"
 	pagination "email-service/Domain/requests"
 	"email-service/Domain/responses"
+	service_interfaces "email-service/Domain/service_interfaces"
 )
 
 type GetEmailQueryHandler struct {
-	fetcher fetcher.DataFetcher
+	fetcher               fetcher.DataFetcher
+	microserviceConnector service_interfaces.MicroserviceConnector
 }
 
-func NewGetEmailQueryHandler(fetcher fetcher.DataFetcher) *GetEmailQueryHandler {
-	return &GetEmailQueryHandler{fetcher: fetcher}
+func NewGetEmailQueryHandler(fetcher fetcher.DataFetcher, microserviceConnector service_interfaces.MicroserviceConnector) *GetEmailQueryHandler {
+	return &GetEmailQueryHandler{fetcher: fetcher, microserviceConnector: microserviceConnector}
 }
 
 func (h *GetEmailQueryHandler) Handle(ctx context.Context, query *GetEmailQuery) (*contract.GetEmailResponse, error) {
+	user, err := h.microserviceConnector.GetUserInternalInfo(query.JwtToken)
+	if err != nil {
+		return createResponse(401, "Invalid JWT token", &models.Email{}), nil
+	}
+
+	if !utils.IsAdminOrSuperAdmin(user.Roles) {
+		return createResponse(403, "You are not authorized retrive emails", &models.Email{}), nil
+	}
+
 	emptyPagination := pagination.Pagination{}
 	emails, err := h.fetcher.GetEmails(emptyPagination)
 	if err != nil {

@@ -25,7 +25,6 @@ func NewGetFileController() *GetFileController {
 // @Accept json
 // @Produce octet-stream
 // @Param file_id query string true "Unique File ID for retrieval"
-// @Param owner_id query string true "Owner ID associated with the file"
 // @Param download query string false "File binary content or file to download"
 // @Success 200 {file} binary "Successful retrieval of file in binary format or file to download in attachment"
 // @Failure 400 {object} contract.GetFileResponse400 "Request contains invalid format or parameters"
@@ -36,12 +35,10 @@ func (h *GetFileController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 
 	fileID := c.Query("file_id")
-	ownerID := c.Query("owner_id")
 	download := c.Query("download")
 
 	req := contract.GetFileRequest{
-		FileID:  fileID,
-		OwnerID: ownerID,
+		FileID: fileID,
 	}
 
 	query := mappers.MapToGetFileQuery(&req)

@@ -11,8 +11,10 @@ import (
 	"file-storage/API/server"
 	"file-storage/Domain/event"
 	"file-storage/Domain/repository_interfaces"
+	"file-storage/Domain/service_interfaces"
 	"file-storage/Infrastructure/config"
 	"file-storage/Infrastructure/db"
+	"file-storage/Infrastructure/microservice_connector"
 	"file-storage/Infrastructure/processor"
 	"file-storage/Infrastructure/publisher"
 	"file-storage/Infrastructure/queue"
@@ -23,10 +25,11 @@ import (
 )
 
 type InfrastructureComponents struct {
-	Config         *config.Config
-	FileRepository repository_interfaces.FileRepository
-	EventPublisher event.EventPublisher
-	EventReceiver  event.EventReceiver
+	Config                *config.Config
+	FileRepository        repository_interfaces.FileRepository
+	EventPublisher        event.EventPublisher
+	EventReceiver         event.EventReceiver
+	MicroserviceConnector service_interfaces.MicroserviceConnector
 }
 
 func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
@@ -38,12 +41,13 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 		publisher.WireSet,
 		processor.WireSet,
 		receiver.WireSet,
+		microservice_connector.WireSet,
 		wire.Struct(new(InfrastructureComponents), "*"),
 	)
 	return &InfrastructureComponents{}, nil
 }
 
-func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPublisher event.EventPublisher, Config *config.Config) (*server.Server, error) {
+func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPublisher event.EventPublisher, MicroserviceConnector service_interfaces.MicroserviceConnector, Config *config.Config) (*server.Server, error) {
 	wire.Build(
 		controllers.WireSet,
 		server.WireSet,

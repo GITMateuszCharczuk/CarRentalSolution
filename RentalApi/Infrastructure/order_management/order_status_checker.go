@@ -42,6 +42,7 @@ func (c *OrderStatusChecker) StartPeriodicCheck(ctx context.Context) {
 				if err := c.CheckOrderStatuses(ctx); err != nil {
 					log.Printf("Error checking order statuses: %v", err)
 				}
+				log.Println("Order statuses checked at: ", time.Now().Format(time.RFC3339))
 			}
 		}
 	}()

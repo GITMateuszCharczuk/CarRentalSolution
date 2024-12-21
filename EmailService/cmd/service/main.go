@@ -19,10 +19,10 @@ func main() {
 		log.Fatalf("Failed to initialize Infrastructure: %v", err)
 	}
 
-	commandHandlers.RegisterCommandHandlers(components.EventPublisher, components.Config)
-	queryHandlers.RegisterQueryHandlers(components.DataFetcher)
+	commandHandlers.RegisterCommandHandlers(components.EventPublisher, components.Config, components.MicroserviceConnector)
+	queryHandlers.RegisterQueryHandlers(components.DataFetcher, components.MicroserviceConnector)
 
-	server, err := InitializeApi(components.DataFetcher, components.EventPublisher, components.Config)
+	server, err := InitializeApi(components.DataFetcher, components.EventPublisher, components.Config, components.MicroserviceConnector)
 	if err != nil {
 		log.Fatalf("Failed to initialize API: %v", err)
 	}

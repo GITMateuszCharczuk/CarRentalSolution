@@ -28,6 +28,18 @@ type GetEmailsResponse400 struct {
 	Emails  []models.Email `json:"emails" swaggertype:"array,object"`
 }
 
+type GetEmailsResponse401 struct {
+	Success bool           `json:"success" example:"false" swaggertype:"boolean"`
+	Message string         `json:"message" example:"Unauthorized." swaggertype:"string"`
+	Emails  []models.Email `json:"emails" swaggertype:"array,object"`
+}
+
+type GetEmailsResponse403 struct {
+	Success bool           `json:"success" example:"false" swaggertype:"boolean"`
+	Message string         `json:"message" example:"Forbidden." swaggertype:"string"`
+	Emails  []models.Email `json:"emails" swaggertype:"array,object"`
+}
+
 type GetEmailsResponse500 struct {
 	Success bool           `json:"success" example:"false" swaggertype:"boolean"`
 	Message string         `json:"message" example:"An unexpected error occurred." swaggertype:"string"`

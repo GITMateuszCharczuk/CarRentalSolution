@@ -1371,10 +1371,13 @@ paths:
         in: query
         name: car_offer_id
         type: string
-      - description: Filter by status
+      - collectionFormat: csv
+        description: Filter by statuses
         in: query
-        name: status
-        type: string
+        items:
+          type: string
+        name: statuses
+        type: array
       - description: Type of date filter
         in: query
         name: date_filter_type

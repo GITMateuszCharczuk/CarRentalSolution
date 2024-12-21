@@ -22,7 +22,6 @@ type Config struct {
 	RunPostgresMigration bool
 	IdentityApiUrl       string
 	EmailServiceBaseUrl  string
-	CompanyEmail         string
 }
 
 var (
@@ -54,7 +53,6 @@ func NewConfig(path string) (*Config, error) {
 			RunPostgresMigration: getEnvBool("RUN_POSTGRES_MIGRATION", false),
 			IdentityApiUrl:       getEnv("IDENTITY_API_URL", "http://localhost:8080"),
 			EmailServiceBaseUrl:  getEnv("EMAIL_SERVICE_BASE_URL", "http://localhost:8080"),
-			CompanyEmail:         getEnv("COMPANY_EMAIL", "noreply@rental.com"),
 		}
 	})
 	return instance, err

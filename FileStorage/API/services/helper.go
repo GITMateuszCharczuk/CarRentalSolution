@@ -38,6 +38,12 @@ func (s *ResponseSender) Send(obj interface{}) {
 		case "StatusCreated":
 			s.c.JSON(http.StatusCreated, obj)
 			return
+		case "StatusForbidden":
+			s.c.JSON(http.StatusForbidden, obj)
+			return
+		case "StatusUnauthorized":
+			s.c.JSON(http.StatusUnauthorized, obj)
+			return
 		case "StatusInternalServerError":
 			s.c.JSON(http.StatusInternalServerError, obj)
 			return

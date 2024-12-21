@@ -1,8 +1,11 @@
 package commands
 
-import "mime/multipart"
+import (
+	models "file-storage/Domain/models/external"
+	"mime/multipart"
+)
 
 type SaveFileCommand struct {
-	OwnerID string                `json:"owner_id"`
-	File    *multipart.FileHeader `json:"file"`
+	models.JwtToken `json:",inline"`
+	File            *multipart.FileHeader `json:"file"`
 }

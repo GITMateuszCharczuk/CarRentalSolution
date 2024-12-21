@@ -12,6 +12,6 @@ type UpdateCarOrderRequest struct {
 	ReturnLocation   string  `json:"returnLocation" example:"City Center" swaggertype:"string"`
 	NumOfDrivers     int     `json:"numOfDrivers" example:"3" swaggertype:"integer"`
 	TotalCost        float64 `json:"totalCost" example:"900.00" swaggertype:"number"`
-	Status           string  `json:"status" example:"pending" swaggertype:"string"`
+	Status           string  `json:"status" example:"pending" swaggertype:"string" validate:"validCarOrderStatus"`
 	models.JwtToken  `json:",inline"`
 }

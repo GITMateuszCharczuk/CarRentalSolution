@@ -21,7 +21,7 @@ func NewQueryHelper[TEntity any, TModel any]() *QueryHelper[TEntity, TModel] {
 }
 
 func (h *QueryHelper[TEntity, TModel]) ApplySorting(query *gorm.DB, sorting *s.Sortable) *gorm.DB {
-	if !sorting.Enabled || len(sorting.SortFields) == 0 {
+	if sorting == nil || !sorting.Enabled || len(sorting.SortFields) == 0 {
 		return query
 	}
 
@@ -44,16 +44,32 @@ func (h *QueryHelper[TEntity, TModel]) ApplySorting(query *gorm.DB, sorting *s.S
 }
 
 func (h *QueryHelper[TEntity, TModel]) ApplyPagination(query *gorm.DB, pagination *p.Pagination) *gorm.DB {
-	if pagination != nil && pagination.Enabled {
-		offset := (pagination.CurrentPage - 1) * pagination.PageSize
-		query = query.Offset(offset).Limit(pagination.PageSize)
+	if pagination == nil || !pagination.Enabled || pagination.PageSize <= 0 {
+		return query
 	}
+
+	offset := (pagination.CurrentPage - 1) * pagination.PageSize
+	query = query.Offset(offset).Limit(pagination.PageSize)
 	return query
 }
 
 func (h *QueryHelper[TEntity, TModel]) CalculateTotalPages(totalItems int64, pagination *p.Pagination) int {
-	if !pagination.Enabled || pagination.PageSize <= 0 {
+	if pagination == nil || !pagination.Enabled || pagination.PageSize <= 0 {
 		return 1
 	}
 	return int(math.Ceil(float64(totalItems) / float64(pagination.PageSize)))
+}
+
+func (h *QueryHelper[TEntity, TModel]) GetCurrentPage(pagination *p.Pagination) int {
+	if pagination == nil {
+		return 1
+	}
+	return pagination.CurrentPage
+}
+
+func (h *QueryHelper[TEntity, TModel]) GetPageSize(pagination *p.Pagination, totalItemsCount int64) int {
+	if pagination == nil {
+		return int(totalItemsCount)
+	}
+	return pagination.PageSize
 }

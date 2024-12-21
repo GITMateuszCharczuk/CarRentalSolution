@@ -11,8 +11,10 @@ import (
 	"file-storage/API/server"
 	"file-storage/Domain/event"
 	"file-storage/Domain/repository_interfaces"
+	"file-storage/Domain/service_interfaces"
 	"file-storage/Infrastructure/config"
 	"file-storage/Infrastructure/db"
+	"file-storage/Infrastructure/microservice_connector"
 	"file-storage/Infrastructure/processor"
 	"file-storage/Infrastructure/publisher"
 	"file-storage/Infrastructure/queue"
@@ -41,16 +43,18 @@ func InitializeInfrastructureComponents() (*InfrastructureComponents, error) {
 	if err != nil {
 		return nil, err
 	}
+	microserviceConnector := microservice_connector.ProvideMicroserviceConnectorImpl(configConfig)
 	infrastructureComponents := &InfrastructureComponents{
-		Config:         configConfig,
-		FileRepository: fileRepository,
-		EventPublisher: eventPublisher,
-		EventReceiver:  eventReceiver,
+		Config:                configConfig,
+		FileRepository:        fileRepository,
+		EventPublisher:        eventPublisher,
+		EventReceiver:         eventReceiver,
+		MicroserviceConnector: microserviceConnector,
 	}
 	return infrastructureComponents, nil
 }
 
-func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPublisher event.EventPublisher, Config *config.Config) (*server.Server, error) {
+func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPublisher event.EventPublisher, MicroserviceConnector service_interfaces.MicroserviceConnector, Config *config.Config) (*server.Server, error) {
 	saveFileController := controllers.NewSaveFileController()
 	getFileController := controllers.NewGetFileController()
 	deleteFileController := controllers.NewDeleteFileController()
@@ -63,8 +67,9 @@ func InitializeApi(FileRepository repository_interfaces.FileRepository, EventPub
 // wire.go:
 
 type InfrastructureComponents struct {
-	Config         *config.Config
-	FileRepository repository_interfaces.FileRepository
-	EventPublisher event.EventPublisher
-	EventReceiver  event.EventReceiver
+	Config                *config.Config
+	FileRepository        repository_interfaces.FileRepository
+	EventPublisher        event.EventPublisher
+	EventReceiver         event.EventReceiver
+	MicroserviceConnector service_interfaces.MicroserviceConnector
 }

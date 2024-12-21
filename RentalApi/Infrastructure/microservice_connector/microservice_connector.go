@@ -15,15 +15,13 @@ import (
 type MicroserviceConnectorImpl struct {
 	IdentityApiBaseUrl  string
 	EmailServiceBaseUrl string
-	CompanyEmail        string
 	httpClient          *http.Client
 }
 
-func NewMicroserviceConnectorImpl(IdentityApiBaseUrl string, EmailServiceBaseUrl string, CompanyEmail string) interfaces.MicroserviceConnector {
+func NewMicroserviceConnectorImpl(IdentityApiBaseUrl string, EmailServiceBaseUrl string) interfaces.MicroserviceConnector {
 	return &MicroserviceConnectorImpl{
 		IdentityApiBaseUrl:  IdentityApiBaseUrl,
 		EmailServiceBaseUrl: EmailServiceBaseUrl,
-		CompanyEmail:        CompanyEmail,
 		httpClient:          &http.Client{},
 	}
 }
@@ -96,11 +94,8 @@ func (df *MicroserviceConnectorImpl) GetUserInternalInfo(token models.JwtToken) 
 	}
 }
 
-func (df *MicroserviceConnectorImpl) SendEmail(email models.Email) error {
-	endpoint := fmt.Sprintf("%s/email-service/api/email/send-email", df.EmailServiceBaseUrl)
-	if email.From == "" {
-		email.From = df.CompanyEmail
-	}
+func (df *MicroserviceConnectorImpl) SendEmail(email models.InternalEmail) error {
+	endpoint := fmt.Sprintf("%s/email-service/api/send-internal-email", df.EmailServiceBaseUrl)
 
 	jsonBody, err := json.Marshal(email)
 	if err != nil {

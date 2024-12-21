@@ -21,6 +21,28 @@ definitions:
         example: false
         type: boolean
     type: object
+  contract.GetEmailResponse401:
+    properties:
+      email:
+        type: object
+      message:
+        example: Unauthorized.
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetEmailResponse403:
+    properties:
+      email:
+        type: object
+      message:
+        example: Forbidden.
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
   contract.GetEmailResponse404:
     properties:
       email:
@@ -69,6 +91,32 @@ definitions:
         example: false
         type: boolean
     type: object
+  contract.GetEmailsResponse401:
+    properties:
+      emails:
+        items:
+          type: object
+        type: array
+      message:
+        example: Unauthorized.
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetEmailsResponse403:
+    properties:
+      emails:
+        items:
+          type: object
+        type: array
+      message:
+        example: Forbidden.
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
   contract.GetEmailsResponse500:
     properties:
       emails:
@@ -97,14 +145,10 @@ definitions:
         maxLength: 100
         minLength: 5
         type: string
-      to:
-        example: recipient@example.com
-        type: string
     required:
     - body
     - from
     - subject
-    - to
     type: object
   contract.SendEmailResponse200:
     properties:
@@ -124,7 +168,72 @@ definitions:
         example: false
         type: boolean
     type: object
+  contract.SendEmailResponse401:
+    properties:
+      message:
+        example: Unauthorized.
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.SendEmailResponse403:
+    properties:
+      message:
+        example: Forbidden.
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
   contract.SendEmailResponse500:
+    properties:
+      message:
+        example: An unexpected error occurred while sending email.
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.SendInternalEmailRequest:
+    properties:
+      body:
+        example: This is the body of the email.
+        maxLength: 1000
+        minLength: 5
+        type: string
+      subject:
+        example: Hello
+        maxLength: 100
+        minLength: 5
+        type: string
+      to:
+        example: recipient@example.com
+        type: string
+    required:
+    - body
+    - subject
+    - to
+    type: object
+  contract.SendInternalEmailResponse200:
+    properties:
+      message:
+        example: Email sent successfully.
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.SendInternalEmailResponse400:
+    properties:
+      message:
+        example: Invalid request for sending email.
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.SendInternalEmailResponse500:
     properties:
       message:
         example: An unexpected error occurred while sending email.
@@ -160,6 +269,11 @@ paths:
       - application/json
       description: Retrieves a list of all emails.
       parameters:
+      - description: JWT Token
+        in: query
+        name: token
+        required: true
+        type: string
       - default: 1
         description: Page number
         in: query
@@ -181,6 +295,14 @@ paths:
           description: Invalid request parameters
           schema:
             $ref: '#/definitions/contract.GetEmailsResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.GetEmailsResponse401'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/contract.GetEmailsResponse403'
         "500":
           description: Server error during emails retrieval
           schema:
@@ -199,6 +321,11 @@ paths:
         name: id
         required: true
         type: string
+      - description: JWT Token
+        in: query
+        name: token
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -210,6 +337,14 @@ paths:
           description: Invalid request parameters
           schema:
             $ref: '#/definitions/contract.GetEmailResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.GetEmailResponse401'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/contract.GetEmailResponse403'
         "404":
           description: Email not found
           schema:
@@ -227,6 +362,11 @@ paths:
       - application/json
       description: Sends an email using the provided data.
       parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
       - description: Email data
         in: body
         name: email
@@ -244,10 +384,48 @@ paths:
           description: Invalid request format or data
           schema:
             $ref: '#/definitions/contract.SendEmailResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.SendEmailResponse401'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/contract.SendEmailResponse403'
         "500":
           description: Server error during email sending
           schema:
             $ref: '#/definitions/contract.SendEmailResponse500'
+      summary: Send an email
+      tags:
+      - emails
+  /email-service/api/send-internal-email:
+    post:
+      consumes:
+      - application/json
+      description: Sends an email using the provided data.
+      parameters:
+      - description: Email data
+        in: body
+        name: email
+        required: true
+        schema:
+          $ref: '#/definitions/contract.SendInternalEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Email sent successfully
+          schema:
+            $ref: '#/definitions/contract.SendInternalEmailResponse200'
+        "400":
+          description: Invalid request format or data
+          schema:
+            $ref: '#/definitions/contract.SendInternalEmailResponse400'
+        "500":
+          description: Server error during email sending
+          schema:
+            $ref: '#/definitions/contract.SendInternalEmailResponse500'
       summary: Send an email
       tags:
       - emails

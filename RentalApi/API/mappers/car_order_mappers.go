@@ -65,7 +65,7 @@ func MapToGetCarOrdersQuery(request *get_car_orders_contract.GetCarOrdersRequest
 		EndDate:        request.EndDate,
 		UserId:         request.UserId,
 		CarOfferId:     request.CarOfferId,
-		Status:         request.Status,
+		Statuses:       request.Statuses,
 		DateFilterType: request.DateFilterType,
 		JwtToken:       request.JwtToken,
 	}

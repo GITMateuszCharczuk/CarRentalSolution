@@ -40,7 +40,7 @@ func (r *CarOrderQueryRepositoryImpl) GetCarOrders(
 	endDate string,
 	userId string,
 	carOfferId string,
-	status string,
+	statuses []string,
 	dateFilterType string,
 ) (*pagination.PaginatedResult[models.CarOrderModel], error) {
 	query := r.ConstructBaseQuery()
@@ -51,13 +51,12 @@ func (r *CarOrderQueryRepositoryImpl) GetCarOrders(
 
 	queryRecords = append(queryRecords, helpers.NewQueryRecord[entities.CarOrderEntity]("car_offer_id", carOfferId))
 
-	queryRecords = append(queryRecords, helpers.NewQueryRecord[entities.CarOrderEntity]("status", status))
+	queryRecords = append(queryRecords, helpers.NewQueryRecord[entities.CarOrderEntity]("status", statuses))
 
 	query = r.ApplyWhereConditions(query, queryRecords...)
 
 	if startDate != "" || endDate != "" {
 		query = r.ApplyDateRangeFilter(query, startDate, endDate, dateFilterType)
 	}
-
 	return r.ExecutePaginatedQuery(query, pagination, sorting)
 }

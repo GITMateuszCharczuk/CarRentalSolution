@@ -6,7 +6,6 @@ import (
 	contract "email-service/Application.contract/send_email"
 	commandHandlers "email-service/Application/commmand_handlers/send_email"
 	"email-service/Domain/responses"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -28,9 +27,12 @@ func NewSendEmailController(validator *validator.Validate) *SendEmailController 
 // @Tags emails
 // @Accept json
 // @Produce json
+// @Param token query string true "JWT token"
 // @Param email body contract.SendEmailRequest true "Email data"
 // @Success 200 {object} contract.SendEmailResponse200 "Email sent successfully"
 // @Failure 400 {object} contract.SendEmailResponse400 "Invalid request format or data"
+// @Failure 401 {object} contract.SendEmailResponse401 "Unauthorized"
+// @Failure 403 {object} contract.SendEmailResponse403 "Forbidden"
 // @Failure 500 {object} contract.SendEmailResponse500 "Server error during email sending"
 // @Router /email-service/api/send-email [post]
 func (h *SendEmailController) Handle(c *gin.Context) {
@@ -42,8 +44,8 @@ func (h *SendEmailController) Handle(c *gin.Context) {
 		})
 		return
 	}
+	req.JwtToken = services.GetJwtTokenFromQuery(c)
 	if validateResponse := services.ValidateRequest[contract.SendEmailResponse](&req, h.validator); validateResponse != nil {
-		fmt.Println(validateResponse)
 		responseSender.Send(validateResponse)
 		return
 	}

@@ -1,5 +1,8 @@
 package queries
 
+import models "email-service/Domain/models/external"
+
 type GetEmailQuery struct {
-	ID string `json:"id"`
+	ID       string
+	JwtToken models.JwtToken
 }

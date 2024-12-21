@@ -11,21 +11,20 @@ import (
 
 func MapToDeleteFileCommand(req *delete_contract.DeleteFileRequest) delete_command.DeleteFileCommand {
 	return delete_command.DeleteFileCommand{
-		FileID:  req.FileID,
-		OwnerID: req.OwnerID,
+		FileID:   req.FileID,
+		JwtToken: req.JwtToken,
 	}
 }
 
 func MapToSaveFileCommand(req *save_contract.SaveFileRequest) save_command.SaveFileCommand {
 	return save_command.SaveFileCommand{
-		OwnerID: req.OwnerID,
-		File:    req.File,
+		JwtToken: req.JwtToken,
+		File:     req.File,
 	}
 }
 
 func MapToGetFileQuery(req *get_contract.GetFileRequest) get_queries.GetFileQuery {
 	return get_queries.GetFileQuery{
-		FileID:  req.FileID,
-		OwnerID: req.OwnerID,
+		FileID: req.FileID,
 	}
 }

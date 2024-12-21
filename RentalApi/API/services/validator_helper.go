@@ -24,6 +24,12 @@ func ValidateRequest[TResponse any](req interface{}, validatorInstance *validato
 				case "gtdate":
 					errorMessages = append(errorMessages,
 						fmt.Sprintf("Field %s must be after %s", e.Field(), e.Param()))
+				case "carOrderStatus":
+					errorMessages = append(errorMessages,
+						fmt.Sprintf("Invalid status for field %s. Must be one of: PENDING, PREPARING, READY, ACTIVE, COMPLETED, CANCELLED, ARCHIVED", e.Field()))
+				case "carOrderStatusArray":
+					errorMessages = append(errorMessages,
+						fmt.Sprintf("Invalid statuses in field %s. Each status must be one of: PENDING, PREPARING, READY, ACTIVE, COMPLETED, CANCELLED, ARCHIVED", e.Field()))
 				default:
 					errorMessages = append(errorMessages, e.Error())
 				}

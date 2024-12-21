@@ -613,9 +613,13 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "Filter by status",
-                        "name": "status",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Filter by statuses",
+                        "name": "statuses",
                         "in": "query"
                     },
                     {

@@ -9,4 +9,6 @@ const (
 	StatusNotFound            StatusCode = 404
 	StatusInternalServerError StatusCode = 500
 	StatusConflict            StatusCode = 409
+	StatusUnauthorized        StatusCode = 401
+	StatusForbidden           StatusCode = 403
 )

@@ -22,6 +22,7 @@ type Config struct {
 	MailhogUrl         string
 	ServicePort        string
 	DefaultEmailSender string
+	IdentityApiUrl     string
 }
 
 var (
@@ -54,6 +55,7 @@ func NewConfig(path string) (*Config, error) {
 			ServiceAddress:     getEnv("SERVICE_ADDRESS", "email-service:8080"),
 			ServicePort:        getEnv("SERVICE_PORT", "8080"),
 			DefaultEmailSender: getEnv("DEFAULT_EMAIL_SENDER", "test@test.com"),
+			IdentityApiUrl:     getEnv("IDENTITY_API_URL", "http://localhost:8080"),
 		}
 	})
 	return instance, err

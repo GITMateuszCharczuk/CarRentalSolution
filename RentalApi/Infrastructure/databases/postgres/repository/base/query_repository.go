@@ -206,8 +206,8 @@ func (r *QueryRepository[TEntity, TId, TModel]) ExecutePaginatedQuery(
 		Items:       models,
 		TotalItems:  totalItems,
 		TotalPages:  totalPages,
-		CurrentPage: pagination.CurrentPage,
-		PageSize:    pagination.PageSize,
+		CurrentPage: r.helper.GetCurrentPage(pagination),
+		PageSize:    r.helper.GetPageSize(pagination, totalItems),
 	}, nil
 }
 

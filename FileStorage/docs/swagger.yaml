@@ -1,11 +1,4 @@
 definitions:
-  contract.DeleteFileRequest:
-    properties:
-      file_id:
-        type: string
-      owner_id:
-        type: string
-    type: object
   contract.DeleteFileResponse200:
     properties:
       message:
@@ -112,9 +105,9 @@ paths:
       description: Uploads and saves a file in the storage system, including metadata
         and content.
       parameters:
-      - description: Owner ID associated with the file
-        in: formData
-        name: owner_id
+      - description: JWT token
+        in: query
+        name: token
         required: true
         type: string
       - description: Binary file content (JPEG, PNG, etc.) to be saved
@@ -140,19 +133,23 @@ paths:
       summary: Save a new file
       tags:
       - files
-  /file-storage/api/files/delete:
+  /file-storage/api/files/delete/{file_id}:
     delete:
       consumes:
       - application/json
       description: Deletes a file from storage by its unique ID. The file ID should
         be a valid identifier for an existing file.
       parameters:
-      - description: Delete file request object
-        in: body
-        name: request
+      - description: JWT token
+        in: query
+        name: token
         required: true
-        schema:
-          $ref: '#/definitions/contract.DeleteFileRequest'
+        type: string
+      - description: File ID
+        in: path
+        name: file_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -186,11 +183,6 @@ paths:
       - description: Unique File ID for retrieval
         in: query
         name: file_id
-        required: true
-        type: string
-      - description: Owner ID associated with the file
-        in: query
-        name: owner_id
         required: true
         type: string
       - description: File binary content or file to download

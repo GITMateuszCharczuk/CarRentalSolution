@@ -21,7 +21,7 @@ func (c *OrderStatusChecker) handleActiveOrders(ctx context.Context) error {
 	orders, err := c.getOrdersByDateRange(
 		yesterday.Add(-7*24*time.Hour), // Get orders from last week
 		yesterday,
-		string(constants.OrderStatusActive),
+		[]constants.CarOrderStatus{constants.OrderStatusActive},
 		"END_BETWEEN",
 	)
 	if err != nil {
@@ -29,6 +29,7 @@ func (c *OrderStatusChecker) handleActiveOrders(ctx context.Context) error {
 	}
 
 	for _, order := range orders.Items {
+		log.Println("Handling overdue order of ID: ", order.Id)
 		if err := c.handleOverdueOrder(ctx, order); err != nil {
 			log.Printf("Error handling overdue order %s: %v", order.Id, err)
 		}
@@ -41,7 +42,7 @@ func (c *OrderStatusChecker) handlePendingOrders(ctx context.Context) error {
 	orders, err := c.getOrdersByDateRange(
 		tomorrow,
 		tomorrow.Add(24*time.Hour),
-		string(constants.OrderStatusPending),
+		[]constants.CarOrderStatus{constants.OrderStatusPending},
 		"START_BETWEEN",
 	)
 	if err != nil {
@@ -49,6 +50,7 @@ func (c *OrderStatusChecker) handlePendingOrders(ctx context.Context) error {
 	}
 
 	for _, order := range orders.Items {
+		log.Println("Handling pending order of ID: ", order.Id)
 		if err := c.notifyAndUpdateOrder(ctx, order, constants.OrderStatusPreparing); err != nil {
 			log.Printf("Error processing pending order %s: %v", order.Id, err)
 		}

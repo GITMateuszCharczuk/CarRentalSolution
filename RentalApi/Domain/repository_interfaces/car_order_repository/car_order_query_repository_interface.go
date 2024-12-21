@@ -15,7 +15,7 @@ type CarOrderQueryRepository interface {
 		endDate string,
 		userId string,
 		carOfferId string,
-		status string,
+		statuses []string,
 		dateFilterType string,
 	) (*pagination.PaginatedResult[models.CarOrderModel], error)
 }

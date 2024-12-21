@@ -15,7 +15,7 @@ func (c *OrderStatusChecker) archiveOldOrders(ctx context.Context) error {
 	orders, err := c.getOrdersByDateRange(
 		monthAgo.Add(-6*30*24*time.Hour),
 		monthAgo,
-		"",
+		[]constants.CarOrderStatus{constants.OrderStatusPending, constants.OrderStatusCancelled, constants.OrderStatusCompleted},
 		"END_BETWEEN",
 	)
 	if err != nil {
@@ -24,6 +24,7 @@ func (c *OrderStatusChecker) archiveOldOrders(ctx context.Context) error {
 
 	for _, order := range orders.Items {
 		if c.shouldArchiveOrder(order) {
+			log.Println("Archiving order of ID: ", order.Id)
 			order.Status = string(constants.OrderStatusArchived)
 			if err := c.orderCommandRepository.UpdateCarOrder(ctx, &order); err != nil {
 				log.Printf("Error archiving order %s: %v", order.Id, err)
@@ -33,7 +34,12 @@ func (c *OrderStatusChecker) archiveOldOrders(ctx context.Context) error {
 	return nil
 }
 
-func (c *OrderStatusChecker) getOrdersByDateRange(start, end time.Time, status string, filterType string) (*pagination.PaginatedResult[domestic_models.CarOrderModel], error) {
+func (c *OrderStatusChecker) getOrdersByDateRange(start, end time.Time, statuses []constants.CarOrderStatus, filterType string) (*pagination.PaginatedResult[domestic_models.CarOrderModel], error) {
+	var statusStrings []string
+	for _, status := range statuses {
+		statusStrings = append(statusStrings, string(status))
+	}
+
 	return c.orderQueryRepository.GetCarOrders(
 		nil,
 		nil,
@@ -41,7 +47,7 @@ func (c *OrderStatusChecker) getOrdersByDateRange(start, end time.Time, status s
 		end.Format(time.RFC3339),
 		"",
 		"",
-		status,
+		statusStrings,
 		filterType,
 	)
 }

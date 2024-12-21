@@ -41,7 +41,7 @@ func (h *GetCarOrdersQueryHandler) Handle(ctx context.Context, query *GetCarOrde
 		query.EndDate,
 		query.UserId,
 		query.CarOfferId,
-		query.Status,
+		query.Statuses,
 		query.DateFilterType,
 	)
 
