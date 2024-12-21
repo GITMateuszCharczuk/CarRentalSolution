@@ -23,6 +23,11 @@ type DeleteCarOrderResponse401 struct {
 	Message string `json:"message" example:"Unauthorized" swaggertype:"string"`
 }
 
+type DeleteCarOrderResponse403 struct {
+	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
+	Message string `json:"message" example:"Forbidden - Not authorized" swaggertype:"string"`
+}
+
 type DeleteCarOrderResponse404 struct {
 	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
 	Message string `json:"message" example:"Car order not found" swaggertype:"string"`

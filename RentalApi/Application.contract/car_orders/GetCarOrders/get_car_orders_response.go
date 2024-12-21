@@ -37,6 +37,16 @@ type GetCarOrdersResponse400 struct {
 	Items   []models.CarOrderModel `json:"items" swaggertype:"array,object"`
 }
 
+type GetCarOrdersResponse401 struct {
+	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
+	Message string `json:"message" example:"Unauthorized" swaggertype:"string"`
+}
+
+type GetCarOrdersResponse403 struct {
+	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
+	Message string `json:"message" example:"Forbidden - Not authorized" swaggertype:"string"`
+}
+
 type GetCarOrdersResponse500 struct {
 	Success bool                   `json:"success" example:"false" swaggertype:"boolean"`
 	Message string                 `json:"message" example:"Internal server error while retrieving car orders" swaggertype:"string"`

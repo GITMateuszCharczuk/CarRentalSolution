@@ -52,7 +52,7 @@ func (s *ResponseSender) Send(obj interface{}) {
 		fieldValue := value.Field(i)
 		if field.Name != "BaseResponse" {
 			if fieldValue.Kind() == reflect.Struct {
-				if field.Name == "BlogPost" {
+				if field.Name == "CarOrder" || field.Name == "CarOffer" {
 					response[getJSONFieldName(field)] = interface{}(fieldValue.Interface())
 					continue
 				}

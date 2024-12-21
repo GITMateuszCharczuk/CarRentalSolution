@@ -20,15 +20,15 @@ func NewGetTagsController(validator *validator.Validate) *GetTagsController {
 
 // Handle godoc
 // @Summary Get all unique tags
-// @Description Retrieves a list of all unique tags used in blog posts
-// @Tags tags
+// @Description Retrieves a list of all unique tags used in car offer
+// @Tags car-offers
 // @Accept json
 // @Produce json
-// @Param id path string false "Blog Post ID" example:"123e4567-e89b-12d3-a456-426614174000"
+// @Param id path string false "Car Offer ID" example:"123e4567-e89b-12d3-a456-426614174000"
 // @Param sort_fields query []string false "Sort fields (field:asc|desc)" example:"created_at:desc"
 // @Success 200 {object} contract.GetTagsResponse200 "Tags retrieved successfully"
 // @Failure 500 {object} contract.GetTagsResponse500 "Server error during retrieval"
-// @Router /rental-api/api/tags/{id} [get]
+// @Router /rental-api/api/car-offers/tags/{id} [get]
 func (h *GetTagsController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 	req := contract.GetTagsRequest{
@@ -45,7 +45,7 @@ func (h *GetTagsController) Handle(c *gin.Context) {
 }
 
 func (h *GetTagsController) Route() string {
-	return "/tags/:id"
+	return "/car-offers/tags/:id"
 }
 
 func (h *GetTagsController) Methods() []string {

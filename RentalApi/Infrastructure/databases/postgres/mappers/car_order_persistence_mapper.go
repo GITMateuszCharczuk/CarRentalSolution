@@ -23,14 +23,16 @@ func (m *CarOrderMapper) MapToModel(entity entities.CarOrderEntity) models.CarOr
 		carOfferId = ""
 	}
 	return models.CarOrderModel{
-		Id:           entity.ID.String(),
-		UserId:       entity.UserId.String(),
-		CarOfferId:   carOfferId,
-		StartDate:    entity.StartDate.Format(time.RFC3339),
-		EndDate:      entity.EndDate.Format(time.RFC3339),
-		NumOfDrivers: entity.NumOfDrivers,
-		TotalCost:    entity.TotalCost,
-		Status:       string(entity.Status),
+		Id:               entity.ID.String(),
+		UserId:           entity.UserId.String(),
+		CarOfferId:       carOfferId,
+		StartDate:        entity.StartDate.Format(time.RFC3339),
+		EndDate:          entity.EndDate.Format(time.RFC3339),
+		NumOfDrivers:     entity.NumOfDrivers,
+		TotalCost:        entity.TotalCost,
+		DeliveryLocation: entity.DeliveryLocation,
+		ReturnLocation:   entity.ReturnLocation,
+		Status:           string(entity.Status),
 	}
 }
 
@@ -48,15 +50,17 @@ func (m *CarOrderMapper) MapToEntity(model models.CarOrderModel) entities.CarOrd
 	endDate, _ := time.Parse(time.RFC3339, model.EndDate)
 
 	return entities.CarOrderEntity{
-		ID:           id,
-		UserId:       userId,
-		CarOfferId:   &carOfferId,
-		StartDate:    startDate,
-		EndDate:      endDate,
-		NumOfDrivers: model.NumOfDrivers,
-		TotalCost:    model.TotalCost,
-		CreatedAt:    time.Now(),
-		UpdatedAt:    time.Now(),
-		Status:       constants.CarOrderStatus(model.Status),
+		ID:               id,
+		UserId:           userId,
+		CarOfferId:       &carOfferId,
+		StartDate:        startDate,
+		EndDate:          endDate,
+		NumOfDrivers:     model.NumOfDrivers,
+		TotalCost:        model.TotalCost,
+		CreatedAt:        time.Now(),
+		UpdatedAt:        time.Now(),
+		DeliveryLocation: model.DeliveryLocation,
+		ReturnLocation:   model.ReturnLocation,
+		Status:           constants.CarOrderStatus(model.Status),
 	}
 }

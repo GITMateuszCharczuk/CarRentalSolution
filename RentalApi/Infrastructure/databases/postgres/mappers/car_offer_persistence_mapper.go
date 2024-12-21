@@ -46,14 +46,14 @@ func (m *CarOfferMapper) MapToEntity(model models.CarOfferModel) entities.CarOff
 		id, _ = uuid.Parse(model.Id)
 	}
 
-	publishedDate, _ := time.Parse(time.RFC3339, model.PublishedDate)
-
 	var createdAt time.Time
+	var publishedDate time.Time
 	if model.CreatedAt == "" {
 		createdAt = time.Now()
 	} else {
 		createdAt, _ = time.Parse(time.RFC3339, model.CreatedAt)
 	}
+	publishedDate = createdAt
 
 	return entities.CarOfferEntity{
 		ID:                 id,

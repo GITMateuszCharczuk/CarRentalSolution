@@ -2,6 +2,7 @@ package commands
 
 import (
 	"context"
+	"log"
 	contract "rental-api/Application.contract/car_offers/create_car_offer"
 	"rental-api/Application/services"
 	models "rental-api/Domain/models/domestic"
@@ -27,6 +28,7 @@ func NewCreateCarOfferCommandHandler(
 
 func (h *CreateCarOfferCommandHandler) Handle(ctx context.Context, command *CreateCarOfferCommand) (*contract.CreateCarOfferResponse, error) {
 	userInfo, err := h.dataFetcher.GetUserInternalInfo(command.JwtToken)
+	log.Println(userInfo)
 	if err != nil {
 		response := responses.NewResponse[contract.CreateCarOfferResponse](401, "Unauthorized")
 		return &response, nil

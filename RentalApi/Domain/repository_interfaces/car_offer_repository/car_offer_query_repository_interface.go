@@ -8,6 +8,7 @@ import (
 
 type CarOfferQueryRepository interface {
 	GetCarOfferByID(id string) (*models.CarOfferModel, error)
+	GetCarOfferCustodianIdByID(id string) (string, error)
 	GetCarOffers(
 		pagination *pagination.Pagination,
 		sorting *sorting.Sortable,

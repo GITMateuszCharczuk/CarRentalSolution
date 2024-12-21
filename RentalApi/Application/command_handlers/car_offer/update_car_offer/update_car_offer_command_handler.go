@@ -35,15 +35,19 @@ func (h *UpdateCarOfferCommandHandler) Handle(ctx context.Context, command *Upda
 		response := responses.NewResponse[contract.UpdateCarOfferResponse](401, "Unauthorized")
 		return &response, nil
 	}
-
 	existingOffer, err := h.carOfferQueryRepository.GetCarOfferByID(command.Id)
 	if err != nil || existingOffer == nil {
 		response := responses.NewResponse[contract.UpdateCarOfferResponse](404, "Car offer not found")
 		return &response, nil
 	}
+	custodianId, err := h.carOfferQueryRepository.GetCarOfferCustodianIdByID(command.Id)
+	if err != nil {
+		response := responses.NewResponse[contract.UpdateCarOfferResponse](500, "Failed to get custodian id")
+		return &response, nil
+	}
 
 	if !services.IsRole(constants.SuperAdmin, userInfo.Roles) {
-		if existingOffer.CustodianId != userInfo.ID && !services.IsRole(constants.Admin, userInfo.Roles) {
+		if custodianId != userInfo.ID && !services.IsRole(constants.Admin, userInfo.Roles) {
 			response := responses.NewResponse[contract.UpdateCarOfferResponse](403, "Not authorized to delete this car offer")
 			return &response, nil
 		}
@@ -65,7 +69,7 @@ func (h *UpdateCarOfferCommandHandler) Handle(ctx context.Context, command *Upda
 		OneWeekendDayPrice: command.OneWeekendDayPrice,
 		OneWeekPrice:       command.OneWeekPrice,
 		OneMonthPrice:      command.OneMonthPrice,
-		CustodianId:        existingOffer.CustodianId,
+		CustodianId:        custodianId,
 		CustodianEmail:     existingOffer.CustodianEmail,
 		CreatedAt:          existingOffer.CreatedAt,
 	}

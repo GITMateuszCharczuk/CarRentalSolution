@@ -17,6 +17,9 @@ func main() {
 	serviceURLs := []string{
 		cfg.EmailServiceURL + "/email-service/api/swagger/doc.json",
 		cfg.FileServiceURL + "/file-storage/api/swagger/doc.json",
+		cfg.BlogApiURL + "/blog-api/api/swagger/doc.json",
+		cfg.RentalApiURL + "/rental-api/api/swagger/doc.json",
+		cfg.IdentityApiURL + "/identity-api/api/swagger/doc.json",
 	}
 
 	r.Use(cors.Default())
@@ -27,6 +30,9 @@ func main() {
 
 	routes.RegisterEmailRoutes(r, cfg.EmailServiceURL, cfg.MainApiRoute)
 	routes.RegisterFileRoutes(r, cfg.FileServiceURL, cfg.MainApiRoute)
+	routes.RegisterBlogApiRoutes(r, cfg.BlogApiURL, cfg.MainApiRoute)
+	routes.RegisterRentalApiRoutes(r, cfg.RentalApiURL, cfg.MainApiRoute)
+	routes.RegisterIdentityApiRoutes(r, cfg.IdentityApiURL, cfg.MainApiRoute)
 	routes.RegisterSwaggerRoutes(r, serviceURLs, cfg.MainApiRoute)
 
 	r.Run(cfg.ServicePort)

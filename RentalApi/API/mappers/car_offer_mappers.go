@@ -74,7 +74,6 @@ func MapToGetCarOffersQuery(request *get_car_offers_contract.GetCarOffersRequest
 		DateTimeTo:   request.DateTimeTo,
 		Tags:         request.Tags,
 		Visible:      request.Visible,
-		Status:       request.Status,
 	}
 }
 

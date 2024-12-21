@@ -261,6 +261,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/blog-api/api/posts/tags/{id}": {
+            "get": {
+                "description": "Retrieves a list of all unique tags used in blog posts",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "blog"
+                ],
+                "summary": "Get all unique tags",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Blog Post ID",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Sort fields (field:asc|desc)",
+                        "name": "sort_fields",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tags retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetTagsResponse200"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetTagsResponse500"
+                        }
+                    }
+                }
+            }
+        },
         "/blog-api/api/posts/{id}": {
             "get": {
                 "description": "Retrieves a specific blog post by its ID",
@@ -770,53 +817,6 @@ const docTemplate = `{
                         "description": "Server error during deletion",
                         "schema": {
                             "$ref": "#/definitions/contract.DeleteLikeForBlogPostResponse500"
-                        }
-                    }
-                }
-            }
-        },
-        "/blog-api/api/tags/{id}": {
-            "get": {
-                "description": "Retrieves a list of all unique tags used in blog posts",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "tags"
-                ],
-                "summary": "Get all unique tags",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Blog Post ID",
-                        "name": "id",
-                        "in": "path"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv",
-                        "description": "Sort fields (field:asc|desc)",
-                        "name": "sort_fields",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Tags retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetTagsResponse200"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during retrieval",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetTagsResponse500"
                         }
                     }
                 }

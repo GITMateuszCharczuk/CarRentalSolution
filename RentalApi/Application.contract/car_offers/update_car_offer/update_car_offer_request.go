@@ -3,7 +3,7 @@ package contract
 import models "rental-api/Domain/models/external"
 
 type UpdateCarOfferRequest struct {
-	Id                 string   `json:"id" example:"123e4567-e89b-12d3-a456-426614174000" swaggertype:"string" validate:"required"`
+	Id                 string   `json:"-" example:"123e4567-e89b-12d3-a456-426614174000" swaggertype:"string" validate:"required"`
 	Heading            string   `json:"heading" binding:"required" example:"Updated Car Offer Title" swaggertype:"string" validate:"required"`
 	ShortDescription   string   `json:"shortDescription" binding:"required" example:"Updated short description" swaggertype:"string" validate:"required"`
 	FeaturedImageUrl   string   `json:"featuredImageUrl" example:"https://example.com/updated-image.jpg" swaggertype:"string"`

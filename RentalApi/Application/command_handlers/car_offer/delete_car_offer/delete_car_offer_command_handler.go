@@ -35,14 +35,14 @@ func (h *DeleteCarOfferCommandHandler) Handle(ctx context.Context, command *Dele
 		return &response, nil
 	}
 
-	existingOffer, err := h.carOfferQueryRepository.GetCarOfferByID(command.ID)
-	if err != nil || existingOffer == nil {
+	custodianId, err := h.carOfferQueryRepository.GetCarOfferCustodianIdByID(command.ID)
+	if err != nil {
 		response := responses.NewResponse[contract.DeleteCarOfferResponse](404, "Car offer not found")
 		return &response, nil
 	}
 
 	if !services.IsRole(constants.SuperAdmin, userInfo.Roles) {
-		if existingOffer.CustodianId != userInfo.ID && !services.IsRole(constants.Admin, userInfo.Roles) {
+		if custodianId != userInfo.ID && !services.IsRole(constants.Admin, userInfo.Roles) {
 			response := responses.NewResponse[contract.DeleteCarOfferResponse](403, "Not authorized to delete this car offer")
 			return &response, nil
 		}

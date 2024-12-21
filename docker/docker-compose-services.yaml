@@ -88,7 +88,9 @@ services:
 
 volumes:
   mongo_data:
-  
+  postgres_data:
+  redis_data:
+
 networks:
   docker-network:
     driver: bridge

@@ -23,6 +23,11 @@ type DeleteImageFromCarOfferResponse401 struct {
 	Message string `json:"message" example:"Unauthorized" swaggertype:"string"`
 }
 
+type DeleteImageFromCarOfferResponse403 struct {
+	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
+	Message string `json:"message" example:"Forbidden - Not authorized" swaggertype:"string"`
+}
+
 type DeleteImageFromCarOfferResponse404 struct {
 	Success bool   `json:"success" example:"false" swaggertype:"boolean"`
 	Message string `json:"message" example:"Car offer not found" swaggertype:"string"`

@@ -1253,7 +1253,7 @@ paths:
       summary: Like a blog post
       tags:
       - likes
-  /blog-api/api/tags/{id}:
+  /blog-api/api/posts/tags/{id}:
     get:
       consumes:
       - application/json
@@ -1283,5 +1283,5 @@ paths:
             $ref: '#/definitions/contract.GetTagsResponse500'
       summary: Get all unique tags
       tags:
-      - tags
+      - blog
 swagger: "2.0"

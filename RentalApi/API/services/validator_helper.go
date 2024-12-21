@@ -2,7 +2,6 @@ package services
 
 import (
 	"fmt"
-	"log"
 	"rental-api/Domain/responses"
 	"strings"
 
@@ -14,15 +13,25 @@ func ValidateRequest[TResponse any](req interface{}, validatorInstance *validato
 	if err := validatorInstance.Struct(req); err != nil {
 		if validationErrors, ok := err.(validator.ValidationErrors); ok {
 			var errorMessages []string
-			for _, fieldError := range validationErrors {
-				errorMessages = append(errorMessages, fmt.Sprintf("Field '%s' failed validation: %s", fieldError.Field(), fieldError.Tag()))
+			for _, e := range validationErrors {
+				switch e.Tag() {
+				case "datetime":
+					errorMessages = append(errorMessages,
+						fmt.Sprintf("Field %s must be in format: YYYY-MM-DD HH:MM:SS.NNNNNN+ZZ", e.Field()))
+				case "futuredate":
+					errorMessages = append(errorMessages,
+						fmt.Sprintf("Field %s must be a future date", e.Field()))
+				case "gtdate":
+					errorMessages = append(errorMessages,
+						fmt.Sprintf("Field %s must be after %s", e.Field(), e.Param()))
+				default:
+					errorMessages = append(errorMessages, e.Error())
+				}
 			}
-			errorMessage = strings.Join(errorMessages, ", ")
-		} else {
-			errorMessage = "Invalid request parameters"
+			response := responses.NewResponse[TResponse](400, strings.Join(errorMessages, "; "))
+			return &response
 		}
 		response := responses.NewResponse[TResponse](400, errorMessage)
-		log.Println(response)
 		return &response
 	}
 	return nil

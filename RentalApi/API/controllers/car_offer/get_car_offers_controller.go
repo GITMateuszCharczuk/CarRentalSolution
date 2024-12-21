@@ -31,7 +31,6 @@ func NewGetCarOffersController(validator *validator.Validate) *GetCarOffersContr
 // @Param date_time_to query string false "Filter to date" example:"2024-01-01T00:00:00Z"
 // @Param tags query []string false "Filter by tags" example:"luxury,sports"
 // @Param visible query string false "Filter by visibility" example:"true"
-// @Param status query string false "Filter by status" example:"available"
 // @Param sort_fields query []string false "Sort fields (field:asc|desc)" example:"created_at:desc"
 // @Success 200 {object} contract.GetCarOffersResponse200 "Car offers retrieved successfully"
 // @Failure 400 {object} contract.GetCarOffersResponse400 "Invalid request parameters"
@@ -45,7 +44,6 @@ func (h *GetCarOffersController) Handle(c *gin.Context) {
 		DateTimeTo:   c.Query("date_time_to"),
 		Tags:         services.ExtractQueryArray(c, "tags"),
 		Visible:      c.Query("visible"),
-		Status:       c.Query("status"),
 		SortQuery:    services.ExtractSortQuery(c),
 		Pagination:   services.ExtractPagination(c),
 	}

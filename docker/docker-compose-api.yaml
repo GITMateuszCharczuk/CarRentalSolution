@@ -11,6 +11,8 @@ services:
       - FILE_SERVICE_URL=http://file-storage-api:8082
       - EMAIL_SERVICE_URL=http://email-service-api:8084
       - IDENTITY_API_URL=http://identity-api:8085
+      - RENTAL_API_URL=http://rental-api:8088
+      - BLOG_API_URL=http://blog-api:8087
       - REQUEST_SENT_LIMIT=100
       - REQUEST_SENT_TIME_WINDOW=60
       - REQUEST_SIZE_LIMIT=10
@@ -18,6 +20,9 @@ services:
     depends_on:
       - file-storage-api
       - email-service-api
+      - identity-api
+      - rental-api
+      - blog-api
     networks:
       - docker-network
   identity-api:
@@ -47,7 +52,52 @@ services:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       RUN_POSTGRES_MIGRATION: "true"
-      
+    networks:
+      - docker-network
+  rental-api:
+    build:
+      context: ../RentalApi
+      dockerfile: ./docker/Dockerfile.API
+    ports:
+      - "8088:8088"
+    environment:
+      # Environment
+      ENV: prod
+      # Service Configuration
+      SERVICE_ADDRESS: /rental-api/api
+      SERVICE_PORT: :8088
+      # PostgreSQL Configuration
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: rental_db
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      RUN_POSTGRES_MIGRATION: "true"
+      IDENTITY_API_URL: http://identity-api:8085
+      EMAIL_SERVICE_BASE_URL: http://email-service-api:8084
+      COMPANY_EMAIL: test@test.com
+    networks:
+      - docker-network
+  blog-api:
+    ports:
+      - "8087:8087"
+    build:
+      context: ../BlogApi
+      dockerfile: ./docker/Dockerfile.API
+    environment:
+      # Environment
+      ENV: prod
+      # Service Configuration
+      SERVICE_ADDRESS: /blog-api/api
+      SERVICE_PORT: :8087
+      IDENTITY_API_URL: http://identity-api:8085
+      # PostgreSQL Configuration
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: blog_db
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      RUN_POSTGRES_MIGRATION: "true"
     networks:
       - docker-network
   email-service-api:

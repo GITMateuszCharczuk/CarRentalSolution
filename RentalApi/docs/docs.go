@@ -15,78 +15,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/rental-api/api/comments/{id}": {
-            "delete": {
-                "description": "Deletes a specific comment from a blog post",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "comments"
-                ],
-                "summary": "Delete a comment from a blog post",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JWT token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Comment ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Comment deleted successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteBlogPostCommentResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteBlogPostCommentResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteBlogPostCommentResponse401"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden - Not the comment owner",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteBlogPostCommentResponse403"
-                        }
-                    },
-                    "404": {
-                        "description": "Comment not found",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteBlogPostCommentResponse404"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during deletion",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteBlogPostCommentResponse500"
-                        }
-                    }
-                }
-            }
-        },
-        "/rental-api/api/posts": {
+        "/rental-api/api/car-offers": {
             "get": {
-                "description": "Retrieves a list of blog posts with optional filtering, pagination and sorting.",
+                "description": "Retrieves a list of car offers with optional filtering, pagination and sorting",
                 "consumes": [
                     "application/json"
                 ],
@@ -94,17 +25,10 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "blog"
+                    "car-offers"
                 ],
-                "summary": "Get blog posts",
+                "summary": "Get car offers",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JWT token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "Page size",
@@ -123,363 +47,8 @@ const docTemplate = `{
                             "type": "string"
                         },
                         "collectionFormat": "csv",
-                        "description": "Sort fields (field:asc|desc)",
-                        "name": "sort_fields",
-                        "in": "query"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv",
-                        "description": "Blog post IDs",
+                        "description": "Filter by car offer IDs",
                         "name": "ids",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Start date",
-                        "name": "date-time-from",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "End date",
-                        "name": "date-time-to",
-                        "in": "query"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv",
-                        "description": "Author IDs",
-                        "name": "author-ids",
-                        "in": "query"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv",
-                        "description": "Tags",
-                        "name": "tags",
-                        "in": "query"
-                    },
-                    {
-                        "type": "boolean",
-                        "description": "Visibility status",
-                        "name": "visible",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Blog posts retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetBlogPostsResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetBlogPostsResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetBlogPostsResponse401"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during retrieval",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetBlogPostsResponse500"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Creates a new blog post with the provided details",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "blog"
-                ],
-                "summary": "Create a new blog post",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JWT token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "description": "Blog post details",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/contract.CreateBlogPostRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Blog post created successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.CreateBlogPostResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.CreateBlogPostResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.CreateBlogPostResponse401"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during creation",
-                        "schema": {
-                            "$ref": "#/definitions/contract.CreateBlogPostResponse500"
-                        }
-                    }
-                }
-            }
-        },
-        "/rental-api/api/posts/{id}": {
-            "get": {
-                "description": "Retrieves a specific blog post by its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "blog"
-                ],
-                "summary": "Get a blog post by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Blog Post ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Blog post retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetBlogPostResponse200"
-                        }
-                    },
-                    "404": {
-                        "description": "Blog post not found",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetBlogPostResponse404"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during retrieval",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetBlogPostResponse500"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Updates an existing blog post with the provided details",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "blog"
-                ],
-                "summary": "Update a blog post",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JWT token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Blog Post ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Updated blog post details",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/contract.UpdateBlogPostRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Blog post updated successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.UpdateBlogPostResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.UpdateBlogPostResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.UpdateBlogPostResponse401"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden - Not the post owner",
-                        "schema": {
-                            "$ref": "#/definitions/contract.UpdateBlogPostResponse403"
-                        }
-                    },
-                    "404": {
-                        "description": "Blog post not found",
-                        "schema": {
-                            "$ref": "#/definitions/contract.UpdateBlogPostResponse404"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during update",
-                        "schema": {
-                            "$ref": "#/definitions/contract.UpdateBlogPostResponse500"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Deletes an existing blog post",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "blog"
-                ],
-                "summary": "Delete a blog post",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JWT token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Blog Post ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Blog post deleted successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteBlogPostResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteBlogPostResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteBlogPostResponse401"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden - Not authorized to delete",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteBlogPostResponse403"
-                        }
-                    },
-                    "404": {
-                        "description": "Blog post not found",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteBlogPostResponse404"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during deletion",
-                        "schema": {
-                            "$ref": "#/definitions/contract.DeleteBlogPostResponse500"
-                        }
-                    }
-                }
-            }
-        },
-        "/rental-api/api/posts/{id}/comments": {
-            "get": {
-                "description": "Retrieves all comments for a specific blog post with pagination",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "comments"
-                ],
-                "summary": "Get comments for a blog post",
-                "parameters": [
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv",
-                        "description": "Filter by blog post IDs",
-                        "name": "ids",
-                        "in": "query"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv",
-                        "description": "Filter by user IDs",
-                        "name": "user_ids",
                         "in": "query"
                     },
                     {
@@ -500,46 +69,50 @@ const docTemplate = `{
                             "type": "string"
                         },
                         "collectionFormat": "csv",
+                        "description": "Filter by tags",
+                        "name": "tags",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by visibility",
+                        "name": "visible",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
                         "description": "Sort fields (field:asc|desc)",
                         "name": "sort_fields",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Page size",
-                        "name": "page_size",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Current page",
-                        "name": "current_page",
                         "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Comments retrieved successfully",
+                        "description": "Car offers retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetBlogPostCommentsResponse200"
+                            "$ref": "#/definitions/contract.GetCarOffersResponse200"
                         }
                     },
-                    "404": {
-                        "description": "Blog post not found",
+                    "400": {
+                        "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetBlogPostCommentsResponse404"
+                            "$ref": "#/definitions/contract.GetCarOffersResponse400"
                         }
                     },
                     "500": {
                         "description": "Server error during retrieval",
                         "schema": {
-                            "$ref": "#/definitions/contract.GetBlogPostCommentsResponse500"
+                            "$ref": "#/definitions/contract.GetCarOffersResponse500"
                         }
                     }
                 }
             },
             "post": {
-                "description": "Creates a new comment on a specific blog post",
+                "description": "Creates a new car offer with the provided details",
                 "consumes": [
                     "application/json"
                 ],
@@ -547,9 +120,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "comments"
+                    "car-offers"
                 ],
-                "summary": "Create a comment on a blog post",
+                "summary": "Create a new car offer",
                 "parameters": [
                     {
                         "type": "string",
@@ -559,162 +132,46 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "Blog Post ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Comment details",
+                        "description": "Car offer details",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/contract.CreateBlogPostCommentRequest"
+                            "$ref": "#/definitions/contract.CreateCarOfferRequest"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Comment created successfully",
+                        "description": "Car offer created successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.CreateBlogPostCommentResponse200"
+                            "$ref": "#/definitions/contract.CreateCarOfferResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.CreateBlogPostCommentResponse400"
+                            "$ref": "#/definitions/contract.CreateCarOfferResponse400"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/contract.CreateBlogPostCommentResponse401"
-                        }
-                    },
-                    "404": {
-                        "description": "Blog post not found",
-                        "schema": {
-                            "$ref": "#/definitions/contract.CreateBlogPostCommentResponse404"
+                            "$ref": "#/definitions/contract.CreateCarOfferResponse401"
                         }
                     },
                     "500": {
                         "description": "Server error during creation",
                         "schema": {
-                            "$ref": "#/definitions/contract.CreateBlogPostCommentResponse500"
+                            "$ref": "#/definitions/contract.CreateCarOfferResponse500"
                         }
                     }
                 }
             }
         },
-        "/rental-api/api/posts/{id}/likes": {
-            "get": {
-                "description": "Retrieves the total number of likes for a specific blog post",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "likes"
-                ],
-                "summary": "Get likes count for a blog post",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Blog Post ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Likes count retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetLikesForBlogPostResponse200"
-                        }
-                    },
-                    "404": {
-                        "description": "Blog post not found",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetLikesForBlogPostResponse404"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during retrieval",
-                        "schema": {
-                            "$ref": "#/definitions/contract.GetLikesForBlogPostResponse500"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Adds a like to a specific blog post",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "likes"
-                ],
-                "summary": "Like a blog post",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JWT token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Blog Post ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Like added successfully",
-                        "schema": {
-                            "$ref": "#/definitions/contract.CreateLikeForBlogPostResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "schema": {
-                            "$ref": "#/definitions/contract.CreateLikeForBlogPostResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/contract.CreateLikeForBlogPostResponse401"
-                        }
-                    },
-                    "404": {
-                        "description": "Blog post not found",
-                        "schema": {
-                            "$ref": "#/definitions/contract.CreateLikeForBlogPostResponse404"
-                        }
-                    },
-                    "500": {
-                        "description": "Server error during creation",
-                        "schema": {
-                            "$ref": "#/definitions/contract.CreateLikeForBlogPostResponse500"
-                        }
-                    }
-                }
-            },
+        "/rental-api/api/car-offers/images/{carOfferId}/{imageId}": {
             "delete": {
-                "description": "Removes a like from a specific blog post",
+                "description": "Deletes an image from a car offer",
                 "consumes": [
                     "application/json"
                 ],
@@ -722,9 +179,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "likes"
+                    "car-images"
                 ],
-                "summary": "Unlike a blog post",
+                "summary": "Delete image from car offer",
                 "parameters": [
                     {
                         "type": "string",
@@ -735,49 +192,62 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Blog Post ID",
-                        "name": "id",
+                        "description": "Car Offer ID",
+                        "name": "carOfferId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Image ID (UUID)",
+                        "name": "imageId",
                         "in": "path",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Like removed successfully",
+                        "description": "Image deleted successfully",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteLikeForBlogPostResponse200"
+                            "$ref": "#/definitions/contract.DeleteImageFromCarOfferResponse200"
                         }
                     },
                     "400": {
                         "description": "Invalid request parameters",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteLikeForBlogPostResponse400"
+                            "$ref": "#/definitions/contract.DeleteImageFromCarOfferResponse400"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteLikeForBlogPostResponse401"
+                            "$ref": "#/definitions/contract.DeleteImageFromCarOfferResponse401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Not authorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteImageFromCarOfferResponse403"
                         }
                     },
                     "404": {
-                        "description": "Blog post not found",
+                        "description": "Image or car offer not found",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteLikeForBlogPostResponse404"
+                            "$ref": "#/definitions/contract.DeleteImageFromCarOfferResponse404"
                         }
                     },
                     "500": {
                         "description": "Server error during deletion",
                         "schema": {
-                            "$ref": "#/definitions/contract.DeleteLikeForBlogPostResponse500"
+                            "$ref": "#/definitions/contract.DeleteImageFromCarOfferResponse500"
                         }
                     }
                 }
             }
         },
-        "/rental-api/api/tags/{id}": {
-            "get": {
-                "description": "Retrieves a list of all unique tags used in blog posts",
+        "/rental-api/api/car-offers/images/{offerId}/{imageId}": {
+            "post": {
+                "description": "Adds a new image URL to an existing car offer",
                 "consumes": [
                     "application/json"
                 ],
@@ -785,13 +255,89 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tags"
+                    "car-images"
+                ],
+                "summary": "Add image to car offer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Car Offer ID",
+                        "name": "offerId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Image ID",
+                        "name": "imageId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Image added successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.AddUrlToCarOfferResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.AddUrlToCarOfferResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.AddUrlToCarOfferResponse401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Not authorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.AddUrlToCarOfferResponse403"
+                        }
+                    },
+                    "404": {
+                        "description": "Car offer not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.AddUrlToCarOfferResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during addition",
+                        "schema": {
+                            "$ref": "#/definitions/contract.AddUrlToCarOfferResponse500"
+                        }
+                    }
+                }
+            }
+        },
+        "/rental-api/api/car-offers/tags/{id}": {
+            "get": {
+                "description": "Retrieves a list of all unique tags used in car offer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car-offers"
                 ],
                 "summary": "Get all unique tags",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Blog Post ID",
+                        "description": "Car Offer ID",
                         "name": "id",
                         "in": "path"
                     },
@@ -821,22 +367,556 @@ const docTemplate = `{
                     }
                 }
             }
-        }
-    },
-    "definitions": {
-        "contract.CreateBlogPostCommentRequest": {
-            "type": "object",
-            "required": [
-                "description"
-            ],
-            "properties": {
-                "description": {
-                    "type": "string",
-                    "example": "This is a great blog post!"
+        },
+        "/rental-api/api/car-offers/{id}": {
+            "get": {
+                "description": "Retrieves a specific car offer by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car-offers"
+                ],
+                "summary": "Get a car offer by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Car Offer ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Car offer retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetCarOfferResponse200"
+                        }
+                    },
+                    "404": {
+                        "description": "Car offer not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetCarOfferResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetCarOfferResponse500"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an existing car offer with the provided details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car-offers"
+                ],
+                "summary": "Update a car offer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Car Offer ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated car offer details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOfferRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Car offer updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOfferResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOfferResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOfferResponse401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Not authorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOfferResponse403"
+                        }
+                    },
+                    "404": {
+                        "description": "Car offer not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOfferResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during update",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOfferResponse500"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes an existing car offer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car-offers"
+                ],
+                "summary": "Delete a car offer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Car Offer ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Car offer deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteCarOfferResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteCarOfferResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteCarOfferResponse401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Not authorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteCarOfferResponse403"
+                        }
+                    },
+                    "404": {
+                        "description": "Car offer not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteCarOfferResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during deletion",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteCarOfferResponse500"
+                        }
+                    }
                 }
             }
         },
-        "contract.CreateBlogPostCommentResponse200": {
+        "/rental-api/api/car-orders": {
+            "get": {
+                "description": "Retrieves a list of car orders with optional filtering, pagination and sorting",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car-orders"
+                ],
+                "summary": "Get car orders",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Current page",
+                        "name": "current_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by start date",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by end date",
+                        "name": "end_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by user ID",
+                        "name": "user_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by car offer ID",
+                        "name": "car_offer_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by status",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Type of date filter",
+                        "name": "date_filter_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Sort fields (field:asc|desc)",
+                        "name": "sort_fields",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Car orders retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetCarOrdersResponse200"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetCarOrdersResponse401"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetCarOrdersResponse500"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new car order with the provided details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car-orders"
+                ],
+                "summary": "Create a new car order",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Car order details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateCarOrderRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Car order created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateCarOrderResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateCarOrderResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateCarOrderResponse401"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during creation",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateCarOrderResponse500"
+                        }
+                    }
+                }
+            }
+        },
+        "/rental-api/api/car-orders/{id}": {
+            "get": {
+                "description": "Retrieves a specific car order by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car-orders"
+                ],
+                "summary": "Get a car order by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Car Order ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Car order retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetCarOrderResponse200"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetCarOrderResponse401"
+                        }
+                    },
+                    "404": {
+                        "description": "Car order not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetCarOrderResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetCarOrderResponse500"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an existing car order with the provided details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car-orders"
+                ],
+                "summary": "Update a car order",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Car Order ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated car order details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOrderRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Car order updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOrderResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOrderResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOrderResponse401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Not authorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOrderResponse403"
+                        }
+                    },
+                    "404": {
+                        "description": "Car order not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOrderResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during update",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateCarOrderResponse500"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes an existing car order",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car-orders"
+                ],
+                "summary": "Delete a car order",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Car Order ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Car order deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteCarOrderResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteCarOrderResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteCarOrderResponse401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Not authorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteCarOrderResponse403"
+                        }
+                    },
+                    "404": {
+                        "description": "Car order not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteCarOrderResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during deletion",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteCarOrderResponse500"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "contract.AddUrlToCarOfferResponse200": {
             "type": "object",
             "properties": {
                 "id": {
@@ -845,7 +925,7 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "Comment added successfully"
+                    "example": "Image added successfully"
                 },
                 "success": {
                     "type": "boolean",
@@ -853,7 +933,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.CreateBlogPostCommentResponse400": {
+        "contract.AddUrlToCarOfferResponse400": {
             "type": "object",
             "properties": {
                 "id": {
@@ -862,7 +942,7 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "Invalid request parameters"
+                    "example": "Invalid request format"
                 },
                 "success": {
                     "type": "boolean",
@@ -870,7 +950,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.CreateBlogPostCommentResponse401": {
+        "contract.AddUrlToCarOfferResponse401": {
             "type": "object",
             "properties": {
                 "id": {
@@ -887,7 +967,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.CreateBlogPostCommentResponse404": {
+        "contract.AddUrlToCarOfferResponse403": {
             "type": "object",
             "properties": {
                 "id": {
@@ -896,7 +976,7 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "Blog post not found"
+                    "example": "Forbidden - Not authorized"
                 },
                 "success": {
                     "type": "boolean",
@@ -904,7 +984,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.CreateBlogPostCommentResponse500": {
+        "contract.AddUrlToCarOfferResponse404": {
             "type": "object",
             "properties": {
                 "id": {
@@ -913,7 +993,7 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "Internal server error while adding comment"
+                    "example": "Car offer not found"
                 },
                 "success": {
                     "type": "boolean",
@@ -921,31 +1001,79 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.CreateBlogPostRequest": {
+        "contract.AddUrlToCarOfferResponse500": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Server error during addition"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.CreateCarOfferRequest": {
             "type": "object",
             "required": [
-                "content",
                 "heading",
-                "pageTitle",
                 "shortDescription",
                 "urlHandle"
             ],
             "properties": {
-                "content": {
+                "driveDetails": {
                     "type": "string",
-                    "example": "Blog post content..."
+                    "example": "AWD"
+                },
+                "engineDetails": {
+                    "type": "string",
+                    "example": "2.0L Turbo"
                 },
                 "featuredImageUrl": {
                     "type": "string",
                     "example": "https://example.com/image.jpg"
                 },
+                "gearboxDetails": {
+                    "type": "string",
+                    "example": "Automatic"
+                },
                 "heading": {
                     "type": "string",
-                    "example": "Blog Post Title"
+                    "example": "Car Offer Title"
                 },
-                "pageTitle": {
+                "horsepower": {
                     "type": "string",
-                    "example": "Page Title"
+                    "example": "300"
+                },
+                "imageUrls": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[\"https://example.com/image1.jpg\"]"
+                    ]
+                },
+                "oneMonthPrice": {
+                    "type": "number",
+                    "example": 2000
+                },
+                "oneNormalDayPrice": {
+                    "type": "number",
+                    "example": 100
+                },
+                "oneWeekPrice": {
+                    "type": "number",
+                    "example": 600
+                },
+                "oneWeekendDayPrice": {
+                    "type": "number",
+                    "example": 150
                 },
                 "shortDescription": {
                     "type": "string",
@@ -957,21 +1085,25 @@ const docTemplate = `{
                         "type": "string"
                     },
                     "example": [
-                        "[\"tech\"",
-                        "\"programming\"]"
+                        "[\"luxury\"",
+                        "\"sports\"]"
                     ]
                 },
                 "urlHandle": {
                     "type": "string",
-                    "example": "blog-post-title"
+                    "example": "car-offer-title"
                 },
                 "visible": {
                     "type": "boolean",
                     "example": true
+                },
+                "yearOfProduction": {
+                    "type": "integer",
+                    "example": 2023
                 }
             }
         },
-        "contract.CreateBlogPostResponse200": {
+        "contract.CreateCarOfferResponse200": {
             "type": "object",
             "properties": {
                 "id": {
@@ -980,7 +1112,7 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "Blog post created successfully"
+                    "example": "Car offer created successfully"
                 },
                 "success": {
                     "type": "boolean",
@@ -988,7 +1120,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.CreateBlogPostResponse400": {
+        "contract.CreateCarOfferResponse400": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1005,7 +1137,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.CreateBlogPostResponse401": {
+        "contract.CreateCarOfferResponse401": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1022,7 +1154,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.CreateBlogPostResponse500": {
+        "contract.CreateCarOfferResponse500": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1031,7 +1163,7 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "Internal server error while creating blog post"
+                    "example": "Internal server error while creating car offer"
                 },
                 "success": {
                     "type": "boolean",
@@ -1039,7 +1171,49 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.CreateLikeForBlogPostResponse200": {
+        "contract.CreateCarOrderRequest": {
+            "type": "object",
+            "required": [
+                "carOfferId",
+                "endDate",
+                "startDate"
+            ],
+            "properties": {
+                "carOfferId": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "deliveryLocation": {
+                    "type": "string",
+                    "example": "City Center"
+                },
+                "endDate": {
+                    "type": "string",
+                    "example": "2024-03-20T12:00:00Z"
+                },
+                "numOfDrivers": {
+                    "type": "integer",
+                    "example": 2
+                },
+                "returnLocation": {
+                    "type": "string",
+                    "example": "City Center"
+                },
+                "startDate": {
+                    "type": "string",
+                    "example": "2024-03-15T14:30:00Z"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "pending"
+                },
+                "totalCost": {
+                    "type": "number",
+                    "example": 750
+                }
+            }
+        },
+        "contract.CreateCarOrderResponse200": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1048,7 +1222,7 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "Like added successfully"
+                    "example": "Car order created successfully"
                 },
                 "success": {
                     "type": "boolean",
@@ -1056,7 +1230,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.CreateLikeForBlogPostResponse400": {
+        "contract.CreateCarOrderResponse400": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1073,7 +1247,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.CreateLikeForBlogPostResponse401": {
+        "contract.CreateCarOrderResponse401": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1090,7 +1264,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.CreateLikeForBlogPostResponse404": {
+        "contract.CreateCarOrderResponse500": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1099,7 +1273,7 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "Blog post not found"
+                    "example": "Internal server error while creating car order"
                 },
                 "success": {
                     "type": "boolean",
@@ -1107,29 +1281,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.CreateLikeForBlogPostResponse500": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "example": ""
-                },
-                "message": {
-                    "type": "string",
-                    "example": "Internal server error while adding like"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.DeleteBlogPostCommentResponse200": {
+        "contract.DeleteCarOfferResponse200": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Comment deleted successfully"
+                    "example": "Car offer deleted successfully"
                 },
                 "success": {
                     "type": "boolean",
@@ -1137,7 +1294,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteBlogPostCommentResponse400": {
+        "contract.DeleteCarOfferResponse400": {
             "type": "object",
             "properties": {
                 "message": {
@@ -1150,7 +1307,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteBlogPostCommentResponse401": {
+        "contract.DeleteCarOfferResponse401": {
             "type": "object",
             "properties": {
                 "message": {
@@ -1163,12 +1320,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteBlogPostCommentResponse403": {
+        "contract.DeleteCarOfferResponse403": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Forbidden"
+                    "example": "Forbidden - Not authorized"
                 },
                 "success": {
                     "type": "boolean",
@@ -1176,12 +1333,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteBlogPostCommentResponse404": {
+        "contract.DeleteCarOfferResponse404": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Comment not found"
+                    "example": "Car offer not found"
                 },
                 "success": {
                     "type": "boolean",
@@ -1189,12 +1346,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteBlogPostCommentResponse500": {
+        "contract.DeleteCarOfferResponse500": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Internal server error while deleting comment"
+                    "example": "Internal server error while deleting car offer"
                 },
                 "success": {
                     "type": "boolean",
@@ -1202,12 +1359,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteBlogPostResponse200": {
+        "contract.DeleteCarOrderResponse200": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Blog post deleted successfully"
+                    "example": "Car order deleted successfully"
                 },
                 "success": {
                     "type": "boolean",
@@ -1215,7 +1372,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteBlogPostResponse400": {
+        "contract.DeleteCarOrderResponse400": {
             "type": "object",
             "properties": {
                 "message": {
@@ -1228,7 +1385,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteBlogPostResponse401": {
+        "contract.DeleteCarOrderResponse401": {
             "type": "object",
             "properties": {
                 "message": {
@@ -1241,12 +1398,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteBlogPostResponse403": {
+        "contract.DeleteCarOrderResponse403": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Forbidden"
+                    "example": "Forbidden - Not authorized"
                 },
                 "success": {
                     "type": "boolean",
@@ -1254,12 +1411,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteBlogPostResponse404": {
+        "contract.DeleteCarOrderResponse404": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Blog post not found"
+                    "example": "Car order not found"
                 },
                 "success": {
                     "type": "boolean",
@@ -1267,12 +1424,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteBlogPostResponse500": {
+        "contract.DeleteCarOrderResponse500": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Internal server error while deleting blog post"
+                    "example": "Internal server error while deleting car order"
                 },
                 "success": {
                     "type": "boolean",
@@ -1280,12 +1437,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteLikeForBlogPostResponse200": {
+        "contract.DeleteImageFromCarOfferResponse200": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Like removed successfully"
+                    "example": "Image added successfully"
                 },
                 "success": {
                     "type": "boolean",
@@ -1293,12 +1450,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteLikeForBlogPostResponse400": {
+        "contract.DeleteImageFromCarOfferResponse400": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Invalid request parameters"
+                    "example": "Image not found"
                 },
                 "success": {
                     "type": "boolean",
@@ -1306,7 +1463,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteLikeForBlogPostResponse401": {
+        "contract.DeleteImageFromCarOfferResponse401": {
             "type": "object",
             "properties": {
                 "message": {
@@ -1319,12 +1476,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteLikeForBlogPostResponse404": {
+        "contract.DeleteImageFromCarOfferResponse403": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Like not found"
+                    "example": "Forbidden - Not authorized"
                 },
                 "success": {
                     "type": "boolean",
@@ -1332,12 +1489,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.DeleteLikeForBlogPostResponse500": {
+        "contract.DeleteImageFromCarOfferResponse404": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Internal server error while removing like"
+                    "example": "Car offer not found"
                 },
                 "success": {
                     "type": "boolean",
@@ -1345,7 +1502,153 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.GetBlogPostCommentsResponse200": {
+        "contract.DeleteImageFromCarOfferResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetCarOfferResponse200": {
+            "type": "object",
+            "properties": {
+                "car_offer": {
+                    "type": "object",
+                    "properties": {
+                        "deliveryLocation": {
+                            "type": "string",
+                            "example": "Airport"
+                        },
+                        "driveDetails": {
+                            "type": "string",
+                            "example": "AWD"
+                        },
+                        "engineDetails": {
+                            "type": "string",
+                            "example": "2.0L Turbo"
+                        },
+                        "featuredImageUrl": {
+                            "type": "string",
+                            "example": "https://example.com/image.jpg"
+                        },
+                        "gearboxDetails": {
+                            "type": "string",
+                            "example": "Automatic"
+                        },
+                        "heading": {
+                            "type": "string",
+                            "example": "Car Offer Title"
+                        },
+                        "horsepower": {
+                            "type": "string",
+                            "example": "300"
+                        },
+                        "id": {
+                            "type": "string",
+                            "example": "123e4567-e89b-12d3-a456-426614174000"
+                        },
+                        "imageUrls": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "example": [
+                                "[\"https://example.com/image1.jpg\"]"
+                            ]
+                        },
+                        "oneMonthPrice": {
+                            "type": "number",
+                            "example": 2000
+                        },
+                        "oneNormalDayPrice": {
+                            "type": "number",
+                            "example": 100
+                        },
+                        "oneWeekPrice": {
+                            "type": "number",
+                            "example": 600
+                        },
+                        "oneWeekendDayPrice": {
+                            "type": "number",
+                            "example": 150
+                        },
+                        "shortDescription": {
+                            "type": "string",
+                            "example": "Short description"
+                        },
+                        "tags": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "example": [
+                                "[\"luxury\"",
+                                "\"sports\"]"
+                            ]
+                        },
+                        "urlHandle": {
+                            "type": "string",
+                            "example": "car-offer-title"
+                        },
+                        "visible": {
+                            "type": "boolean",
+                            "example": true
+                        },
+                        "yearOfProduction": {
+                            "type": "integer",
+                            "example": 2023
+                        }
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Car offer retrieved successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.GetCarOfferResponse404": {
+            "type": "object",
+            "properties": {
+                "car_offer": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Car offer not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetCarOfferResponse500": {
+            "type": "object",
+            "properties": {
+                "car_offer": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error while retrieving car offer"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetCarOffersResponse200": {
             "type": "object",
             "properties": {
                 "current_page": {
@@ -1353,15 +1656,54 @@ const docTemplate = `{
                     "example": 1
                 },
                 "items": {
-                    "description": "todo",
                     "type": "array",
                     "items": {
-                        "type": "object"
+                        "type": "object",
+                        "properties": {
+                            "featuredImageUrl": {
+                                "type": "string",
+                                "example": "https://example.com/image.jpg"
+                            },
+                            "heading": {
+                                "type": "string",
+                                "example": "Car Offer Title"
+                            },
+                            "id": {
+                                "type": "string",
+                                "example": "123e4567-e89b-12d3-a456-426614174000"
+                            },
+                            "publishedDate": {
+                                "type": "string",
+                                "example": "2023-12-12"
+                            },
+                            "shortDescription": {
+                                "type": "string",
+                                "example": "Short description"
+                            },
+                            "tags": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "example": [
+                                    "[\"luxury\"",
+                                    "\"sports\"]"
+                                ]
+                            },
+                            "urlHandle": {
+                                "type": "string",
+                                "example": "car-offer-title"
+                            },
+                            "visible": {
+                                "type": "boolean",
+                                "example": true
+                            }
+                        }
                     }
                 },
                 "message": {
                     "type": "string",
-                    "example": "Comments retrieved successfully"
+                    "example": "Car offers retrieved successfully"
                 },
                 "page_size": {
                     "type": "integer",
@@ -1381,218 +1723,10 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.GetBlogPostCommentsResponse404": {
+        "contract.GetCarOffersResponse400": {
             "type": "object",
             "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Blog post not found"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.GetBlogPostCommentsResponse500": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Internal server error while retrieving comments"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.GetBlogPostResponse200": {
-            "type": "object",
-            "properties": {
-                "blog_post": {
-                    "type": "object",
-                    "properties": {
-                        "author": {
-                            "type": "string",
-                            "example": "John Doe"
-                        },
-                        "content": {
-                            "type": "string",
-                            "example": "Blog post content..."
-                        },
-                        "createdAt": {
-                            "type": "string",
-                            "example": "2023-12-12T10:00:00Z"
-                        },
-                        "featuredImageUrl": {
-                            "type": "string",
-                            "example": "https://example.com/image.jpg"
-                        },
-                        "heading": {
-                            "type": "string",
-                            "example": "Blog Post Title"
-                        },
-                        "id": {
-                            "type": "string",
-                            "example": "123e4567-e89b-12d3-a456-426614174000"
-                        },
-                        "pageTitle": {
-                            "type": "string",
-                            "example": "Page Title"
-                        },
-                        "publishedDate": {
-                            "type": "string",
-                            "example": "2023-12-12"
-                        },
-                        "shortDescription": {
-                            "type": "string",
-                            "example": "Short description"
-                        },
-                        "urlHandle": {
-                            "type": "string",
-                            "example": "blog-post-title"
-                        }
-                    }
-                },
-                "message": {
-                    "type": "string",
-                    "example": "Blog post retrieved successfully"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": true
-                }
-            }
-        },
-        "contract.GetBlogPostResponse404": {
-            "type": "object",
-            "properties": {
-                "blog_post": {
-                    "type": "object"
-                },
-                "message": {
-                    "type": "string",
-                    "example": "Blog post not found"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.GetBlogPostResponse500": {
-            "type": "object",
-            "properties": {
-                "blog_post": {
-                    "type": "object"
-                },
-                "message": {
-                    "type": "string",
-                    "example": "Internal server error while retrieving blog post"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "contract.GetBlogPostsResponse200": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "object",
-                    "properties": {
-                        "current_page": {
-                            "type": "integer",
-                            "example": 1
-                        },
-                        "items": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "author": {
-                                        "type": "string",
-                                        "example": "John Doe"
-                                    },
-                                    "content": {
-                                        "type": "string",
-                                        "example": "Blog post content..."
-                                    },
-                                    "featuredImageUrl": {
-                                        "type": "string",
-                                        "example": "https://example.com/image.jpg"
-                                    },
-                                    "heading": {
-                                        "type": "string",
-                                        "example": "Blog Post Title"
-                                    },
-                                    "id": {
-                                        "type": "string",
-                                        "example": "123e4567-e89b-12d3-a456-426614174000"
-                                    },
-                                    "pageTitle": {
-                                        "type": "string",
-                                        "example": "Page Title"
-                                    },
-                                    "publishedDate": {
-                                        "type": "string",
-                                        "example": "2023-12-12"
-                                    },
-                                    "shortDescription": {
-                                        "type": "string",
-                                        "example": "Short description"
-                                    },
-                                    "tags": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
-                                        },
-                                        "example": [
-                                            "[\"tech\"",
-                                            "\"programming\"]"
-                                        ]
-                                    },
-                                    "urlHandle": {
-                                        "type": "string",
-                                        "example": "blog-post-title"
-                                    },
-                                    "visible": {
-                                        "type": "boolean",
-                                        "example": true
-                                    }
-                                }
-                            }
-                        },
-                        "page_size": {
-                            "type": "integer",
-                            "example": 10
-                        },
-                        "total_items": {
-                            "type": "integer",
-                            "example": 100
-                        },
-                        "total_pages": {
-                            "type": "integer",
-                            "example": 10
-                        }
-                    }
-                },
-                "message": {
-                    "type": "string",
-                    "example": "Users retrieved successfully"
-                },
-                "status_code": {
-                    "type": "integer",
-                    "example": 200
-                }
-            }
-        },
-        "contract.GetBlogPostsResponse400": {
-            "type": "object",
-            "properties": {
-                "data": {
+                "items": {
                     "type": "array",
                     "items": {
                         "type": "object"
@@ -1608,15 +1742,82 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.GetBlogPostsResponse401": {
+        "contract.GetCarOffersResponse500": {
             "type": "object",
             "properties": {
-                "data": {
+                "items": {
                     "type": "array",
                     "items": {
                         "type": "object"
                     }
                 },
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error while retrieving car offers"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetCarOrderResponse200": {
+            "type": "object",
+            "properties": {
+                "car_order": {
+                    "type": "object",
+                    "properties": {
+                        "carOfferId": {
+                            "type": "string",
+                            "example": "123e4567-e89b-12d3-a456-426614174000"
+                        },
+                        "deliveryLocation": {
+                            "type": "string",
+                            "example": "City Center"
+                        },
+                        "endDate": {
+                            "type": "string",
+                            "example": "2023-12-19"
+                        },
+                        "id": {
+                            "type": "string",
+                            "example": "123e4567-e89b-12d3-a456-426614174000"
+                        },
+                        "numOfDrivers": {
+                            "type": "integer",
+                            "example": 2
+                        },
+                        "returnLocation": {
+                            "type": "string",
+                            "example": "City Center"
+                        },
+                        "startDate": {
+                            "type": "string",
+                            "example": "2023-12-12"
+                        },
+                        "totalCost": {
+                            "type": "number",
+                            "example": 750
+                        },
+                        "userId": {
+                            "type": "string",
+                            "example": "123e4567-e89b-12d3-a456-426614174000"
+                        }
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Car order retrieved successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.GetCarOrderResponse401": {
+            "type": "object",
+            "properties": {
                 "message": {
                     "type": "string",
                     "example": "Unauthorized"
@@ -1627,10 +1828,128 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.GetBlogPostsResponse500": {
+        "contract.GetCarOrderResponse404": {
             "type": "object",
             "properties": {
-                "data": {
+                "car_order": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Car order not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetCarOrderResponse500": {
+            "type": "object",
+            "properties": {
+                "car_order": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error while retrieving car order"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetCarOrdersResponse200": {
+            "type": "object",
+            "properties": {
+                "current_page": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "carOfferId": {
+                                "type": "string",
+                                "example": "123e4567-e89b-12d3-a456-426614174000"
+                            },
+                            "deliveryLocation": {
+                                "type": "string",
+                                "example": "City Center"
+                            },
+                            "endDate": {
+                                "type": "string",
+                                "example": "2023-12-19"
+                            },
+                            "id": {
+                                "type": "string",
+                                "example": "123e4567-e89b-12d3-a456-426614174000"
+                            },
+                            "numOfDrivers": {
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "returnLocation": {
+                                "type": "string",
+                                "example": "City Center"
+                            },
+                            "startDate": {
+                                "type": "string",
+                                "example": "2023-12-12"
+                            },
+                            "totalCost": {
+                                "type": "number",
+                                "example": 750
+                            },
+                            "userId": {
+                                "type": "string",
+                                "example": "123e4567-e89b-12d3-a456-426614174000"
+                            }
+                        }
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Car orders retrieved successfully"
+                },
+                "page_size": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "total_items": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "total_pages": {
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
+        "contract.GetCarOrdersResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Unauthorized"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetCarOrdersResponse500": {
+            "type": "object",
+            "properties": {
+                "items": {
                     "type": "array",
                     "items": {
                         "type": "object"
@@ -1638,62 +1957,11 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "Internal server error while retrieving blog posts"
+                    "example": "Internal server error while retrieving car orders"
                 },
                 "success": {
                     "type": "boolean",
                     "example": false
-                }
-            }
-        },
-        "contract.GetLikesForBlogPostResponse200": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Likes retrieved successfully"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": true
-                },
-                "totalCount": {
-                    "type": "integer",
-                    "example": 42
-                }
-            }
-        },
-        "contract.GetLikesForBlogPostResponse404": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Blog post not found"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "totalCount": {
-                    "type": "integer",
-                    "example": 0
-                }
-            }
-        },
-        "contract.GetLikesForBlogPostResponse500": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Internal server error while retrieving likes"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "totalCount": {
-                    "type": "integer",
-                    "example": 0
                 }
             }
         },
@@ -1735,36 +2003,53 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.UpdateBlogPostRequest": {
+        "contract.UpdateCarOfferRequest": {
             "type": "object",
             "required": [
-                "content",
                 "heading",
-                "jwtToken",
-                "pageTitle",
-                "publishedDate",
                 "shortDescription",
                 "urlHandle"
             ],
             "properties": {
-                "content": {
+                "driveDetails": {
                     "type": "string",
-                    "example": "Updated blog post content..."
+                    "example": "RWD"
+                },
+                "engineDetails": {
+                    "type": "string",
+                    "example": "3.0L Twin-Turbo"
                 },
                 "featuredImageUrl": {
                     "type": "string",
                     "example": "https://example.com/updated-image.jpg"
                 },
+                "gearboxDetails": {
+                    "type": "string",
+                    "example": "8-Speed Automatic"
+                },
                 "heading": {
                     "type": "string",
-                    "example": "Updated Blog Post Title"
+                    "example": "Updated Car Offer Title"
                 },
-                "jwtToken": {
-                    "$ref": "#/definitions/models.JwtToken"
-                },
-                "pageTitle": {
+                "horsepower": {
                     "type": "string",
-                    "example": "Updated Page Title"
+                    "example": "350"
+                },
+                "oneMonthPrice": {
+                    "type": "number",
+                    "example": 2500
+                },
+                "oneNormalDayPrice": {
+                    "type": "number",
+                    "example": 120
+                },
+                "oneWeekPrice": {
+                    "type": "number",
+                    "example": 700
+                },
+                "oneWeekendDayPrice": {
+                    "type": "number",
+                    "example": 180
                 },
                 "publishedDate": {
                     "type": "string",
@@ -1780,26 +2065,30 @@ const docTemplate = `{
                         "type": "string"
                     },
                     "example": [
-                        "[\"tech\"",
-                        "\"programming\"]"
+                        "[\"luxury\"",
+                        "\"sports\"]"
                     ]
                 },
                 "urlHandle": {
                     "type": "string",
-                    "example": "updated-blog-post-title"
+                    "example": "updated-car-offer-title"
                 },
                 "visible": {
                     "type": "boolean",
                     "example": true
+                },
+                "yearOfProduction": {
+                    "type": "integer",
+                    "example": 2023
                 }
             }
         },
-        "contract.UpdateBlogPostResponse200": {
+        "contract.UpdateCarOfferResponse200": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Blog post updated successfully"
+                    "example": "Car offer updated successfully"
                 },
                 "success": {
                     "type": "boolean",
@@ -1807,7 +2096,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.UpdateBlogPostResponse400": {
+        "contract.UpdateCarOfferResponse400": {
             "type": "object",
             "properties": {
                 "message": {
@@ -1820,7 +2109,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.UpdateBlogPostResponse401": {
+        "contract.UpdateCarOfferResponse401": {
             "type": "object",
             "properties": {
                 "message": {
@@ -1833,12 +2122,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.UpdateBlogPostResponse403": {
+        "contract.UpdateCarOfferResponse403": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Forbidden"
+                    "example": "Forbidden - Not authorized"
                 },
                 "success": {
                     "type": "boolean",
@@ -1846,12 +2135,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.UpdateBlogPostResponse404": {
+        "contract.UpdateCarOfferResponse404": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Blog post not found"
+                    "example": "Car offer not found"
                 },
                 "success": {
                     "type": "boolean",
@@ -1859,12 +2148,12 @@ const docTemplate = `{
                 }
             }
         },
-        "contract.UpdateBlogPostResponse500": {
+        "contract.UpdateCarOfferResponse500": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Internal server error while updating blog post"
+                    "example": "Internal server error while updating car offer"
                 },
                 "success": {
                     "type": "boolean",
@@ -1872,8 +2161,130 @@ const docTemplate = `{
                 }
             }
         },
-        "models.JwtToken": {
-            "type": "object"
+        "contract.UpdateCarOrderRequest": {
+            "type": "object",
+            "required": [
+                "carOfferId",
+                "endDate",
+                "startDate",
+                "userId"
+            ],
+            "properties": {
+                "carOfferId": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "deliveryLocation": {
+                    "type": "string",
+                    "example": "City Center"
+                },
+                "endDate": {
+                    "type": "string",
+                    "example": "2024-03-20T12:00:00Z"
+                },
+                "numOfDrivers": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "returnLocation": {
+                    "type": "string",
+                    "example": "City Center"
+                },
+                "startDate": {
+                    "type": "string",
+                    "example": "2024-03-15T14:30:00Z"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "pending"
+                },
+                "totalCost": {
+                    "type": "number",
+                    "example": 900
+                },
+                "userId": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                }
+            }
+        },
+        "contract.UpdateCarOrderResponse200": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Car order updated successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.UpdateCarOrderResponse400": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.UpdateCarOrderResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Unauthorized"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.UpdateCarOrderResponse403": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Forbidden - Not authorized"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.UpdateCarOrderResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Car order not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.UpdateCarOrderResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal server error while updating car order"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
         }
     }
 }`

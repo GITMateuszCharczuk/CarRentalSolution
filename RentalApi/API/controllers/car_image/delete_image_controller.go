@@ -25,19 +25,19 @@ func NewDeleteImageController(validator *validator.Validate) *DeleteImageControl
 // @Accept json
 // @Produce json
 // @Param token query string true "JWT token" example:"your.jwt.token.here"
-// @Param carOfferId path string true "Car Offer ID" example:"123e4567-e89b-12d3-a456-426614174000"
-// @Param id path string true "Image ID" example:"123e4567-e89b-12d3-a456-426614174000"
+// @Param carOfferId path string true "Car Offer ID" example:"371eb93a-054c-44db-b429-0a0ebe87c3b9"
+// @Param imageId path string true "Image ID (UUID)" example:"550e8400-e29b-41d4-a716-446655440000"
 // @Success 200 {object} contract.DeleteImageFromCarOfferResponse200 "Image deleted successfully"
 // @Failure 400 {object} contract.DeleteImageFromCarOfferResponse400 "Invalid request parameters"
 // @Failure 401 {object} contract.DeleteImageFromCarOfferResponse401 "Unauthorized"
 // @Failure 403 {object} contract.DeleteImageFromCarOfferResponse403 "Forbidden - Not authorized"
 // @Failure 404 {object} contract.DeleteImageFromCarOfferResponse404 "Image or car offer not found"
 // @Failure 500 {object} contract.DeleteImageFromCarOfferResponse500 "Server error during deletion"
-// @Router /rental-api/api/car-offers/{carOfferId}/images/{id} [delete]
+// @Router /rental-api/api/car-offers/images/{carOfferId}/{imageId} [delete]
 func (h *DeleteImageController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 	req := contract.DeleteImageFromCarOfferRequest{
-		Id:         services.ExtractFromPath(c, "id"),
+		Id:         services.ExtractFromPath(c, "imageId"),
 		CarOfferId: services.ExtractFromPath(c, "carOfferId"),
 		JwtToken:   services.GetJwtTokenFromQuery(c),
 	}
@@ -51,7 +51,7 @@ func (h *DeleteImageController) Handle(c *gin.Context) {
 }
 
 func (h *DeleteImageController) Route() string {
-	return "/car-offers/:carOfferId/images/:id"
+	return "/car-offers/images/:carOfferId/:imageId"
 }
 
 func (h *DeleteImageController) Methods() []string {

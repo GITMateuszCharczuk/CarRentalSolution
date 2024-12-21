@@ -1,37 +1,29 @@
 definitions:
-  contract.CreateBlogPostCommentRequest:
-    properties:
-      description:
-        example: This is a great blog post!
-        type: string
-    required:
-    - description
-    type: object
-  contract.CreateBlogPostCommentResponse200:
+  contract.AddUrlToCarOfferResponse200:
     properties:
       id:
         example: 123e4567-e89b-12d3-a456-426614174000
         type: string
       message:
-        example: Comment added successfully
+        example: Image added successfully
         type: string
       success:
         example: true
         type: boolean
     type: object
-  contract.CreateBlogPostCommentResponse400:
+  contract.AddUrlToCarOfferResponse400:
     properties:
       id:
         example: ""
         type: string
       message:
-        example: Invalid request parameters
+        example: Invalid request format
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.CreateBlogPostCommentResponse401:
+  contract.AddUrlToCarOfferResponse401:
     properties:
       id:
         example: ""
@@ -43,80 +35,117 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.CreateBlogPostCommentResponse404:
+  contract.AddUrlToCarOfferResponse403:
     properties:
       id:
         example: ""
         type: string
       message:
-        example: Blog post not found
+        example: Forbidden - Not authorized
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.CreateBlogPostCommentResponse500:
+  contract.AddUrlToCarOfferResponse404:
     properties:
       id:
         example: ""
         type: string
       message:
-        example: Internal server error while adding comment
+        example: Car offer not found
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.CreateBlogPostRequest:
+  contract.AddUrlToCarOfferResponse500:
     properties:
-      content:
-        example: Blog post content...
+      id:
+        example: ""
+        type: string
+      message:
+        example: Server error during addition
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.CreateCarOfferRequest:
+    properties:
+      driveDetails:
+        example: AWD
+        type: string
+      engineDetails:
+        example: 2.0L Turbo
         type: string
       featuredImageUrl:
         example: https://example.com/image.jpg
         type: string
+      gearboxDetails:
+        example: Automatic
+        type: string
       heading:
-        example: Blog Post Title
+        example: Car Offer Title
         type: string
-      pageTitle:
-        example: Page Title
+      horsepower:
+        example: "300"
         type: string
+      imageUrls:
+        example:
+        - '["https://example.com/image1.jpg"]'
+        items:
+          type: string
+        type: array
+      oneMonthPrice:
+        example: 2000
+        type: number
+      oneNormalDayPrice:
+        example: 100
+        type: number
+      oneWeekPrice:
+        example: 600
+        type: number
+      oneWeekendDayPrice:
+        example: 150
+        type: number
       shortDescription:
         example: Short description
         type: string
       tags:
         example:
-        - '["tech"'
-        - '"programming"]'
+        - '["luxury"'
+        - '"sports"]'
         items:
           type: string
         type: array
       urlHandle:
-        example: blog-post-title
+        example: car-offer-title
         type: string
       visible:
         example: true
         type: boolean
+      yearOfProduction:
+        example: 2023
+        type: integer
     required:
-    - content
     - heading
-    - pageTitle
     - shortDescription
     - urlHandle
     type: object
-  contract.CreateBlogPostResponse200:
+  contract.CreateCarOfferResponse200:
     properties:
       id:
         example: 123e4567-e89b-12d3-a456-426614174000
         type: string
       message:
-        example: Blog post created successfully
+        example: Car offer created successfully
         type: string
       success:
         example: true
         type: boolean
     type: object
-  contract.CreateBlogPostResponse400:
+  contract.CreateCarOfferResponse400:
     properties:
       id:
         example: ""
@@ -128,7 +157,7 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.CreateBlogPostResponse401:
+  contract.CreateCarOfferResponse401:
     properties:
       id:
         example: ""
@@ -140,31 +169,62 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.CreateBlogPostResponse500:
+  contract.CreateCarOfferResponse500:
     properties:
       id:
         example: ""
         type: string
       message:
-        example: Internal server error while creating blog post
+        example: Internal server error while creating car offer
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.CreateLikeForBlogPostResponse200:
+  contract.CreateCarOrderRequest:
+    properties:
+      carOfferId:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      deliveryLocation:
+        example: City Center
+        type: string
+      endDate:
+        example: "2024-03-20T12:00:00Z"
+        type: string
+      numOfDrivers:
+        example: 2
+        type: integer
+      returnLocation:
+        example: City Center
+        type: string
+      startDate:
+        example: "2024-03-15T14:30:00Z"
+        type: string
+      status:
+        example: pending
+        type: string
+      totalCost:
+        example: 750
+        type: number
+    required:
+    - carOfferId
+    - endDate
+    - startDate
+    type: object
+  contract.CreateCarOrderResponse200:
     properties:
       id:
         example: 123e4567-e89b-12d3-a456-426614174000
         type: string
       message:
-        example: Like added successfully
+        example: Car order created successfully
         type: string
       success:
         example: true
         type: boolean
     type: object
-  contract.CreateLikeForBlogPostResponse400:
+  contract.CreateCarOrderResponse400:
     properties:
       id:
         example: ""
@@ -176,7 +236,7 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.CreateLikeForBlogPostResponse401:
+  contract.CreateCarOrderResponse401:
     properties:
       id:
         example: ""
@@ -188,40 +248,28 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.CreateLikeForBlogPostResponse404:
+  contract.CreateCarOrderResponse500:
     properties:
       id:
         example: ""
         type: string
       message:
-        example: Blog post not found
+        example: Internal server error while creating car order
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.CreateLikeForBlogPostResponse500:
-    properties:
-      id:
-        example: ""
-        type: string
-      message:
-        example: Internal server error while adding like
-        type: string
-      success:
-        example: false
-        type: boolean
-    type: object
-  contract.DeleteBlogPostCommentResponse200:
+  contract.DeleteCarOfferResponse200:
     properties:
       message:
-        example: Comment deleted successfully
+        example: Car offer deleted successfully
         type: string
       success:
         example: true
         type: boolean
     type: object
-  contract.DeleteBlogPostCommentResponse400:
+  contract.DeleteCarOfferResponse400:
     properties:
       message:
         example: Invalid request parameters
@@ -230,7 +278,7 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.DeleteBlogPostCommentResponse401:
+  contract.DeleteCarOfferResponse401:
     properties:
       message:
         example: Unauthorized
@@ -239,43 +287,43 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.DeleteBlogPostCommentResponse403:
+  contract.DeleteCarOfferResponse403:
     properties:
       message:
-        example: Forbidden
+        example: Forbidden - Not authorized
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.DeleteBlogPostCommentResponse404:
+  contract.DeleteCarOfferResponse404:
     properties:
       message:
-        example: Comment not found
+        example: Car offer not found
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.DeleteBlogPostCommentResponse500:
+  contract.DeleteCarOfferResponse500:
     properties:
       message:
-        example: Internal server error while deleting comment
+        example: Internal server error while deleting car offer
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.DeleteBlogPostResponse200:
+  contract.DeleteCarOrderResponse200:
     properties:
       message:
-        example: Blog post deleted successfully
+        example: Car order deleted successfully
         type: string
       success:
         example: true
         type: boolean
     type: object
-  contract.DeleteBlogPostResponse400:
+  contract.DeleteCarOrderResponse400:
     properties:
       message:
         example: Invalid request parameters
@@ -284,7 +332,7 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.DeleteBlogPostResponse401:
+  contract.DeleteCarOrderResponse401:
     properties:
       message:
         example: Unauthorized
@@ -293,52 +341,52 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.DeleteBlogPostResponse403:
+  contract.DeleteCarOrderResponse403:
     properties:
       message:
-        example: Forbidden
+        example: Forbidden - Not authorized
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.DeleteBlogPostResponse404:
+  contract.DeleteCarOrderResponse404:
     properties:
       message:
-        example: Blog post not found
+        example: Car order not found
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.DeleteBlogPostResponse500:
+  contract.DeleteCarOrderResponse500:
     properties:
       message:
-        example: Internal server error while deleting blog post
+        example: Internal server error while deleting car order
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.DeleteLikeForBlogPostResponse200:
+  contract.DeleteImageFromCarOfferResponse200:
     properties:
       message:
-        example: Like removed successfully
+        example: Image added successfully
         type: string
       success:
         example: true
         type: boolean
     type: object
-  contract.DeleteLikeForBlogPostResponse400:
+  contract.DeleteImageFromCarOfferResponse400:
     properties:
       message:
-        example: Invalid request parameters
+        example: Image not found
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.DeleteLikeForBlogPostResponse401:
+  contract.DeleteImageFromCarOfferResponse401:
     properties:
       message:
         example: Unauthorized
@@ -347,36 +395,168 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.DeleteLikeForBlogPostResponse404:
+  contract.DeleteImageFromCarOfferResponse403:
     properties:
       message:
-        example: Like not found
+        example: Forbidden - Not authorized
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.DeleteLikeForBlogPostResponse500:
+  contract.DeleteImageFromCarOfferResponse404:
     properties:
       message:
-        example: Internal server error while removing like
+        example: Car offer not found
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.GetBlogPostCommentsResponse200:
+  contract.DeleteImageFromCarOfferResponse500:
+    properties:
+      message:
+        example: Internal server error
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetCarOfferResponse200:
+    properties:
+      car_offer:
+        properties:
+          deliveryLocation:
+            example: Airport
+            type: string
+          driveDetails:
+            example: AWD
+            type: string
+          engineDetails:
+            example: 2.0L Turbo
+            type: string
+          featuredImageUrl:
+            example: https://example.com/image.jpg
+            type: string
+          gearboxDetails:
+            example: Automatic
+            type: string
+          heading:
+            example: Car Offer Title
+            type: string
+          horsepower:
+            example: "300"
+            type: string
+          id:
+            example: 123e4567-e89b-12d3-a456-426614174000
+            type: string
+          imageUrls:
+            example:
+            - '["https://example.com/image1.jpg"]'
+            items:
+              type: string
+            type: array
+          oneMonthPrice:
+            example: 2000
+            type: number
+          oneNormalDayPrice:
+            example: 100
+            type: number
+          oneWeekPrice:
+            example: 600
+            type: number
+          oneWeekendDayPrice:
+            example: 150
+            type: number
+          shortDescription:
+            example: Short description
+            type: string
+          tags:
+            example:
+            - '["luxury"'
+            - '"sports"]'
+            items:
+              type: string
+            type: array
+          urlHandle:
+            example: car-offer-title
+            type: string
+          visible:
+            example: true
+            type: boolean
+          yearOfProduction:
+            example: 2023
+            type: integer
+        type: object
+      message:
+        example: Car offer retrieved successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.GetCarOfferResponse404:
+    properties:
+      car_offer:
+        type: object
+      message:
+        example: Car offer not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetCarOfferResponse500:
+    properties:
+      car_offer:
+        type: object
+      message:
+        example: Internal server error while retrieving car offer
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetCarOffersResponse200:
     properties:
       current_page:
         example: 1
         type: integer
       items:
-        description: todo
         items:
+          properties:
+            featuredImageUrl:
+              example: https://example.com/image.jpg
+              type: string
+            heading:
+              example: Car Offer Title
+              type: string
+            id:
+              example: 123e4567-e89b-12d3-a456-426614174000
+              type: string
+            publishedDate:
+              example: "2023-12-12"
+              type: string
+            shortDescription:
+              example: Short description
+              type: string
+            tags:
+              example:
+              - '["luxury"'
+              - '"sports"]'
+              items:
+                type: string
+              type: array
+            urlHandle:
+              example: car-offer-title
+              type: string
+            visible:
+              example: true
+              type: boolean
           type: object
         type: array
       message:
-        example: Comments retrieved successfully
+        example: Car offers retrieved successfully
         type: string
       page_size:
         example: 10
@@ -391,157 +571,9 @@ definitions:
         example: 10
         type: integer
     type: object
-  contract.GetBlogPostCommentsResponse404:
+  contract.GetCarOffersResponse400:
     properties:
-      message:
-        example: Blog post not found
-        type: string
-      success:
-        example: false
-        type: boolean
-    type: object
-  contract.GetBlogPostCommentsResponse500:
-    properties:
-      message:
-        example: Internal server error while retrieving comments
-        type: string
-      success:
-        example: false
-        type: boolean
-    type: object
-  contract.GetBlogPostResponse200:
-    properties:
-      blog_post:
-        properties:
-          author:
-            example: John Doe
-            type: string
-          content:
-            example: Blog post content...
-            type: string
-          createdAt:
-            example: "2023-12-12T10:00:00Z"
-            type: string
-          featuredImageUrl:
-            example: https://example.com/image.jpg
-            type: string
-          heading:
-            example: Blog Post Title
-            type: string
-          id:
-            example: 123e4567-e89b-12d3-a456-426614174000
-            type: string
-          pageTitle:
-            example: Page Title
-            type: string
-          publishedDate:
-            example: "2023-12-12"
-            type: string
-          shortDescription:
-            example: Short description
-            type: string
-          urlHandle:
-            example: blog-post-title
-            type: string
-        type: object
-      message:
-        example: Blog post retrieved successfully
-        type: string
-      success:
-        example: true
-        type: boolean
-    type: object
-  contract.GetBlogPostResponse404:
-    properties:
-      blog_post:
-        type: object
-      message:
-        example: Blog post not found
-        type: string
-      success:
-        example: false
-        type: boolean
-    type: object
-  contract.GetBlogPostResponse500:
-    properties:
-      blog_post:
-        type: object
-      message:
-        example: Internal server error while retrieving blog post
-        type: string
-      success:
-        example: false
-        type: boolean
-    type: object
-  contract.GetBlogPostsResponse200:
-    properties:
-      data:
-        properties:
-          current_page:
-            example: 1
-            type: integer
-          items:
-            items:
-              properties:
-                author:
-                  example: John Doe
-                  type: string
-                content:
-                  example: Blog post content...
-                  type: string
-                featuredImageUrl:
-                  example: https://example.com/image.jpg
-                  type: string
-                heading:
-                  example: Blog Post Title
-                  type: string
-                id:
-                  example: 123e4567-e89b-12d3-a456-426614174000
-                  type: string
-                pageTitle:
-                  example: Page Title
-                  type: string
-                publishedDate:
-                  example: "2023-12-12"
-                  type: string
-                shortDescription:
-                  example: Short description
-                  type: string
-                tags:
-                  example:
-                  - '["tech"'
-                  - '"programming"]'
-                  items:
-                    type: string
-                  type: array
-                urlHandle:
-                  example: blog-post-title
-                  type: string
-                visible:
-                  example: true
-                  type: boolean
-              type: object
-            type: array
-          page_size:
-            example: 10
-            type: integer
-          total_items:
-            example: 100
-            type: integer
-          total_pages:
-            example: 10
-            type: integer
-        type: object
-      message:
-        example: Users retrieved successfully
-        type: string
-      status_code:
-        example: 200
-        type: integer
-    type: object
-  contract.GetBlogPostsResponse400:
-    properties:
-      data:
+      items:
         items:
           type: object
         type: array
@@ -552,12 +584,60 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.GetBlogPostsResponse401:
+  contract.GetCarOffersResponse500:
     properties:
-      data:
+      items:
         items:
           type: object
         type: array
+      message:
+        example: Internal server error while retrieving car offers
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetCarOrderResponse200:
+    properties:
+      car_order:
+        properties:
+          carOfferId:
+            example: 123e4567-e89b-12d3-a456-426614174000
+            type: string
+          deliveryLocation:
+            example: City Center
+            type: string
+          endDate:
+            example: "2023-12-19"
+            type: string
+          id:
+            example: 123e4567-e89b-12d3-a456-426614174000
+            type: string
+          numOfDrivers:
+            example: 2
+            type: integer
+          returnLocation:
+            example: City Center
+            type: string
+          startDate:
+            example: "2023-12-12"
+            type: string
+          totalCost:
+            example: 750
+            type: number
+          userId:
+            example: 123e4567-e89b-12d3-a456-426614174000
+            type: string
+        type: object
+      message:
+        example: Car order retrieved successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.GetCarOrderResponse401:
+    properties:
       message:
         example: Unauthorized
         type: string
@@ -565,54 +645,102 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.GetBlogPostsResponse500:
+  contract.GetCarOrderResponse404:
     properties:
-      data:
+      car_order:
+        type: object
+      message:
+        example: Car order not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetCarOrderResponse500:
+    properties:
+      car_order:
+        type: object
+      message:
+        example: Internal server error while retrieving car order
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetCarOrdersResponse200:
+    properties:
+      current_page:
+        example: 1
+        type: integer
+      items:
+        items:
+          properties:
+            carOfferId:
+              example: 123e4567-e89b-12d3-a456-426614174000
+              type: string
+            deliveryLocation:
+              example: City Center
+              type: string
+            endDate:
+              example: "2023-12-19"
+              type: string
+            id:
+              example: 123e4567-e89b-12d3-a456-426614174000
+              type: string
+            numOfDrivers:
+              example: 2
+              type: integer
+            returnLocation:
+              example: City Center
+              type: string
+            startDate:
+              example: "2023-12-12"
+              type: string
+            totalCost:
+              example: 750
+              type: number
+            userId:
+              example: 123e4567-e89b-12d3-a456-426614174000
+              type: string
+          type: object
+        type: array
+      message:
+        example: Car orders retrieved successfully
+        type: string
+      page_size:
+        example: 10
+        type: integer
+      success:
+        example: true
+        type: boolean
+      total_items:
+        example: 100
+        type: integer
+      total_pages:
+        example: 10
+        type: integer
+    type: object
+  contract.GetCarOrdersResponse401:
+    properties:
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetCarOrdersResponse500:
+    properties:
+      items:
         items:
           type: object
         type: array
       message:
-        example: Internal server error while retrieving blog posts
+        example: Internal server error while retrieving car orders
         type: string
       success:
         example: false
         type: boolean
-    type: object
-  contract.GetLikesForBlogPostResponse200:
-    properties:
-      message:
-        example: Likes retrieved successfully
-        type: string
-      success:
-        example: true
-        type: boolean
-      totalCount:
-        example: 42
-        type: integer
-    type: object
-  contract.GetLikesForBlogPostResponse404:
-    properties:
-      message:
-        example: Blog post not found
-        type: string
-      success:
-        example: false
-        type: boolean
-      totalCount:
-        example: 0
-        type: integer
-    type: object
-  contract.GetLikesForBlogPostResponse500:
-    properties:
-      message:
-        example: Internal server error while retrieving likes
-        type: string
-      success:
-        example: false
-        type: boolean
-      totalCount:
-        example: 0
-        type: integer
     type: object
   contract.GetTagsResponse200:
     properties:
@@ -640,22 +768,38 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.UpdateBlogPostRequest:
+  contract.UpdateCarOfferRequest:
     properties:
-      content:
-        example: Updated blog post content...
+      driveDetails:
+        example: RWD
+        type: string
+      engineDetails:
+        example: 3.0L Twin-Turbo
         type: string
       featuredImageUrl:
         example: https://example.com/updated-image.jpg
         type: string
+      gearboxDetails:
+        example: 8-Speed Automatic
+        type: string
       heading:
-        example: Updated Blog Post Title
+        example: Updated Car Offer Title
         type: string
-      jwtToken:
-        $ref: '#/definitions/models.JwtToken'
-      pageTitle:
-        example: Updated Page Title
+      horsepower:
+        example: "350"
         type: string
+      oneMonthPrice:
+        example: 2500
+        type: number
+      oneNormalDayPrice:
+        example: 120
+        type: number
+      oneWeekPrice:
+        example: 700
+        type: number
+      oneWeekendDayPrice:
+        example: 180
+        type: number
       publishedDate:
         example: "2023-12-12"
         type: string
@@ -664,36 +808,35 @@ definitions:
         type: string
       tags:
         example:
-        - '["tech"'
-        - '"programming"]'
+        - '["luxury"'
+        - '"sports"]'
         items:
           type: string
         type: array
       urlHandle:
-        example: updated-blog-post-title
+        example: updated-car-offer-title
         type: string
       visible:
         example: true
         type: boolean
+      yearOfProduction:
+        example: 2023
+        type: integer
     required:
-    - content
     - heading
-    - jwtToken
-    - pageTitle
-    - publishedDate
     - shortDescription
     - urlHandle
     type: object
-  contract.UpdateBlogPostResponse200:
+  contract.UpdateCarOfferResponse200:
     properties:
       message:
-        example: Blog post updated successfully
+        example: Car offer updated successfully
         type: string
       success:
         example: true
         type: boolean
     type: object
-  contract.UpdateBlogPostResponse400:
+  contract.UpdateCarOfferResponse400:
     properties:
       message:
         example: Invalid request parameters
@@ -702,7 +845,7 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.UpdateBlogPostResponse401:
+  contract.UpdateCarOfferResponse401:
     properties:
       message:
         example: Unauthorized
@@ -711,96 +854,132 @@ definitions:
         example: false
         type: boolean
     type: object
-  contract.UpdateBlogPostResponse403:
+  contract.UpdateCarOfferResponse403:
     properties:
       message:
-        example: Forbidden
+        example: Forbidden - Not authorized
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.UpdateBlogPostResponse404:
+  contract.UpdateCarOfferResponse404:
     properties:
       message:
-        example: Blog post not found
+        example: Car offer not found
         type: string
       success:
         example: false
         type: boolean
     type: object
-  contract.UpdateBlogPostResponse500:
+  contract.UpdateCarOfferResponse500:
     properties:
       message:
-        example: Internal server error while updating blog post
+        example: Internal server error while updating car offer
         type: string
       success:
         example: false
         type: boolean
     type: object
-  models.JwtToken:
+  contract.UpdateCarOrderRequest:
+    properties:
+      carOfferId:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      deliveryLocation:
+        example: City Center
+        type: string
+      endDate:
+        example: "2024-03-20T12:00:00Z"
+        type: string
+      numOfDrivers:
+        example: 3
+        type: integer
+      returnLocation:
+        example: City Center
+        type: string
+      startDate:
+        example: "2024-03-15T14:30:00Z"
+        type: string
+      status:
+        example: pending
+        type: string
+      totalCost:
+        example: 900
+        type: number
+      userId:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+    required:
+    - carOfferId
+    - endDate
+    - startDate
+    - userId
+    type: object
+  contract.UpdateCarOrderResponse200:
+    properties:
+      message:
+        example: Car order updated successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.UpdateCarOrderResponse400:
+    properties:
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.UpdateCarOrderResponse401:
+    properties:
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.UpdateCarOrderResponse403:
+    properties:
+      message:
+        example: Forbidden - Not authorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.UpdateCarOrderResponse404:
+    properties:
+      message:
+        example: Car order not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.UpdateCarOrderResponse500:
+    properties:
+      message:
+        example: Internal server error while updating car order
+        type: string
+      success:
+        example: false
+        type: boolean
     type: object
 info:
   contact: {}
 paths:
-  /rental-api/api/comments/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Deletes a specific comment from a blog post
-      parameters:
-      - description: JWT token
-        in: query
-        name: token
-        required: true
-        type: string
-      - description: Comment ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Comment deleted successfully
-          schema:
-            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse200'
-        "400":
-          description: Invalid request parameters
-          schema:
-            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse400'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse401'
-        "403":
-          description: Forbidden - Not the comment owner
-          schema:
-            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse403'
-        "404":
-          description: Comment not found
-          schema:
-            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse404'
-        "500":
-          description: Server error during deletion
-          schema:
-            $ref: '#/definitions/contract.DeleteBlogPostCommentResponse500'
-      summary: Delete a comment from a blog post
-      tags:
-      - comments
-  /rental-api/api/posts:
+  /rental-api/api/car-offers:
     get:
       consumes:
       - application/json
-      description: Retrieves a list of blog posts with optional filtering, pagination
-        and sorting.
+      description: Retrieves a list of car offers with optional filtering, pagination
+        and sorting
       parameters:
-      - description: JWT token
-        in: query
-        name: token
-        required: true
-        type: string
       - description: Page size
         in: query
         name: page_size
@@ -810,249 +989,11 @@ paths:
         name: current_page
         type: integer
       - collectionFormat: csv
-        description: Sort fields (field:asc|desc)
-        in: query
-        items:
-          type: string
-        name: sort_fields
-        type: array
-      - collectionFormat: csv
-        description: Blog post IDs
+        description: Filter by car offer IDs
         in: query
         items:
           type: string
         name: ids
-        type: array
-      - description: Start date
-        in: query
-        name: date-time-from
-        type: string
-      - description: End date
-        in: query
-        name: date-time-to
-        type: string
-      - collectionFormat: csv
-        description: Author IDs
-        in: query
-        items:
-          type: string
-        name: author-ids
-        type: array
-      - collectionFormat: csv
-        description: Tags
-        in: query
-        items:
-          type: string
-        name: tags
-        type: array
-      - description: Visibility status
-        in: query
-        name: visible
-        type: boolean
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Blog posts retrieved successfully
-          schema:
-            $ref: '#/definitions/contract.GetBlogPostsResponse200'
-        "400":
-          description: Invalid request parameters
-          schema:
-            $ref: '#/definitions/contract.GetBlogPostsResponse400'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/contract.GetBlogPostsResponse401'
-        "500":
-          description: Server error during retrieval
-          schema:
-            $ref: '#/definitions/contract.GetBlogPostsResponse500'
-      summary: Get blog posts
-      tags:
-      - blog
-    post:
-      consumes:
-      - application/json
-      description: Creates a new blog post with the provided details
-      parameters:
-      - description: JWT token
-        in: query
-        name: token
-        required: true
-        type: string
-      - description: Blog post details
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/contract.CreateBlogPostRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Blog post created successfully
-          schema:
-            $ref: '#/definitions/contract.CreateBlogPostResponse200'
-        "400":
-          description: Invalid request parameters
-          schema:
-            $ref: '#/definitions/contract.CreateBlogPostResponse400'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/contract.CreateBlogPostResponse401'
-        "500":
-          description: Server error during creation
-          schema:
-            $ref: '#/definitions/contract.CreateBlogPostResponse500'
-      summary: Create a new blog post
-      tags:
-      - blog
-  /rental-api/api/posts/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Deletes an existing blog post
-      parameters:
-      - description: JWT token
-        in: query
-        name: token
-        required: true
-        type: string
-      - description: Blog Post ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Blog post deleted successfully
-          schema:
-            $ref: '#/definitions/contract.DeleteBlogPostResponse200'
-        "400":
-          description: Invalid request parameters
-          schema:
-            $ref: '#/definitions/contract.DeleteBlogPostResponse400'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/contract.DeleteBlogPostResponse401'
-        "403":
-          description: Forbidden - Not authorized to delete
-          schema:
-            $ref: '#/definitions/contract.DeleteBlogPostResponse403'
-        "404":
-          description: Blog post not found
-          schema:
-            $ref: '#/definitions/contract.DeleteBlogPostResponse404'
-        "500":
-          description: Server error during deletion
-          schema:
-            $ref: '#/definitions/contract.DeleteBlogPostResponse500'
-      summary: Delete a blog post
-      tags:
-      - blog
-    get:
-      consumes:
-      - application/json
-      description: Retrieves a specific blog post by its ID
-      parameters:
-      - description: Blog Post ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Blog post retrieved successfully
-          schema:
-            $ref: '#/definitions/contract.GetBlogPostResponse200'
-        "404":
-          description: Blog post not found
-          schema:
-            $ref: '#/definitions/contract.GetBlogPostResponse404'
-        "500":
-          description: Server error during retrieval
-          schema:
-            $ref: '#/definitions/contract.GetBlogPostResponse500'
-      summary: Get a blog post by ID
-      tags:
-      - blog
-    put:
-      consumes:
-      - application/json
-      description: Updates an existing blog post with the provided details
-      parameters:
-      - description: JWT token
-        in: query
-        name: token
-        required: true
-        type: string
-      - description: Blog Post ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Updated blog post details
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/contract.UpdateBlogPostRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Blog post updated successfully
-          schema:
-            $ref: '#/definitions/contract.UpdateBlogPostResponse200'
-        "400":
-          description: Invalid request parameters
-          schema:
-            $ref: '#/definitions/contract.UpdateBlogPostResponse400'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/contract.UpdateBlogPostResponse401'
-        "403":
-          description: Forbidden - Not the post owner
-          schema:
-            $ref: '#/definitions/contract.UpdateBlogPostResponse403'
-        "404":
-          description: Blog post not found
-          schema:
-            $ref: '#/definitions/contract.UpdateBlogPostResponse404'
-        "500":
-          description: Server error during update
-          schema:
-            $ref: '#/definitions/contract.UpdateBlogPostResponse500'
-      summary: Update a blog post
-      tags:
-      - blog
-  /rental-api/api/posts/{id}/comments:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves all comments for a specific blog post with pagination
-      parameters:
-      - collectionFormat: csv
-        description: Filter by blog post IDs
-        in: query
-        items:
-          type: string
-        name: ids
-        type: array
-      - collectionFormat: csv
-        description: Filter by user IDs
-        in: query
-        items:
-          type: string
-        name: user_ids
         type: array
       - description: Filter from date
         in: query
@@ -1063,97 +1004,91 @@ paths:
         name: date_time_to
         type: string
       - collectionFormat: csv
+        description: Filter by tags
+        in: query
+        items:
+          type: string
+        name: tags
+        type: array
+      - description: Filter by visibility
+        in: query
+        name: visible
+        type: string
+      - collectionFormat: csv
         description: Sort fields (field:asc|desc)
         in: query
         items:
           type: string
         name: sort_fields
         type: array
-      - description: Page size
-        in: query
-        name: page_size
-        type: integer
-      - description: Current page
-        in: query
-        name: current_page
-        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: Comments retrieved successfully
+          description: Car offers retrieved successfully
           schema:
-            $ref: '#/definitions/contract.GetBlogPostCommentsResponse200'
-        "404":
-          description: Blog post not found
+            $ref: '#/definitions/contract.GetCarOffersResponse200'
+        "400":
+          description: Invalid request parameters
           schema:
-            $ref: '#/definitions/contract.GetBlogPostCommentsResponse404'
+            $ref: '#/definitions/contract.GetCarOffersResponse400'
         "500":
           description: Server error during retrieval
           schema:
-            $ref: '#/definitions/contract.GetBlogPostCommentsResponse500'
-      summary: Get comments for a blog post
+            $ref: '#/definitions/contract.GetCarOffersResponse500'
+      summary: Get car offers
       tags:
-      - comments
+      - car-offers
     post:
       consumes:
       - application/json
-      description: Creates a new comment on a specific blog post
+      description: Creates a new car offer with the provided details
       parameters:
       - description: JWT token
         in: query
         name: token
         required: true
         type: string
-      - description: Blog Post ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Comment details
+      - description: Car offer details
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/contract.CreateBlogPostCommentRequest'
+          $ref: '#/definitions/contract.CreateCarOfferRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: Comment created successfully
+          description: Car offer created successfully
           schema:
-            $ref: '#/definitions/contract.CreateBlogPostCommentResponse200'
+            $ref: '#/definitions/contract.CreateCarOfferResponse200'
         "400":
           description: Invalid request parameters
           schema:
-            $ref: '#/definitions/contract.CreateBlogPostCommentResponse400'
+            $ref: '#/definitions/contract.CreateCarOfferResponse400'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/contract.CreateBlogPostCommentResponse401'
-        "404":
-          description: Blog post not found
-          schema:
-            $ref: '#/definitions/contract.CreateBlogPostCommentResponse404'
+            $ref: '#/definitions/contract.CreateCarOfferResponse401'
         "500":
           description: Server error during creation
           schema:
-            $ref: '#/definitions/contract.CreateBlogPostCommentResponse500'
-      summary: Create a comment on a blog post
+            $ref: '#/definitions/contract.CreateCarOfferResponse500'
+      summary: Create a new car offer
       tags:
-      - comments
-  /rental-api/api/posts/{id}/likes:
+      - car-offers
+  /rental-api/api/car-offers/{id}:
     delete:
       consumes:
       - application/json
-      description: Removes a like from a specific blog post
+      description: Deletes an existing car offer
       parameters:
       - description: JWT token
         in: query
         name: token
         required: true
         type: string
-      - description: Blog Post ID
+      - description: Car Offer ID
         in: path
         name: id
         required: true
@@ -1162,34 +1097,38 @@ paths:
       - application/json
       responses:
         "200":
-          description: Like removed successfully
+          description: Car offer deleted successfully
           schema:
-            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse200'
+            $ref: '#/definitions/contract.DeleteCarOfferResponse200'
         "400":
           description: Invalid request parameters
           schema:
-            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse400'
+            $ref: '#/definitions/contract.DeleteCarOfferResponse400'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse401'
-        "404":
-          description: Blog post not found
+            $ref: '#/definitions/contract.DeleteCarOfferResponse401'
+        "403":
+          description: Forbidden - Not authorized
           schema:
-            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse404'
+            $ref: '#/definitions/contract.DeleteCarOfferResponse403'
+        "404":
+          description: Car offer not found
+          schema:
+            $ref: '#/definitions/contract.DeleteCarOfferResponse404'
         "500":
           description: Server error during deletion
           schema:
-            $ref: '#/definitions/contract.DeleteLikeForBlogPostResponse500'
-      summary: Unlike a blog post
+            $ref: '#/definitions/contract.DeleteCarOfferResponse500'
+      summary: Delete a car offer
       tags:
-      - likes
+      - car-offers
     get:
       consumes:
       - application/json
-      description: Retrieves the total number of likes for a specific blog post
+      description: Retrieves a specific car offer by its ID
       parameters:
-      - description: Blog Post ID
+      - description: Car Offer ID
         in: path
         name: id
         required: true
@@ -1198,68 +1137,180 @@ paths:
       - application/json
       responses:
         "200":
-          description: Likes count retrieved successfully
+          description: Car offer retrieved successfully
           schema:
-            $ref: '#/definitions/contract.GetLikesForBlogPostResponse200'
+            $ref: '#/definitions/contract.GetCarOfferResponse200'
         "404":
-          description: Blog post not found
+          description: Car offer not found
           schema:
-            $ref: '#/definitions/contract.GetLikesForBlogPostResponse404'
+            $ref: '#/definitions/contract.GetCarOfferResponse404'
         "500":
           description: Server error during retrieval
           schema:
-            $ref: '#/definitions/contract.GetLikesForBlogPostResponse500'
-      summary: Get likes count for a blog post
+            $ref: '#/definitions/contract.GetCarOfferResponse500'
+      summary: Get a car offer by ID
       tags:
-      - likes
-    post:
+      - car-offers
+    put:
       consumes:
       - application/json
-      description: Adds a like to a specific blog post
+      description: Updates an existing car offer with the provided details
       parameters:
       - description: JWT token
         in: query
         name: token
         required: true
         type: string
-      - description: Blog Post ID
+      - description: Car Offer ID
         in: path
         name: id
+        required: true
+        type: string
+      - description: Updated car offer details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.UpdateCarOfferRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Car offer updated successfully
+          schema:
+            $ref: '#/definitions/contract.UpdateCarOfferResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.UpdateCarOfferResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.UpdateCarOfferResponse401'
+        "403":
+          description: Forbidden - Not authorized
+          schema:
+            $ref: '#/definitions/contract.UpdateCarOfferResponse403'
+        "404":
+          description: Car offer not found
+          schema:
+            $ref: '#/definitions/contract.UpdateCarOfferResponse404'
+        "500":
+          description: Server error during update
+          schema:
+            $ref: '#/definitions/contract.UpdateCarOfferResponse500'
+      summary: Update a car offer
+      tags:
+      - car-offers
+  /rental-api/api/car-offers/images/{carOfferId}/{imageId}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an image from a car offer
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Car Offer ID
+        in: path
+        name: carOfferId
+        required: true
+        type: string
+      - description: Image ID (UUID)
+        in: path
+        name: imageId
         required: true
         type: string
       produces:
       - application/json
       responses:
         "200":
-          description: Like added successfully
+          description: Image deleted successfully
           schema:
-            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse200'
+            $ref: '#/definitions/contract.DeleteImageFromCarOfferResponse200'
         "400":
           description: Invalid request parameters
           schema:
-            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse400'
+            $ref: '#/definitions/contract.DeleteImageFromCarOfferResponse400'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse401'
+            $ref: '#/definitions/contract.DeleteImageFromCarOfferResponse401'
+        "403":
+          description: Forbidden - Not authorized
+          schema:
+            $ref: '#/definitions/contract.DeleteImageFromCarOfferResponse403'
         "404":
-          description: Blog post not found
+          description: Image or car offer not found
           schema:
-            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse404'
+            $ref: '#/definitions/contract.DeleteImageFromCarOfferResponse404'
         "500":
-          description: Server error during creation
+          description: Server error during deletion
           schema:
-            $ref: '#/definitions/contract.CreateLikeForBlogPostResponse500'
-      summary: Like a blog post
+            $ref: '#/definitions/contract.DeleteImageFromCarOfferResponse500'
+      summary: Delete image from car offer
       tags:
-      - likes
-  /rental-api/api/tags/{id}:
+      - car-images
+  /rental-api/api/car-offers/images/{offerId}/{imageId}:
+    post:
+      consumes:
+      - application/json
+      description: Adds a new image URL to an existing car offer
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Car Offer ID
+        in: path
+        name: offerId
+        required: true
+        type: string
+      - description: Image ID
+        in: path
+        name: imageId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Image added successfully
+          schema:
+            $ref: '#/definitions/contract.AddUrlToCarOfferResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.AddUrlToCarOfferResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.AddUrlToCarOfferResponse401'
+        "403":
+          description: Forbidden - Not authorized
+          schema:
+            $ref: '#/definitions/contract.AddUrlToCarOfferResponse403'
+        "404":
+          description: Car offer not found
+          schema:
+            $ref: '#/definitions/contract.AddUrlToCarOfferResponse404'
+        "500":
+          description: Server error during addition
+          schema:
+            $ref: '#/definitions/contract.AddUrlToCarOfferResponse500'
+      summary: Add image to car offer
+      tags:
+      - car-images
+  /rental-api/api/car-offers/tags/{id}:
     get:
       consumes:
       - application/json
-      description: Retrieves a list of all unique tags used in blog posts
+      description: Retrieves a list of all unique tags used in car offer
       parameters:
-      - description: Blog Post ID
+      - description: Car Offer ID
         in: path
         name: id
         type: string
@@ -1283,5 +1334,246 @@ paths:
             $ref: '#/definitions/contract.GetTagsResponse500'
       summary: Get all unique tags
       tags:
-      - tags
+      - car-offers
+  /rental-api/api/car-orders:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of car orders with optional filtering, pagination
+        and sorting
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Current page
+        in: query
+        name: current_page
+        type: integer
+      - description: Filter by start date
+        in: query
+        name: start_date
+        type: string
+      - description: Filter by end date
+        in: query
+        name: end_date
+        type: string
+      - description: Filter by user ID
+        in: query
+        name: user_id
+        type: string
+      - description: Filter by car offer ID
+        in: query
+        name: car_offer_id
+        type: string
+      - description: Filter by status
+        in: query
+        name: status
+        type: string
+      - description: Type of date filter
+        in: query
+        name: date_filter_type
+        type: string
+      - collectionFormat: csv
+        description: Sort fields (field:asc|desc)
+        in: query
+        items:
+          type: string
+        name: sort_fields
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Car orders retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetCarOrdersResponse200'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.GetCarOrdersResponse401'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetCarOrdersResponse500'
+      summary: Get car orders
+      tags:
+      - car-orders
+    post:
+      consumes:
+      - application/json
+      description: Creates a new car order with the provided details
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Car order details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.CreateCarOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Car order created successfully
+          schema:
+            $ref: '#/definitions/contract.CreateCarOrderResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.CreateCarOrderResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.CreateCarOrderResponse401'
+        "500":
+          description: Server error during creation
+          schema:
+            $ref: '#/definitions/contract.CreateCarOrderResponse500'
+      summary: Create a new car order
+      tags:
+      - car-orders
+  /rental-api/api/car-orders/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an existing car order
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Car Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Car order deleted successfully
+          schema:
+            $ref: '#/definitions/contract.DeleteCarOrderResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.DeleteCarOrderResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.DeleteCarOrderResponse401'
+        "403":
+          description: Forbidden - Not authorized
+          schema:
+            $ref: '#/definitions/contract.DeleteCarOrderResponse403'
+        "404":
+          description: Car order not found
+          schema:
+            $ref: '#/definitions/contract.DeleteCarOrderResponse404'
+        "500":
+          description: Server error during deletion
+          schema:
+            $ref: '#/definitions/contract.DeleteCarOrderResponse500'
+      summary: Delete a car order
+      tags:
+      - car-orders
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a specific car order by its ID
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Car Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Car order retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetCarOrderResponse200'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.GetCarOrderResponse401'
+        "404":
+          description: Car order not found
+          schema:
+            $ref: '#/definitions/contract.GetCarOrderResponse404'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetCarOrderResponse500'
+      summary: Get a car order by ID
+      tags:
+      - car-orders
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing car order with the provided details
+      parameters:
+      - description: JWT token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: Car Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated car order details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.UpdateCarOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Car order updated successfully
+          schema:
+            $ref: '#/definitions/contract.UpdateCarOrderResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.UpdateCarOrderResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.UpdateCarOrderResponse401'
+        "403":
+          description: Forbidden - Not authorized
+          schema:
+            $ref: '#/definitions/contract.UpdateCarOrderResponse403'
+        "404":
+          description: Car order not found
+          schema:
+            $ref: '#/definitions/contract.UpdateCarOrderResponse404'
+        "500":
+          description: Server error during update
+          schema:
+            $ref: '#/definitions/contract.UpdateCarOrderResponse500'
+      summary: Update a car order
+      tags:
+      - car-orders
 swagger: "2.0"

@@ -4,21 +4,21 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile.API
     ports:
-      - "8087:8087"
+      - "8088:8088"
     environment:
       # Environment
       ENV: prod
       # Service Configuration
       SERVICE_ADDRESS: /rental-api/api
-      SERVICE_PORT: :8087
+      SERVICE_PORT: :8088
       # PostgreSQL Configuration
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: blog_db
+      POSTGRES_DB: rental_db
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       RUN_POSTGRES_MIGRATION: "true"
-      IDENTITY_API_URL: http://rental-api:8085
+      IDENTITY_API_URL: http://identity-api:8085
     networks:
       - docker-network
 
