@@ -164,6 +164,14 @@ export interface UserInfo {
   roles: string[];
 }
 
+export interface AuthResponse {
+  data: {
+    user: UserInfo;
+    token: string;
+    refresh_token: string;
+  };
+}
+
 export interface ModifyUserRequest {
   user_id?: string;
   email_address?: string;

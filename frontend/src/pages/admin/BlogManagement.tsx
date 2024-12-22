@@ -1,29 +1,34 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { blogService } from '../../services/api';
-import type { BlogPost, PaginationParams, SortingParams } from '../../types/api';
+import type { BlogPost, BlogPostsQueryParams } from '../../types/api';
 
 const BlogManagement = () => {
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [sortField, setSortField] = useState<keyof BlogPost>('publishedDate');
+  const [sortField, setSortField] = useState<string>('publishedDate');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  const [searchTerm, setSearchTerm] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [dateFrom, setDateFrom] = useState<string>('');
+  const [dateTo, setDateTo] = useState<string>('');
+  const [visible, setVisible] = useState<boolean | undefined>(undefined);
 
   // Query for blog posts with pagination, sorting, and filtering
   const { data, isLoading } = useQuery({
-    queryKey: ['adminBlogPosts', currentPage, pageSize, sortField, sortOrder, searchTerm, selectedTags],
-    queryFn: () =>
-      blogService.getBlogPosts({
+    queryKey: ['adminBlogPosts', currentPage, pageSize, sortField, sortOrder, selectedTags, dateFrom, dateTo, visible],
+    queryFn: () => {
+      const params: BlogPostsQueryParams = {
         current_page: currentPage,
         page_size: pageSize,
-        sort_by: sortField,
-        sort_order: sortOrder,
-        search: searchTerm,
+        sort_fields: [`${sortField}:${sortOrder}`],
         tags: selectedTags,
-      }),
+        'date-time-from': dateFrom,
+        'date-time-to': dateTo,
+        visible: visible
+      };
+      return blogService.getBlogPosts(params);
+    },
   });
 
   // Mutations for CRUD operations
@@ -35,13 +40,19 @@ const BlogManagement = () => {
   });
 
   const toggleVisibilityMutation = useMutation({
-    mutationFn: (postId: string) => blogService.toggleBlogVisibility(postId),
+    mutationFn: async (post: BlogPost) => {
+      const updateData = {
+        ...post,
+        visible: !post.visible,
+      };
+      return blogService.updateBlogPost(post.id, updateData);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminBlogPosts'] });
     },
   });
 
-  const handleSort = (field: keyof BlogPost) => {
+  const handleSort = (field: string) => {
     if (field === sortField) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
@@ -77,14 +88,38 @@ const BlogManagement = () => {
       {/* Filters */}
       <div className="bg-white p-4 shadow sm:rounded-lg">
         <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="Search posts..."
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {/* Add more filters as needed */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Date From</label>
+              <input
+                type="date"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Date To</label>
+              <input
+                type="date"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                value={dateTo}
+                onChange={(e) => setDateTo(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Visibility</label>
+              <select
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                value={visible === undefined ? '' : String(visible)}
+                onChange={(e) => setVisible(e.target.value === '' ? undefined : e.target.value === 'true')}
+              >
+                <option value="">All</option>
+                <option value="true">Published</option>
+                <option value="false">Draft</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -127,7 +162,11 @@ const BlogManagement = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {data?.items.map((post) => (
+              {isLoading ? (
+                <tr>
+                  <td colSpan={5} className="text-center py-4">Loading...</td>
+                </tr>
+              ) : data?.items.map((post) => (
                 <tr key={post.id}>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
                     {post.heading}
@@ -157,7 +196,7 @@ const BlogManagement = () => {
                       Edit
                     </button>
                     <button
-                      onClick={() => toggleVisibilityMutation.mutate(post.id)}
+                      onClick={() => toggleVisibilityMutation.mutate(post)}
                       className="text-yellow-600 hover:text-yellow-900 mr-4"
                     >
                       {post.visible ? 'Unpublish' : 'Publish'}
@@ -188,8 +227,8 @@ const BlogManagement = () => {
               Previous
             </button>
             <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.totalPages))}
-              disabled={currentPage === data.totalPages}
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.total_pages))}
+              disabled={currentPage === data.total_pages}
               className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Next
@@ -200,9 +239,9 @@ const BlogManagement = () => {
               <p className="text-sm text-gray-700">
                 Showing <span className="font-medium">{(currentPage - 1) * pageSize + 1}</span> to{' '}
                 <span className="font-medium">
-                  {Math.min(currentPage * pageSize, data.totalItems)}
+                  {Math.min(currentPage * pageSize, data.total_items)}
                 </span>{' '}
-                of <span className="font-medium">{data.totalItems}</span> results
+                of <span className="font-medium">{data.total_items}</span> results
               </p>
             </div>
             <div>

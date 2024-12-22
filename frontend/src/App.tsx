@@ -1,30 +1,19 @@
-import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import AppRoutes from './routes';
+import { RouterProvider } from 'react-router-dom';
+import router from './routes';
 import { store } from './store';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      cacheTime: 1000 * 60 * 30, // 30 minutes
-    },
-  },
-});
+const queryClient = new QueryClient();
 
-function App() {
+const App = () => {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <Router>
-          <div className="min-h-screen">
-            <AppRoutes />
-          </div>
-        </Router>
+        <RouterProvider router={router} />
       </QueryClientProvider>
     </Provider>
   );
-}
+};
 
 export default App;

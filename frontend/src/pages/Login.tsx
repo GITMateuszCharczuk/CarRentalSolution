@@ -3,7 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import { authService } from '../services/api';
-import { login } from '../store/slices/authSlice';
+import { setCredentials } from '../store/slices/authSlice';
+import type { AuthResponse } from '../types/api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,8 +20,12 @@ const Login = () => {
   const loginMutation = useMutation({
     mutationFn: (credentials: { email: string; password: string }) =>
       authService.login(credentials),
-    onSuccess: (data) => {
-      dispatch(login(data));
+    onSuccess: (response: AuthResponse) => {
+      dispatch(setCredentials({
+        user: response.data.user,
+        token: response.data.token,
+        refresh_token: response.data.refresh_token
+      }));
       navigate(from, { replace: true });
     },
   });

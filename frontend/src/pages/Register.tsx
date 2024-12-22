@@ -3,28 +3,33 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import { authService } from '../services/api';
-import { login } from '../store/slices/authSlice';
+import { setCredentials } from '../store/slices/authSlice';
+import type { RegisterRequest, AuthResponse } from '../types/api';
 
 const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    email: '',
+    email_address: '',
     password: '',
     confirmPassword: '',
     name: '',
     surname: '',
     address: '',
     city: '',
-    postalCode: '',
-    phoneNumber: '',
+    postal_code: '',
+    phone_number: '',
   });
 
   const registerMutation = useMutation({
     mutationFn: (userData: Omit<typeof formData, 'confirmPassword'>) =>
       authService.register(userData),
-    onSuccess: (data) => {
-      dispatch(login(data));
+    onSuccess: (response: AuthResponse) => {
+      dispatch(setCredentials({
+        user: response.data.user,
+        token: response.data.token,
+        refresh_token: response.data.refresh_token
+      }));
       navigate('/', { replace: true });
     },
   });
@@ -57,18 +62,18 @@ const Register = () => {
           <div className="space-y-4 rounded-md shadow-sm">
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email_address" className="block text-sm font-medium text-gray-700">
                 Email address
               </label>
               <input
-                id="email"
-                name="email"
+                id="email_address"
+                name="email_address"
                 type="email"
                 autoComplete="email"
                 required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                value={formData.email_address}
+                onChange={(e) => setFormData({ ...formData, email_address: e.target.value })}
               />
             </div>
 
@@ -176,35 +181,35 @@ const Register = () => {
 
             {/* Postal Code */}
             <div>
-              <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="postal_code" className="block text-sm font-medium text-gray-700">
                 Postal Code
               </label>
               <input
-                id="postalCode"
-                name="postalCode"
+                id="postal_code"
+                name="postal_code"
                 type="text"
                 autoComplete="postal-code"
                 required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                value={formData.postalCode}
-                onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
+                value={formData.postal_code}
+                onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
               />
             </div>
 
             {/* Phone Number */}
             <div>
-              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700">
                 Phone Number
               </label>
               <input
-                id="phoneNumber"
-                name="phoneNumber"
+                id="phone_number"
+                name="phone_number"
                 type="tel"
                 autoComplete="tel"
                 required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                value={formData.phoneNumber}
-                onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                value={formData.phone_number}
+                onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
               />
             </div>
           </div>

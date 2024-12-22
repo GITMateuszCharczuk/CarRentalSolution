@@ -30,7 +30,7 @@ const CarOrderManagement = () => {
 
   const updateStatusMutation = useMutation({
     mutationFn: ({ orderId, status }: { orderId: string; status: string }) =>
-      carService.updateCarOrderStatus(orderId, status),
+      carService.updateCarOrder(orderId, { status }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminCarOrders'] });
     },
@@ -220,8 +220,8 @@ const CarOrderManagement = () => {
               Previous
             </button>
             <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.totalPages))}
-              disabled={currentPage === data.totalPages}
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.total_pages))}
+              disabled={currentPage === data.total_pages}
               className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Next
@@ -232,9 +232,9 @@ const CarOrderManagement = () => {
               <p className="text-sm text-gray-700">
                 Showing <span className="font-medium">{(currentPage - 1) * pageSize + 1}</span> to{' '}
                 <span className="font-medium">
-                  {Math.min(currentPage * pageSize, data.totalItems)}
+                  {Math.min(currentPage * pageSize, data.total_items)}
                 </span>{' '}
-                of <span className="font-medium">{data.totalItems}</span> results
+                of <span className="font-medium">{data.total_items}</span> results
               </p>
             </div>
             <div>

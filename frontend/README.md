@@ -1,50 +1,85 @@
-# React + TypeScript + Vite
+# Car Rental Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React application for car rental services with blog and admin panel functionality.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Car listing and details with reservation system
+- Blog system with comments and likes
+- User authentication and profile management
+- Admin panel for managing cars, orders, users, and blog posts
+- Responsive design with Tailwind CSS
+- TypeScript for better type safety
+- Modern state management with Redux Toolkit
+- API integration with React Query
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Node.js 18.x or later
+- npm 9.x or later
 
-- Configure the top-level `parserOptions` property like this:
+## Setup
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+1. Clone the repository
+2. Install dependencies:
+```bash
+npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+3. Create a `.env` file in the root directory with the following content:
+```env
+VITE_API_URL=http://localhost:5000/api
 ```
+
+## Development
+
+To start the development server:
+
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:3000`.
+
+## Build
+
+To create a production build:
+
+```bash
+npm run build
+```
+
+## Linting
+
+To run the linter:
+
+```bash
+npm run lint
+```
+
+## Project Structure
+
+```
+src/
+├── assets/        # Static assets
+├── components/    # Reusable components
+├── hooks/         # Custom React hooks
+├── pages/         # Page components
+├── services/      # API services
+├── store/         # Redux store and slices
+├── types/         # TypeScript types and interfaces
+└── utils/         # Utility functions
+```
+
+## Technologies Used
+
+- React 18
+- TypeScript
+- Vite
+- Redux Toolkit
+- React Query
+- React Router
+- Tailwind CSS
+- Axios
+- Zod
+- React Hook Form
