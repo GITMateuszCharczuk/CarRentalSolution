@@ -90,7 +90,7 @@ const Blog = () => {
       </div>
 
       {/* Pagination */}
-      {data && data.totalPages > 1 && (
+      {data && data.total_pages > 1 && (
         <div className="flex items-center justify-center space-x-2">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -100,11 +100,11 @@ const Blog = () => {
             Previous
           </button>
           <span className="text-sm text-gray-700">
-            Page {currentPage} of {data.totalPages}
+            Page {currentPage} of {data.total_pages}
           </span>
           <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.totalPages))}
-            disabled={currentPage === data.totalPages}
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.total_pages))}
+            disabled={currentPage === data.total_pages}
             className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Next

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { store } from '../../store';
 
-const BASE_URL = 'http://localhost:5000/car-rental/api'; // Change this to your API URL
+const BASE_URL = 'http://localhost:8000/car-rental/api'; // Change this to your API URL
 
 export const api = axios.create({
   baseURL: BASE_URL,

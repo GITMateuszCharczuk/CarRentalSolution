@@ -222,6 +222,7 @@ export interface CarOrdersQueryParams extends PaginationParams, SortParams {
   car_offer_id?: string;
   statuses?: string[];
   date_filter_type?: string;
+  
 }
 
 export interface BlogPostsQueryParams extends PaginationParams, SortParams {

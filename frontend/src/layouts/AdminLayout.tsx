@@ -7,7 +7,7 @@ const AdminLayout = () => {
   const { user } = useSelector((state: RootState) => state.auth);
 
   // Redirect non-admin users
-  if (!user?.is_admin) {
+  if (!user?.roles.includes('admin')) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

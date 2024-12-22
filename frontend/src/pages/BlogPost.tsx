@@ -19,13 +19,13 @@ const BlogPost = () => {
 
   const { data: comments, isLoading: areCommentsLoading } = useQuery({
     queryKey: ['blogComments', id],
-    queryFn: () => blogService.getBlogComments(id!),
+    queryFn: () => blogService.getBlogPostComments(id!),
     enabled: !!id,
   });
 
   const addCommentMutation = useMutation({
     mutationFn: (commentData: { description: string }) =>
-      blogService.addBlogComment(id!, commentData),
+      blogService.createBlogPostComment(id!, commentData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['blogComments', id] });
       setComment('');
@@ -33,7 +33,7 @@ const BlogPost = () => {
   });
 
   const toggleLikeMutation = useMutation({
-    mutationFn: () => blogService.toggleBlogLike(id!),
+    mutationFn: () => blogService.likeBlogPost(id!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['blogPost', id] });
     },

@@ -19,10 +19,8 @@ const CarOrderManagement = () => {
       carService.getCarOrders({
         current_page: currentPage,
         page_size: pageSize,
-        sort_by: sortField,
-        sort_order: sortOrder,
-        search: searchTerm,
-        status: statusFilter === 'all' ? undefined : statusFilter,
+        sort_fields: [`${sortField}:${sortOrder}`],
+        statuses: statusFilter === 'all' ? undefined : [statusFilter], // todo
         start_date: dateRange.start || undefined,
         end_date: dateRange.end || undefined,
       }),

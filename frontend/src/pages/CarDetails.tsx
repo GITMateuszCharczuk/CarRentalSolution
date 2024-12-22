@@ -62,16 +62,16 @@ const CarDetails = () => {
       {/* Car Details */}
       <div className="overflow-hidden bg-white shadow sm:rounded-lg">
         <div className="px-4 py-5 sm:px-6">
-          <h1 className="text-3xl font-bold leading-tight text-gray-900">{car.name}</h1>
-          <p className="mt-1 max-w-2xl text-sm text-gray-500">{car.description}</p>
+          <h1 className="text-3xl font-bold leading-tight text-gray-900">{car.car_offer.heading}</h1>
+          <p className="mt-1 max-w-2xl text-sm text-gray-500">{car.car_offer.shortDescription}</p>
         </div>
 
         {/* Image Gallery */}
         <div className="border-t border-gray-200">
           <div className="aspect-h-3 aspect-w-4 overflow-hidden">
             <img
-              src={car.imageUrl}
-              alt={car.name}
+              src={car.car_offer.featuredImageUrl}
+              alt={car.car_offer.heading}
               className="h-96 w-full object-cover object-center"
             />
           </div>
@@ -81,20 +81,50 @@ const CarDetails = () => {
         <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
           <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
             <div className="sm:col-span-1">
-              <dt className="text-sm font-medium text-gray-500">Price per Day</dt>
-              <dd className="mt-1 text-lg font-semibold text-primary-600">${car.pricePerDay}</dd>
+              <dt className="text-sm font-medium text-gray-500">Normal Day Price</dt>
+              <dd className="mt-1 text-lg font-semibold text-primary-600">${car.car_offer.oneNormalDayPrice}</dd>
             </div>
             <div className="sm:col-span-1">
-              <dt className="text-sm font-medium text-gray-500">Brand</dt>
-              <dd className="mt-1 text-sm text-gray-900">{car.brand}</dd>
+              <dt className="text-sm font-medium text-gray-500">Weekend Day Price</dt>
+              <dd className="mt-1 text-lg font-semibold text-primary-600">${car.car_offer.oneWeekendDayPrice}</dd>
             </div>
             <div className="sm:col-span-1">
-              <dt className="text-sm font-medium text-gray-500">Model</dt>
-              <dd className="mt-1 text-sm text-gray-900">{car.model}</dd>
+              <dt className="text-sm font-medium text-gray-500">Week Price</dt>
+              <dd className="mt-1 text-lg font-semibold text-primary-600">${car.car_offer.oneWeekPrice}</dd>
             </div>
             <div className="sm:col-span-1">
-              <dt className="text-sm font-medium text-gray-500">Year</dt>
-              <dd className="mt-1 text-sm text-gray-900">{car.year}</dd>
+              <dt className="text-sm font-medium text-gray-500">Month Price</dt>
+              <dd className="mt-1 text-lg font-semibold text-primary-600">${car.car_offer.oneMonthPrice}</dd>
+            </div>
+            <div className="sm:col-span-1">
+              <dt className="text-sm font-medium text-gray-500">Engine</dt>
+              <dd className="mt-1 text-sm text-gray-900">{car.car_offer.engineDetails}</dd>
+            </div>
+            <div className="sm:col-span-1">
+              <dt className="text-sm font-medium text-gray-500">Gearbox</dt>
+              <dd className="mt-1 text-sm text-gray-900">{car.car_offer.gearboxDetails}</dd>
+            </div>
+            <div className="sm:col-span-1">
+              <dt className="text-sm font-medium text-gray-500">Drive</dt>
+              <dd className="mt-1 text-sm text-gray-900">{car.car_offer.driveDetails}</dd>
+            </div>
+            <div className="sm:col-span-1">
+              <dt className="text-sm font-medium text-gray-500">Horsepower</dt>
+              <dd className="mt-1 text-sm text-gray-900">{car.car_offer.horsepower}</dd>
+            </div>
+            <div className="sm:col-span-1">
+              <dt className="text-sm font-medium text-gray-500">Year of Production</dt>
+              <dd className="mt-1 text-sm text-gray-900">{car.car_offer.yearOfProduction}</dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-sm font-medium text-gray-500">Tags</dt>
+              <dd className="mt-1 flex flex-wrap gap-2">
+                {car.car_offer.tags.map((tag) => (
+                  <span key={tag} className="inline-flex items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800">
+                    {tag}
+                  </span>
+                ))}
+              </dd>
             </div>
           </dl>
         </div>
