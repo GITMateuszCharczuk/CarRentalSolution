@@ -2,7 +2,6 @@ package server
 
 import (
 	"blog-api/API/controllers"
-	"blog-api/API/middleware"
 	"blog-api/Infrastructure/config"
 	"context"
 	"log"
@@ -31,7 +30,6 @@ func NewServer(Controllers *controllers.Controllers, Config *config.Config) *Ser
 
 func (r *Server) RegisterRoutes() {
 	router := gin.Default()
-	router.Use(middleware.CORSMiddleware())
 
 	apiGroup := router.Group(r.Config.ServiceAddress)
 	{

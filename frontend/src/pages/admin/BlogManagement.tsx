@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { blogService } from '../../services/api';
 import type { BlogPost, BlogPostsQueryParams } from '../../types/api';
+import { formatDateForApi } from '../../utils/dateUtils';
 
 const BlogManagement = () => {
   const queryClient = useQueryClient();
@@ -23,8 +24,8 @@ const BlogManagement = () => {
         page_size: pageSize,
         sort_fields: [`${sortField}:${sortOrder}`],
         tags: selectedTags,
-        'date-time-from': dateFrom,
-        'date-time-to': dateTo,
+        'date-time-from': dateFrom ? formatDateForApi(dateFrom) : undefined,
+        'date-time-to': dateTo ? formatDateForApi(dateTo) : undefined,
         visible: visible
       };
       return blogService.getBlogPosts(params);
@@ -166,7 +167,7 @@ const BlogManagement = () => {
                 <tr>
                   <td colSpan={5} className="text-center py-4">Loading...</td>
                 </tr>
-              ) : data?.items.map((post) => (
+              ) : data?.Items.map((post) => (
                 <tr key={post.id}>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
                     {post.heading}
@@ -227,8 +228,8 @@ const BlogManagement = () => {
               Previous
             </button>
             <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.total_pages))}
-              disabled={currentPage === data.total_pages}
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.TotalPages))}
+              disabled={currentPage === data.TotalPages}
               className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Next
@@ -239,9 +240,9 @@ const BlogManagement = () => {
               <p className="text-sm text-gray-700">
                 Showing <span className="font-medium">{(currentPage - 1) * pageSize + 1}</span> to{' '}
                 <span className="font-medium">
-                  {Math.min(currentPage * pageSize, data.total_items)}
+                  {Math.min(currentPage * pageSize, data.TotalItems)}
                 </span>{' '}
-                of <span className="font-medium">{data.total_items}</span> results
+                of <span className="font-medium">{data.TotalItems}</span> results
               </p>
             </div>
             <div>

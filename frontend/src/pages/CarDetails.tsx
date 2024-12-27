@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { carService } from '../services/api';
+import { carService, fileService } from '../services/api';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { formatDateForApi } from '../utils/dateUtils';
+import { selectIsAuthenticated } from '../store/slices/authSlice';
 
 const CarDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const [reservation, setReservation] = useState({
     startDate: '',
     endDate: '',
@@ -23,9 +24,9 @@ const CarDetails = () => {
   const createOrderMutation = useMutation({
     mutationFn: (orderData: { startDate: string; endDate: string }) =>
       carService.createCarOrder({
-        carOfferId: id!,
-        startDate: orderData.startDate,
-        endDate: orderData.endDate,
+        car_offer_id: id!,
+        start_date: formatDateForApi(orderData.startDate),
+        end_date: formatDateForApi(orderData.endDate),
       }),
     onSuccess: () => {
       navigate('/profile');
@@ -63,14 +64,14 @@ const CarDetails = () => {
       <div className="overflow-hidden bg-white shadow sm:rounded-lg">
         <div className="px-4 py-5 sm:px-6">
           <h1 className="text-3xl font-bold leading-tight text-gray-900">{car.car_offer.heading}</h1>
-          <p className="mt-1 max-w-2xl text-sm text-gray-500">{car.car_offer.shortDescription}</p>
+          <p className="mt-1 max-w-2xl text-sm text-gray-500">{car.car_offer.short_description}</p>
         </div>
 
         {/* Image Gallery */}
         <div className="border-t border-gray-200">
           <div className="aspect-h-3 aspect-w-4 overflow-hidden">
             <img
-              src={car.car_offer.featuredImageUrl}
+              src={car.car_offer.featured_image_url ? fileService.getFileUrl(car.car_offer.featured_image_url) : '/placeholder-car.jpg'}
               alt={car.car_offer.heading}
               className="h-96 w-full object-cover object-center"
             />
@@ -82,31 +83,31 @@ const CarDetails = () => {
           <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
             <div className="sm:col-span-1">
               <dt className="text-sm font-medium text-gray-500">Normal Day Price</dt>
-              <dd className="mt-1 text-lg font-semibold text-primary-600">${car.car_offer.oneNormalDayPrice}</dd>
+              <dd className="mt-1 text-lg font-semibold text-primary-600">${car.car_offer.one_normal_day_price}</dd>
             </div>
             <div className="sm:col-span-1">
               <dt className="text-sm font-medium text-gray-500">Weekend Day Price</dt>
-              <dd className="mt-1 text-lg font-semibold text-primary-600">${car.car_offer.oneWeekendDayPrice}</dd>
+              <dd className="mt-1 text-lg font-semibold text-primary-600">${car.car_offer.one_weekend_day_price}</dd>
             </div>
             <div className="sm:col-span-1">
               <dt className="text-sm font-medium text-gray-500">Week Price</dt>
-              <dd className="mt-1 text-lg font-semibold text-primary-600">${car.car_offer.oneWeekPrice}</dd>
+              <dd className="mt-1 text-lg font-semibold text-primary-600">${car.car_offer.one_week_price}</dd>
             </div>
             <div className="sm:col-span-1">
               <dt className="text-sm font-medium text-gray-500">Month Price</dt>
-              <dd className="mt-1 text-lg font-semibold text-primary-600">${car.car_offer.oneMonthPrice}</dd>
+              <dd className="mt-1 text-lg font-semibold text-primary-600">${car.car_offer.one_month_price}</dd>
             </div>
             <div className="sm:col-span-1">
               <dt className="text-sm font-medium text-gray-500">Engine</dt>
-              <dd className="mt-1 text-sm text-gray-900">{car.car_offer.engineDetails}</dd>
+              <dd className="mt-1 text-sm text-gray-900">{car.car_offer.engine_details}</dd>
             </div>
             <div className="sm:col-span-1">
               <dt className="text-sm font-medium text-gray-500">Gearbox</dt>
-              <dd className="mt-1 text-sm text-gray-900">{car.car_offer.gearboxDetails}</dd>
+              <dd className="mt-1 text-sm text-gray-900">{car.car_offer.gearbox_details}</dd>
             </div>
             <div className="sm:col-span-1">
               <dt className="text-sm font-medium text-gray-500">Drive</dt>
-              <dd className="mt-1 text-sm text-gray-900">{car.car_offer.driveDetails}</dd>
+              <dd className="mt-1 text-sm text-gray-900">{car.car_offer.drive_details}</dd>
             </div>
             <div className="sm:col-span-1">
               <dt className="text-sm font-medium text-gray-500">Horsepower</dt>
@@ -114,16 +115,18 @@ const CarDetails = () => {
             </div>
             <div className="sm:col-span-1">
               <dt className="text-sm font-medium text-gray-500">Year of Production</dt>
-              <dd className="mt-1 text-sm text-gray-900">{car.car_offer.yearOfProduction}</dd>
+              <dd className="mt-1 text-sm text-gray-900">{car.car_offer.year_of_production}</dd>
             </div>
             <div className="sm:col-span-2">
               <dt className="text-sm font-medium text-gray-500">Tags</dt>
               <dd className="mt-1 flex flex-wrap gap-2">
-                {car.car_offer.tags.map((tag) => (
+                {car.car_offer.tags?.map((tag) => (
                   <span key={tag} className="inline-flex items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800">
                     {tag}
                   </span>
-                ))}
+                )) || (
+                  <span className="text-sm text-gray-500">No tags available</span>
+                )}
               </dd>
             </div>
           </dl>

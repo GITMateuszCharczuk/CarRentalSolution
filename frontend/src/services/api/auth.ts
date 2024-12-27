@@ -3,17 +3,17 @@ import type { LoginRequest, RegisterRequest, AuthResponse } from '../../types/ap
 
 export const authService = {
   login: async (credentials: LoginRequest): Promise<AuthResponse> => {
-    const response = await api.post('/auth/login', credentials);
+    const response = await api.post('/login', credentials);
     return response.data;
   },
 
   register: async (userData: RegisterRequest): Promise<AuthResponse> => {
-    const response = await api.post('/auth/register', userData);
+    const response = await api.post('/register', userData);
     return response.data;
   },
 
   refreshToken: async (refreshToken: string): Promise<AuthResponse> => {
-    const response = await api.post('/auth/refresh-token', { refresh_token: refreshToken });
+    const response = await api.post('/token/refresh-token', { refresh_token: refreshToken });
     return response.data;
   },
 }; 

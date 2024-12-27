@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"file-storage/API/controllers"
-	"file-storage/API/middleware"
 	"file-storage/Infrastructure/config"
 	"log"
 	"net/http"
@@ -28,8 +27,6 @@ func NewServer(fileControllers *controllers.Controllers, config *config.Config) 
 
 func (r *Server) RegisterRoutes() {
 	router := gin.Default()
-
-	router.Use(middleware.CORSMiddleware())
 
 	apiGroup := router.Group(r.config.ServiceAddress)
 	{

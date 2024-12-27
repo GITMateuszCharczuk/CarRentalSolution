@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { store } from '../../store';
+import { setToken, logout, selectAuthToken, selectRefreshToken } from '../../store/slices/authSlice';
 
 const BASE_URL = 'http://localhost:8000/car-rental/api'; // Change this to your API URL
 
@@ -14,7 +15,7 @@ export const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const state = store.getState();
-    const token = state.auth.token;
+    const token = selectAuthToken(state);
     
     if (token) {
       config.params = {
@@ -42,21 +43,21 @@ api.interceptors.response.use(
 
       try {
         const state = store.getState();
-        const refreshToken = state.auth.refreshToken;
+        const refreshToken = selectRefreshToken(state);
         
         const response = await axios.post(`${BASE_URL}/token/refresh`, null, {
           params: { token: refreshToken },
         });
 
         const { token } = response.data;
-        store.dispatch({ type: 'auth/setToken', payload: token });
+        store.dispatch(setToken(token));
 
         // Retry the original request with the new token
         originalRequest.params.token = token;
         return api(originalRequest);
       } catch (refreshError) {
         // If refresh token fails, logout user and redirect to login
-        store.dispatch({ type: 'auth/logout' });
+        store.dispatch(logout());
         return Promise.reject(refreshError);
       }
     }

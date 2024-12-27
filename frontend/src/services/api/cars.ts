@@ -12,6 +12,7 @@ export const carService = {
   // Car Offers
   async getCarOffers(params?: CarOffersQueryParams): Promise<PaginatedResponse<CarOffer>> {
     const response = await api.get('/car-offers', { params });
+    console.log(response.data);
     return response.data;
   },
 

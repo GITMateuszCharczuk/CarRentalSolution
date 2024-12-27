@@ -1,0 +1,32 @@
+services:
+  seed-manager:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    environment:
+      - SERVICE_PORT=:8000
+      - FILE_SERVICE_URL=http://file-storage-api:8082
+      - EMAIL_SERVICE_URL=http://email-service-api:8084
+      - IDENTITY_API_URL=http://identity-api:8085
+      - RENTAL_API_URL=http://rental-api:8088
+      - BLOG_API_URL=http://blog-api:8087
+      - ENV=PROD
+      - JWT_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzUyNzA0MjEsImlhdCI6MTczNTI2OTUyMSwicm9sZXMiOlsidXNlciJdLCJzdWIiOiJiYmU0ZmQwOS1hNzUwLTQ1NjMtOGNjMS1hODYzMWUwNGQxZmEifQ.atB_0JF5NIYDMPDCZTaRHy8RRmw4LTORw7SwA6y1CV4
+      # Seed counts
+      - SEED_USERS_COUNT=10
+      - SEED_BLOG_POSTS_COUNT=1000
+      - SEED_COMMENTS_PER_POST=5
+      - SEED_CARS_COUNT=1000
+      - SEED_ORDERS_PER_CAR=5
+      - SEED_CAR_IMAGES_COUNT=50
+      - SEED_AVATARS_COUNT=50
+      - SEED_EMAIL_TEMPLATES_COUNT=5
+      - SEED_EMAILS_PER_TEMPLATE=3
+      - SEED_STANDALONE_EMAILS_COUNT=10
+      - SEED_BLOG_IMAGES_COUNT=50
+    networks:
+      - docker-network
+
+networks:
+  docker-network:
+    driver: bridge

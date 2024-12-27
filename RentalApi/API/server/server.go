@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"rental-api/API/controllers"
-	"rental-api/API/middleware"
 	"rental-api/Infrastructure/config"
 	"time"
 
@@ -31,7 +30,6 @@ func NewServer(Controllers *controllers.Controllers, Config *config.Config) *Ser
 
 func (r *Server) RegisterRoutes() {
 	router := gin.Default()
-	router.Use(middleware.CORSMiddleware())
 
 	apiGroup := router.Group(r.Config.ServiceAddress)
 	{

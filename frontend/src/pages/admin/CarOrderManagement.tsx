@@ -1,28 +1,29 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { carService } from '../../services/api';
-import type { CarOrder } from '../../types/api';
+import type { CarOrder, PaginatedResponse } from '../../types/api';
+import { formatDateForApi } from '../../utils/dateUtils';
 
 const CarOrderManagement = () => {
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [sortField, setSortField] = useState<keyof CarOrder>('startDate');
+  const [sortField, setSortField] = useState<keyof CarOrder>('start_date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<PaginatedResponse<CarOrder>>({
     queryKey: ['adminCarOrders', currentPage, pageSize, sortField, sortOrder, searchTerm, statusFilter, dateRange],
     queryFn: () =>
       carService.getCarOrders({
         current_page: currentPage,
         page_size: pageSize,
         sort_fields: [`${sortField}:${sortOrder}`],
-        statuses: statusFilter === 'all' ? undefined : [statusFilter], // todo
-        start_date: dateRange.start || undefined,
-        end_date: dateRange.end || undefined,
+        statuses: statusFilter === 'all' ? undefined : [statusFilter],
+        start_date: dateRange.start ? formatDateForApi(dateRange.start) : undefined,
+        end_date: dateRange.end ? formatDateForApi(dateRange.end) : undefined,
       }),
   });
 
@@ -131,14 +132,14 @@ const CarOrderManagement = () => {
                 <th
                   scope="col"
                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer"
-                  onClick={() => handleSort('startDate')}
+                  onClick={() => handleSort('start_date')}
                 >
                   Start Date
                 </th>
                 <th
                   scope="col"
                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer"
-                  onClick={() => handleSort('endDate')}
+                  onClick={() => handleSort('end_date')}
                 >
                   End Date
                 </th>
@@ -154,60 +155,76 @@ const CarOrderManagement = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {data?.items.map((order) => (
-                <tr key={order.id}>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
-                    {order.id.slice(0, 8)}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    {new Date(order.startDate).toLocaleDateString()}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    {new Date(order.endDate).toLocaleDateString()}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <select
-                      value={order.status}
-                      onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                      className={`rounded-md text-xs font-semibold ${
-                        order.status === 'Completed'
-                          ? 'bg-green-100 text-green-800'
-                          : order.status === 'Pending'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : order.status === 'Cancelled'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-blue-100 text-blue-800'
-                      }`}
-                    >
-                      <option value="Pending">Pending</option>
-                      <option value="Confirmed">Confirmed</option>
-                      <option value="Completed">Completed</option>
-                      <option value="Cancelled">Cancelled</option>
-                    </select>
-                  </td>
-                  <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                    <button
-                      onClick={() => {/* TODO: Implement view details */}}
-                      className="text-primary-600 hover:text-primary-900 mr-4"
-                    >
-                      View Details
-                    </button>
-                    <button
-                      onClick={() => handleDelete(order.id)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      Delete
-                    </button>
+              {isLoading ? (
+                <tr>
+                  <td colSpan={5} className="text-center py-8">
+                    <div className="flex justify-center">
+                      <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-primary-500"></div>
+                    </div>
                   </td>
                 </tr>
-              ))}
+              ) : !data?.Items?.length ? (
+                <tr>
+                  <td colSpan={5} className="text-center py-8 text-gray-500">
+                    No orders found.
+                  </td>
+                </tr>
+              ) : (
+                data.Items.map((order) => (
+                  <tr key={order.id}>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
+                      {order.id.slice(0, 8)}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {new Date(order.start_date).toLocaleDateString()}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {new Date(order.end_date).toLocaleDateString()}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <select
+                        value={order.status}
+                        onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                        className={`rounded-md text-xs font-semibold ${
+                          order.status === 'Completed'
+                            ? 'bg-green-100 text-green-800'
+                            : order.status === 'Pending'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : order.status === 'Cancelled'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-blue-100 text-blue-800'
+                        }`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                      </select>
+                    </td>
+                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                      <button
+                        onClick={() => {/* TODO: Implement view details */}}
+                        className="text-primary-600 hover:text-primary-900 mr-4"
+                      >
+                        View Details
+                      </button>
+                      <button
+                        onClick={() => handleDelete(order.id)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
       {/* Pagination */}
-      {data && (
+      {data?.Items && data.Items.length > 0 && data.TotalPages > 0 && (
         <div className="flex items-center justify-between bg-white px-4 py-3 sm:px-6">
           <div className="flex flex-1 justify-between sm:hidden">
             <button
@@ -218,8 +235,12 @@ const CarOrderManagement = () => {
               Previous
             </button>
             <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.total_pages))}
-              disabled={currentPage === data.total_pages}
+              onClick={() => 
+                setCurrentPage((prev) => 
+                  Math.min(prev + 1, data?.TotalPages ?? prev)
+                )
+              }
+              disabled={currentPage === (data?.TotalPages ?? 1)}
               className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Next
@@ -230,9 +251,9 @@ const CarOrderManagement = () => {
               <p className="text-sm text-gray-700">
                 Showing <span className="font-medium">{(currentPage - 1) * pageSize + 1}</span> to{' '}
                 <span className="font-medium">
-                  {Math.min(currentPage * pageSize, data.total_items)}
+                  {Math.min(currentPage * pageSize, data?.TotalItems ?? 0)}
                 </span>{' '}
-                of <span className="font-medium">{data.total_items}</span> results
+                of <span className="font-medium">{data?.TotalItems ?? 0}</span> results
               </p>
             </div>
             <div>

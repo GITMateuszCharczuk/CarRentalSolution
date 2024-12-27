@@ -4,15 +4,24 @@ import type { UserInfo } from '../../types/api';
 interface AuthState {
   user: UserInfo | null;
   token: string | null;
-  refreshToken: string | null;
+  refresh_token: string | null;
+  roles: string[];
   isAuthenticated: boolean;
   isLoading: boolean;
+}
+
+interface AuthCredentials {
+  user?: UserInfo;
+  token: string;
+  refresh_token: string;
+  roles: string[];
 }
 
 const initialState: AuthState = {
   user: null,
   token: null,
-  refreshToken: null,
+  refresh_token: null,
+  roles: [],
   isAuthenticated: false,
   isLoading: false,
 };
@@ -21,17 +30,11 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (
-      state,
-      action: PayloadAction<{
-        user: UserInfo;
-        token: string;
-        refresh_token: string;
-      }>
-    ) => {
-      state.user = action.payload.user;
+    setCredentials: (state, action: PayloadAction<AuthCredentials>) => {
+      if (action.payload.user) state.user = action.payload.user;
       state.token = action.payload.token;
-      state.refreshToken = action.payload.refresh_token;
+      state.refresh_token = action.payload.refresh_token;
+      state.roles = action.payload.roles;
       state.isAuthenticated = true;
       state.isLoading = false;
     },
@@ -41,15 +44,16 @@ const authSlice = createSlice({
     setUser: (state, action: PayloadAction<UserInfo>) => {
       state.user = action.payload;
     },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
     logout: (state) => {
       state.user = null;
       state.token = null;
-      state.refreshToken = null;
+      state.refresh_token = null;
+      state.roles = [];
       state.isAuthenticated = false;
       state.isLoading = false;
-    },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
     },
   },
 });
@@ -61,9 +65,10 @@ export const { setCredentials, setToken, setUser, logout, setLoading } = authSli
 export const selectCurrentUser = (state: { auth: AuthState }) => state.auth.user;
 export const selectIsAuthenticated = (state: { auth: AuthState }) => state.auth.isAuthenticated;
 export const selectIsAdmin = (state: { auth: AuthState }) => 
-  state.auth.user?.roles.includes('admin') ?? false;
+  state.auth.roles.includes('admin');
 export const selectAuthToken = (state: { auth: AuthState }) => state.auth.token;
-export const selectRefreshToken = (state: { auth: AuthState }) => state.auth.refreshToken;
+export const selectRefreshToken = (state: { auth: AuthState }) => state.auth.refresh_token;
 export const selectIsLoading = (state: { auth: AuthState }) => state.auth.isLoading;
+export const selectUserRoles = (state: { auth: AuthState }) => state.auth.roles;
 
 export default authSlice.reducer; 

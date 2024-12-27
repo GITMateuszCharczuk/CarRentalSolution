@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
-import { authService } from '../services/api';
+import { authService, userService } from '../services/api';
 import { setCredentials } from '../store/slices/authSlice';
-import type { AuthResponse } from '../types/api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,13 +17,20 @@ const Login = () => {
   const from = location.state?.from || '/';
 
   const loginMutation = useMutation({
-    mutationFn: (credentials: { email: string; password: string }) =>
-      authService.login(credentials),
-    onSuccess: (response: AuthResponse) => {
+    mutationFn: async (credentials: { email: string; password: string }) => {
+      const loginResponse = await authService.login(credentials);
+      const userInfoResponse = await userService.getUserInfo(undefined, loginResponse.Token);
+      return {
+        ...loginResponse,
+        user: userInfoResponse.user_info
+      };
+    },
+    onSuccess: (response) => {
       dispatch(setCredentials({
-        user: response.data.user,
-        token: response.data.token,
-        refresh_token: response.data.refresh_token
+        token: response.Token,
+        refresh_token: response.RefreshToken,
+        roles: response.Roles,
+        user: response.user
       }));
       navigate(from, { replace: true });
     },

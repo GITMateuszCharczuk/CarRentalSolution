@@ -1,19 +1,27 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
 import { blogService } from '../services/api';
-import { RootState } from '../store';
+import { BlogPost as BlogPostType, BlogComment } from '../types/api';
+import { selectIsAuthenticated, selectCurrentUser } from '../store/slices/authSlice';
 
 const BlogPost = () => {
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
-  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const user = useSelector(selectCurrentUser);
   const [comment, setComment] = useState('');
 
   const { data: post, isLoading: isPostLoading } = useQuery({
     queryKey: ['blogPost', id],
     queryFn: () => blogService.getBlogPostById(id!),
+    enabled: !!id,
+  });
+
+  const { data: likesData } = useQuery({
+    queryKey: ['blogPostLikes', id],
+    queryFn: () => blogService.getBlogPostLikes(id!),
     enabled: !!id,
   });
 
@@ -36,6 +44,7 @@ const BlogPost = () => {
     mutationFn: () => blogService.likeBlogPost(id!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['blogPost', id] });
+      queryClient.invalidateQueries({ queryKey: ['blogPostLikes', id] });
     },
   });
 
@@ -53,7 +62,7 @@ const BlogPost = () => {
     );
   }
 
-  if (!post) {
+  if (!post?.blog_post) {
     return (
       <div className="flex h-96 items-center justify-center">
         <p className="text-red-500">Blog post not found.</p>
@@ -61,44 +70,50 @@ const BlogPost = () => {
     );
   }
 
+  const blogPost = post.blog_post;
+
   return (
-    <div className="mx-auto max-w-4xl space-y-8">
+    <div className="mx-auto max-w-4xl space-y-8 px-4 py-8">
       {/* Featured Image */}
-      <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-        <img
-          src={post.featuredImageUrl}
-          alt={post.heading}
-          className="h-96 w-full object-cover"
-        />
-      </div>
+      {blogPost.featuredImageUrl && (
+        <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+          <img
+            src={blogPost.featuredImageUrl}
+            alt={blogPost.heading}
+            className="h-96 w-full object-cover"
+          />
+        </div>
+      )}
 
       {/* Post Header */}
       <div className="text-center">
         <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-          {post.heading}
+          {blogPost.heading}
         </h1>
         <div className="mt-4 flex items-center justify-center space-x-4 text-sm text-gray-500">
-          <span>{post.author}</span>
+          <span>{blogPost.author}</span>
           <span>•</span>
-          <time dateTime={post.publishedDate}>
-            {new Date(post.publishedDate).toLocaleDateString()}
+          <time dateTime={blogPost.publishedDate}>
+            {new Date(blogPost.publishedDate).toLocaleDateString()}
           </time>
         </div>
-        <div className="mt-2 flex justify-center space-x-2">
-          {post.tags.map((tag) => (
-            <span
-              key={tag}
-              className="inline-flex items-center rounded-full bg-primary-100 px-3 py-0.5 text-sm font-medium text-primary-800"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
+        {blogPost.tags && blogPost.tags.length > 0 && (
+          <div className="mt-2 flex justify-center space-x-2">
+            {blogPost.tags.map((tag: string) => (
+              <span
+                key={tag}
+                className="inline-flex items-center rounded-full bg-primary-100 px-3 py-0.5 text-sm font-medium text-primary-800"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Post Content */}
-      <div className="prose prose-lg mx-auto mt-6">
-        <div dangerouslySetInnerHTML={{ __html: post.content }} />
+      <div className="prose prose-lg mx-auto mt-6 text-black">
+        <div dangerouslySetInnerHTML={{ __html: blogPost.content }} />
       </div>
 
       {/* Like Button */}
@@ -124,7 +139,7 @@ const BlogPost = () => {
               clipRule="evenodd"
             />
           </svg>
-          <span>{post.likes} likes</span>
+          <span>{likesData?.totalCount || 0} likes</span>
         </button>
       </div>
 
@@ -161,9 +176,9 @@ const BlogPost = () => {
         ) : (
           <p className="mt-4 text-center text-sm text-gray-500">
             Please{' '}
-            <a href="/login" className="text-primary-600 hover:text-primary-500">
+            <Link to="/login" className="text-primary-600 hover:text-primary-500">
               sign in
-            </a>{' '}
+            </Link>{' '}
             to leave a comment.
           </p>
         )}
@@ -174,8 +189,8 @@ const BlogPost = () => {
             <div className="flex justify-center">
               <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-primary-500"></div>
             </div>
-          ) : comments?.length ? (
-            comments.map((comment) => (
+          ) : comments?.Items?.length ? (
+            comments.Items.map((comment: BlogComment) => (
               <div key={comment.id} className="flex space-x-4">
                 <div className="flex-shrink-0">
                   <div className="h-10 w-10 rounded-full bg-gray-200"></div>

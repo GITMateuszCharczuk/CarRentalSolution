@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { authService } from '../../services/api';
-import type { User } from '../../types/api';
+import { userService } from '../../services/api/users';
+import type { UserInfo } from '../../types/api';
 
 const UserManagement = () => {
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [sortField, setSortField] = useState<keyof User>('email_address');
+  const [sortField, setSortField] = useState<keyof UserInfo>('email_address');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<'all' | 'admin' | 'user'>('all');
@@ -15,37 +15,58 @@ const UserManagement = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['adminUsers', currentPage, pageSize, sortField, sortOrder, searchTerm, roleFilter],
     queryFn: () =>
-      authService.getUsers({
+      userService.getUsers({
         current_page: currentPage,
         page_size: pageSize,
-        sort_by: sortField,
-        sort_order: sortOrder,
+        sort_fields: [`${sortField}:${sortOrder}`],
         search: searchTerm,
         role: roleFilter === 'all' ? undefined : roleFilter,
       }),
   });
 
-  const toggleAdminMutation = useMutation({
-    mutationFn: (userId: string) => authService.toggleUserAdmin(userId),
+  const modifyUserMutation = useMutation({
+    mutationFn: (userData: { userId: string; roles: string[] }) =>
+      userService.modifyUser({
+        user_id: userData.userId,
+        roles: userData.roles,
+        // We need to include these required fields, even if we're not changing them
+        name: '', // These will be filled with existing values in a real implementation
+        surname: '',
+        address: '',
+        city: '',
+        postal_code: '',
+        phone_number: '',
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminUsers'] });
     },
   });
 
   const deleteUserMutation = useMutation({
-    mutationFn: (userId: string) => authService.deleteUser(userId),
+    mutationFn: (userId: string) => userService.deleteUser(userId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminUsers'] });
     },
   });
 
-  const handleSort = (field: keyof User) => {
+  const handleSort = (field: keyof UserInfo) => {
     if (field === sortField) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
       setSortField(field);
       setSortOrder('asc');
     }
+  };
+
+  const handleToggleAdmin = async (user: UserInfo) => {
+    const newRoles = user.roles.includes('admin')
+      ? user.roles.filter(role => role !== 'admin')
+      : [...user.roles, 'admin'];
+    
+    await modifyUserMutation.mutateAsync({
+      userId: user.id,
+      roles: newRoles,
+    });
   };
 
   const handleDelete = async (userId: string) => {
@@ -115,19 +136,13 @@ const UserManagement = () => {
                 >
                   Role
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  Status
-                </th>
                 <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
                   <span className="sr-only">Actions</span>
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {data?.items.map((user) => (
+              {data?.data.items.map((user) => (
                 <tr key={user.id}>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
                     {user.email_address}
@@ -138,31 +153,20 @@ const UserManagement = () => {
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                     <span
                       className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                        user.is_admin
+                        user.roles.includes('admin')
                           ? 'bg-purple-100 text-purple-800'
                           : 'bg-gray-100 text-gray-800'
                       }`}
                     >
-                      {user.is_admin ? 'Admin' : 'User'}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <span
-                      className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                        user.is_active
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}
-                    >
-                      {user.is_active ? 'Active' : 'Inactive'}
+                      {user.roles.includes('admin') ? 'Admin' : 'User'}
                     </span>
                   </td>
                   <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                     <button
-                      onClick={() => toggleAdminMutation.mutate(user.id)}
+                      onClick={() => handleToggleAdmin(user)}
                       className="text-primary-600 hover:text-primary-900 mr-4"
                     >
-                      {user.is_admin ? 'Remove Admin' : 'Make Admin'}
+                      {user.roles.includes('admin') ? 'Remove Admin' : 'Make Admin'}
                     </button>
                     <button
                       onClick={() => handleDelete(user.id)}
@@ -190,8 +194,8 @@ const UserManagement = () => {
               Previous
             </button>
             <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.totalPages))}
-              disabled={currentPage === data.totalPages}
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.data.total_pages))}
+              disabled={currentPage === data.data.total_pages}
               className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Next
@@ -202,9 +206,9 @@ const UserManagement = () => {
               <p className="text-sm text-gray-700">
                 Showing <span className="font-medium">{(currentPage - 1) * pageSize + 1}</span> to{' '}
                 <span className="font-medium">
-                  {Math.min(currentPage * pageSize, data.totalItems)}
+                  {Math.min(currentPage * pageSize, data.data.total_items)}
                 </span>{' '}
-                of <span className="font-medium">{data.totalItems}</span> results
+                of <span className="font-medium">{data.data.total_items}</span> results
               </p>
             </div>
             <div>

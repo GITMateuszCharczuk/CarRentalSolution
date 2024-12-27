@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"email-service/API/controllers"
-	"email-service/API/middleware"
 	"email-service/Infrastructure/config"
 	"log"
 	"net/http"
@@ -31,7 +30,6 @@ func NewServer(Controllers *controllers.Controllers, Config *config.Config) *Ser
 
 func (r *Server) RegisterRoutes() {
 	router := gin.Default()
-	router.Use(middleware.CORSMiddleware())
 
 	apiGroup := router.Group(r.Config.ServiceAddress)
 	{

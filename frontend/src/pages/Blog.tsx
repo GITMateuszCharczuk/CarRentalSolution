@@ -2,16 +2,18 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { blogService } from '../services/api';
+import type { BlogPost, PaginatedResponse } from '../types/api';
 
 const Blog = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(6);
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error } = useQuery<PaginatedResponse<BlogPost>>({
     queryKey: ['blogPosts', currentPage],
     queryFn: () =>
       blogService.getBlogPosts({
         current_page: currentPage,
-        page_size: 6,
+        page_size: pageSize,
       }),
   });
 
@@ -31,6 +33,23 @@ const Blog = () => {
     );
   }
 
+  if (!data?.Items?.length) {
+    return (
+      <div className="space-y-8">
+        <div className="border-b border-gray-200 pb-5">
+          <h1 className="text-3xl font-bold leading-tight text-gray-900">Blog</h1>
+          <p className="mt-2 max-w-4xl text-sm text-gray-500">
+            Stay updated with our latest news, tips, and insights about car rental and automotive
+            industry.
+          </p>
+        </div>
+        <div className="flex h-64 items-center justify-center">
+          <p className="text-gray-500">No blog posts available.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -44,28 +63,32 @@ const Blog = () => {
 
       {/* Blog Posts Grid */}
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {data?.items.map((post) => (
+        {data.Items.map((post) => (
           <article
             key={post.id}
             className="flex flex-col overflow-hidden rounded-lg shadow-lg transition duration-300 hover:shadow-xl"
           >
             <div className="flex-shrink-0">
-              <img
-                className="h-48 w-full object-cover"
-                src={post.featuredImageUrl}
-                alt={post.heading}
-              />
+              {post.featuredImageUrl && (
+                <img
+                  className="h-48 w-full object-cover"
+                  src={post.featuredImageUrl}
+                  alt={post.heading}
+                />
+              )}
             </div>
             <div className="flex flex-1 flex-col justify-between bg-white p-6">
               <div className="flex-1">
-                <p className="text-sm font-medium text-primary-600">
-                  {post.tags.map((tag) => (
-                    <span key={tag} className="mr-2">
-                      #{tag}
-                    </span>
-                  ))}
-                </p>
-                <Link to={`/blog/${post.urlHandle}`} className="mt-2 block">
+                {post.tags && post.tags.length > 0 && (
+                  <p className="text-sm font-medium text-primary-600">
+                    {post.tags.map((tag) => (
+                      <span key={tag} className="mr-2">
+                        #{tag}
+                      </span>
+                    ))}
+                  </p>
+                )}
+                <Link to={`/blog/${post.id}`} className="mt-2 block">
                   <p className="text-xl font-semibold text-gray-900">{post.heading}</p>
                   <p className="mt-3 text-base text-gray-500">{post.shortDescription}</p>
                 </Link>
@@ -90,7 +113,7 @@ const Blog = () => {
       </div>
 
       {/* Pagination */}
-      {data && data.total_pages > 1 && (
+      {data.TotalItems > pageSize && (
         <div className="flex items-center justify-center space-x-2">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -100,11 +123,11 @@ const Blog = () => {
             Previous
           </button>
           <span className="text-sm text-gray-700">
-            Page {currentPage} of {data.total_pages}
+            Page {currentPage} of {Math.ceil(data.TotalItems / pageSize)}
           </span>
           <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.total_pages))}
-            disabled={currentPage === data.total_pages}
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(data.TotalItems / pageSize)))}
+            disabled={currentPage === Math.ceil(data.TotalItems / pageSize)}
             className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Next

@@ -4,6 +4,7 @@ import (
 	"api-gateway/internal/config"
 	"api-gateway/internal/middleware"
 	"api-gateway/internal/routes"
+	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -27,6 +28,10 @@ func main() {
 	r.Use(middleware.RecoveryMiddleware())
 	r.Use(middleware.RateLimiter(cfg.RequestSentLimit, cfg.RequestSentTimeWindow))
 	r.Use(middleware.RequestSizeLimiter(cfg.RequestSizeLimit * 1024 * 1024)) // x * 1MB
+
+	r.OPTIONS("/*path", func(c *gin.Context) {
+		c.Status(http.StatusOK)
+	})
 
 	routes.RegisterEmailRoutes(r, cfg.EmailServiceURL, cfg.MainApiRoute)
 	routes.RegisterFileRoutes(r, cfg.FileServiceURL, cfg.MainApiRoute)

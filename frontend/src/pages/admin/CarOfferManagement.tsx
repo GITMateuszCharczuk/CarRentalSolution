@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { carService } from '../../services/api';
 import type { CarOffer, CarOffersQueryParams } from '../../types/api';
+import { formatDateForApi } from '../../utils/dateUtils';
 
 const CarOfferManagement = () => {
   const queryClient = useQueryClient();
@@ -22,8 +23,8 @@ const CarOfferManagement = () => {
         page_size: pageSize,
         sort_fields: [`${sortField}:${sortOrder}`],
         tags: selectedTags,
-        date_time_from: dateFrom,
-        date_time_to: dateTo,
+        date_time_from: dateFrom ? formatDateForApi(dateFrom) : undefined,
+        date_time_to: dateTo ? formatDateForApi(dateTo) : undefined,
         visible: visible
       };
       return carService.getCarOffers(params);
@@ -162,16 +163,16 @@ const CarOfferManagement = () => {
                 <tr>
                   <td colSpan={5} className="text-center py-4">Loading...</td>
                 </tr>
-              ) : data?.items.map((offer) => (
+              ) : data?.Items.map((offer) => (
                 <tr key={offer.id}>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
                     {offer.heading}
                   </td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    ${offer.oneNormalDayPrice}
+                    ${offer.one_normal_day_price}
                   </td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    {offer.yearOfProduction}
+                    {offer.year_of_production}
                   </td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                     <span
@@ -223,8 +224,8 @@ const CarOfferManagement = () => {
               Previous
             </button>
             <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.total_pages))}
-              disabled={currentPage === data.total_pages}
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.TotalPages))}
+              disabled={currentPage === data.TotalPages}
               className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Next
@@ -235,9 +236,9 @@ const CarOfferManagement = () => {
               <p className="text-sm text-gray-700">
                 Showing <span className="font-medium">{(currentPage - 1) * pageSize + 1}</span> to{' '}
                 <span className="font-medium">
-                  {Math.min(currentPage * pageSize, data.total_items)}
+                  {Math.min(currentPage * pageSize, data.TotalItems)}
                 </span>{' '}
-                of <span className="font-medium">{data.total_items}</span> results
+                of <span className="font-medium">{data.TotalItems}</span> results
               </p>
             </div>
             <div>

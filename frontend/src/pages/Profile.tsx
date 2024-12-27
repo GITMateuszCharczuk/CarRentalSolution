@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
 import { carService } from '../services/api';
-import { RootState } from '../store';
 import { Link } from 'react-router-dom';
+import { selectCurrentUser } from '../store/slices/authSlice';
 
 const Profile = () => {
-  const { user } = useSelector((state: RootState) => state.auth);
+  const user = useSelector(selectCurrentUser);
   const [activeTab, setActiveTab] = useState<'orders' | 'profile'>('orders');
 
   const { data: orders, isLoading } = useQuery({
@@ -74,10 +74,10 @@ const Profile = () => {
               <div className="flex h-48 items-center justify-center">
                 <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-primary-500"></div>
               </div>
-            ) : orders?.items.length ? (
+            ) : orders?.Items?.length ? (
               <div className="overflow-hidden bg-white shadow sm:rounded-lg">
                 <ul className="divide-y divide-gray-200">
-                  {orders.items.map((order) => (
+                  {orders.Items.map((order) => (
                     <li key={order.id} className="p-4 hover:bg-gray-50">
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
@@ -85,8 +85,8 @@ const Profile = () => {
                             Order #{order.id.slice(0, 8)}
                           </h3>
                           <p className="mt-1 text-sm text-gray-500">
-                            {new Date(order.startDate).toLocaleDateString()} -{' '}
-                            {new Date(order.endDate).toLocaleDateString()}
+                            {new Date(order.start_date).toLocaleDateString()} -{' '}
+                            {new Date(order.end_date).toLocaleDateString()}
                           </p>
                         </div>
                         <div className="ml-4">
@@ -107,7 +107,7 @@ const Profile = () => {
                       </div>
                       <div className="mt-2">
                         <Link
-                          to={`/cars/${order.carOfferId}`}
+                          to={`/cars/${order.car_offer_id}`}
                           className="text-sm font-medium text-primary-600 hover:text-primary-500"
                         >
                           View Car Details →
