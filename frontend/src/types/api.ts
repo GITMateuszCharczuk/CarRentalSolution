@@ -12,6 +12,10 @@ export interface PaginatedResponse<T> extends ApiResponse {
   Items: T[];
 }
 
+export interface ListResponse<T> extends ApiResponse {
+  Items: T[];
+}
+
 // Auth Types
 export interface LoginRequest {
   email: string;
@@ -35,6 +39,19 @@ export interface RegisterRequest {
   city: string;
   postal_code: string;
   phone_number: string;
+}
+
+export interface CarOfferTag {
+  id: string;
+  name: string;
+}
+
+export interface CarOfferImage {
+  id: string;
+  url: string;
+  car_offer_id: string;
+  created_at: string;
+  updated_at: string;
 }
 
 // Car Types
@@ -103,7 +120,6 @@ export interface CreateCarOrderRequest {
   returnLocation?: string;
   numOfDrivers?: number;
   totalCost?: number;
-  status?: string;
 }
 
 export interface UpdateCarOrderRequest extends CreateCarOrderRequest {
@@ -123,6 +139,11 @@ export interface BlogPost {
   publishedDate: string;
   visible: boolean;
   tags: string[];
+}
+
+export interface BlogTag {
+  id: string;
+  name: string;
 }
 
 export interface CreateBlogPostRequest {
@@ -271,4 +292,9 @@ export interface ModifyUserRequest {
   postal_code: string;
   phone_number: string;
   roles?: string[];
+}
+
+export interface CarTag {
+  id: string;
+  name: string;
 } 

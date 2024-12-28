@@ -12,6 +12,7 @@ import (
 	update_commands "rental-api/Application/command_handlers/car_order/update_car_order"
 	get_car_order_queries "rental-api/Application/query_handlers/car_order/get_car_order"
 	get_car_orders_queries "rental-api/Application/query_handlers/car_order/get_car_orders"
+	"rental-api/Domain/constants"
 )
 
 func MapToCreateCarOrderCommand(request *create_contract.CreateCarOrderRequest) create_commands.CreateCarOrderCommand {
@@ -23,7 +24,7 @@ func MapToCreateCarOrderCommand(request *create_contract.CreateCarOrderRequest) 
 		ReturnLocation:   request.ReturnLocation,
 		NumOfDrivers:     request.NumOfDrivers,
 		TotalCost:        request.TotalCost,
-		Status:           request.Status,
+		Status:           string(constants.OrderStatusPending),
 		JwtToken:         request.JwtToken,
 	}
 }

@@ -169,6 +169,68 @@ const docTemplate = `{
                 }
             }
         },
+        "/rental-api/api/car-offers/images/{carOfferId}": {
+            "get": {
+                "description": "Retrieves all images for a specific car offer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car-images"
+                ],
+                "summary": "Get all images for a car offer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Car Offer ID",
+                        "name": "carOfferId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Images retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetAllImagesResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetAllImagesResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetAllImagesResponse401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Not authorized",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetAllImagesResponse403"
+                        }
+                    },
+                    "404": {
+                        "description": "Image or car offer not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetAllImagesResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetAllImagesResponse500"
+                        }
+                    }
+                }
+            }
+        },
         "/rental-api/api/car-offers/images/{carOfferId}/{imageId}": {
             "delete": {
                 "description": "Deletes an image from a car offer",
@@ -321,7 +383,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/rental-api/api/car-offers/tags/{id}": {
+        "/rental-api/api/car-offers/tags": {
             "get": {
                 "description": "Retrieves a list of all unique tags used in car offer",
                 "consumes": [
@@ -338,8 +400,8 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Car Offer ID",
-                        "name": "id",
-                        "in": "path"
+                        "name": "carOfferId",
+                        "in": "query"
                     },
                     {
                         "type": "array",
@@ -1207,10 +1269,6 @@ const docTemplate = `{
                     "type": "string",
                     "example": "2024-03-15T14:30:00Z"
                 },
-                "status": {
-                    "type": "string",
-                    "example": "pending"
-                },
                 "totalCost": {
                     "type": "number",
                     "example": 750
@@ -1512,6 +1570,94 @@ const docTemplate = `{
                 "message": {
                     "type": "string",
                     "example": "Internal server error"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetAllImagesResponse200": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "https://example.com/image1.jpg",
+                        "https://example.com/image2.jpg"
+                    ]
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Images retrieved successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.GetAllImagesResponse400": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid request parameters"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetAllImagesResponse401": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Unauthorized"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetAllImagesResponse403": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Forbidden - Not authorized"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetAllImagesResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Car offer not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetAllImagesResponse500": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Server error during retrieval"
                 },
                 "success": {
                     "type": "boolean",

@@ -4,10 +4,11 @@ import AdminLayout from '../layouts/AdminLayout';
 import Home from '../pages/Home';
 import CarListing from '../pages/CarListing';
 import CarDetails from '../pages/CarDetails';
+import CarOrder from '../pages/CarOrder';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Profile from '../pages/Profile';
-import Blog from '../pages/Blog';
+import BlogListing from '../pages/BlogListing';
 import BlogPost from '../pages/BlogPost';
 import BlogManagement from '../pages/admin/BlogManagement';
 import UserManagement from '../pages/admin/UserManagement';
@@ -22,10 +23,11 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: 'cars', element: <CarListing /> },
       { path: 'cars/:id', element: <CarDetails /> },
+      { path: 'car-order/:id', element: <CarOrder /> },
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
       { path: 'profile', element: <Profile /> },
-      { path: 'blog', element: <Blog /> },
+      { path: 'blog', element: <BlogListing /> },
       { path: 'blog/:id', element: <BlogPost /> },
     ],
   },

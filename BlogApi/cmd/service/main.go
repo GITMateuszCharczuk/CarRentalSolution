@@ -2,15 +2,14 @@ package main
 
 import (
 	"blog-api/API/server"
+	command_handlers "blog-api/Application/command_handlers"
+	query_handlers "blog-api/Application/query_handlers"
 	"context"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-
-	command_handlers "blog-api/Application/command_handlers"
-	query_handlers "blog-api/Application/query_handlers"
 )
 
 func main() {

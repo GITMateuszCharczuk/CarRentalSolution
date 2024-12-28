@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
-import { blogService } from '../services/api';
+import { blogService, fileService } from '../services/api';
 import { BlogPost as BlogPostType, BlogComment } from '../types/api';
 import { selectIsAuthenticated, selectCurrentUser } from '../store/slices/authSlice';
 
@@ -12,6 +12,8 @@ const BlogPost = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const user = useSelector(selectCurrentUser);
   const [comment, setComment] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(5);
 
   const { data: post, isLoading: isPostLoading } = useQuery({
     queryKey: ['blogPost', id],
@@ -26,8 +28,11 @@ const BlogPost = () => {
   });
 
   const { data: comments, isLoading: areCommentsLoading } = useQuery({
-    queryKey: ['blogComments', id],
-    queryFn: () => blogService.getBlogPostComments(id!),
+    queryKey: ['blogComments', id, currentPage, pageSize],
+    queryFn: () => blogService.getBlogPostComments(id!, {
+      current_page: currentPage,
+      page_size: pageSize
+    }),
     enabled: !!id,
   });
 
@@ -78,7 +83,7 @@ const BlogPost = () => {
       {blogPost.featuredImageUrl && (
         <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
           <img
-            src={blogPost.featuredImageUrl}
+            src={blogPost.featuredImageUrl ? fileService.getFileUrl(blogPost.featuredImageUrl) : '/placeholder-blog.jpg'}
             alt={blogPost.heading}
             className="h-96 w-full object-cover"
           />
@@ -139,7 +144,7 @@ const BlogPost = () => {
               clipRule="evenodd"
             />
           </svg>
-          <span>{likesData?.totalCount || 0} likes</span>
+          <span>{likesData?.TotalCount || 0} likes</span>
         </button>
       </div>
 
@@ -190,24 +195,51 @@ const BlogPost = () => {
               <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-primary-500"></div>
             </div>
           ) : comments?.Items?.length ? (
-            comments.Items.map((comment: BlogComment) => (
-              <div key={comment.id} className="flex space-x-4">
-                <div className="flex-shrink-0">
-                  <div className="h-10 w-10 rounded-full bg-gray-200"></div>
-                </div>
-                <div className="flex-grow">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium text-gray-900">
-                      {comment.userId === user?.id ? 'You' : 'Anonymous User'}
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      {new Date(comment.createdAt).toLocaleDateString()}
-                    </p>
+            <>
+              <div className="space-y-6">
+                {comments.Items.map((comment: BlogComment) => (
+                  <div key={comment.id} className="flex space-x-4">
+                    <div className="flex-shrink-0">
+                      <div className="h-10 w-10 rounded-full bg-gray-200"></div>
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-medium text-gray-900">
+                          {comment.userId === user?.id ? 'You' : 'Anonymous User'}
+                        </h3>
+                        <p className="text-sm text-gray-500">
+                          {new Date(comment.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-700">{comment.description}</p>
+                    </div>
                   </div>
-                  <p className="mt-1 text-sm text-gray-700">{comment.description}</p>
-                </div>
+                ))}
               </div>
-            ))
+
+              {/* Comments Pagination */}
+              {comments.TotalPages > 1 && (
+                <div className="mt-6 flex items-center justify-center space-x-2">
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Previous
+                  </button>
+                  <span className="text-sm text-gray-700">
+                    Page {currentPage} of {comments.TotalPages}
+                  </span>
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, comments.TotalPages))}
+                    disabled={currentPage === comments.TotalPages}
+                    className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
             <p className="text-center text-gray-500">No comments yet. Be the first to comment!</p>
           )}

@@ -21,6 +21,7 @@ var ControllerSet = wire.NewSet(
 	comment.NewCreateBlogPostCommentController,
 	comment.NewDeleteBlogPostCommentController,
 	comment.NewGetBlogPostCommentsController,
+	comment.NewGetBlogPostCommentsCountController,
 	like.NewCreateLikeForBlogPostController,
 	like.NewDeleteLikeForBlogPostController,
 	like.NewGetLikesForBlogPostController,
@@ -47,6 +48,7 @@ func ProvideControllers(
 	createBlogPostCommentController *comment.CreateBlogPostCommentController,
 	deleteBlogPostCommentController *comment.DeleteBlogPostCommentController,
 	getBlogPostCommentsController *comment.GetBlogPostCommentsController,
+	getBlogPostCommentsCountController *comment.GetBlogPostCommentsCountController,
 
 	// Blog Post Like Controllers
 	createLikeForBlogPostController *like.CreateLikeForBlogPostController,
@@ -68,6 +70,7 @@ func ProvideControllers(
 		createBlogPostCommentController,
 		deleteBlogPostCommentController,
 		getBlogPostCommentsController,
+		getBlogPostCommentsCountController,
 
 		// Blog Post Like Controllers
 		createLikeForBlogPostController,
@@ -90,6 +93,7 @@ var WireSet = wire.NewSet(
 	comment.NewCreateBlogPostCommentController,
 	comment.NewDeleteBlogPostCommentController,
 	comment.NewGetBlogPostCommentsController,
+	comment.NewGetBlogPostCommentsCountController,
 	like.NewCreateLikeForBlogPostController,
 	like.NewDeleteLikeForBlogPostController,
 	like.NewGetLikesForBlogPostController,

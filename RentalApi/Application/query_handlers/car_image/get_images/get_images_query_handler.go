@@ -33,6 +33,6 @@ func (h *GetImagesQueryHandler) Handle(ctx context.Context, query *GetImagesQuer
 
 	return &contract.GetAllImagesResponse{
 		BaseResponse: responses.NewBaseResponse(200, "Images retrieved successfully"),
-		Images:       *images,
+		Items:        *images,
 	}, nil
 }

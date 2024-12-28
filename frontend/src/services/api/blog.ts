@@ -6,6 +6,8 @@ import type {
   ApiResponse,
   PaginationParams,
   SortParams,
+  BlogTag,
+  ListResponse,
 } from '../../types/api';
 
 interface BlogPostsQueryParams extends PaginationParams, SortParams {
@@ -27,7 +29,16 @@ interface BlogCommentsQueryParams extends PaginationParams, SortParams {
 export const blogService = {
   // Blog Posts
   async getBlogPosts(params?: BlogPostsQueryParams): Promise<PaginatedResponse<BlogPost>> {
-    const response = await api.get('/posts', { params });
+    const modifiedParams = params?.tags?.length 
+      ? { ...params, tags: params.tags.join(',') }
+      : params;
+
+    const finalParams = {
+      ...modifiedParams,
+      sort_fields: modifiedParams?.sort_fields?.join(','),
+    };
+
+    const response = await api.get('/posts', { params: finalParams });
     return response.data;
   },
 
@@ -52,8 +63,8 @@ export const blogService = {
   },
 
   async getBlogPostTags(id: string, sortFields?: string[]): Promise<{ items: string[] }> {
-    const response = await api.get(`/posts/tags/${id}`, {
-      params: { sort_fields: sortFields },
+    const response = await api.get(`/posts/tags`, {
+      params: { id, sort_fields: sortFields },
     });
     return response.data;
   },
@@ -64,6 +75,13 @@ export const blogService = {
     params?: BlogCommentsQueryParams
   ): Promise<PaginatedResponse<BlogComment>> {
     const response = await api.get(`/posts/${postId}/comments`, { params });
+    return response.data;
+  },
+
+  async getBlogPostCommentsCount(
+    postId: string,
+  ): Promise<{ Count: number }> {
+    const response = await api.get(`/posts/comments/count`, { params: { blog_post_id: postId } });
     return response.data;
   },
 
@@ -81,7 +99,7 @@ export const blogService = {
   },
 
   // Likes
-  async getBlogPostLikes(postId: string): Promise<{ totalCount: number }> {
+  async getBlogPostLikes(postId: string): Promise<{ TotalCount: number }> {
     const response = await api.get(`/posts/${postId}/likes`);
     return response.data;
   },
@@ -93,6 +111,14 @@ export const blogService = {
 
   async unlikeBlogPost(postId: string): Promise<ApiResponse> {
     const response = await api.delete(`/posts/${postId}/likes`);
+    return response.data;
+  },
+
+  // Tags
+  async getBlogTags(sortFields?: string[]): Promise<ListResponse<BlogTag>> {
+    const response = await api.get('/posts/tags', {
+      params: { sort_fields: sortFields?.join(',') },
+    });
     return response.data;
   },
 }; 

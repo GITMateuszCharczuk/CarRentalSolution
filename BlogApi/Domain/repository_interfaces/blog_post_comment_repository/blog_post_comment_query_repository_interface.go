@@ -17,4 +17,5 @@ type BlogPostCommentQueryRepository interface {
 		pagination *pagination.Pagination,
 		sorting *sorting.Sortable,
 	) (*pagination.PaginatedResult[models.BlogPostCommentModel], error)
+	GetCommentsCount(blogPostId string) (int, error)
 }

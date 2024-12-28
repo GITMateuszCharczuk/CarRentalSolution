@@ -6,13 +6,39 @@ import type {
   CarOrdersQueryParams,
   PaginatedResponse,
   ApiResponse,
+  CarOfferTag,
+  CarOfferImage,
+  ListResponse,
+  CreateCarOrderRequest,
 } from '../../types/api';
 
 export const carService = {
   // Car Offers
-  async getCarOffers(params?: CarOffersQueryParams): Promise<PaginatedResponse<CarOffer>> {
-    const response = await api.get('/car-offers', { params });
-    console.log(response.data);
+  async getCarOffers({
+    page_size,
+    current_page,
+    tags,
+    date_time_from,
+    date_time_to,
+    sort_fields,
+  }: {
+    page_size: number;
+    current_page: number;
+    tags?: string[];
+    date_time_from?: string;
+    date_time_to?: string;
+    sort_fields?: string[];
+  }): Promise<PaginatedResponse<CarOffer>> {
+    const response = await api.get<PaginatedResponse<CarOffer>>('/car-offers', {
+      params: {
+        page_size,
+        current_page,
+        tags: tags?.join(','),
+        date_time_from,
+        date_time_to,
+        sort_fields: sort_fields?.join(','),
+      },
+    });
     return response.data;
   },
 
@@ -36,9 +62,12 @@ export const carService = {
     return response.data;
   },
 
-  async getCarOfferTags(id: string, sortFields?: string[]): Promise<{ items: string[] }> {
-    const response = await api.get(`/car-offers/tags/${id}`, {
-      params: { sort_fields: sortFields },
+  async getCarOfferTags(id?: string, sortFields?: string[]): Promise<ListResponse<CarOfferTag>> {
+    const response = await api.get('/car-offers/tags', {
+      params: { 
+        car_offer_id: id !== '' ? id : undefined,
+        sort_fields: sortFields?.join(',')
+      },
     });
     return response.data;
   },
@@ -46,6 +75,11 @@ export const carService = {
   // Car Images
   async addImageToCarOffer(offerId: string, imageId: string): Promise<ApiResponse> {
     const response = await api.post(`/car-offers/images/${offerId}/${imageId}`);
+    return response.data;
+  },
+
+  async getCarOfferImages(offerId: string): Promise<ListResponse<CarOfferImage>> {
+    const response = await api.get(`/car-offers/images/${offerId}`);
     return response.data;
   },
 
@@ -65,9 +99,9 @@ export const carService = {
     return response.data;
   },
 
-  async createCarOrder(order: Partial<CarOrder>): Promise<ApiResponse> {
-    const response = await api.post('/car-orders', order);
-    return response.data;
+  createCarOrder: async (orderData: CreateCarOrderRequest) => {
+    const { data } = await api.post<CarOrder>('/car-rental/api/car-orders', orderData);
+    return data;
   },
 
   async updateCarOrder(id: string, order: Partial<CarOrder>): Promise<ApiResponse> {

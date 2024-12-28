@@ -99,13 +99,6 @@ const docTemplate = `{
                 "summary": "Get blog posts",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "JWT token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
                         "type": "integer",
                         "description": "Page size",
                         "name": "page_size",
@@ -261,7 +254,50 @@ const docTemplate = `{
                 }
             }
         },
-        "/blog-api/api/posts/tags/{id}": {
+        "/blog-api/api/posts/comments/count": {
+            "get": {
+                "description": "Retrieves all comments for a specific blog post with pagination",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comments"
+                ],
+                "summary": "Get comments for a blog post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Filter by blog post ID",
+                        "name": "blog_post_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comments retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetBlogPostCommentsCountResponse200"
+                        }
+                    },
+                    "404": {
+                        "description": "Blog post not found",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetBlogPostCommentsCountResponse404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error during retrieval",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GetBlogPostCommentsResponse500"
+                        }
+                    }
+                }
+            }
+        },
+        "/blog-api/api/posts/tags": {
             "get": {
                 "description": "Retrieves a list of all unique tags used in blog posts",
                 "consumes": [
@@ -278,8 +314,8 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Blog Post ID",
-                        "name": "id",
-                        "in": "path"
+                        "name": "blogPostId",
+                        "in": "query"
                     },
                     {
                         "type": "array",
@@ -1338,6 +1374,36 @@ const docTemplate = `{
                 "message": {
                     "type": "string",
                     "example": "Internal server error while removing like"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "contract.GetBlogPostCommentsCountResponse200": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Comments count retrieved successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "contract.GetBlogPostCommentsCountResponse404": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Blog post not found"
                 },
                 "success": {
                     "type": "boolean",

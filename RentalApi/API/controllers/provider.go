@@ -28,6 +28,7 @@ var ControllerSet = wire.NewSet(
 	// Car Image Controllers
 	car_image.NewAddImageController,
 	car_image.NewDeleteImageController,
+	car_image.NewGetImagesController,
 	// Car Tag Controllers
 	car_tag.NewGetTagsController,
 )
@@ -56,6 +57,7 @@ func ProvideControllers(
 	// Car Image Controllers
 	addImageController *car_image.AddImageController,
 	deleteImageController *car_image.DeleteImageController,
+	getImagesController *car_image.GetImagesController,
 	// Car Tag Controllers
 	getTagsController *car_tag.GetTagsController,
 ) []base.Controller {
@@ -75,6 +77,7 @@ func ProvideControllers(
 		// Car Image Controllers
 		addImageController,
 		deleteImageController,
+		getImagesController,
 		// Car Tag Controllers
 		getTagsController,
 	}
@@ -98,6 +101,7 @@ var WireSet = wire.NewSet(
 	// Car Image Controllers
 	car_image.NewAddImageController,
 	car_image.NewDeleteImageController,
+	car_image.NewGetImagesController,
 	// Car Tag Controllers
 	car_tag.NewGetTagsController,
 )

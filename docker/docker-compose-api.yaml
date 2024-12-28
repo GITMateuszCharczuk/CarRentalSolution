@@ -13,7 +13,7 @@ services:
       - IDENTITY_API_URL=http://identity-api:8085
       - RENTAL_API_URL=http://rental-api:8088
       - BLOG_API_URL=http://blog-api:8087
-      - REQUEST_SENT_LIMIT=100
+      - REQUEST_SENT_LIMIT=300
       - REQUEST_SENT_TIME_WINDOW=60
       - REQUEST_SIZE_LIMIT=10
       - ENV=PROD

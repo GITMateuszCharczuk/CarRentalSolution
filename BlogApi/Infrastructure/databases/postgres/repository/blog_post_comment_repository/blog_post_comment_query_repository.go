@@ -70,3 +70,11 @@ func (r *BlogPostCommentQueryRepositoryImpl) GetComments(
 
 	return r.ExecutePaginatedQuery(query, pagination, sorting)
 }
+
+func (r *BlogPostCommentQueryRepositoryImpl) GetCommentsCount(blogPostId string) (int, error) {
+	var count int64
+	if err := r.ConstructBaseQuery().Where("blog_post_id = ?", blogPostId).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return int(count), nil
+}

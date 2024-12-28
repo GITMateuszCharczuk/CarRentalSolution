@@ -24,15 +24,15 @@ func NewGetTagsController(validator *validator.Validate) *GetTagsController {
 // @Tags car-offers
 // @Accept json
 // @Produce json
-// @Param id path string false "Car Offer ID" example:"123e4567-e89b-12d3-a456-426614174000"
+// @Param carOfferId query string false "Car Offer ID" example:"123e4567-e89b-12d3-a456-426614174000"
 // @Param sort_fields query []string false "Sort fields (field:asc|desc)" example:"created_at:desc"
 // @Success 200 {object} contract.GetTagsResponse200 "Tags retrieved successfully"
 // @Failure 500 {object} contract.GetTagsResponse500 "Server error during retrieval"
-// @Router /rental-api/api/car-offers/tags/{id} [get]
+// @Router /rental-api/api/car-offers/tags [get]
 func (h *GetTagsController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 	req := contract.GetTagsRequest{
-		CarOfferId: services.ExtractFromPath(c, "id"),
+		CarOfferId: c.Query("carOfferId"),
 		SortQuery:  services.ExtractSortQuery(c),
 	}
 	if validateResponse := services.ValidateRequest[contract.GetTagsResponse](&req, h.validator); validateResponse != nil {
@@ -45,7 +45,7 @@ func (h *GetTagsController) Handle(c *gin.Context) {
 }
 
 func (h *GetTagsController) Route() string {
-	return "/car-offers/tags/:id"
+	return "/car-offers/tags"
 }
 
 func (h *GetTagsController) Methods() []string {

@@ -4,6 +4,7 @@ import (
 	get_blog_post "blog-api/Application/query_handlers/blog_post/get_blog_post"
 	get_blog_posts "blog-api/Application/query_handlers/blog_post/get_blog_posts"
 	get_blog_post_comments "blog-api/Application/query_handlers/blog_post_comment/get_blog_post_comments"
+	get_blog_post_comments_count "blog-api/Application/query_handlers/blog_post_comment/get_blog_post_comments_count"
 	get_likes_for_blog_post "blog-api/Application/query_handlers/blog_post_like/get_likes_for_blog_post"
 	get_tags "blog-api/Application/query_handlers/blog_post_tag/get_tags"
 	blog_post_comment_repository_interfaces "blog-api/Domain/repository_interfaces/blog_post_comment_repository"
@@ -48,6 +49,16 @@ func registerGetBlogPostCommentsQueryHandler(
 	}
 }
 
+func registerGetBlogPostCommentsCountQueryHandler(
+	blogPostCommentQueryRepository blog_post_comment_repository_interfaces.BlogPostCommentQueryRepository,
+) {
+	handler := get_blog_post_comments_count.NewGetBlogPostCommentsCountQueryHandler(blogPostCommentQueryRepository)
+	err := mediatr.RegisterRequestHandler(handler)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func registerGetLikesForBlogPostQueryHandler(
 	blogPostLikeQueryRepository blog_post_like_repository_interfaces.BlogPostLikeQueryRepository,
 ) {
@@ -80,4 +91,5 @@ func RegisterQueryHandlers(
 	registerGetBlogPostCommentsQueryHandler(blogPostCommentQueryRepository, blogPostQueryRepository)
 	registerGetLikesForBlogPostQueryHandler(blogPostLikeQueryRepository)
 	registerGetTagsQueryHandler(blogPostTagQueryRepository)
+	registerGetBlogPostCommentsCountQueryHandler(blogPostCommentQueryRepository)
 }

@@ -74,11 +74,12 @@ func InitializeApi(blogQueryRepo repository_interfaces.BlogPostQueryRepository, 
 	createBlogPostCommentController := controllers2.NewCreateBlogPostCommentController(validate)
 	deleteBlogPostCommentController := controllers2.NewDeleteBlogPostCommentController(validate)
 	getBlogPostCommentsController := controllers2.NewGetBlogPostCommentsController(validate)
+	getBlogPostCommentsCountController := controllers2.NewGetBlogPostCommentsCountController(validate)
 	createLikeForBlogPostController := controllers3.NewCreateLikeForBlogPostController(validate)
 	deleteLikeForBlogPostController := controllers3.NewDeleteLikeForBlogPostController(validate)
 	getLikesForBlogPostController := controllers3.NewGetLikesForBlogPostController(validate)
 	getTagsController := controllers4.NewGetTagsController(validate)
-	v := controllers5.ProvideControllers(createBlogPostController, getBlogPostController, getBlogPostsController, updateBlogPostController, deleteBlogPostController, createBlogPostCommentController, deleteBlogPostCommentController, getBlogPostCommentsController, createLikeForBlogPostController, deleteLikeForBlogPostController, getLikesForBlogPostController, getTagsController)
+	v := controllers5.ProvideControllers(createBlogPostController, getBlogPostController, getBlogPostsController, updateBlogPostController, deleteBlogPostController, createBlogPostCommentController, deleteBlogPostCommentController, getBlogPostCommentsController, getBlogPostCommentsCountController, createLikeForBlogPostController, deleteLikeForBlogPostController, getLikesForBlogPostController, getTagsController)
 	controllersControllers := controllers5.NewControllers(v)
 	serverServer := server.ProvideServer(controllersControllers, config3)
 	return serverServer, nil

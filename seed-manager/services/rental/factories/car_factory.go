@@ -72,16 +72,8 @@ func (f *CarFactory) Create() (*models.CarModel, error) {
 		OneWeekPrice:       float64(randInt2[0]) * 6,
 		OneMonthPrice:      float64(randInt2[0]) * 25,
 		Tags:               tags,
-		ImageUrls:          generateImageUrls(additionalImageIds),
+		ImageUrls:          additionalImageIds,
 	}, nil
-}
-
-func generateImageUrls(imageIds []string) []string {
-	urls := make([]string, len(imageIds))
-	for i, id := range imageIds {
-		urls[i] = fmt.Sprintf("/api/files/%s", id)
-	}
-	return urls
 }
 
 func (f *CarFactory) CreateMany(count int) ([]*models.CarModel, error) {

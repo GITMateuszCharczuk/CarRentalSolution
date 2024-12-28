@@ -81,8 +81,9 @@ func InitializeApi(carOfferQueryRepo repository_interfaces.CarOfferQueryReposito
 	getCarOrdersController := controllers2.NewGetCarOrdersController(validate)
 	addImageController := controllers3.NewAddImageController(validate)
 	deleteImageController := controllers3.NewDeleteImageController(validate)
+	getImagesController := controllers3.NewGetImagesController(validate)
 	getTagsController := controllers4.NewGetTagsController(validate)
-	v := controllers5.ProvideControllers(createCarOfferController, updateCarOfferController, deleteCarOfferController, getCarOfferController, getCarOffersController, createCarOrderController, updateCarOrderController, deleteCarOrderController, getCarOrderController, getCarOrdersController, addImageController, deleteImageController, getTagsController)
+	v := controllers5.ProvideControllers(createCarOfferController, updateCarOfferController, deleteCarOfferController, getCarOfferController, getCarOffersController, createCarOrderController, updateCarOrderController, deleteCarOrderController, getCarOrderController, getCarOrdersController, addImageController, deleteImageController, getImagesController, getTagsController)
 	controllersControllers := controllers5.NewControllers(v)
 	serverServer := server.ProvideServer(controllersControllers, config3)
 	return serverServer, nil

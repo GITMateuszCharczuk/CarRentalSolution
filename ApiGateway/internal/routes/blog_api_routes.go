@@ -18,6 +18,7 @@ func RegisterBlogApiRoutes(router *gin.Engine, serviceURL string, mainApiRoute s
 	router.POST(mainApiRoute+"/posts/:id/comments", services.ReverseProxy(serviceURL, "/blog-api/api", mainApiRoute))
 	router.DELETE(mainApiRoute+"/comments/:id", services.ReverseProxy(serviceURL, "/blog-api/api", mainApiRoute))
 	router.GET(mainApiRoute+"/posts/:id/comments", services.ReverseProxy(serviceURL, "/blog-api/api", mainApiRoute))
+	router.GET(mainApiRoute+"/posts/comments/count", services.ReverseProxy(serviceURL, "/blog-api/api", mainApiRoute))
 
 	// Likes routes
 	router.POST(mainApiRoute+"/posts/:id/likes", services.ReverseProxy(serviceURL, "/blog-api/api", mainApiRoute))
@@ -25,5 +26,5 @@ func RegisterBlogApiRoutes(router *gin.Engine, serviceURL string, mainApiRoute s
 	router.GET(mainApiRoute+"/posts/:id/likes", services.ReverseProxy(serviceURL, "/blog-api/api", mainApiRoute))
 
 	// Tags routes
-	router.GET(mainApiRoute+"/posts/tags/:id", services.ReverseProxy(serviceURL, "/blog-api/api", mainApiRoute))
+	router.GET(mainApiRoute+"/posts/tags", services.ReverseProxy(serviceURL, "/blog-api/api", mainApiRoute))
 }

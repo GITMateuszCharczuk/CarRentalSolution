@@ -44,16 +44,20 @@ api.interceptors.response.use(
       try {
         const state = store.getState();
         const refreshToken = selectRefreshToken(state);
-        
+        console.log(refreshToken);
         const response = await axios.post(`${BASE_URL}/token/refresh`, null, {
           params: { token: refreshToken },
         });
 
-        const { token } = response.data;
-        store.dispatch(setToken(token));
+        const { Token } = response.data;
+        store.dispatch(setToken(Token));
 
         // Retry the original request with the new token
-        originalRequest.params.token = token;
+        originalRequest.params = {
+          ...originalRequest.params,
+          token: Token,
+        };
+        console.log(originalRequest.params);
         return api(originalRequest);
       } catch (refreshError) {
         // If refresh token fails, logout user and redirect to login

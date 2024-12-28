@@ -24,7 +24,6 @@ func NewGetBlogPostsController(validator *validator.Validate) *GetBlogPostsContr
 // @Tags blog
 // @Accept json
 // @Produce json
-// @Param token query string true "JWT token" example:"your.jwt.token.here"
 // @Param page_size query int false "Page size" example:"10"
 // @Param current_page query int false "Current page" example:"1"
 // @Param sort_fields query []string false "Sort fields (field:asc|desc)" example:"created_at:desc"

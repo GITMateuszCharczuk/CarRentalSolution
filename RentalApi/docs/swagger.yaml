@@ -201,9 +201,6 @@ definitions:
       startDate:
         example: "2024-03-15T14:30:00Z"
         type: string
-      status:
-        example: pending
-        type: string
       totalCost:
         example: 750
         type: number
@@ -417,6 +414,67 @@ definitions:
     properties:
       message:
         example: Internal server error
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetAllImagesResponse200:
+    properties:
+      items:
+        example:
+        - https://example.com/image1.jpg
+        - https://example.com/image2.jpg
+        items:
+          type: string
+        type: array
+      message:
+        example: Images retrieved successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.GetAllImagesResponse400:
+    properties:
+      message:
+        example: Invalid request parameters
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetAllImagesResponse401:
+    properties:
+      message:
+        example: Unauthorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetAllImagesResponse403:
+    properties:
+      message:
+        example: Forbidden - Not authorized
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetAllImagesResponse404:
+    properties:
+      message:
+        example: Car offer not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  contract.GetAllImagesResponse500:
+    properties:
+      message:
+        example: Server error during retrieval
         type: string
       success:
         example: false
@@ -1202,6 +1260,47 @@ paths:
       summary: Update a car offer
       tags:
       - car-offers
+  /rental-api/api/car-offers/images/{carOfferId}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all images for a specific car offer
+      parameters:
+      - description: Car Offer ID
+        in: path
+        name: carOfferId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Images retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetAllImagesResponse200'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/contract.GetAllImagesResponse400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/contract.GetAllImagesResponse401'
+        "403":
+          description: Forbidden - Not authorized
+          schema:
+            $ref: '#/definitions/contract.GetAllImagesResponse403'
+        "404":
+          description: Image or car offer not found
+          schema:
+            $ref: '#/definitions/contract.GetAllImagesResponse404'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetAllImagesResponse500'
+      summary: Get all images for a car offer
+      tags:
+      - car-images
   /rental-api/api/car-offers/images/{carOfferId}/{imageId}:
     delete:
       consumes:
@@ -1304,15 +1403,15 @@ paths:
       summary: Add image to car offer
       tags:
       - car-images
-  /rental-api/api/car-offers/tags/{id}:
+  /rental-api/api/car-offers/tags:
     get:
       consumes:
       - application/json
       description: Retrieves a list of all unique tags used in car offer
       parameters:
       - description: Car Offer ID
-        in: path
-        name: id
+        in: query
+        name: carOfferId
         type: string
       - collectionFormat: csv
         description: Sort fields (field:asc|desc)

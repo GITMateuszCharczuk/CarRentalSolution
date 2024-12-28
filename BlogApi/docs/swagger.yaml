@@ -365,6 +365,27 @@ definitions:
         example: false
         type: boolean
     type: object
+  contract.GetBlogPostCommentsCountResponse200:
+    properties:
+      count:
+        example: 100
+        type: integer
+      message:
+        example: Comments count retrieved successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  contract.GetBlogPostCommentsCountResponse404:
+    properties:
+      message:
+        example: Blog post not found
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
   contract.GetBlogPostCommentsResponse200:
     properties:
       current_page:
@@ -796,11 +817,6 @@ paths:
       description: Retrieves a list of blog posts with optional filtering, pagination
         and sorting.
       parameters:
-      - description: JWT token
-        in: query
-        name: token
-        required: true
-        type: string
       - description: Page size
         in: query
         name: page_size
@@ -1253,15 +1269,43 @@ paths:
       summary: Like a blog post
       tags:
       - likes
-  /blog-api/api/posts/tags/{id}:
+  /blog-api/api/posts/comments/count:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all comments for a specific blog post with pagination
+      parameters:
+      - description: Filter by blog post ID
+        in: query
+        name: blog_post_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Comments retrieved successfully
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostCommentsCountResponse200'
+        "404":
+          description: Blog post not found
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostCommentsCountResponse404'
+        "500":
+          description: Server error during retrieval
+          schema:
+            $ref: '#/definitions/contract.GetBlogPostCommentsResponse500'
+      summary: Get comments for a blog post
+      tags:
+      - comments
+  /blog-api/api/posts/tags:
     get:
       consumes:
       - application/json
       description: Retrieves a list of all unique tags used in blog posts
       parameters:
       - description: Blog Post ID
-        in: path
-        name: id
+        in: query
+        name: blogPostId
         type: string
       - collectionFormat: csv
         description: Sort fields (field:asc|desc)

@@ -24,15 +24,15 @@ func NewGetTagsController(validator *validator.Validate) *GetTagsController {
 // @Tags blog
 // @Accept json
 // @Produce json
-// @Param id path string false "Blog Post ID" example:"123e4567-e89b-12d3-a456-426614174000"
+// @Param blogPostId query string false "Blog Post ID" example:"123e4567-e89b-12d3-a456-426614174000"
 // @Param sort_fields query []string false "Sort fields (field:asc|desc)" example:"created_at:desc"
 // @Success 200 {object} contract.GetTagsResponse200 "Tags retrieved successfully"
 // @Failure 500 {object} contract.GetTagsResponse500 "Server error during retrieval"
-// @Router /blog-api/api/posts/tags/{id} [get]
+// @Router /blog-api/api/posts/tags [get]
 func (h *GetTagsController) Handle(c *gin.Context) {
 	responseSender := services.NewResponseSender(c)
 	req := contract.GetTagsRequest{
-		BlogPostId: services.ExtractFromPath(c, "id"),
+		BlogPostId: c.Query("blogPostId"),
 		SortQuery:  services.ExtractSortQuery(c),
 	}
 	if validateResponse := services.ValidateRequest[contract.GetTagsResponse](&req, h.validator); validateResponse != nil {
@@ -45,7 +45,7 @@ func (h *GetTagsController) Handle(c *gin.Context) {
 }
 
 func (h *GetTagsController) Route() string {
-	return "/posts/tags/:id"
+	return "/posts/tags"
 }
 
 func (h *GetTagsController) Methods() []string {

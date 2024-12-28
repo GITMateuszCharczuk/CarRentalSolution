@@ -17,14 +17,34 @@ interface AuthCredentials {
   roles: string[];
 }
 
-const initialState: AuthState = {
-  user: null,
-  token: null,
-  refresh_token: null,
-  roles: [],
-  isAuthenticated: false,
-  isLoading: false,
+// Load initial state from localStorage
+const loadState = (): AuthState => {
+  try {
+    const serializedAuth = localStorage.getItem('auth');
+    if (serializedAuth === null) {
+      return {
+        user: null,
+        token: null,
+        refresh_token: null,
+        roles: [],
+        isAuthenticated: false,
+        isLoading: false,
+      };
+    }
+    return JSON.parse(serializedAuth);
+  } catch (_err) {
+    return {
+      user: null,
+      token: null,
+      refresh_token: null,
+      roles: [],
+      isAuthenticated: false,
+      isLoading: false,
+    };
+  }
 };
+
+const initialState: AuthState = loadState();
 
 const authSlice = createSlice({
   name: 'auth',
@@ -37,12 +57,16 @@ const authSlice = createSlice({
       state.roles = action.payload.roles;
       state.isAuthenticated = true;
       state.isLoading = false;
+      // Save to localStorage
+      localStorage.setItem('auth', JSON.stringify(state));
     },
     setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
+      localStorage.setItem('auth', JSON.stringify(state));
     },
     setUser: (state, action: PayloadAction<UserInfo>) => {
       state.user = action.payload;
+      localStorage.setItem('auth', JSON.stringify(state));
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
@@ -54,6 +78,8 @@ const authSlice = createSlice({
       state.roles = [];
       state.isAuthenticated = false;
       state.isLoading = false;
+      // Clear localStorage
+      localStorage.removeItem('auth');
     },
   },
 });
