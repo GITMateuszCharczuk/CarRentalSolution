@@ -3,22 +3,13 @@ version: '3.8'
 services:
   frontend:
     build:
-      context: ../
+      context: ..
       dockerfile: ./docker/Dockerfile
-      args:
-        - VITE_API_URL=http://localhost:8000/car-rental/api
     ports:
       - "80:80"
-    environment:
-      - VITE_API_URL=http://localhost:8000/car-rental/api
     networks:
-      - app-network
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:80/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      - docker-network
 
 networks:
-  app-network:
+  docker-network:
     driver: bridge
