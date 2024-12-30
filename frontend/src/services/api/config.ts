@@ -2,7 +2,7 @@ import axios from 'axios';
 import { store } from '../../store';
 import { setToken, logout, selectAuthToken, selectRefreshToken } from '../../store/slices/authSlice';
 
-const BASE_URL = 'http://localhost:8000/car-rental/api'; // Change this to your API URL
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/car-rental/api';
 
 export const api = axios.create({
   baseURL: BASE_URL,

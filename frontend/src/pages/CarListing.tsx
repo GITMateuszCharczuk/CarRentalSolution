@@ -246,7 +246,7 @@ const CarListing = () => {
                     Details
                   </Link>
                   <Link
-                    to={`/cars/${car.id}/book`}
+                    to={`/car-order/${car.id}`}
                     className="bg-primary-600 text-white py-3 px-6 rounded-xl text-center font-medium hover:bg-primary-700 transition-colors"
                   >
                     Book Now

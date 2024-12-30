@@ -3,13 +3,22 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { blogService } from '../../services/api';
 import type { BlogPost, BlogPostsQueryParams } from '../../types/api';
 import { formatDateForApi } from '../../utils/dateUtils';
+import { SortSelect, type SortField } from '../../components/SortSelect';
+import { Pagination } from '../../components/Pagination';
+
+const SORT_FIELDS: SortField[] = [
+  { field: 'heading', label: 'Title' },
+  { field: 'author', label: 'Author' },
+  { field: 'publishedDate', label: 'Published Date' },
+  { field: 'likes_count', label: 'Likes' },
+  { field: 'comments_count', label: 'Comments' },
+];
 
 const BlogManagement = () => {
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [sortField, setSortField] = useState<string>('publishedDate');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [sortFields, setSortFields] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [dateFrom, setDateFrom] = useState<string>('');
   const [dateTo, setDateTo] = useState<string>('');
@@ -17,12 +26,12 @@ const BlogManagement = () => {
 
   // Query for blog posts with pagination, sorting, and filtering
   const { data, isLoading } = useQuery({
-    queryKey: ['adminBlogPosts', currentPage, pageSize, sortField, sortOrder, selectedTags, dateFrom, dateTo, visible],
+    queryKey: ['adminBlogPosts', currentPage, pageSize, sortFields, selectedTags, dateFrom, dateTo, visible],
     queryFn: () => {
       const params: BlogPostsQueryParams = {
         current_page: currentPage,
         page_size: pageSize,
-        sort_fields: [`${sortField}:${sortOrder}`],
+        sort_fields: sortFields.length > 0 ? sortFields : undefined,
         tags: selectedTags,
         'date-time-from': dateFrom ? formatDateForApi(dateFrom) : undefined,
         'date-time-to': dateTo ? formatDateForApi(dateTo) : undefined,
@@ -53,15 +62,6 @@ const BlogManagement = () => {
     },
   });
 
-  const handleSort = (field: string) => {
-    if (field === sortField) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortField(field);
-      setSortOrder('asc');
-    }
-  };
-
   const handleDelete = async (postId: string) => {
     if (window.confirm('Are you sure you want to delete this blog post?')) {
       await deleteMutation.mutateAsync(postId);
@@ -88,38 +88,44 @@ const BlogManagement = () => {
 
       {/* Filters */}
       <div className="bg-white p-4 shadow sm:rounded-lg">
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Date From</label>
-              <input
-                type="date"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                value={dateFrom}
-                onChange={(e) => setDateFrom(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Date To</label>
-              <input
-                type="date"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                value={dateTo}
-                onChange={(e) => setDateTo(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Visibility</label>
-              <select
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                value={visible === undefined ? '' : String(visible)}
-                onChange={(e) => setVisible(e.target.value === '' ? undefined : e.target.value === 'true')}
-              >
-                <option value="">All</option>
-                <option value="true">Published</option>
-                <option value="false">Draft</option>
-              </select>
-            </div>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold text-gray-900">Filter Posts</h2>
+          <SortSelect
+            availableFields={SORT_FIELDS}
+            onChange={setSortFields}
+            className="min-w-[200px] text-gray-900"
+          />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Date From</label>
+            <input
+              type="date"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm text-gray-900"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Date To</label>
+            <input
+              type="date"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm text-gray-900"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Visibility</label>
+            <select
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm text-gray-900"
+              value={visible === undefined ? '' : String(visible)}
+              onChange={(e) => setVisible(e.target.value === '' ? undefined : e.target.value === 'true')}
+            >
+              <option value="">All</option>
+              <option value="true">Published</option>
+              <option value="false">Draft</option>
+            </select>
           </div>
         </div>
       </div>
@@ -132,22 +138,19 @@ const BlogManagement = () => {
               <tr>
                 <th
                   scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer"
-                  onClick={() => handleSort('heading')}
+                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
                   Title
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer"
-                  onClick={() => handleSort('author')}
+                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
                   Author
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer"
-                  onClick={() => handleSort('publishedDate')}
+                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
                   Published Date
                 </th>
@@ -217,25 +220,9 @@ const BlogManagement = () => {
       </div>
 
       {/* Pagination */}
-      {data && (
-        <div className="flex items-center justify-between bg-white px-4 py-3 sm:px-6">
-          <div className="flex flex-1 justify-between sm:hidden">
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-            >
-              Previous
-            </button>
-            <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.TotalPages))}
-              disabled={currentPage === data.TotalPages}
-              className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-            >
-              Next
-            </button>
-          </div>
-          <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+      {data && data.TotalPages > 0 && (
+        <div className="mt-8 flex items-center justify-between bg-white px-4 py-3 sm:px-6">
+          <div className="flex flex-1 justify-between sm:flex sm:items-center">
             <div>
               <p className="text-sm text-gray-700">
                 Showing <span className="font-medium">{(currentPage - 1) * pageSize + 1}</span> to{' '}
@@ -245,17 +232,30 @@ const BlogManagement = () => {
                 of <span className="font-medium">{data.TotalItems}</span> results
               </p>
             </div>
-            <div>
-              <select
-                value={pageSize}
-                onChange={(e) => setPageSize(Number(e.target.value))}
-                className="rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
-              >
-                <option value="5">5 per page</option>
-                <option value="10">10 per page</option>
-                <option value="20">20 per page</option>
-                <option value="50">50 per page</option>
-              </select>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <label htmlFor="pageSize" className="text-sm text-gray-600">Show:</label>
+                <select
+                  id="pageSize"
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                  className="rounded-md border-gray-300 py-1 pl-3 pr-8 text-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 text-gray-900"
+                >
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                </select>
+                <span className="text-sm text-gray-600">per page</span>
+              </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={data.TotalPages}
+                onPageChange={setCurrentPage}
+              />
             </div>
           </div>
         </div>
